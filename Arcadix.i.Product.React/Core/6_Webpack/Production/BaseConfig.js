@@ -1,29 +1,29 @@
 ﻿const path = require('path');
-const LoadablePlugin = require('../../../../Arcadix.i.Product.React.Bundle/node_modules/@loadable/webpack-plugin')
-const WebpackCleanupPlugin = require('../../../../Arcadix.i.Product.React.Bundle/node_modules/webpack-cleanup-plugin');
-const Webpack = require('../../../../Arcadix.i.Product.React.Bundle/node_modules/webpack');
+const LoadablePlugin = require('/Arcadix.i.Product.React.Bundle/node_modules/@loadable/webpack-plugin')
+const WebpackCleanupPlugin = require('/Arcadix.i.Product.React.Bundle/node_modules/webpack-cleanup-plugin');
+const Webpack = require('/Arcadix.i.Product.React.Bundle/node_modules/webpack');
 
 const ClientIndexFilePath = "../../../Core/1_AppIndex/Index.js";
 const ServerRenderFilePath = '../../../Core/5_ServerRender/ServerRender.js';
 const res = p => path.resolve(__dirname, p);
 const base = { mode: 'development' };
-const BundleAnalyzerPlugin = require('../../../../Arcadix.i.Product.React.Bundle/node_modules/webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require('/Arcadix.i.Product.React.Bundle/node_modules/webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 
 var babelOptions = {
     "presets": [
-        [path.resolve(__dirname, "../../../../Arcadix.i.Product.React.Bundle/node_modules/@babel/preset-env"), {
+        [path.resolve(__dirname, "/Arcadix.i.Product.React.Bundle/node_modules/@babel/preset-env"), {
             "targets": {
                 "browsers": ["last 2 versions", "> 2%"]
             }
         }],
-        path.resolve(__dirname, "../../../../Arcadix.i.Product.React.Bundle/node_modules/@babel/preset-react")
+        path.resolve(__dirname, "/Arcadix.i.Product.React.Bundle/node_modules/@babel/preset-react")
     ],
     "plugins": [
-        path.resolve(__dirname, "../../../../Arcadix.i.Product.React.Bundle/node_modules/@babel/plugin-transform-spread"),
-        path.resolve(__dirname, "../../../../Arcadix.i.Product.React.Bundle/node_modules/react-hot-loader/babel"),
-        path.resolve(__dirname, "../../../../Arcadix.i.Product.React.Bundle/node_modules/@loadable/babel-plugin"),
-        path.resolve(__dirname, "../../../../Arcadix.i.Product.React.Bundle/node_modules/@babel/plugin-transform-runtime")
+        path.resolve(__dirname, "/Arcadix.i.Product.React.Bundle/node_modules/@babel/plugin-transform-spread"),
+        path.resolve(__dirname, "/Arcadix.i.Product.React.Bundle/node_modules/react-hot-loader/babel"),
+        path.resolve(__dirname, "/Arcadix.i.Product.React.Bundle/node_modules/@loadable/babel-plugin"),
+        path.resolve(__dirname, "/Arcadix.i.Product.React.Bundle/node_modules/@babel/plugin-transform-runtime")
     ]
 };
 
@@ -44,7 +44,7 @@ const loaderRules = [
     },
     {
         test: [/\.bmp$/,/\.jpe?g$/, /\.png$/],
-        loader: require.resolve('../../../../Arcadix.i.Product.React.Bundle/node_modules/url-loader'),
+        loader: require.resolve('/Arcadix.i.Product.React.Bundle/node_modules/url-loader'),
         options: {
             limit: 10000,
             name: 'static/media/[name].[hash:8].[ext]'
@@ -85,7 +85,7 @@ const ClientSideConfiguration = (objParams) => {
             index: res(ClientIndexFilePath)
         },
         output: {
-            path: res('../../../../Arcadix.i.Product.React.Bundle/Production/' + objParams.ApplicationFolderName + "/ClientBuild"),
+            path: res('/Arcadix.i.Product.React.Bundle/Production/' + objParams.ApplicationFolderName + "/ClientBuild"),
             filename: '[name].js',
             chunkFilename: "[name].chunk.js",
             publicPath: '/Bundle/' + objParams.ApplicationFolderName + "/ClientBuild/",
@@ -95,14 +95,14 @@ const ClientSideConfiguration = (objParams) => {
             rules: loaderRules
         },
         resolve: {
-            modules: [path.join(__dirname, '../../../../Arcadix.i.Product.React.Bundle/node_modules')],
+            modules: [path.join(__dirname, '/Arcadix.i.Product.React.Bundle/node_modules')],
             extensions: [".js", ".css"],
             alias: {
                 '@root': path.join(__dirname, '../../../'),
-                '@shared': path.join(__dirname, '../../../../Arcadix.h.Product.BusinessLogic'),
+                '@shared': path.join(__dirname, '/Arcadix.h.Product.BusinessLogic'),
                 '@appfolder': path.join(__dirname, '../../../' + objParams.ApplicationFolderName),
-                '@inlineimage': path.join(__dirname, '../../../../Arcadix.h.Product.Resources/Themes/Default/0.InlineImage'),
-                '@intranetdefaulttheme': path.join(__dirname, '../../../../Arcadix.h.Product.Resources/Themes/Default/c.Intranet/Skin2018'),
+                '@inlineimage': path.join(__dirname, '/Arcadix.h.Product.Resources/Themes/Default/0.InlineImage'),
+                '@intranetdefaulttheme': path.join(__dirname, '/Arcadix.h.Product.Resources/Themes/Default/c.Intranet/Skin2018'),
                 'react-dom$': 'react-dom/profiling',
                 'scheduler/tracing': 'scheduler/tracing-profiling',
             }
@@ -160,7 +160,7 @@ const ServerSideConfiguration = (objParams) => {
             serverrender: res(ServerRenderFilePath)
         },
         output: {
-            path: res('../../../../Arcadix.i.Product.React.Bundle/Production/' + objParams.ApplicationFolderName + "/ServerBuild"),
+            path: res('/Arcadix.i.Product.React.Bundle/Production/' + objParams.ApplicationFolderName + "/ServerBuild"),
             filename: '[name].js',
             chunkFilename: "[name].chunk.js",
             publicPath: '/Bundle/' + objParams.ApplicationFolderName + "/ClientBuild/",
@@ -170,14 +170,14 @@ const ServerSideConfiguration = (objParams) => {
             rules: loaderRules
         },
         resolve: {
-            modules: [path.join(__dirname, '../../../../Arcadix.i.Product.React.Bundle/node_modules')],
+            modules: [path.join(__dirname, '/Arcadix.i.Product.React.Bundle/node_modules')],
             extensions: [".js", ".css"],
             alias: {
                 '@root': path.join(__dirname, '../../../'),
-                '@shared': path.join(__dirname, '../../../../Arcadix.h.Product.BusinessLogic'),
+                '@shared': path.join(__dirname, '/Arcadix.h.Product.BusinessLogic'),
                 '@appfolder': path.join(__dirname, '../../../' + objParams.ApplicationFolderName),
-                '@inlineimage': path.join(__dirname, '../../../../Arcadix.h.Product.Resources/Themes/Default/0.InlineImage'),
-                '@intranetdefaulttheme': path.join(__dirname, '../../../../Arcadix.h.Product.Resources/Themes/Default/c.Intranet/Skin2018'),
+                '@inlineimage': path.join(__dirname, '/Arcadix.h.Product.Resources/Themes/Default/0.InlineImage'),
+                '@intranetdefaulttheme': path.join(__dirname, '/Arcadix.h.Product.Resources/Themes/Default/c.Intranet/Skin2018'),
                 'react-dom$': 'react-dom/profiling',
                 'scheduler/tracing': 'scheduler/tracing-profiling',
             }
