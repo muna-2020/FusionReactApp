@@ -107,7 +107,7 @@
     "test": "jest",
     "DemoBuild": "webpack --watch --config ../Arcadix.i.Product.React/Core/6_Webpack/Production/SupportApplication/Demo.webpack.config.js --progress",
     "JSDocBuild": "webpack --watch --config ../Arcadix.i.Product.React/Core/6_Webpack/Production/SupportApplication/JSDoc.webpack.config.js --progress",
-    "SchoolBuild": "webpack --watch --config ../Arcadix.i.Product.React/Core/6_Webpack/Production/School.webpack.config.js --progress",
+    "SchoolBuild": "webpack --watch --config /Arcadix.i.Product.React/Core/6_Webpack/Production/School.webpack.config.js --progress",
     "StateBuild": "webpack --watch --config ../Arcadix.i.Product.React/Core/6_Webpack/Production/State.webpack.config.js --progress",
     "TeacherBuild": "webpack --watch --config ../Arcadix.i.Product.React/Core/6_Webpack/Production/Teacher.webpack.config.js --progress",
     "PupilBuild": "webpack --watch --config ../Arcadix.i.Product.React/Core/6_Webpack/Production/Pupil.webpack.config.js --progress",
