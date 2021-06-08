@@ -1,0 +1,61 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_UserPreference' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_Framework_UserPreference ADD dtModifiedOn datetime  default getdate()
+END
+	
+GO	
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_UserPreference' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_Framework_UserPreference ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_Framework_UserPreference set dtModifiedOn = GETDATE() where dtModifiedOn is null
+
+GO
+update t_Framework_UserPreference set  uModifiedByUserId = uUserId where uModifiedByUserId is null
+
+GO
+/********************AllDependentProc********************
+FProc_TestDrive_BaseObject_UserPreference_AddData
+FProc_TestDrive_BaseObject_UserPreference_DeleteData
+FProc_TestDrive_BaseObject_UserPreference_EditData
+FProc_TestDrive_BaseObject_UserPreference_GetData
+JProc_AngularFusionSync_GetUserPreferenceDetails
+JProc_Framework_Member_PageUserPreference_GetUserPreferenceDetails
+JProc_Framework_Member_PageUserPreference_GetUserPreferenceDetails_MainClient
+JProc_Framework_Member_PageUserPreference_GetUserPreferenceDetails_MainClient_Sync
+JProc_Framework_Member_PageUserPreference_GetUserPreferenceOverview
+JProc_Framework_Member_PageUserPreference_SaveUserPreferenceValues
+JProc_Framework_PupilProfile_SavePreference
+JProc_Framework_UserPreference_ProfileDetails
+JProc_Framework_UserPreference_ProfileDetailsForMainClient
+JProc_Framework_UserPreference_SaveProfileDetails
+JProc_Framework_UserPreference_SaveProfileDetails_NewProc
+JProc_Framework_UserPreference_SaveProfileDetails_NewProc_06_09_2018
+JProc_Framework_UserProfileDetails_GetUserPreference
+Proc_Framework_Member_PageUserPreference_GetUserPreferenceDetails
+Proc_Framework_Member_PageUserPreference_GetUserPreferenceOverview
+Proc_Framework_Member_PageUserPreference_SaveUserNavigationOverView
+Proc_Framework_Member_PageUserPreference_SaveUserNavigationOverView_New
+Proc_Framework_Member_PageUserPreference_SaveUserPreferenceValues
+Proc_Framework_Member_PageUserPreference_SetTreeWidthForUser
+Proc_Framework_Profile_SaveUserPreferenceDetails
+Proc_Framework_UserPreference_ProfileDetails
+Proc_Framework_UserPreference_SaveProfileDetails
+Proc_TestDrive_JProfile_GetUserPreferenceDetails
+Proc_TestDrive_PageTestSummaryAndSPSSExport_GetUserPreferenceColumn
+Proc_TestDrive_PageTestSummaryAndSPSSExport_InsertUserPreferenceColumn
+****************************************************************/
+
+/********************Procs need to Review**********************
+Proc_Framework_Profile_SaveUserPreferenceDetails :Checked
+Proc_Framework_Member_PageUserPreference_SaveUserPreferenceValues
+****************************************************************/

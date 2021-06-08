@@ -1,0 +1,143 @@
+﻿<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: calibri;
+        }
+
+        .main-wrapper {
+            width: 1024px;
+            margin: 0px auto;
+            padding: 20px;
+            font-size: 18px;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 24px;
+            padding: 10px;
+            border-bottom: 1px solid #f1f1f1;
+            font-weight: bold;
+        }
+
+        .sub-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .item-wrapper ul {
+            line-height: 2rem;
+            list-style-type: square;
+            list-style-position: inside;
+        }
+
+        .item-wrapper p {
+            margin: 10px 0px;
+        }
+
+        pre {
+            white-space: pre-line;
+            padding: 20px;
+            width: 100%;
+            padding-right: 100px;
+            margin: 10px 0px;
+            letter-spacing: 1px;
+            background: #282c34;
+            color: #b5b5b5;
+        }
+
+        .yellow-pre {
+            background: #fffcdd;
+            color: #222;
+            border-left: 5px solid #FFEB3B;
+        }
+
+        .light-text {
+            color: #999;
+            font-style: italic;
+            font-size: 14px;
+        }
+        table, td, th {  
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        table {
+            border-collapse: collapse;
+            width: fit-content;
+        }
+        th, td {
+            padding: 15px;
+        }
+        .vendor-prefixes-example {
+            padding: 20px;
+        }
+        .sub-sub-title {
+            margin-top: 30px;
+            font-weight: 600;
+        }
+         @media screen and (max-width: 1024px) {
+            .main-wrapper {
+                width: 100%;
+            }
+         }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="title">
+            <span>CSS Vendor Prefixes</span>
+        </div>
+        <p>
+            CSS vendor prefixes, also sometimes known as or CSS browser prefixes, 
+            are a way for browser makers to add support for new CSS features before 
+            those features are fully supported in all browsers.
+        </p>
+        <div class="item">
+            <div class="sub-title">
+                <span>Common Prefixes</span>
+            </div>
+            <table>
+                <tr>
+                    <th>Browser</th>
+                    <th>Prefixes</th>
+                </tr>
+                <tr>
+                    <td>Chrome, Safari, <br/> newer versions of Opera, <br/> almost all iOS browsers including Firefox for iOS; <br/>basically, any WebKit based browser</td>
+                    <td>-webkit-</td>
+                </tr>
+                <tr>
+                    <td>Firefox</td>
+                    <td>-moz-</td>
+                </tr>
+                <tr>
+                    <td>old pre-WebKit versions of Opera</td>
+                    <td>-o-</td>
+                </tr>
+                <tr>
+                    <td>Internet Explorer and Microsoft Edge</td>
+                    <td>-ms-</td>
+                </tr>
+            </table>
+            <div class="sub-sub-title">
+                <span>Sample Example</span>
+            </div>
+            <div class="code">
+                <pre>
+                    -webkit-transition: all 4s ease;
+                    -moz-transition: all 4s ease;
+                    -ms-transition: all 4s ease;
+                    -o-transition: all 4s ease;
+                    transition: all 4s ease; 
+                </pre>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

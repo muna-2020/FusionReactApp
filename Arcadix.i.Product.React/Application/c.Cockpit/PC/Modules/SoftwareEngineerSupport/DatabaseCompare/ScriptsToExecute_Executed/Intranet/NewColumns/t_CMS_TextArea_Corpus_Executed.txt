@@ -1,0 +1,30 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_TextArea_Corpus' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_CMS_TextArea_Corpus ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_CMS_TextArea_Corpus set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+Proc_CMS_TextArea_DeleteCorpusByCorpusId
+Proc_CMS_TextArea_GetAllCorpusforLanguageID
+Proc_CMS_TextArea_GetCorpusByCorpusId
+Proc_CMS_TextArea_SaveCorpusData
+***********************************************************/
+
+
+/********************Procs need to Review**********************
+Proc_CMS_TextArea_SaveCorpusData
+******************************************************************/

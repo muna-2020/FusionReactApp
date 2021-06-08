@@ -1,0 +1,262 @@
+﻿/**********************************
+Following tables updated:
+1) t_CMS_Element
+**********************************/
+
+/**********************************
+Following procs updated:
+1) Proc_CMS_CMSAnimation_AddAnimationElement 
+**********************************/
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_Element' AND COLUMN_NAME = 'vElementJson') 
+BEGIN
+ALTER TABLE t_CMS_Element ADD vElementJson nvarchar(max)  
+END	  
+
+GO	  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_Element' AND COLUMN_NAME = 'cIsFusionVersion') 
+BEGIN
+ALTER TABLE t_CMS_Element ADD cIsFusionVersion char(1)  
+END			
+
+GO			
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_Element' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_CMS_Element ADD uModifiedByUserId uniqueidentifier  
+END
+	 
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_CMS_Element set uModifiedByUserId= uUserId where uModifiedByUserId is  null
+
+
+/**********************************
+Procs updated
+**********************************/
+
+
+ALTER proc Proc_CMS_CMSAnimation_AddAnimationElement     
+(       
+ @iElementId int,    
+ @iMainClientId int,    
+ @iFolderId int,    
+ @iSubjectId int,    
+ @cIsDisplayedInElementTree char(1),    
+ @uUserId uniqueidentifier,    
+ @vAnimationName nvarchar(500),     
+ @vAnimationDescription ntext,     
+ @cIsTaskAnimation char(1),    
+ @vFileName nvarchar(500),    
+ @iFileSize int,    
+ @iFileVersion int,    
+ @iCanvasHeight int,    
+ @iCanvasWidth int,    
+ @cIsCodeEditor char(1),    
+ @cIsSvgBased char(1),    
+ @cIsConstructBased char(1),    
+ @tDataXml nvarchar(max),    
+ @IsNewUpload char(1),    
+ @vSolutionFileName nvarchar(500),    
+ @iSolutionFileSize int,    
+ @vSolutionFileType nvarchar(500),    
+ @iSolutionFileVersion int    
+)     
+As     
+Begin                                       
+declare @iElementAnimationId  int, @h int, @vAttributeName nvarchar(500), @iOrder int    
+ if(@iElementId=-1)      
+  BEGIN      
+   Declare @iNewElementId int      
+     
+   Insert into t_CMS_Element ( iElementTypeId,iMainClientId,iFolderID,cIsDeleted,cIsDisplayedInElementTree,dtCreatedOn,dtModifiedOn,cIsSecure,uUserId,vElementSkinName,cIsQuestionPlaceholder,cHasTextOnTop,vHeaderText
+   ) values(29,@iMainClientId,@iFolderId,'N',@cIsDisplayedInElementTree,GETDATE(),GETDATE(),'Y',@uUserId,NULL, 'N','N',null)        
+   set @iNewElementId = @@IDENTITY ;    
+   Insert into t_CMS_Element_Animation(    
+   iElementId,    
+   vAnimationName,     
+   vAnimationDescription,    
+   tClientSideAnimationScript,    
+   cIsTaskAnimation,    
+   iSubjectId,    
+   iHeight,    
+   iWidth,    
+   vFileName,    
+   iAnimationFileSize,    
+   iAnimationFileVersion,    
+   cIsCodeEditor,    
+   cIsSvgBased,    
+   cIsConstructBased,    
+   vSolutionFileName,    
+   iSolutionFileSize,    
+   vSolutionFileType,    
+   iSolutionFileVersion )    
+   values(    
+    @iNewElementId,    
+    @vAnimationName,    
+    @vAnimationDescription,    
+    '',    
+    @cIsTaskAnimation,     
+    @iSubjectId,    
+    @iCanvasHeight,    
+    @iCanvasWidth,     
+    @vFileName,    
+    @iFileSize,    
+    @iFileVersion,    
+    @cIsCodeEditor,     
+    @cIsSvgBased,     
+    @cIsConstructBased,     
+    @vSolutionFileName,     
+    @iSolutionFileSize,     
+    @vSolutionFileType,    
+    @iSolutionFileVersion)        
+   set @iElementAnimationId = @@IDENTITY;    
+   select * from t_CMS_Element where iElementId =@iNewElementId                  
+   select * from t_CMS_Element_Animation where iElementId =@iNewElementId                  
+  END              
+ ELSE              
+  BEGIN              
+   set @iElementAnimationId = (select iElementAnimationId from t_CMS_Element_Animation where iElementId = @iElementId)    
+   update t_CMS_Element set dtModifiedOn =GETDATE(), uUserId =@uUserId where iElementId =@iElementId     
+   update t_CMS_Element_Animation set     
+   vAnimationName =@vAnimationName,    
+   vAnimationDescription =@vAnimationDescription,              
+   cIsTaskAnimation=@cIsTaskAnimation,iSubjectId= @iSubjectId,    
+   vFileName = @vFileName, iAnimationFileSize = @iFileSize,    
+   iAnimationFileVersion = @iFileVersion,            
+   cIsCodeEditor = @cIsCodeEditor,    
+   cIsSvgBased = @cIsSvgBased,    
+   cIsConstructBased = @cIsConstructBased,    
+   iSolutionFileVersion = @iSolutionFileVersion,     
+   vSolutionFileName = @vSolutionFileName,     
+   iSolutionFileSize = @iSolutionFileSize,     
+   vSolutionFileType = @vSolutionFileType    
+   where iElementId =@iElementId              
+   if(@IsNewUpload = 'Y')    
+    begin    
+    update t_CMS_Element_Animation set iHeight = @iCanvasHeight,iWidth = @iCanvasWidth where iElementId =@iElementId     
+    end    
+   if(@vSolutionFileName <> '')    
+    begin    
+     update t_CMS_Element_Animation set vSolutionFileName = @vSolutionFileName,iSolutionFileSize = @iSolutionFileSize, vSolutionFileType = @vSolutionFileType, iSolutionFileVersion = @iSolutionFileVersion where iElementId =@iElementId     
+    end    
+   select * from t_CMS_Element where iElementId =@iElementId                  
+   select * from t_CMS_Element_Animation where iElementId =@iElementId                  
+  END              
+/*Cursor for Attributes*/    
+ if(@tDataXml <> '')    
+  BEGIN    
+   EXECUTE sp_xml_preparedocument @h OUTPUT, @tDataXml     
+   DELETE from t_CMS_Element_Animation_Attribute WHERE iElementAnimationId = @iElementAnimationId     
+   DECLARE cursor_SaveAttributes CURSOR FOR select  *  from  OPENXML(@h, 'Attributes/Attribute') with (  vAttributeName nvarchar(500) 'Name',iOrder int 'Order')     
+    OPEN cursor_SaveAttributes     
+    FETCH NEXT FROM cursor_SaveAttributes into  @vAttributeName, @iOrder       
+    WHILE( @@FETCH_STATUS <> -1 )         
+     BEGIN          
+      if(@vAttributeName <> '')       
+       BEGIN        
+         Insert  into t_CMS_Element_Animation_Attribute(iElementAnimationId,vAttributeName,iOrder)  values  (@iElementAnimationId, @vAttributeName, @iOrder)    
+       END     
+      Fetch Next From cursor_SaveAttributes into  @vAttributeName ,@iOrder    
+     End     
+    close cursor_SaveAttributes    
+    Deallocate cursor_SaveAttributes    
+    EXEC sp_xml_removedocument @h     
+  END    
+/*******/    
+END 
+
+/**********************************
+New table		
+**********************************/
+GO
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 't_Fusion_Intranet_ResultPageCertificate' ) 
+BEGIN
+CREATE TABLE [dbo].[t_Fusion_Intranet_ResultPageCertificate]
+(
+	  [uResultPageCertificateId] UNIQUEIDENTIFIER NOT NULL
+	, [vResultPageComponentName] NVARCHAR(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [iMainClientId] INT NULL
+	, [cIsDeleted] CHAR(1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [cIsForFusion] CHAR(1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [uUserId] UNIQUEIDENTIFIER NULL
+	, [dtCreatedOn] DATETIME NULL
+	, [dtModifiedOn] DATETIME NULL
+	, [uModifiedByUserId] UNIQUEIDENTIFIER NULL
+	, CONSTRAINT [PK__t_Fusion__582426294B2A7964] PRIMARY KEY ([uResultPageCertificateId] ASC)
+)
+END
+GO
+/**********************************
+Default Values
+**********************************/
+
+IF NOT EXISTS (SELECT * FROM t_Fusion_Intranet_ResultPageCertificate WHERE uResultPageCertificateId =  '50C6C0AC-3566-46E9-BB8C-63F7B7F6F8AA') 
+BEGIN
+insert into t_Fusion_Intranet_ResultPageCertificate values('50C6C0AC-3566-46E9-BB8C-63F7B7F6F8AA','StandardCertificate',97,'N','Y','E4205C35-2A37-458A-BA0D-52660FD6ECE2',getdate(),getdate(),NULL)
+END
+GO
+/**********************************
+Angular proc modified
+**********************************/
+/**********************************
+New table		
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 't_Fusion_Intranet_ResultPageCertificate_Data' ) 
+BEGIN
+CREATE TABLE [dbo].[t_Fusion_Intranet_ResultPageCertificate_Data]
+(
+	  [uResultPageCertificateDataId] UNIQUEIDENTIFIER NOT NULL
+	, [uResultPageCertificateId] UNIQUEIDENTIFIER NULL
+	, [iLanguageId] INT NULL
+	, [vResultPageCertificateText] NVARCHAR(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, CONSTRAINT [PK__t_Fusion__D07B8A6F840BDAE9] PRIMARY KEY ([uResultPageCertificateDataId] ASC)
+)
+END
+GO
+/**********************************
+Default Values
+**********************************/
+IF NOT EXISTS (SELECT * FROM t_Fusion_Intranet_ResultPageCertificate_Data WHERE uResultPageCertificateDataId =  'DCAF7171-E46D-4A96-BE86-58A7CAFB3ECD') 
+BEGIN
+insert into t_Fusion_Intranet_ResultPageCertificate_Data values('DCAF7171-E46D-4A96-BE86-58A7CAFB3ECD','50C6C0AC-3566-46E9-BB8C-63F7B7F6F8AA',3,'StandardResultCertificate')
+END
+GO
+GO
+/**********************************
+Angular proc modified
+**********************************/
+
+/**********************************
+New table		
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 't_TestDrive_CompetencyTopicDescription_Tasks' ) 
+BEGIN
+CREATE TABLE [dbo].[t_TestDrive_CompetencyTopicDescription_Tasks]
+(
+	  [uCompetencyTopicDescriptionTaskId] UNIQUEIDENTIFIER NULL
+	, [uCompetencyTopicDescriptionId] UNIQUEIDENTIFIER NULL
+	, [iOrder] INT NULL
+	, [cIsDeleted] CHAR(1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+)
+END
+GO
+/**********************************
+Default Values
+
+**********************************/
+
+--No DefaultValues
+
+
+/**********************************
+Angular proc modified
+**********************************/

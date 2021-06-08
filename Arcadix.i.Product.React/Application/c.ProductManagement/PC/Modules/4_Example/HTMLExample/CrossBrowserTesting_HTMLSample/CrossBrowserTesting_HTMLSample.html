@@ -1,0 +1,142 @@
+﻿<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: calibri;
+        }
+
+        .main-wrapper {
+            width: 1024px;
+            margin: 0px auto;
+            padding: 20px;
+            font-size: 18px;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 24px;
+            padding: 10px;
+            border-bottom: 1px solid #f1f1f1;
+            font-weight: bold;
+        }
+
+        .sub-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .item-wrapper ul {
+            line-height: 2rem;
+            list-style-type: square;
+            margin-left: 20px;
+        }
+        .item-wrapper ol {
+            line-height: 2rem;
+            margin-left: 20px;
+        }
+        .item-wrapper p {
+            margin: 10px 0px;
+        }
+
+        pre {
+            white-space: pre-line;
+            padding: 20px;
+            width: 100%;
+            padding-right: 100px;
+            margin: 10px 0px;
+            letter-spacing: 1px;
+            background: #282c34;
+            color: #b5b5b5;
+        }
+
+        .yellow-pre {
+            background: #fffcdd;
+            color: #222;
+            border-left: 5px solid #FFEB3B;
+        }
+
+        .light-text {
+            color: #999;
+            font-style: italic;
+        }
+
+        @media screen and (max-width: 1024px) {
+            .main-wrapper {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="title">
+            <span><span>Cross browser testing</span></span>
+        </div>
+        <section class="content-section">
+            <div class="item-wrapper">
+                <p>Cross Browser testing is a type of non-functional testing that lets you check whether your website works as intended when accessed through:</p>
+                <ul>
+                    <li><strong>Different Browser-OS combinations</strong> 
+                    i.e., on popular browsers like Firefox, Chrome, Edge, Safari—on any of the popular operating 
+                        systems like Windows, macOS, iOS and Android.</li>
+                    <li><strong>Different devices</strong> 
+                    i.e., users can view and interact with your website on popular devices—smartphones, tablets, desktops and laptops etc.</li>
+                    <li><strong>Assistive Tools</strong> 
+                    i.e., the website is compatible with assistive technologies like screen readers for individuals who are differently abled.</li>
+                </ul>
+            </div>
+        </section>
+        <section class="content-section">
+            <div class="sub-title">
+                <span>What Features are Analyzed in a Browser Test?</span>
+            </div>
+            <div class="item-wrapper">
+                <p>You can categorize the features that will undergo testing like this:</p>
+                <ol>
+                    <li><strong>Base Functionality:</strong> 
+                        <p>To ensure that basic functionality works on most browser-OS combinations. For example, you could 
+                            be testing to verify that:</p>
+                        <ul>
+                            <li>All dialogs boxes and menus are working as intended</li>
+                            <li>All form fields accept inputs after validating them correctly</li>
+                            <li>Website handles first-party cookies (and features like personalization that are dependent on them) correctly</li>
+                            <li>Seamless touch input for mobiles or tablets</li>
+                        </ul>
+                    </li>
+                    <li><strong>Design:</strong>
+                    This ensures that the website’s appearance—fonts, images, and layout—matches the specifications shared 
+                        by the Design team.</li>
+                    <li><strong>Accessibility:</strong> 
+                    Accounts for compliance with Web Content Accessibility Guidelines (WCAG) to enable differently-abled users to 
+                        access the website.</li>
+                    <li><strong>Responsiveness:</strong>Verifies that design is fluid and fits different screen sizes/orientations.</li>
+                    </ol>
+            </div>
+        </section>
+        <section class="content-section">
+            <div class="sub-title">
+                <span>Steps for Cross browser testing</span>
+            </div>
+            <div class="item-wrapper">
+                <p>Let’s quickly recap the 7 broad steps that are involved in cross browser testing:</p>
+                <ol>
+                    <li>Identify which features you’ll test and write steps to specify the scenarios.</li>
+                    <li>Identify the browsers and platforms—either by popularity or site traffic analysis—that you’ll test on.</li>
+                    <li>Pick how you’ll execute the test scenarios—manually or automatically.</li>
+                    <li>Set up devices/browsers you’ll test on (or connect with a cloud-based provider).</li>
+                    <li>Execute test scenarios on browsers with the highest share of traffic, then move on to outliers.</li>
+                    <li>Document and share the test results with teams who can debug/fix issues.</li>
+                    <li>Continuously run cross browser compatibility tests to ensure that no bugs were missed.</li>
+                </ol>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

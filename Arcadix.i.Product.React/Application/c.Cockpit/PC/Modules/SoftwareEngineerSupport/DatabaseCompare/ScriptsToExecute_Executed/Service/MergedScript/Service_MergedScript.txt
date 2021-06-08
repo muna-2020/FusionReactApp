@@ -1,0 +1,925 @@
+/**********************************
+New table		
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES   WHERE TABLE_NAME = N't_Framework_Country_MainClient')
+BEGIN
+CREATE TABLE [dbo].[t_Framework_Country_MainClient]
+(
+	  [iCountryMainClientId] INT NOT NULL IDENTITY(1,1)
+	, [iCountryId] INT NULL
+	, [iMainClientId] INT NULL
+	, [iApplicationTypeId] INT NULL
+	, [dtModifiedOn] DATETIME NULL
+	, [dtCreatedOn] DATETIME NULL
+	, [uUserId] UNIQUEIDENTIFIER NULL
+	, [cIsDeleted] CHAR(1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [uModifiedByUserId] UNIQUEIDENTIFIER NULL
+	, CONSTRAINT [PK_t_Framework_Country_MainClient] PRIMARY KEY ([iCountryMainClientId] ASC)
+)
+
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 0 and iApplicationTypeId =1)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,0,1,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 0 and iApplicationTypeId =2)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,0,2,getdate(),getdate(),null,'N',null)
+END
+
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 0 and iApplicationTypeId =4)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,0,4,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 0 and iApplicationTypeId =6)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,0,6,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 0 and iApplicationTypeId =16)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,0,16,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 97 and iApplicationTypeId =1)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,97,1,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 97 and iApplicationTypeId =2)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,97,2,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 97 and iApplicationTypeId =4)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,97,4,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 97 and iApplicationTypeId =6)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,97,6,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 97 and iApplicationTypeId =16)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,97,16,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 115 and iApplicationTypeId =1)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,115,1,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 115 and iApplicationTypeId =2)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,115,2,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 115 and iApplicationTypeId =4)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,115,4,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 115 and iApplicationTypeId =6)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,115,6,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 115 and iApplicationTypeId =16)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,115,16,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 112 and iApplicationTypeId =1)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,112,1,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 112 and iApplicationTypeId =2)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,112,2,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 112 and iApplicationTypeId =4)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,112,4,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 112 and iApplicationTypeId =6)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,112,6,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 112 and iApplicationTypeId =16)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,112,16,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 114 and iApplicationTypeId =1)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,114,1,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 114 and iApplicationTypeId =2)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,114,2,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 114 and iApplicationTypeId =4)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,114,4,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 114 and iApplicationTypeId =6)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,114,6,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 114 and iApplicationTypeId =16)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,114,16,getdate(),getdate(),null,'N',null)
+END
+
+
+
+/**********************************
+New table		
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES   WHERE TABLE_NAME = N'T_Framework_ElasticObjectUpdate')
+BEGIN
+CREATE TABLE [dbo].[T_Framework_ElasticObjectUpdate]
+(
+	  [uElasticObjectUpdateId] UNIQUEIDENTIFIER NULL
+	, [vPrimaryKeyValue] NVARCHAR(200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [vObjectName] NVARCHAR(500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [vObjectUpdatedForApplication] NVARCHAR(200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [vObjectToBeUpdatedInApplication] NVARCHAR(200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [dtCreatedOn] DATETIME NULL
+	, [dtPickedForUpdate] DATETIME NULL
+	, [iMainClientId] INT NULL
+)
+
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+
+--No Default values
+
+
+/**********************************
+New table		
+**********************************/
+GO
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES   WHERE TABLE_NAME = N't_Framework_FileHandler_OneDrive_FileMapping')
+BEGIN
+CREATE TABLE [dbo].[t_Framework_FileHandler_OneDrive_FileMapping]
+(
+	  [uFileHandlerFieldId] UNIQUEIDENTIFIER NOT NULL
+	, [vFileType] NVARCHAR(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [vFilePath] NVARCHAR(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [vFileId] NVARCHAR(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [cIsFaulted] CHAR(1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [iMainClientId] INT NOT NULL
+	, [dtCreatedOn] DATETIME NOT NULL
+	, [dtModifiedOn] DATETIME NOT NULL
+	, [cIsMovedToOneDrive] CHAR(1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [iNumberOfAttemptsToMoveFile] INT NULL
+)
+
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+
+--No DefaultValue
+
+/**********************************
+New table		
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES   WHERE TABLE_NAME = N't_Framework_Gatekeeper_TargetType')
+BEGIN
+CREATE TABLE [dbo].[t_Framework_Gatekeeper_TargetType]
+(
+	  [uTargetTypeId] UNIQUEIDENTIFIER NOT NULL DEFAULT(newid())
+	, [vTargetGroupIdentifier] NVARCHAR(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [cIsDeleted] CHAR(1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [dtCreatedOn] DATETIME NULL
+	, [dtModifiedOn] DATETIME NULL
+	, [uUserId] UNIQUEIDENTIFIER NULL
+	, [uModifiedByUserId ] UNIQUEIDENTIFIER NULL
+)
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES   WHERE TABLE_NAME = N't_Framework_Gatekeeper_TargetType_Data')
+BEGIN
+CREATE TABLE [dbo].[t_Framework_Gatekeeper_TargetType_Data]
+(
+	  [uTargetTypeDataId] UNIQUEIDENTIFIER NOT NULL DEFAULT(newid())
+	, [uTargetTypeId] UNIQUEIDENTIFIER NOT NULL
+	, [iLanguageId] INT NULL
+	, [vTargetTypeName] NVARCHAR(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+)
+END
+/**********************************
+Default Values
+**********************************/
+END
+
+GO
+insert into t_Framework_Gatekeeper_TargetType values( 'E842AEDD-0859-4703-B639-E262F0E90DD8','Test','N',getdate(),'N','E4205C35-2A37-458A-BA0D-52660FD6ECE2','E4205C35-2A37-458A-BA0D-52660FD6ECE2')
+
+GO
+insert into t_Framework_Gatekeeper_TargetType values( 'CAABA7C6-D44B-4495-8F28-08D45475182B','Pupil','N',getdate(),'N','E4205C35-2A37-458A-BA0D-52660FD6ECE2','E4205C35-2A37-458A-BA0D-52660FD6ECE2')
+
+GO
+insert into t_Framework_Gatekeeper_TargetType values( 'CAABA7C6-D44B-4495-8F28-08D45475182C','School','N',getdate(),'N','E4205C35-2A37-458A-BA0D-52660FD6ECE2','E4205C35-2A37-458A-BA0D-52660FD6ECE2')
+
+GO
+insert into t_Framework_Gatekeeper_TargetType values( 'CAABA7C6-D44B-4495-8F28-08D45475182D','Teacher','N',getdate(),'N','E4205C35-2A37-458A-BA0D-52660FD6ECE2','E4205C35-2A37-458A-BA0D-52660FD6ECE2')
+
+GO
+insert into t_Framework_Gatekeeper_TargetType values( 'EB6CA735-E834-4A7C-8953-D67530F62CCB','Intranet','N',getdate(),'N','E4205C35-2A37-458A-BA0D-52660FD6ECE2','E4205C35-2A37-458A-BA0D-52660FD6ECE2')
+
+GO
+insert into t_Framework_Gatekeeper_TargetType values( 'FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F','Cockpit','N',getdate(),'N','E4205C35-2A37-458A-BA0D-52660FD6ECE2','E4205C35-2A37-458A-BA0D-52660FD6ECE2')
+
+
+
+/**********************************
+Default Values
+**********************************/
+GO
+if not exists(select * from t_Framework_Gatekeeper_TargetType where uTargetTypeId ='E842AEDD-0859-4703-B639-E262F0E90DD8')
+BEGIN
+	insert into t_Framework_Gatekeeper_TargetType values( 'E842AEDD-0859-4703-B639-E262F0E90DD8','Test','N',getdate(),'N','E4205C35-2A37-458A-BA0D-52660FD6ECE2','E4205C35-2A37-458A-BA0D-52660FD6ECE2')
+END
+
+GO
+if not exists(select * from t_Framework_Gatekeeper_TargetType where uTargetTypeId ='CAABA7C6-D44B-4495-8F28-08D45475182B')
+BEGIN
+insert into t_Framework_Gatekeeper_TargetType values( 'CAABA7C6-D44B-4495-8F28-08D45475182B','Pupil','N',getdate(),'N','E4205C35-2A37-458A-BA0D-52660FD6ECE2','E4205C35-2A37-458A-BA0D-52660FD6ECE2')
+END
+
+GO
+if not exists(select * from t_Framework_Gatekeeper_TargetType where uTargetTypeId ='CAABA7C6-D44B-4495-8F28-08D45475182C')
+BEGIN
+insert into t_Framework_Gatekeeper_TargetType values( 'CAABA7C6-D44B-4495-8F28-08D45475182C','School','N',getdate(),'N','E4205C35-2A37-458A-BA0D-52660FD6ECE2','E4205C35-2A37-458A-BA0D-52660FD6ECE2')
+END
+
+if not exists(select * from t_Framework_Gatekeeper_TargetType where uTargetTypeId ='CAABA7C6-D44B-4495-8F28-08D45475182D')
+BEGIN
+insert into t_Framework_Gatekeeper_TargetType values( 'CAABA7C6-D44B-4495-8F28-08D45475182D','Teacher','N',getdate(),'N','E4205C35-2A37-458A-BA0D-52660FD6ECE2','E4205C35-2A37-458A-BA0D-52660FD6ECE2')
+END
+
+GO
+if not exists(select * from t_Framework_Gatekeeper_TargetType where uTargetTypeId ='EB6CA735-E834-4A7C-8953-D67530F62CCB')
+BEGIN
+insert into t_Framework_Gatekeeper_TargetType values( 'EB6CA735-E834-4A7C-8953-D67530F62CCB','Intranet','N',getdate(),'N','E4205C35-2A37-458A-BA0D-52660FD6ECE2','E4205C35-2A37-458A-BA0D-52660FD6ECE2')
+insert into t_Framework_Gatekeeper_TargetType_Data values('B264153C-2185-425E-A7F9-CF6923732F3F','EB6CA735-E834-4A7C-8953-D67530F62CCB',1,'Intranet')
+insert into t_Framework_Gatekeeper_TargetType_Data values('9E8F397C-89A2-4447-B80F-DCCEB44B8107','EB6CA735-E834-4A7C-8953-D67530F62CCB',2,'Intranet')
+insert into t_Framework_Gatekeeper_TargetType_Data values('7D9D5037-DAF2-4022-83F4-4C8745ABECC9','EB6CA735-E834-4A7C-8953-D67530F62CCB',3,'Intranet')
+END
+
+GO
+if not exists(select * from t_Framework_Gatekeeper_TargetType where uTargetTypeId ='FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F')
+BEGIN
+insert into t_Framework_Gatekeeper_TargetType values( 'FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F','Cockpit','N',getdate(),'N','E4205C35-2A37-458A-BA0D-52660FD6ECE2','E4205C35-2A37-458A-BA0D-52660FD6ECE2')
+insert into t_Framework_Gatekeeper_TargetType_Data values('709F5BB0-370D-47FF-9792-BE47837398AE','FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F',1,'Cockpit')
+insert into t_Framework_Gatekeeper_TargetType_Data values('9D7BE2A6-6E36-4F2D-A2F3-86394CEDE50B','FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F',2,'Cockpit')
+insert into t_Framework_Gatekeeper_TargetType_Data values('6FA0235C-703E-42E7-B9A5-F85606BB0EC6','FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F',3,'Cockpit')
+END
+
+GO
+/***************************************************
+New Table
+
+***************************************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES   WHERE TABLE_NAME = N't_Framework_ObjectConfiguration')
+BEGIN
+CREATE TABLE [dbo].[t_Framework_ObjectConfiguration]
+(
+	  [uObjectConfigurationId] UNIQUEIDENTIFIER NOT NULL
+	, [iMainClientId] INT NULL
+	, [vObjectName] NVARCHAR(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [cIsDeleted] CHAR(1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [dtCreatedOn] DATETIME NULL
+	, [dtModifiedOn] DATETIME NULL
+	, [uUserId] UNIQUEIDENTIFIER NULL
+	, [uModifiedByUserId] UNIQUEIDENTIFIER NULL
+	, CONSTRAINT [PK_t_Framework_ObjectConfiguration] PRIMARY KEY ([uObjectConfigurationId] ASC)
+)
+END
+
+GO
+/***************************************************
+Dafult values
+
+***************************************************/
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = '6A319EBD-F9AF-49A9-850F-1500E6ADCF54')BEGIN insert into t_Framework_ObjectConfiguration select '6A319EBD-F9AF-49A9-850F-1500E6ADCF54','0','PupilManagementGrid','N',getdate(),getdate(),'5EC5AA97-790A-4F30-AEA3-7788E7C18FF6','5EC5AA97-790A-4F30-AEA3-7788E7C18FF6'END
+ 
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = '4E50593B-88FE-44B4-941E-1B8E9E41ADE0')BEGIN insert into t_Framework_ObjectConfiguration select '4E50593B-88FE-44B4-941E-1B8E9E41ADE0','97','StateManagementGrid','N',getdate(),getdate(),'688FAC4D-281E-4497-9116-045A819B582F','688FAC4D-281E-4497-9116-045A819B582F'END
+ 
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = '26FC51EA-B486-46A8-9089-265B900F8BF7')BEGIN insert into t_Framework_ObjectConfiguration select '26FC51EA-B486-46A8-9089-265B900F8BF7','0','KeyClocksGrid','N',getdate(),getdate(),'5CBEF3EC-D26D-42EE-8975-BEE71B68BDFF','5CBEF3EC-D26D-42EE-8975-BEE71B68BDFF'END
+ 
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = 'FFDEF18E-B584-4291-8678-2B67249B4ACD')BEGIN insert into t_Framework_ObjectConfiguration select 'FFDEF18E-B584-4291-8678-2B67249B4ACD','0','TeacherProfile','N',getdate(),getdate(),'CE7DA37F-ED1B-4424-98F1-FBBA7C986F86','CE7DA37F-ED1B-4424-98F1-FBBA7C986F86'END
+ 
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = 'FEABA1FB-4A6C-4618-B140-2EB86A39420A')BEGIN insert into t_Framework_ObjectConfiguration select 'FEABA1FB-4A6C-4618-B140-2EB86A39420A','0','TeacherImportExport','N',getdate(),getdate(),'1A66ED3C-2535-4E2C-965E-70AD04CD7DAA','1A66ED3C-2535-4E2C-965E-70AD04CD7DAA'END
+ 
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = 'CDBB181A-6404-45EB-8286-460FA8F940FB')BEGIN insert into t_Framework_ObjectConfiguration select 'CDBB181A-6404-45EB-8286-460FA8F940FB','0','StateAdministrator','N',getdate(),getdate(),'F73C81B3-CBE1-4C85-AD80-7B8958FED8C6','F73C81B3-CBE1-4C85-AD80-7B8958FED8C6'END
+ 
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = 'E1B0A9AB-5585-481B-B751-4843241AB239')BEGIN insert into t_Framework_ObjectConfiguration select 'E1B0A9AB-5585-481B-B751-4843241AB239','97','TaskGridColumns','N',getdate(),getdate(),'84F3F707-DD28-459E-A4DB-9CD0F4CEC7E3','84F3F707-DD28-459E-A4DB-9CD0F4CEC7E3'END
+ 
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = '3A77A3E2-15CC-431D-A2F6-4F715A10BC16')BEGIN insert into t_Framework_ObjectConfiguration select '3A77A3E2-15CC-431D-A2F6-4F715A10BC16','0','TeacherClassGrid','N',getdate(),getdate(),'F7673E7E-B4B3-49B0-9BD3-12002B3D6436','F7673E7E-B4B3-49B0-9BD3-12002B3D6436'END
+
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = '7DFE4E6B-95E7-47F4-BBFE-60754FF5F59D')BEGIN insert into t_Framework_ObjectConfiguration select '7DFE4E6B-95E7-47F4-BBFE-60754FF5F59D','0','IntranetAdministrator','N',getdate(),getdate(),'E5808A71-1F0B-47E8-851F-98D5CDADFF7B','E5808A71-1F0B-47E8-851F-98D5CDADFF7B'END
+
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = '829960F2-2771-4735-9B98-61A39EB7E13E')BEGIN insert into t_Framework_ObjectConfiguration select '829960F2-2771-4735-9B98-61A39EB7E13E','0','ClassManagementGrid','N',getdate(),getdate(),'10BD746F-F386-493A-AE2C-921ED806F149','10BD746F-F386-493A-AE2C-921ED806F149'END
+
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = 'D0F492C6-2953-4DFF-94E3-67712F644924')BEGIN insert into t_Framework_ObjectConfiguration select 'D0F492C6-2953-4DFF-94E3-67712F644924','0','TeacherPupilGrid','N',getdate(),getdate(),'33AD84BF-1C15-487A-BB91-DD5CBAADC3D5','33AD84BF-1C15-487A-BB91-DD5CBAADC3D5'END
+ 
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = 'C9892ED9-D7FD-4175-9F44-740F108521BA')BEGIN insert into t_Framework_ObjectConfiguration select 'C9892ED9-D7FD-4175-9F44-740F108521BA','0','TaskGrid','N',getdate(),getdate(),'4F6D13AF-8A51-499F-9ADD-5A756B2F471B','4F6D13AF-8A51-499F-9ADD-5A756B2F471B'END
+ 
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = 'CF393644-84B5-4D6B-9A6B-7BEB52FA2DB7')BEGIN insert into t_Framework_ObjectConfiguration select 'CF393644-84B5-4D6B-9A6B-7BEB52FA2DB7','0','SchoolManagementGrid','N',getdate(),getdate(),'79BE2AC7-A401-456F-A8A0-EA715139DBAF','79BE2AC7-A401-456F-A8A0-EA715139DBAF'END
+ 
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = '474CAF9D-D1D7-46DA-B14B-7E45AA188AA6')BEGIN insert into t_Framework_ObjectConfiguration select '474CAF9D-D1D7-46DA-B14B-7E45AA188AA6','0','TeacherManagementGrid','N',getdate(),getdate(),'EFEA2E1E-493E-4424-9987-50AC0635C812','EFEA2E1E-493E-4424-9987-50AC0635C812'END
+ 
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = '426E4C3C-949D-42AF-8BE6-81EE08DC691D')BEGIN insert into t_Framework_ObjectConfiguration select '426E4C3C-949D-42AF-8BE6-81EE08DC691D','0','CompetencyRange','N',getdate(),getdate(),'8DBC0206-CF7A-4C00-91AF-100FD41F31D0','8DBC0206-CF7A-4C00-91AF-100FD41F31D0'END
+ 
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = 'C7E77599-6F2C-4987-8371-85513AEA76B7')BEGIN insert into t_Framework_ObjectConfiguration select 'C7E77599-6F2C-4987-8371-85513AEA76B7','0','SchoolClassGrid','N',getdate(),getdate(),'664A5886-FFA4-4EA4-9C60-B87A341DBDB9','664A5886-FFA4-4EA4-9C60-B87A341DBDB9'END
+ 
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = 'A7D1D024-735E-48D3-826A-94A84A5FF57C')BEGIN insert into t_Framework_ObjectConfiguration select 'A7D1D024-735E-48D3-826A-94A84A5FF57C','0','SchoolProfile','N',getdate(),getdate(),'A4D272A3-1B9D-444E-994C-2715E5C3765B','A4D272A3-1B9D-444E-994C-2715E5C3765B'END
+ 
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = '6DB0946D-0B23-4A19-B190-9993142EEF9F')BEGIN insert into t_Framework_ObjectConfiguration select '6DB0946D-0B23-4A19-B190-9993142EEF9F','0','SubjectGrid','N',getdate(),getdate(),'2A38888E-F4C0-44A1-99A0-3F98961EE341','2A38888E-F4C0-44A1-99A0-3F98961EE341'END
+ 
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = '2033751E-B5C5-4F34-9311-9A3EB238F6A6')BEGIN insert into t_Framework_ObjectConfiguration select '2033751E-B5C5-4F34-9311-9A3EB238F6A6','0','SchoolTeacherGrid','N',getdate(),getdate(),'3F0E0F76-1F8C-4103-94CC-672B6B61F686','3F0E0F76-1F8C-4103-94CC-672B6B61F686'END
+ 
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = '4B1BAEDF-7971-4F86-A9D4-A4D7D708B429')BEGIN insert into t_Framework_ObjectConfiguration select '4B1BAEDF-7971-4F86-A9D4-A4D7D708B429','0','State','N',getdate(),getdate(),'56DE037B-94FA-4555-BBED-0A3090E1438A','56DE037B-94FA-4555-BBED-0A3090E1438A'END
+ 
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = '2D4EDACB-51EF-4F9C-899A-AFCBE89D93B6')BEGIN insert into t_Framework_ObjectConfiguration select '2D4EDACB-51EF-4F9C-899A-AFCBE89D93B6','0','ClassType','N',getdate(),getdate(),'AB8EBF97-B02D-4A76-AF7A-2907410B6DB7','AB8EBF97-B02D-4A76-AF7A-2907410B6DB7'END
+ 
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = 'EA79CA79-588A-4401-B2E9-BC46992D603A')BEGIN insert into t_Framework_ObjectConfiguration select 'EA79CA79-588A-4401-B2E9-BC46992D603A','0','SchoolRegistration','N',getdate(),getdate(),'BFDD717E-391F-4CAB-BB22-DD77B98DFACE','BFDD717E-391F-4CAB-BB22-DD77B98DFACE'END
+ 
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = 'D740B4FE-C15D-48BC-BC42-CD4A7922FABF')BEGIN insert into t_Framework_ObjectConfiguration select 'D740B4FE-C15D-48BC-BC42-CD4A7922FABF','0','StateManagementGrid','N',getdate(),getdate(),'6E3E22AD-2BE5-4858-9175-CC21264B5CBB','6E3E22AD-2BE5-4858-9175-CC21264B5CBB'END
+ 
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = '0A7CBF69-2A09-4F27-BF19-D1190B9D3B27')BEGIN insert into t_Framework_ObjectConfiguration select '0A7CBF69-2A09-4F27-BF19-D1190B9D3B27','0','CompetencyLevel','N',getdate(),getdate(),'A6ECA618-0810-41DE-A22C-D6F551D92D0C','A6ECA618-0810-41DE-A22C-D6F551D92D0C'END
+ 
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = '86A7E3C2-5B74-4D4F-8838-D3A3B79F853A')BEGIN insert into t_Framework_ObjectConfiguration select '86A7E3C2-5B74-4D4F-8838-D3A3B79F853A','0','SchoolPupilGrid','N',getdate(),getdate(),'659A9A51-5BA9-4B0A-A43E-B2455B17308A','659A9A51-5BA9-4B0A-A43E-B2455B17308A'END
+ 
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = 'B53B9E7B-645B-4022-98DF-D3D0F0D04605')BEGIN insert into t_Framework_ObjectConfiguration select 'B53B9E7B-645B-4022-98DF-D3D0F0D04605','0','CategoryCompetencyGrid','N',getdate(),getdate(),'5BF87640-3CDA-48E6-80DC-0FE6C23C825C','5BF87640-3CDA-48E6-80DC-0FE6C23C825C'END
+ 
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = '99BC607C-CE60-4464-9E20-D7F186B322CD')BEGIN insert into t_Framework_ObjectConfiguration select '99BC607C-CE60-4464-9E20-D7F186B322CD','0','TaskGridColumnSetting','N',getdate(),getdate(),'290DC91B-5CB5-4783-8BDF-7CF6E755D1AC','290DC91B-5CB5-4783-8BDF-7CF6E755D1AC'END
+ 
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = 'B6F42949-7E61-4F82-B329-E7FD911C5C75')BEGIN insert into t_Framework_ObjectConfiguration select 'B6F42949-7E61-4F82-B329-E7FD911C5C75','0','CategoryGrid','N',getdate(),getdate(),'E4BD4ABE-3E92-48FA-B63F-615C549B5B1D','E4BD4ABE-3E92-48FA-B63F-615C549B5B1D'END
+ 
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = '288A50C0-FACA-4AA3-8E89-E95FA6270C60')BEGIN insert into t_Framework_ObjectConfiguration select '288A50C0-FACA-4AA3-8E89-E95FA6270C60','0','PupilImportExport','N',getdate(),getdate(),'52A7D1EB-B1EB-407C-B923-0C833B49CC64','52A7D1EB-B1EB-407C-B923-0C833B49CC64'END
+ 
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = '262E2EB8-7C75-403D-97FE-EBF79DD34D83')BEGIN insert into t_Framework_ObjectConfiguration select '262E2EB8-7C75-403D-97FE-EBF79DD34D83','0','SchoolYear','N',getdate(),getdate(),'B0C2CCD1-209E-4660-B076-03A485D57E18','B0C2CCD1-209E-4660-B076-03A485D57E18'END
+ 
+ GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration where uObjectConfigurationId = 'FAE881A0-065E-4FCB-ADA2-EFBB507ECD4D')BEGIN insert into t_Framework_ObjectConfiguration select 'FAE881A0-065E-4FCB-ADA2-EFBB507ECD4D','0','ClassManagementGrid','N',getdate(),getdate(),'7A935A0C-55A7-41AF-9965-4F366F5C3B37','7A935A0C-55A7-41AF-9965-4F366F5C3B37'END
+
+ GO
+/***************************************************
+New Table
+
+***************************************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES   WHERE TABLE_NAME = N't_Framework_ObjectConfiguration_Column')
+BEGIN
+CREATE TABLE [dbo].[t_Framework_ObjectConfiguration_Column]
+(
+	  [uObjectConfigurationColumnId] UNIQUEIDENTIFIER NOT NULL
+	, [uObjectConfigurationId] UNIQUEIDENTIFIER NULL
+	, [vColumnName] VARCHAR(200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [vDataType] VARCHAR(200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [iDisplayOrder] INT NULL
+	, [vTextResourcePage] VARCHAR(500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [vTextResourceKey] VARCHAR(500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [vControlType] VARCHAR(200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [IsMandatory] CHAR(1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [vValidationType] NVARCHAR(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [iWidth] INT NULL
+	, [cShowMultiLanguage] CHAR(1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [vValidationKey] VARCHAR(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, CONSTRAINT [PK_t_Framework_ObjectConfiguration_Column] PRIMARY KEY ([uObjectConfigurationColumnId] ASC)
+)
+
+END
+
+GO
+/***************************************************
+Dafult values
+
+***************************************************/
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '3203041B-351E-4C8A-98C3-06FAD1C363B1')BEGIN insert into t_Framework_ObjectConfiguration_Column select '3203041B-351E-4C8A-98C3-06FAD1C363B1','EA79CA79-588A-4401-B2E9-BC46992D603A','iTitleId','int',1,'SchoolRegistration','TitleId','dropdown','Y','dropdown',NULL,NULL,'DropdownValidationMessage'END
+
+GO
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'BC3E46BA-363C-42F9-9187-0788F30A0F0C')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'BC3E46BA-363C-42F9-9187-0788F30A0F0C','6DB0946D-0B23-4A19-B190-9993142EEF9F','t_TestDrive_Subject_Data.vSubjectName','string',4,'Subject','SubjectName','textbox','Y',NULL,NULL,'Y',NULL END
+
+GO
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '8E7D8076-17DB-4774-89DB-07A3CCCE8FA6')BEGIN insert into t_Framework_ObjectConfiguration_Column select '8E7D8076-17DB-4774-89DB-07A3CCCE8FA6','6DB0946D-0B23-4A19-B190-9993142EEF9F','cIsReadyForManualLearningTest','string',15,'Subject','IsReadyForManualLearningTest','checkbox',NULL,NULL,NULL,NULL,NULL END
+
+GO
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'ACFE57DF-3823-4F87-A88A-099E10C132A6')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'ACFE57DF-3823-4F87-A88A-099E10C132A6','A7D1D024-735E-48D3-826A-94A84A5FF57C','vFirstName','string',8,'School','FirstName','textbox','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'B772BDE6-E7C3-4065-8FDE-09C015387794')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'B772BDE6-E7C3-4065-8FDE-09C015387794','4E50593B-88FE-44B4-941E-1B8E9E41ADE0','vName','string',3,'State','vName','textbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'DF3ADCFC-FA7F-4067-989C-0CF7EE95F94E')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'DF3ADCFC-FA7F-4067-989C-0CF7EE95F94E','288A50C0-FACA-4AA3-8E89-E95FA6270C60','t_TestDrive_Member_Class_Pupil.uClassGroupId','uniqueidentifier',7,'PupilImportExport','ClassGroup','dropdown','N',NULL,'150',NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'C44D39A7-E14D-4155-8925-0F2DB437E660')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'C44D39A7-E14D-4155-8925-0F2DB437E660','7DFE4E6B-95E7-47F4-BBFE-60754FF5F59D','vIPRestriction','int',7,'IntranetAdministrator','IPRestriction','textbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '304C5EFD-B382-4D6B-B335-109455C1D41A')BEGIN insert into t_Framework_ObjectConfiguration_Column select '304C5EFD-B382-4D6B-B335-109455C1D41A','4B1BAEDF-7971-4F86-A9D4-A4D7D708B429','iStateNumberForTestToken','int',1,'State','StateNumberForTestToken','label',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '09FAAD05-5124-4368-BBA5-121D5D0FC342')BEGIN insert into t_Framework_ObjectConfiguration_Column select '09FAAD05-5124-4368-BBA5-121D5D0FC342','EA79CA79-588A-4401-B2E9-BC46992D603A','iZIPCode','int',6,'SchoolRegistration','ZIPCode','textbox','Y','number',NULL,NULL,'NumberValidationMessage'END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '33FB63D1-7D96-4CD6-9E50-1302F6B494F3')BEGIN insert into t_Framework_ObjectConfiguration_Column select '33FB63D1-7D96-4CD6-9E50-1302F6B494F3','829960F2-2771-4735-9B98-61A39EB7E13E','vStateName','string',1,'Class','StateName','label',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '6E968D48-F0A2-4734-979F-15D7E5DF8381')BEGIN insert into t_Framework_ObjectConfiguration_Column select '6E968D48-F0A2-4734-979F-15D7E5DF8381','2D4EDACB-51EF-4F9C-899A-AFCBE89D93B6','iDisplayOrder','int',5,'ClassType','Sequence','textbox','Y','number',NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '5F7C3BC7-2F81-4875-AEEB-177FD809B36B')BEGIN insert into t_Framework_ObjectConfiguration_Column select '5F7C3BC7-2F81-4875-AEEB-177FD809B36B','A7D1D024-735E-48D3-826A-94A84A5FF57C','vSchoolName','string',1,'School','SchoolName','textbox','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '444F1D8F-4C49-4917-BC4F-17DEA0928435')BEGIN insert into t_Framework_ObjectConfiguration_Column select '444F1D8F-4C49-4917-BC4F-17DEA0928435','26FC51EA-B486-46A8-9089-265B900F8BF7','cIsLoginFailed','char',6,'KeyClockLogs','LoginFailed','checkbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '0034FC34-3CB5-4A05-8549-190154202305')BEGIN insert into t_Framework_ObjectConfiguration_Column select '0034FC34-3CB5-4A05-8549-190154202305','6A319EBD-F9AF-49A9-850F-1500E6ADCF54','iZip','int',8,'Pupil','ZIPCode','label',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '5031D467-AF2E-4B82-A82C-1A7D607A0E96')BEGIN insert into t_Framework_ObjectConfiguration_Column select '5031D467-AF2E-4B82-A82C-1A7D607A0E96','26FC51EA-B486-46A8-9089-265B900F8BF7','vAdditionalInformation','string',8,'KeyClockLogs','AdditionalInformation','label',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '76CCD2F7-A7C7-4C6E-8E4A-1C2B3975FA1D')BEGIN insert into t_Framework_ObjectConfiguration_Column select '76CCD2F7-A7C7-4C6E-8E4A-1C2B3975FA1D','4B1BAEDF-7971-4F86-A9D4-A4D7D708B429','vLongName','string',9,'State','LongName','textbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'CFC6DE85-F03D-49F0-868A-1E6AB58A437F')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'CFC6DE85-F03D-49F0-868A-1E6AB58A437F','B6F42949-7E61-4F82-B329-E7FD911C5C75','t_TestDrive_Category_Data.tClarificationNotes','string',4,'Category','ClarificationNotes','textbox',NULL,NULL,NULL,'Y',NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '53E3ED06-B6FA-4B38-8AA9-1E95FB4C64D9')BEGIN insert into t_Framework_ObjectConfiguration_Column select '53E3ED06-B6FA-4B38-8AA9-1E95FB4C64D9','B6F42949-7E61-4F82-B329-E7FD911C5C75','t_TestDrive_Category_Data.vCategoryName','string',1,'Category','CategoryName','textbox',NULL,NULL,NULL,'Y',NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '471388A1-026E-4AC4-B68A-2071A53E8E2F')BEGIN insert into t_Framework_ObjectConfiguration_Column select '471388A1-026E-4AC4-B68A-2071A53E8E2F','CF393644-84B5-4D6B-9A6B-7BEB52FA2DB7','dtWhenLoginlEmailSent','datetime',13,'SchoolManagement','EMailSentText','label',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'BB75A392-7DC2-4450-8FAC-2107E81C39E0')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'BB75A392-7DC2-4450-8FAC-2107E81C39E0','C9892ED9-D7FD-4175-9F44-740F108521BA','iPageId','int',1,'Task','ID','textbox','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '5A577889-2B1D-4A64-99E2-211F797E389A')BEGIN insert into t_Framework_ObjectConfiguration_Column select '5A577889-2B1D-4A64-99E2-211F797E389A','426E4C3C-949D-42AF-8BE6-81EE08DC691D','iDisplayOrder','int',1,'CompetencyRange','DisplayUpdate','textbox','Y','number',NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'EA82E7A2-0954-4724-B0D8-2148717D35F5')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'EA82E7A2-0954-4724-B0D8-2148717D35F5','FEABA1FB-4A6C-4618-B140-2EB86A39420A','vName','string',3,'School','TeacherGrid_ColumnName_Name','textbox','N',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '14212141-0E2E-4FF3-90EB-237E56CA77D3')BEGIN insert into t_Framework_ObjectConfiguration_Column select '14212141-0E2E-4FF3-90EB-237E56CA77D3','4E50593B-88FE-44B4-941E-1B8E9E41ADE0','t_TestDrive_Member_State_Data.vShortStateName','string',4,'State','vShortStateName','textbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'D2295067-358C-49C8-B0E9-26D7CB17BFB5')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'D2295067-358C-49C8-B0E9-26D7CB17BFB5','0A7CBF69-2A09-4F27-BF19-D1190B9D3B27','iDisplayOrder','int',1,'CompetencyLevel','DisplayUpdate','textbox','Y','number',NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '4DB17E8E-6DF7-4988-9742-2791B1DEC9BF')BEGIN insert into t_Framework_ObjectConfiguration_Column select '4DB17E8E-6DF7-4988-9742-2791B1DEC9BF','2033751E-B5C5-4F34-9311-9A3EB238F6A6','vFirstName','string',3,'School','TeacherGrid_ColumnName_FirstName','textbox','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'CC5C18B5-68FC-4DC6-B15C-293F01B6E9DF')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'CC5C18B5-68FC-4DC6-B15C-293F01B6E9DF','6A319EBD-F9AF-49A9-850F-1500E6ADCF54','vStreet','string',6,'Pupil','Street','label',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'CD099986-0815-4A98-B3F5-2A55C6C0182E')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'CD099986-0815-4A98-B3F5-2A55C6C0182E','EA79CA79-588A-4401-B2E9-BC46992D603A','vSchoolName','string',4,'SchoolRegistration','SchoolName','textbox','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '79FC6A97-342A-4FAC-B159-2B56E7A2FF1D')BEGIN insert into t_Framework_ObjectConfiguration_Column select '79FC6A97-342A-4FAC-B159-2B56E7A2FF1D','474CAF9D-D1D7-46DA-B14B-7E45AA188AA6','vFirstName','string',4,'Teacher','FirstName','textbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '19264AE3-2158-43B3-BF9E-2BB698B68671')BEGIN insert into t_Framework_ObjectConfiguration_Column select '19264AE3-2158-43B3-BF9E-2BB698B68671','CF393644-84B5-4D6B-9A6B-7BEB52FA2DB7','vName','string',5,'SchoolManagement','Name','label','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '372E9748-7767-4DAD-B21D-2BE3A17560E5')BEGIN insert into t_Framework_ObjectConfiguration_Column select '372E9748-7767-4DAD-B21D-2BE3A17560E5','4E50593B-88FE-44B4-941E-1B8E9E41ADE0','dtCreatedOn','date',7,'State','dtCreatedOn','label',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'CA152BA8-653F-4BF3-805B-2CCB4F04FA45')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'CA152BA8-653F-4BF3-805B-2CCB4F04FA45','6A319EBD-F9AF-49A9-850F-1500E6ADCF54','cIsForeignLanguage','char',14,'Pupil','ForeignLanguage','label',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '1D03D17B-D6A8-45E3-814D-2DF8AF7C5B33')BEGIN insert into t_Framework_ObjectConfiguration_Column select '1D03D17B-D6A8-45E3-814D-2DF8AF7C5B33','6DB0946D-0B23-4A19-B190-9993142EEF9F','t_TestDrive_Subject_Data.vSubjectShortName','string',12,'Subject','ShortName','textbox',NULL,NULL,NULL,'Y',NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '904FE343-716D-4BEF-80A1-2F24D34EC306')BEGIN insert into t_Framework_ObjectConfiguration_Column select '904FE343-716D-4BEF-80A1-2F24D34EC306','2033751E-B5C5-4F34-9311-9A3EB238F6A6','iTitleId','int',1,'School','TeacherGrid_ColumnName_Title','dropdown','Y',NULL,'80',NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '0D3B5D45-ECBF-4E5D-B7B9-302C6189B00B')BEGIN insert into t_Framework_ObjectConfiguration_Column select '0D3B5D45-ECBF-4E5D-B7B9-302C6189B00B','4E50593B-88FE-44B4-941E-1B8E9E41ADE0','iStateId','int',1,'State','iStateId','label',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '1344AE3B-1757-415B-924E-313C1CC571B6')BEGIN insert into t_Framework_ObjectConfiguration_Column select '1344AE3B-1757-415B-924E-313C1CC571B6','474CAF9D-D1D7-46DA-B14B-7E45AA188AA6','iTitleId','int',3,'Teacher','TitleId','dropdown',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '3CC1DACF-A59F-4134-BD2A-32935CCCC1F7')BEGIN insert into t_Framework_ObjectConfiguration_Column select '3CC1DACF-A59F-4134-BD2A-32935CCCC1F7','EA79CA79-588A-4401-B2E9-BC46992D603A','iSchoolTypeId','string',9,'SchoolRegistration','SchoolType','dropdown','Y','dropdown',NULL,NULL,'DropdownValidationMessage' END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '88032EDC-67C3-49E6-9E13-32E61E4D5A77')BEGIN insert into t_Framework_ObjectConfiguration_Column select '88032EDC-67C3-49E6-9E13-32E61E4D5A77','99BC607C-CE60-4464-9E20-D7F186B322CD','dPoints','decimal',4,'TaskGridColumnSetting','Points','textbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '2C6D254B-7C5E-4ECF-8B43-335A8E2B0AA2')BEGIN insert into t_Framework_ObjectConfiguration_Column select '2C6D254B-7C5E-4ECF-8B43-335A8E2B0AA2','474CAF9D-D1D7-46DA-B14B-7E45AA188AA6','vName','string',5,'Teacher','Name','textbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '864FDDC5-DEE8-4199-9F30-337BFCD9CF61')BEGIN insert into t_Framework_ObjectConfiguration_Column select '864FDDC5-DEE8-4199-9F30-337BFCD9CF61','2033751E-B5C5-4F34-9311-9A3EB238F6A6','vPhonePrivate','string',6,'School','TeacherGrid_ColumnName_Mobile','textbox','N','Number',NULL,NULL,'NumberValidationMessage'END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '96C7433C-B5B1-487E-846D-358A2C2869DB')BEGIN insert into t_Framework_ObjectConfiguration_Column select '96C7433C-B5B1-487E-846D-358A2C2869DB','A7D1D024-735E-48D3-826A-94A84A5FF57C','vPhone','string',4,'School','Phone','textbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '2E00A415-F637-44C2-AC8B-360072EBAE87')BEGIN insert into t_Framework_ObjectConfiguration_Column select '2E00A415-F637-44C2-AC8B-360072EBAE87','288A50C0-FACA-4AA3-8E89-E95FA6270C60','vFirstName','string',4,'PupilImportExport','FirstName','textbox','Y',NULL,'150',NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '739B1FC1-8AD7-4C0A-92DF-36259A0A83DB')BEGIN insert into t_Framework_ObjectConfiguration_Column select '739B1FC1-8AD7-4C0A-92DF-36259A0A83DB','288A50C0-FACA-4AA3-8E89-E95FA6270C60','vName','string',3,'PupilImportExport','Name','textbox','Y',NULL,'150',NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '1CBAD059-3447-4FFB-B6F5-3A81DEA7FC93')BEGIN insert into t_Framework_ObjectConfiguration_Column select '1CBAD059-3447-4FFB-B6F5-3A81DEA7FC93','6A319EBD-F9AF-49A9-850F-1500E6ADCF54','iLanguageId','int',11,'Pupil','Language','label',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '02FC40F1-8925-4A1D-9313-42220012CD5D')BEGIN insert into t_Framework_ObjectConfiguration_Column select '02FC40F1-8925-4A1D-9313-42220012CD5D','EA79CA79-588A-4401-B2E9-BC46992D603A','vEmail','string',11,'SchoolRegistration','EMail','textbox','Y','email',NULL,NULL,'EmailValidationMessage'END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '3DE597A9-A491-47B3-83AD-4277BE0D191E')BEGIN insert into t_Framework_ObjectConfiguration_Column select '3DE597A9-A491-47B3-83AD-4277BE0D191E','CF393644-84B5-4D6B-9A6B-7BEB52FA2DB7','iTitleId','int',3,'SchoolManagement','TitleId','dropdown','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'C5C4B526-3942-4F9C-BDD8-4290E8E3FEDA')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'C5C4B526-3942-4F9C-BDD8-4290E8E3FEDA','6DB0946D-0B23-4A19-B190-9993142EEF9F','dVariance','int',9,'Subject','Variance','textbox',NULL,'number',NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'E59F0869-4799-4EB3-B3E7-42C4431E47C5')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'E59F0869-4799-4EB3-B3E7-42C4431E47C5','6DB0946D-0B23-4A19-B190-9993142EEF9F','t_TestDrive_Subject_Data.tSubjectDescription','string',11,'Subject','Description','textbox',NULL,NULL,NULL,'Y',NULL END
+GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '6E183F0D-EE56-4F4A-9C43-4388E21607AE')BEGIN insert into t_Framework_ObjectConfiguration_Column select '6E183F0D-EE56-4F4A-9C43-4388E21607AE','FFDEF18E-B584-4291-8678-2B67249B4ACD','vEmail','string',7,'Teacher','Email','textbox','Y','email',NULL,NULL,'EmailValidationMessage'END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '4B15A5A7-8089-44D7-A01F-43F49A85BCB2')BEGIN insert into t_Framework_ObjectConfiguration_Column select '4B15A5A7-8089-44D7-A01F-43F49A85BCB2','6DB0946D-0B23-4A19-B190-9993142EEF9F','iDisplayOrder','string',5,'Subject','DisplayOrder','textbox','Y','number',NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'CF056B5F-AF54-4409-9FB8-45F976E68360')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'CF056B5F-AF54-4409-9FB8-45F976E68360','D0F492C6-2953-4DFF-94E3-67712F644924','vFirstName','string',3,'Teacher','FirstName','textbox','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '01A18F76-E274-4C47-B0E5-45FB06F8C885')BEGIN insert into t_Framework_ObjectConfiguration_Column select '01A18F76-E274-4C47-B0E5-45FB06F8C885','FEABA1FB-4A6C-4618-B140-2EB86A39420A','vPhoneSchool','string',8,'School','TeacherGrid_ColumnName_Phone','textbox','N',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '741A2D81-ED67-4B58-8632-4769490F6C4F')BEGIN insert into t_Framework_ObjectConfiguration_Column select '741A2D81-ED67-4B58-8632-4769490F6C4F','C9892ED9-D7FD-4175-9F44-740F108521BA','vPageName','string',1,'Task','Name','textbox','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '059D36D9-CF24-4D37-899B-4AC1E2CFF535')BEGIN insert into t_Framework_ObjectConfiguration_Column select '059D36D9-CF24-4D37-899B-4AC1E2CFF535','26FC51EA-B486-46A8-9089-265B900F8BF7','dtDateTimeOfLogout','date',5,'KeyClockLogs','DateTimeOfLogout','label',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'F484D0AD-723C-4124-997D-4B1AC1793473')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'F484D0AD-723C-4124-997D-4B1AC1793473','CF393644-84B5-4D6B-9A6B-7BEB52FA2DB7','vPhone','string',8,'SchoolManagement','Phone','label',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'C2A79798-4DFA-485A-BEC9-4D9EFCA5146E')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'C2A79798-4DFA-485A-BEC9-4D9EFCA5146E','CF393644-84B5-4D6B-9A6B-7BEB52FA2DB7','iSchoolTypeId','int',6,'SchoolManagement','SchoolType','dropdown','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '84ECD83B-752E-4619-BC2D-4E9D4C24B769')BEGIN insert into t_Framework_ObjectConfiguration_Column select '84ECD83B-752E-4619-BC2D-4E9D4C24B769','829960F2-2771-4735-9B98-61A39EB7E13E','vTeacherName','string',3,'Class','TeacherName','label',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '3CAD904C-E47D-40C9-95C2-4F1337328A98')BEGIN insert into t_Framework_ObjectConfiguration_Column select '3CAD904C-E47D-40C9-95C2-4F1337328A98','C7E77599-6F2C-4987-8371-85513AEA76B7','vClassName','string',1,'School','ClassName','textbox','Y',NULL,'140',NULL,NULL END
+GO
+ if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '974DCC4B-17E6-48C7-AE06-525FABDFE84B')BEGIN insert into t_Framework_ObjectConfiguration_Column select '974DCC4B-17E6-48C7-AE06-525FABDFE84B','86A7E3C2-5B74-4D4F-8838-D3A3B79F853A','iGenderId','int',1,'School','Gender','dropdown','Y',NULL,'112',NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'E2BF9AEE-803A-421A-BC89-52DE9B2794D1')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'E2BF9AEE-803A-421A-BC89-52DE9B2794D1','6A319EBD-F9AF-49A9-850F-1500E6ADCF54','vName','string',7,'Pupil','Name','label',NULL,NULL,NULL,NULL,NULL END
+GO
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '0141B2F0-06F5-4DF3-99F3-571D61709BA4')BEGIN insert into t_Framework_ObjectConfiguration_Column select '0141B2F0-06F5-4DF3-99F3-571D61709BA4','EA79CA79-588A-4401-B2E9-BC46992D603A','vTown','string',7,'SchoolRegistration','Town','textbox','Y',NULL,NULL,NULL,NULL END
+NULL
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '536971A1-A852-45D1-978E-585DE00C37F5')BEGIN insert into t_Framework_ObjectConfiguration_Column select '536971A1-A852-45D1-978E-585DE00C37F5','829960F2-2771-4735-9B98-61A39EB7E13E','iSchoolYear','int',5,'Class','SchoolYear','dropdown',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'DFAA6E01-83F5-4453-BB14-589EBF98DBC2')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'DFAA6E01-83F5-4453-BB14-589EBF98DBC2','26FC51EA-B486-46A8-9089-265B900F8BF7','vTimeTakenToLogin','string',3,'KeyClockLogs','TimeTakenToLogin','label',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'DBA2F6FC-ECB3-4055-AE47-59529E53DB1D')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'DBA2F6FC-ECB3-4055-AE47-59529E53DB1D','FFDEF18E-B584-4291-8678-2B67249B4ACD','uSchoolId','uniqueidentifier',8,'Teacher','School','label','N',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '02C6E0D4-5B3C-4CE8-A835-597BB0D24835')BEGIN insert into t_Framework_ObjectConfiguration_Column select '02C6E0D4-5B3C-4CE8-A835-597BB0D24835','288A50C0-FACA-4AA3-8E89-E95FA6270C60','uPupilId','uniqueidentifier',1,'PupilImportExport','PupilId','textbox','N',NULL,'150',NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '88C588D1-204E-44B0-8FFB-5A2373EC0BE0')BEGIN insert into t_Framework_ObjectConfiguration_Column select '88C588D1-204E-44B0-8FFB-5A2373EC0BE0','CF393644-84B5-4D6B-9A6B-7BEB52FA2DB7','vStreet','string',7,'SchoolManagement','Street','label','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'C02B7B91-816C-45F3-9366-5B2CFD6FB81B')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'C02B7B91-816C-45F3-9366-5B2CFD6FB81B','99BC607C-CE60-4464-9E20-D7F186B322CD','dActualTaskPoints','decimal',7,'TaskGridColumnSetting','ActualTaskPoints','textbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '80633B24-09D4-4730-9B05-5C25C18D490A')BEGIN insert into t_Framework_ObjectConfiguration_Column select '80633B24-09D4-4730-9B05-5C25C18D490A','2033751E-B5C5-4F34-9311-9A3EB238F6A6','vName','string',2,'School','TeacherGrid_ColumnName_Name','textbox','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '92FA418B-81E4-459A-AFBE-5C6F8A36EEB0')BEGIN insert into t_Framework_ObjectConfiguration_Column select '92FA418B-81E4-459A-AFBE-5C6F8A36EEB0','B6F42949-7E61-4F82-B329-E7FD911C5C75','vCategoryKeyword','int',5,'Category','CategoryKeyword','textbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '44C86052-5935-4EA7-AAB9-5E2F8BFED603')BEGIN insert into t_Framework_ObjectConfiguration_Column select '44C86052-5935-4EA7-AAB9-5E2F8BFED603','2D4EDACB-51EF-4F9C-899A-AFCBE89D93B6','iStateId','string',2,'ClassType','OrganizationalUnit','dropdown','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'AAA8B9CD-2CE5-4415-AD27-6199D1635EA7')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'AAA8B9CD-2CE5-4415-AD27-6199D1635EA7','CF393644-84B5-4D6B-9A6B-7BEB52FA2DB7','vFirstName','string',4,'SchoolManagement','FirstName','label','Y',NULL,NULL,NULL,NULL DEND
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '20291FF7-7405-4DC7-82D9-635D5BC8547A')BEGIN insert into t_Framework_ObjectConfiguration_Column select '20291FF7-7405-4DC7-82D9-635D5BC8547A','6A319EBD-F9AF-49A9-850F-1500E6ADCF54','vBirthdate','string',13,'Pupil','BirthDate','label',NULL,NULL,NULL,NULL,'DateValidationMessage'END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'AE8A7862-BD47-47EA-8611-63EEC2D53734')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'AE8A7862-BD47-47EA-8611-63EEC2D53734','CF393644-84B5-4D6B-9A6B-7BEB52FA2DB7','iZIPCode','int',9,'SchoolManagement','ZIPCode','label',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'A74C50B8-1981-48EE-8F95-6485A3F9D9FF')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'A74C50B8-1981-48EE-8F95-6485A3F9D9FF','262E2EB8-7C75-403D-97FE-EBF79DD34D83','t_TestDrive_Member_Class_SchoolYear_Data.vSchoolYearName','string',2,'SchoolYear','SchoolYearName','textbox',NULL,NULL,NULL,'Y',NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '42DB3194-A29C-4A2F-AC2F-65431999C863')BEGIN insert into t_Framework_ObjectConfiguration_Column select '42DB3194-A29C-4A2F-AC2F-65431999C863','3A77A3E2-15CC-431D-A2F6-4F715A10BC16','uSchoolYearPeriodId','uniqueidentifier',2,'Teacher','SchoolYearPeriod','dropdown','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'B20A67F4-E611-4D86-973E-65773EAB3B03')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'B20A67F4-E611-4D86-973E-65773EAB3B03','CF393644-84B5-4D6B-9A6B-7BEB52FA2DB7','vTown','string',11,'SchoolManagement','Town','label',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '2C1A751B-6941-4AD6-A47C-66F793084585')BEGIN insert into t_Framework_ObjectConfiguration_Column select '2C1A751B-6941-4AD6-A47C-66F793084585','26FC51EA-B486-46A8-9089-265B900F8BF7','dtMasterLoad','int',4,'KeyClockLogs','MasterLoad','label',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '024890BE-6ECC-4484-A136-6A79AC579C13')BEGIN insert into t_Framework_ObjectConfiguration_Column select '024890BE-6ECC-4484-A136-6A79AC579C13','C7E77599-6F2C-4987-8371-85513AEA76B7','uSchoolYearPeriodId','uniqueidentifier',2,'School','SchoolYearPeriod','dropdown','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '1C66A1E7-7949-458F-B182-6B2FBFDAA17B')BEGIN insert into t_Framework_ObjectConfiguration_Column select '1C66A1E7-7949-458F-B182-6B2FBFDAA17B','FEABA1FB-4A6C-4618-B140-2EB86A39420A','uTeacherId','string',1,'School','TeacherIDColumnName','textbox','N',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '5CD653E2-9702-4762-A639-6DD7F3B96948')BEGIN insert into t_Framework_ObjectConfiguration_Column select '5CD653E2-9702-4762-A639-6DD7F3B96948','3A77A3E2-15CC-431D-A2F6-4F715A10BC16','iSchoolYear','int',3,'Teacher','SchoolYear','dropdown','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'D0D0D58A-5510-4981-9E24-6F2737C1BB9C')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'D0D0D58A-5510-4981-9E24-6F2737C1BB9C','0A7CBF69-2A09-4F27-BF19-D1190B9D3B27','t_testdrive_Category_Competency_CompetencyLevel_Data.cCompetencyLevel','string',2,'CompetencyLevel','Cycle','textbox',NULL,NULL,NULL,'Y',NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'F9995433-BDF7-4621-929B-731E9B9FA862')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'F9995433-BDF7-4621-929B-731E9B9FA862','99BC607C-CE60-4464-9E20-D7F186B322CD','Description','string',3,'TaskGridColumnSetting','Description','textbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '24729E1A-D601-4A85-9DCC-76DE661C1016')BEGIN insert into t_Framework_ObjectConfiguration_Column select '24729E1A-D601-4A85-9DCC-76DE661C1016','26FC51EA-B486-46A8-9089-265B900F8BF7','vExceptionMessageIfError','string',7,'KeyClockLogs','ExceptionMessage','label',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '1C71E1E2-1DC1-4FC8-BA16-775893430208')BEGIN insert into t_Framework_ObjectConfiguration_Column select '1C71E1E2-1DC1-4FC8-BA16-775893430208','6DB0946D-0B23-4A19-B190-9993142EEF9F','iSubjectId','int',1,'Subject','SubjectId','textbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '699D4335-184A-4E64-A4D9-778E8B9A3291')BEGIN insert into t_Framework_ObjectConfiguration_Column select '699D4335-184A-4E64-A4D9-778E8B9A3291','CDBB181A-6404-45EB-8286-460FA8F940FB','vPassword','string',5,'StateAdministrator','Password','textbox','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '1B406A7D-9549-4B6E-9D7D-7803294C28B5')BEGIN insert into t_Framework_ObjectConfiguration_Column select '1B406A7D-9549-4B6E-9D7D-7803294C28B5','2D4EDACB-51EF-4F9C-899A-AFCBE89D93B6','t_TestDrive_Member_ClassType_Data.vLongClassTypeName','string',4,'ClassType','LongClassTypeName','textbox',NULL,NULL,NULL,'Y',NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'E03E1FF6-164D-4F94-A189-7BE7AC613FE2')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'E03E1FF6-164D-4F94-A189-7BE7AC613FE2','6DB0946D-0B23-4A19-B190-9993142EEF9F','cIsReadyForSystemLearningTest','string',14,'Subject','IsReadyForSystemLearningTest','checkbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '96A4D63C-3903-432E-95C7-7CEF9BFDBAE8')BEGIN insert into t_Framework_ObjectConfiguration_Column select '96A4D63C-3903-432E-95C7-7CEF9BFDBAE8','B53B9E7B-645B-4022-98DF-D3D0F0D04605','iDisplayOrder','int',1,'CategoryCompetency','Sequence','textbox','Y','number',NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '186FF7D7-3620-4D4E-A7E1-7D60E9D46376')BEGIN insert into t_Framework_ObjectConfiguration_Column select '186FF7D7-3620-4D4E-A7E1-7D60E9D46376','6DB0946D-0B23-4A19-B190-9993142EEF9F','dConstance','int',8,'Subject','Constance','textbox',NULL,'number',NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'F771AFF5-CC56-4595-B959-7D826EA963A6')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'F771AFF5-CC56-4595-B959-7D826EA963A6','D0F492C6-2953-4DFF-94E3-67712F644924','vBirthdate','datetime',4,'Teacher','DateOfBirth','textbox','N','date','102',NULL,'DateValidationMessage'END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '48CF61EB-85FB-40FB-B1E2-7D9561BAAE8B')BEGIN insert into t_Framework_ObjectConfiguration_Column select '48CF61EB-85FB-40FB-B1E2-7D9561BAAE8B','FFDEF18E-B584-4291-8678-2B67249B4ACD','vPhonePrivate','string',5,'Teacher','PhonePrivate','textbox','N','number',NULL,NULL,'Number_Text'END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '02ADCC95-E7DF-447D-ACF6-7DB4A70F0C70')BEGIN insert into t_Framework_ObjectConfiguration_Column select '02ADCC95-E7DF-447D-ACF6-7DB4A70F0C70','6A319EBD-F9AF-49A9-850F-1500E6ADCF54','PupilMappingName','string',1,'Pupil','PupilMappingName','label',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '4C27C8F7-932A-4B73-A53F-7F77B42D34CC')BEGIN insert into t_Framework_ObjectConfiguration_Column select '4C27C8F7-932A-4B73-A53F-7F77B42D34CC','D0F492C6-2953-4DFF-94E3-67712F644924','ActivationStatus','image',7,'Teacher','ActivationStatus','image','N',NULL,'50',NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'FF6CDCC5-D88E-483C-92B5-80A64E11C9E8')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'FF6CDCC5-D88E-483C-92B5-80A64E11C9E8','EA79CA79-588A-4401-B2E9-BC46992D603A','vFirstName','string',2,'SchoolRegistration','FirstName','textbox','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '9F438B93-BC6D-4501-81CE-819BA3A38A9A')BEGIN insert into t_Framework_ObjectConfiguration_Column select '9F438B93-BC6D-4501-81CE-819BA3A38A9A','CF393644-84B5-4D6B-9A6B-7BEB52FA2DB7','cIsTestSchool','string',12,'SchoolManagement','IsTestSchool','label',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '0263597B-ED8B-488A-961D-819F1243E2CB')BEGIN insert into t_Framework_ObjectConfiguration_Column select '0263597B-ED8B-488A-961D-819F1243E2CB','EA79CA79-588A-4401-B2E9-BC46992D603A','uSchoolId','uniqueidentifier',14,'SchoolRegistration','SchoolId','hidden',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '31007F64-2E4A-4392-93DD-82142762F87F')BEGIN insert into t_Framework_ObjectConfiguration_Column select '31007F64-2E4A-4392-93DD-82142762F87F','2033751E-B5C5-4F34-9311-9A3EB238F6A6','vPhoneSchool','string',7,'School','TeacherGrid_ColumnName_Phone','textbox','N','Number',NULL,NULL,'NumberValidationMessage'END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '98D5A2D1-3319-45FD-80A4-8417A004BBD8')BEGIN insert into t_Framework_ObjectConfiguration_Column select '98D5A2D1-3319-45FD-80A4-8417A004BBD8','4B1BAEDF-7971-4F86-A9D4-A4D7D708B429','iDisplayOrder','int',8,'State','DisplayOrder','textbox','Y','number',NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '39CB334D-DE12-4A36-B2D7-846A4E815BBF')BEGIN insert into t_Framework_ObjectConfiguration_Column select '39CB334D-DE12-4A36-B2D7-846A4E815BBF','4B1BAEDF-7971-4F86-A9D4-A4D7D708B429','iStateId','int',2,'State','StateId','textbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '6AEFEB44-B5AD-468F-98E5-856BF7DA783C')BEGIN insert into t_Framework_ObjectConfiguration_Column select '6AEFEB44-B5AD-468F-98E5-856BF7DA783C','FFDEF18E-B584-4291-8678-2B67249B4ACD','vName','string',3,'Teacher','Name','textbox','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'AE920742-50A1-4756-8FC4-89AE84469D55')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'AE920742-50A1-4756-8FC4-89AE84469D55','B6F42949-7E61-4F82-B329-E7FD911C5C75','iDisplayOrder','int',2,'Category','DisplayOrder','textbox','Y','number',NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'C6EE3C22-1AFF-4945-9B7C-8A9BD2A3047F')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'C6EE3C22-1AFF-4945-9B7C-8A9BD2A3047F','4E50593B-88FE-44B4-941E-1B8E9E41ADE0','iDisplayOrder','int',6,'State','iDisplayOrder','textbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '4F47217C-E17A-4A9A-9535-8AF06DA2EB4D')BEGIN insert into t_Framework_ObjectConfiguration_Column select '4F47217C-E17A-4A9A-9535-8AF06DA2EB4D','CDBB181A-6404-45EB-8286-460FA8F940FB','vEmail','string',4,'StateAdministrator','Email','textbox','Y',NULL,NULL,NULL,'EmailValidationMessage'END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '362FA8A6-204C-48CE-9C30-8B8BC93689AE')BEGIN insert into t_Framework_ObjectConfiguration_Column select '362FA8A6-204C-48CE-9C30-8B8BC93689AE','D0F492C6-2953-4DFF-94E3-67712F644924','t_TestDrive_Member_Class_Pupil.uClassGroupId','uniqueidentifier',6,'Teacher','ClassGroup','dropdown','Y',NULL,'60',NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'F79DFE02-497B-4F2B-AD3F-900CF6E543FA')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'F79DFE02-497B-4F2B-AD3F-900CF6E543FA','2D4EDACB-51EF-4F9C-899A-AFCBE89D93B6','iClassTypeId','int',1,'ClassType','ClassType','textbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '3566821A-9BC0-4D72-84E6-906E258AAFCB')BEGIN insert into t_Framework_ObjectConfiguration_Column select '3566821A-9BC0-4D72-84E6-906E258AAFCB','4B1BAEDF-7971-4F86-A9D4-A4D7D708B429','vName','string',7,'State','Name','textbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '51DAA870-4754-44EE-840D-907F86D7946A')BEGIN insert into t_Framework_ObjectConfiguration_Column select '51DAA870-4754-44EE-840D-907F86D7946A','6DB0946D-0B23-4A19-B190-9993142EEF9F','cIsLearnCoacherSubject','int',6,'Subject','IsLearnCoacherSubject','checkbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '9F97A341-1147-4812-AF6D-90FFDB6B0D4A')BEGIN insert into t_Framework_ObjectConfiguration_Column select '9F97A341-1147-4812-AF6D-90FFDB6B0D4A','6A319EBD-F9AF-49A9-850F-1500E6ADCF54','vFirstName','string',9,'Pupil','FirstName','label',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '24B7DD72-8604-45C4-ADE3-9328378E02AB')BEGIN insert into t_Framework_ObjectConfiguration_Column select '24B7DD72-8604-45C4-ADE3-9328378E02AB','2033751E-B5C5-4F34-9311-9A3EB238F6A6','cIsSubjectExpertTeacherMarkedBySchool','boolean',8,'School','TeacherGrid_ColumnName_SubjectExpertTeacherMarkedBySchool','image','N',NULL,'44',NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '719330DE-D6A6-4E6D-A5B8-951AACAE2621')BEGIN insert into t_Framework_ObjectConfiguration_Column select '719330DE-D6A6-4E6D-A5B8-951AACAE2621','829960F2-2771-4735-9B98-61A39EB7E13E','vClassName','string',4,'Class','ClassName','textbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '40AE1117-5229-45E2-831E-9A5B537B811E')BEGIN insert into t_Framework_ObjectConfiguration_Column select '40AE1117-5229-45E2-831E-9A5B537B811E','6A319EBD-F9AF-49A9-850F-1500E6ADCF54','vEmail','string',12,'Pupil','EMail','label',NULL,NULL,NULL,NULL,'EmailValidationMessage'END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '49634C45-17C4-42C7-9650-9AA740DE52EB')BEGIN insert into t_Framework_ObjectConfiguration_Column select '49634C45-17C4-42C7-9650-9AA740DE52EB','4E50593B-88FE-44B4-941E-1B8E9E41ADE0','t_TestDrive_Member_State_Data.vStateName','string',5,'State','vStateName','textbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '944063C5-1053-46DA-8AC7-9B48C247805E')BEGIN insert into t_Framework_ObjectConfiguration_Column select '944063C5-1053-46DA-8AC7-9B48C247805E','829960F2-2771-4735-9B98-61A39EB7E13E','vSchoolName','string',2,'Class','SchoolName','label',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '7CCB09B0-06BB-4B90-85D3-9D4330F52D7E')BEGIN insert into t_Framework_ObjectConfiguration_Column select '7CCB09B0-06BB-4B90-85D3-9D4330F52D7E','99BC607C-CE60-4464-9E20-D7F186B322CD','WorkflowStatusName','string',6,'TaskGridColumnSetting','WorkflowStatusName','textbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '7C5C448C-4635-4F18-816F-9EFEBC3D3A6C')BEGIN insert into t_Framework_ObjectConfiguration_Column select '7C5C448C-4635-4F18-816F-9EFEBC3D3A6C','FEABA1FB-4A6C-4618-B140-2EB86A39420A','vEmail','string',6,'School','TeacherGrid_ColumnName_Email','textbox','Y','Email',NULL,NULL,'EmailValidationMessage'END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'D31B3293-A090-429D-9A1A-A07ACDCE05CC')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'D31B3293-A090-429D-9A1A-A07ACDCE05CC','A7D1D024-735E-48D3-826A-94A84A5FF57C','vTown','string',11,'School','Town','textbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'AFF4DC4F-7E18-43B8-A4D9-A17919F1143B')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'AFF4DC4F-7E18-43B8-A4D9-A17919F1143B','CF393644-84B5-4D6B-9A6B-7BEB52FA2DB7','vSchoolName','string',2,'SchoolManagement','SchoolName','label','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '11A59D2C-5430-4318-9B58-A352D16CE31C')BEGIN insert into t_Framework_ObjectConfiguration_Column select '11A59D2C-5430-4318-9B58-A352D16CE31C','288A50C0-FACA-4AA3-8E89-E95FA6270C60','iGenderId','int',2,'PupilImportExport','Gender','dropdown','Y',NULL,'150',NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '915F3F69-EE12-4399-9190-A96761E7AEF9')BEGIN insert into t_Framework_ObjectConfiguration_Column select '915F3F69-EE12-4399-9190-A96761E7AEF9','C7E77599-6F2C-4987-8371-85513AEA76B7','iSchoolYear','int',3,'School','SchoolYear','dropdown','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '415185C3-DE65-40E4-BEBA-AA225029744D')BEGIN insert into t_Framework_ObjectConfiguration_Column select '415185C3-DE65-40E4-BEBA-AA225029744D','288A50C0-FACA-4AA3-8E89-E95FA6270C60','vBirthdate','datetime',5,'PupilImportExport','DateOfBirth','textbox','N','date','150',NULL,'DateValidationMessage'END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '12A1AC21-51F6-4266-8560-AB144D840204')BEGIN insert into t_Framework_ObjectConfiguration_Column select '12A1AC21-51F6-4266-8560-AB144D840204','99BC607C-CE60-4464-9E20-D7F186B322CD','Text','string',1,'TaskGridColumnSetting','Text','textbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '45405713-1119-4FAE-897A-ABDE200868DB')BEGIN insert into t_Framework_ObjectConfiguration_Column select '45405713-1119-4FAE-897A-ABDE200868DB','CDBB181A-6404-45EB-8286-460FA8F940FB','vFirstName','string',3,'StateAdministrator','FirstName','textbox','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'D1B00459-786E-4199-8C3C-AD010C3B9B54')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'D1B00459-786E-4199-8C3C-AD010C3B9B54','A7D1D024-735E-48D3-826A-94A84A5FF57C','uSchoolId','uniqueidentifier',14,'School','SchoolId','hidden',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'B5A8DB1A-09D9-4D73-AF56-AE58AB57BA41')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'B5A8DB1A-09D9-4D73-AF56-AE58AB57BA41','FFDEF18E-B584-4291-8678-2B67249B4ACD','iTitleId','int',1,'Teacher','Title','dropdown','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '786F6439-BA9B-4474-9DC2-B0738E0C6145')BEGIN insert into t_Framework_ObjectConfiguration_Column select '786F6439-BA9B-4474-9DC2-B0738E0C6145','CDBB181A-6404-45EB-8286-460FA8F940FB','iStateId','int',1,'StateAdministrator','StateId','dropdown',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '9B18939D-8B66-45CD-A07B-B16D6F376D7A')BEGIN insert into t_Framework_ObjectConfiguration_Column select '9B18939D-8B66-45CD-A07B-B16D6F376D7A','86A7E3C2-5B74-4D4F-8838-D3A3B79F853A','ActivationStatus','image',7,'School','ActivationStatus','image','N',NULL,'50',NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '8C4F9707-425B-4A81-8C05-B1890529FABC')BEGIN insert into t_Framework_ObjectConfiguration_Column select '8C4F9707-425B-4A81-8C05-B1890529FABC','FEABA1FB-4A6C-4618-B140-2EB86A39420A','vPhonePrivate','string',7,'School','TeacherGrid_ColumnName_Mobile','textbox','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '978A6996-B1B9-43E0-BC06-B35502E1F33B')BEGIN insert into t_Framework_ObjectConfiguration_Column select '978A6996-B1B9-43E0-BC06-B35502E1F33B','B53B9E7B-645B-4022-98DF-D3D0F0D04605','t_TestDrive_Category_Competency_Data.tCompetencyText','string',3,'CategoryCompetency','Competency','textbox',NULL,NULL,NULL,'Y',NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '63FFB2DF-D55D-4352-9683-B36BE5CAD046')BEGIN insert into t_Framework_ObjectConfiguration_Column select '63FFB2DF-D55D-4352-9683-B36BE5CAD046','CF393644-84B5-4D6B-9A6B-7BEB52FA2DB7','vEmail','string',10,'SchoolManagement','E-Mail','label',NULL,NULL,NULL,NULL,'EmailValidationMessage'END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '8E27749F-40AF-40BC-B4AC-B37D12F72790')BEGIN insert into t_Framework_ObjectConfiguration_Column select '8E27749F-40AF-40BC-B4AC-B37D12F72790','86A7E3C2-5B74-4D4F-8838-D3A3B79F853A','t_TestDrive_Member_Class_Pupil.uClassGroupId','uniqueidentifier',6,'School','ClassGroup','dropdown','N',NULL,'60',NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '87623EDA-2379-4DD4-97BC-B56A46C2F991')BEGIN insert into t_Framework_ObjectConfiguration_Column select '87623EDA-2379-4DD4-97BC-B56A46C2F991','B53B9E7B-645B-4022-98DF-D3D0F0D04605','vCompetencykeyword','int',2,'CategoryCompetency','Id','textbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'CA21B478-F1B3-48C5-B814-B615132F660F')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'CA21B478-F1B3-48C5-B814-B615132F660F','6DB0946D-0B23-4A19-B190-9993142EEF9F','t_TestDrive_Subject_Data.vSubjectDisplayName','string',10,'Subject','DisplayName','textbox',NULL,NULL,NULL,'Y',NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '73F2ED41-6DD9-435E-931D-B65F93463320')BEGIN insert into t_Framework_ObjectConfiguration_Column select '73F2ED41-6DD9-435E-931D-B65F93463320','A7D1D024-735E-48D3-826A-94A84A5FF57C','vName','string',9,'School','Name','textbox','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'DC15C7C0-39CA-4991-9E29-B6CE4FBE4CA1')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'DC15C7C0-39CA-4991-9E29-B6CE4FBE4CA1','FFDEF18E-B584-4291-8678-2B67249B4ACD','vPassword','string',9,'Teacher','Password','password',NULL,'password',NULL,NULL,'Password_Text'END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '82A4FB29-F9BD-40BF-A8E9-B77344919051')BEGIN insert into t_Framework_ObjectConfiguration_Column select '82A4FB29-F9BD-40BF-A8E9-B77344919051','99BC607C-CE60-4464-9E20-D7F186B322CD','iSchoolYearId','int',2,'TaskGridColumnSetting','SchoolYear','dropdown',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '4D0BFA7C-EDBA-4A68-B124-B7DD5D9B3F2C')BEGIN insert into t_Framework_ObjectConfiguration_Column select '4D0BFA7C-EDBA-4A68-B124-B7DD5D9B3F2C','EA79CA79-588A-4401-B2E9-BC46992D603A','vName','string',3,'SchoolRegistration','Name','textbox','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '1510925E-B813-4EAC-9D91-B997378939E2')BEGIN insert into t_Framework_ObjectConfiguration_Column select '1510925E-B813-4EAC-9D91-B997378939E2','B6F42949-7E61-4F82-B329-E7FD911C5C75','t_TestDrive_Category_Data.tConceptAndSkills','string',3,'Category','ConceptAndSkills','textbox',NULL,NULL,NULL,'Y',NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '75A1724C-1286-4050-8158-BB9EEB592AE7')BEGIN insert into t_Framework_ObjectConfiguration_Column select '75A1724C-1286-4050-8158-BB9EEB592AE7','86A7E3C2-5B74-4D4F-8838-D3A3B79F853A','vBirthdate','datetime',4,'School','DateOfBirth','textbox','N','date','102',NULL,'DateValidationMessage'END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '5F48BAC6-6830-4424-8E15-BC63F516AA91')BEGIN insert into t_Framework_ObjectConfiguration_Column select '5F48BAC6-6830-4424-8E15-BC63F516AA91','6A319EBD-F9AF-49A9-850F-1500E6ADCF54','vTown','string',10,'Pupil','Town','label',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'DD001E73-07B3-4716-A975-BCBCBEE29447')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'DD001E73-07B3-4716-A975-BCBCBEE29447','3A77A3E2-15CC-431D-A2F6-4F715A10BC16','ActivationStatus','image',5,'Teacher','ActivationStatus','image','N',NULL,'50',NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'D23EA5A7-077C-4981-B736-BFE98BDCAE6A')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'D23EA5A7-077C-4981-B736-BFE98BDCAE6A','426E4C3C-949D-42AF-8BE6-81EE08DC691D','t_testdrive_Category_Competency_CompetencyRange_Data.vCompetencyRange','string',2,'CompetencyRange','Cycle','textbox',NULL,NULL,NULL,'Y',NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '6EC5C957-4351-404E-A71A-BFFB18FB3D19')BEGIN insert into t_Framework_ObjectConfiguration_Column select '6EC5C957-4351-404E-A71A-BFFB18FB3D19','6DB0946D-0B23-4A19-B190-9993142EEF9F','iParentSubjectId','int',3,'Subject','ParentSubjectId','dropdown',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '4AF5C253-4484-4AF3-9467-C008709F02A6')BEGIN insert into t_Framework_ObjectConfiguration_Column select '4AF5C253-4484-4AF3-9467-C008709F02A6','CF393644-84B5-4D6B-9A6B-7BEB52FA2DB7','iStateId','int',1,'SchoolManagement','StateName','dropdown','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'A546EC3B-3FF3-4FDC-AECD-C01B1D4754FF')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'A546EC3B-3FF3-4FDC-AECD-C01B1D4754FF','86A7E3C2-5B74-4D4F-8838-D3A3B79F853A','vName','string',2,'School','Name','textbox','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'A8C61298-47F2-4A28-8AF8-C197BA52CFF2')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'A8C61298-47F2-4A28-8AF8-C197BA52CFF2','EA79CA79-588A-4401-B2E9-BC46992D603A','iStateId','string',8,'SchoolRegistration','StateName','dropdown','Y','dropdown',NULL,NULL,'DropdownValidationMessage'END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '1924E720-7D21-4477-BD50-C38F4CD4F99C')BEGIN insert into t_Framework_ObjectConfiguration_Column select '1924E720-7D21-4477-BD50-C38F4CD4F99C','C7E77599-6F2C-4987-8371-85513AEA76B7','iPupilCount','int',5,'School','PupilCount','label','N',NULL,'50',NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'ECBAB7A1-095D-417B-BB35-C50AB9DCE6AC')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'ECBAB7A1-095D-417B-BB35-C50AB9DCE6AC','FFDEF18E-B584-4291-8678-2B67249B4ACD','vFirstName','string',2,'Teacher','FirstName','textbox','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'E8446BF9-4D9C-4C76-832B-C742AAA7C945')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'E8446BF9-4D9C-4C76-832B-C742AAA7C945','262E2EB8-7C75-403D-97FE-EBF79DD34D83','iDisplayOrder','int',3,'SchoolYear','DisplayOrder','textbox','Y','number',NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'E7BEB2E3-6C9C-45FA-91B7-C77C336D9558')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'E7BEB2E3-6C9C-45FA-91B7-C77C336D9558','7DFE4E6B-95E7-47F4-BBFE-60754FF5F59D','vEmail','string',6,'IntranetAdministrator','Email','textbox','Y',NULL,NULL,NULL,'EmailValidationMessage'END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'EF628174-89EB-4E1F-AAC2-C7B323538D94')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'EF628174-89EB-4E1F-AAC2-C7B323538D94','A7D1D024-735E-48D3-826A-94A84A5FF57C','iStateId','int',2,'School','StateName','label',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '3D17F718-A6AC-44D5-A0E6-C8C9D22EC9B8')BEGIN insert into t_Framework_ObjectConfiguration_Column select '3D17F718-A6AC-44D5-A0E6-C8C9D22EC9B8','262E2EB8-7C75-403D-97FE-EBF79DD34D83','iSchoolYear','int',1,'SchoolYear','SchoolYear','textbox','Y','number',NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '517E2327-0A94-41ED-8AF5-C920AD9B1BC1')BEGIN insert into t_Framework_ObjectConfiguration_Column select '517E2327-0A94-41ED-8AF5-C920AD9B1BC1','6DB0946D-0B23-4A19-B190-9993142EEF9F','vKeyForImage','string',2,'Subject','KeyForImage','textbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '731AAA20-2510-4057-AE04-CC7C83C6C7D8')BEGIN insert into t_Framework_ObjectConfiguration_Column select '731AAA20-2510-4057-AE04-CC7C83C6C7D8','D0F492C6-2953-4DFF-94E3-67712F644924','vName','string',2,'Teacher','Name','textbox','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '0D0B835C-945A-4753-95F3-CEACA77B1EEF')BEGIN insert into t_Framework_ObjectConfiguration_Column select '0D0B835C-945A-4753-95F3-CEACA77B1EEF','3A77A3E2-15CC-431D-A2F6-4F715A10BC16','vClassName','string',1,'Teacher','ClassName','textbox','Y',NULL,'140',NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'BA00CE8F-CBC0-4E97-9A3B-D1A292E49014')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'BA00CE8F-CBC0-4E97-9A3B-D1A292E49014','FEABA1FB-4A6C-4618-B140-2EB86A39420A','vFirstName','string',4,'School','TeacherGrid_ColumnName_FirstName','textbox','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '1FA46DD3-5BD4-4ACE-BA60-D23089CE8D65')BEGIN insert into t_Framework_ObjectConfiguration_Column select '1FA46DD3-5BD4-4ACE-BA60-D23089CE8D65','C7E77599-6F2C-4987-8371-85513AEA76B7','ActivationStatus','image',6,'School','ActivationStatus','image','N',NULL,'50',NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '1ACF20DC-A904-4880-B315-D260B94D08D5')BEGIN insert into t_Framework_ObjectConfiguration_Column select '1ACF20DC-A904-4880-B315-D260B94D08D5','FFDEF18E-B584-4291-8678-2B67249B4ACD','vShortCut','string',4,'Teacher','ShortName','textbox','N',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '56528B57-46C7-4D11-8CE3-D75CE1909B79')BEGIN insert into t_Framework_ObjectConfiguration_Column select '56528B57-46C7-4D11-8CE3-D75CE1909B79','7DFE4E6B-95E7-47F4-BBFE-60754FF5F59D','vName','string',1,'IntranetAdministrator','Name','textbox','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'A5E574B9-CC28-4CA1-B902-D86C08BF6B8F')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'A5E574B9-CC28-4CA1-B902-D86C08BF6B8F','A7D1D024-735E-48D3-826A-94A84A5FF57C','iSchoolTypeId','string',5,'School','SchoolType','dropdown','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'D790AC06-E69D-4865-A407-D98C32D7A252')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'D790AC06-E69D-4865-A407-D98C32D7A252','A7D1D024-735E-48D3-826A-94A84A5FF57C','vStreet','string',3,'School','Street','textbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'F070F403-627B-486C-9235-DC32179CF43B')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'F070F403-627B-486C-9235-DC32179CF43B','A7D1D024-735E-48D3-826A-94A84A5FF57C','vEmail','string',10,'School','EMail','textbox','Y','email',NULL,NULL,'EmailValidationMessage'END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '75E09388-3790-4D2E-A4AB-DD1FEE0304F0')BEGIN insert into t_Framework_ObjectConfiguration_Column select '75E09388-3790-4D2E-A4AB-DD1FEE0304F0','99BC607C-CE60-4464-9E20-D7F186B322CD','vCustomerTaskId','string',5,'TaskGridColumnSetting','KundenId','textbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'AF4F8728-62D9-4E64-94C5-DD414E103B43')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'AF4F8728-62D9-4E64-94C5-DD414E103B43','4B1BAEDF-7971-4F86-A9D4-A4D7D708B429','t_TestDrive_Member_State_Data.vStateName','string',3,'State','StateName','textbox',NULL,NULL,NULL,'Y',NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '4A39F1C2-855A-4BB1-8AC5-DEB7F439227C')BEGIN insert into t_Framework_ObjectConfiguration_Column select '4A39F1C2-855A-4BB1-8AC5-DEB7F439227C','FEABA1FB-4A6C-4618-B140-2EB86A39420A','vShortCut','string',5,'School','TeacherGrid_ColumnName_ShortCut','textbox','N',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '2CD3C6F1-6AD9-483C-95D0-DF034572F54D')BEGIN insert into t_Framework_ObjectConfiguration_Column select '2CD3C6F1-6AD9-483C-95D0-DF034572F54D','4E50593B-88FE-44B4-941E-1B8E9E41ADE0','vFirstName','string',2,'State','vFirstName','textbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '899CFB45-67A1-46BA-9AD8-E00C666A292A')BEGIN insert into t_Framework_ObjectConfiguration_Column select '899CFB45-67A1-46BA-9AD8-E00C666A292A','3A77A3E2-15CC-431D-A2F6-4F715A10BC16','iPupilCount','int',4,'Teacher','PupilCount','textbox','N',NULL,'50',NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '22C89E45-C0A4-4E95-9E6B-E0E8C5AC3924')BEGIN insert into t_Framework_ObjectConfiguration_Column select '22C89E45-C0A4-4E95-9E6B-E0E8C5AC3924','2033751E-B5C5-4F34-9311-9A3EB238F6A6','vShortCut','string',4,'School','TeacherGrid_ColumnName_ShortCut','textbox','Y',NULL,'100',NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '11010F05-FED5-4089-B6E1-E41CE9BDC960')BEGIN insert into t_Framework_ObjectConfiguration_Column select '11010F05-FED5-4089-B6E1-E41CE9BDC960','EA79CA79-588A-4401-B2E9-BC46992D603A','vStreet','string',5,'SchoolRegistration','Street','textbox','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'A5BF8A83-CA4F-4B32-A682-E49569D16D7F')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'A5BF8A83-CA4F-4B32-A682-E49569D16D7F','EA79CA79-588A-4401-B2E9-BC46992D603A','vPhone','string',10,'SchoolRegistration','Phone','textbox','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'DA713025-CDD6-4FF2-859E-E534F048F845')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'DA713025-CDD6-4FF2-859E-E534F048F845','26FC51EA-B486-46A8-9089-265B900F8BF7','dtDateTimeOfLogin','date',2,'KeyClockLogs','DateTimeOfLogin','label',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '4380319F-22D2-4D90-B22C-E53ADA8D297C')BEGIN insert into t_Framework_ObjectConfiguration_Column select '4380319F-22D2-4D90-B22C-E53ADA8D297C','2D4EDACB-51EF-4F9C-899A-AFCBE89D93B6','t_TestDrive_Member_ClassType_Data.vClassTypeName','string',3,'ClassType','ClassTypeName','textbox',NULL,NULL,NULL,'Y',NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '2C7236DA-50B0-4133-B33C-E6C3C8110D9D')BEGIN insert into t_Framework_ObjectConfiguration_Column select '2C7236DA-50B0-4133-B33C-E6C3C8110D9D','CDBB181A-6404-45EB-8286-460FA8F940FB','vName','string',2,'StateAdministrator','Name','textbox','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '5597C035-6080-4CA2-B301-E7C65E39882A')BEGIN insert into t_Framework_ObjectConfiguration_Column select '5597C035-6080-4CA2-B301-E7C65E39882A','474CAF9D-D1D7-46DA-B14B-7E45AA188AA6','vPhonePrivate','string',7,'Teacher','Phone','textbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '2472CCFB-AAE3-47B9-BF27-E8F7F388A8A4')BEGIN insert into t_Framework_ObjectConfiguration_Column select '2472CCFB-AAE3-47B9-BF27-E8F7F388A8A4','FFDEF18E-B584-4291-8678-2B67249B4ACD','vPhoneSchool','string',6,'Teacher','PhoneSchool','textbox','N','number',NULL,NULL,'Number_Text'END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '60316958-9677-4530-B7EB-EA512286AC0C')BEGIN insert into t_Framework_ObjectConfiguration_Column select '60316958-9677-4530-B7EB-EA512286AC0C','26FC51EA-B486-46A8-9089-265B900F8BF7','UserName','string',1,'KeyClockLogs','UserName','label',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '11E75B6F-9F01-4700-B8DD-EB0B269F66A1')BEGIN insert into t_Framework_ObjectConfiguration_Column select '11E75B6F-9F01-4700-B8DD-EB0B269F66A1','426E4C3C-949D-42AF-8BE6-81EE08DC691D','cIspreselect','string',3,'CompetencyRange','IsPreselect','checkbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'AEABDBE5-491D-475F-A89C-EC2615367747')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'AEABDBE5-491D-475F-A89C-EC2615367747','4B1BAEDF-7971-4F86-A9D4-A4D7D708B429','t_TestDrive_Member_State_Data.vShortStateName','string',4,'State','ShortStateName','textbox',NULL,NULL,NULL,'Y',NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'B77FD065-5A69-4249-AF74-ECDA1F2FC7DC')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'B77FD065-5A69-4249-AF74-ECDA1F2FC7DC','A7D1D024-735E-48D3-826A-94A84A5FF57C','iZIPCode','int',6,'School','ZIPCode','textbox','Y','number',NULL,NULL,'Number_Text'END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '5ADA7FF6-DEE0-4C9A-9CBC-ED1F4182F21B')BEGIN insert into t_Framework_ObjectConfiguration_Column select '5ADA7FF6-DEE0-4C9A-9CBC-ED1F4182F21B','A7D1D024-735E-48D3-826A-94A84A5FF57C','iTitleId','int',7,'School','TitleId','dropdown','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '9B4AFBBA-455A-414E-BC7A-EF595F15326E')BEGIN insert into t_Framework_ObjectConfiguration_Column select '9B4AFBBA-455A-414E-BC7A-EF595F15326E','C7E77599-6F2C-4987-8371-85513AEA76B7','t_TestDrive_Member_Class_Teacher.uTeacherId','uniqueidentifier',4,'School','Teacher','dropdown','Y',NULL,'147',NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'F6518CD0-949F-42C9-BBB7-EF59E91082A2')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'F6518CD0-949F-42C9-BBB7-EF59E91082A2','7DFE4E6B-95E7-47F4-BBFE-60754FF5F59D','vFirstName','string',2,'IntranetAdministrator','FirstName','textbox','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'DA5C042B-81AA-4958-BCC3-EF5E99D03AAC')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'DA5C042B-81AA-4958-BCC3-EF5E99D03AAC','D0F492C6-2953-4DFF-94E3-67712F644924','iGenderId','int',1,'Teacher','Gender','dropdown','Y',NULL,'112',NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '340DA121-0F2B-459A-861B-F1316032A1D6')BEGIN insert into t_Framework_ObjectConfiguration_Column select '340DA121-0F2B-459A-861B-F1316032A1D6','474CAF9D-D1D7-46DA-B14B-7E45AA188AA6','State-School','string',2,'Teacher','StateSchoolName','label',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'D7528A06-913B-4CA7-9FB0-F25E25354434')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'D7528A06-913B-4CA7-9FB0-F25E25354434','EA79CA79-588A-4401-B2E9-BC46992D603A','vAnnotation','string',12,'SchoolRegistration','Annotation','textarea','N',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '21A0196E-2A74-4E4D-98C0-F3599C4D4D19')BEGIN insert into t_Framework_ObjectConfiguration_Column select '21A0196E-2A74-4E4D-98C0-F3599C4D4D19','6A319EBD-F9AF-49A9-850F-1500E6ADCF54','iGenderId','int',5,'Pupil','Gender','dropdown',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '8FC55E83-A0D5-44DC-BA4C-F5F12A4AC929')BEGIN insert into t_Framework_ObjectConfiguration_Column select '8FC55E83-A0D5-44DC-BA4C-F5F12A4AC929','A7D1D024-735E-48D3-826A-94A84A5FF57C','vPassword','string',15,'School','Password','password',NULL,'password',NULL,NULL,'Password_Text'END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '58AC170F-87BE-4A23-A6BA-F5F771FEC5C2')BEGIN insert into t_Framework_ObjectConfiguration_Column select '58AC170F-87BE-4A23-A6BA-F5F771FEC5C2','6DB0946D-0B23-4A19-B190-9993142EEF9F','cIsTestedAtThisTime','string',13,'Subject','IsTestedAtThisTime','checkbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '04F54063-54BD-49B9-BF19-F63A7C51061B')BEGIN insert into t_Framework_ObjectConfiguration_Column select '04F54063-54BD-49B9-BF19-F63A7C51061B','FEABA1FB-4A6C-4618-B140-2EB86A39420A','cIsSubjectExpertTeacherMarkedBySchool','boolean',9,'School','TeacherGrid_ColumnName_SubjectExpertTeacherMarkedBySchool','checkbox','N',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '4FE0B3FA-EA3B-4224-94C0-F79A93C0DCB6')BEGIN insert into t_Framework_ObjectConfiguration_Column select '4FE0B3FA-EA3B-4224-94C0-F79A93C0DCB6','86A7E3C2-5B74-4D4F-8838-D3A3B79F853A','vFirstName','string',3,'School','FirstName','textbox','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '0E7CB111-BF57-4E68-B1C3-F95B04CBC87D')BEGIN insert into t_Framework_ObjectConfiguration_Column select '0E7CB111-BF57-4E68-B1C3-F95B04CBC87D','FEABA1FB-4A6C-4618-B140-2EB86A39420A','iTitleId','int',2,'School','TeacherGrid_ColumnName_Title','dropdown','Y',NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'F52A04AE-D9F5-4471-B187-F99F1EC0C0C9')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'F52A04AE-D9F5-4471-B187-F99F1EC0C0C9','2033751E-B5C5-4F34-9311-9A3EB238F6A6','vEmail','string',5,'School','TeacherGrid_ColumnName_Email','textbox','Y','Email','100',NULL,'EmailValidationMessage'END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'E4E39F6A-34A1-4973-90C4-F9A64CDC8826')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'E4E39F6A-34A1-4973-90C4-F9A64CDC8826','474CAF9D-D1D7-46DA-B14B-7E45AA188AA6','vEmail','string',6,'Teacher','EMail','textbox',NULL,NULL,NULL,NULL,'EmailValidationMessage'END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '8FE18F30-D892-4C89-8685-FAD95D488DCC')BEGIN insert into t_Framework_ObjectConfiguration_Column select '8FE18F30-D892-4C89-8685-FAD95D488DCC','6DB0946D-0B23-4A19-B190-9993142EEF9F','cIsActive','int',7,'Subject','IsActive','checkbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = 'F76C2072-A751-4CFA-8257-FEF63E9325D9')BEGIN insert into t_Framework_ObjectConfiguration_Column select 'F76C2072-A751-4CFA-8257-FEF63E9325D9','4B1BAEDF-7971-4F86-A9D4-A4D7D708B429','vFirstName','string',6,'State','FirstName','textbox',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '0716A9AD-3D7C-4653-AD71-FFD972802988')BEGIN insert into t_Framework_ObjectConfiguration_Column select '0716A9AD-3D7C-4653-AD71-FFD972802988','4B1BAEDF-7971-4F86-A9D4-A4D7D708B429','iTitleId','int',5,'State','TitleId','dropdown',NULL,NULL,NULL,NULL,NULL END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '3203041B-351E-4C8A-98C3-06FAD1C363B1')BEGIN insert into t_Framework_ObjectConfiguration_Column select '3203041B-351E-4C8A-98C3-06FAD1C363B1','EA79CA79-588A-4401-B2E9-BC46992D603A','iTitleId','int',1,'SchoolRegistration','TitleId','dropdown','Y','dropdown',NULL,NULL,'DropdownValidationMessage'END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '3203041B-351E-4C8A-98C3-06FAD1C363B1')BEGIN insert into t_Framework_ObjectConfiguration_Column select '3203041B-351E-4C8A-98C3-06FAD1C363B1','EA79CA79-588A-4401-B2E9-BC46992D603A','iTitleId','int',1,'SchoolRegistration','TitleId','dropdown','Y','dropdown',NULL,NULL,'DropdownValidationMessage'END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '3203041B-351E-4C8A-98C3-06FAD1C363B1')BEGIN insert into t_Framework_ObjectConfiguration_Column select '3203041B-351E-4C8A-98C3-06FAD1C363B1','EA79CA79-588A-4401-B2E9-BC46992D603A','iTitleId','int',1,'SchoolRegistration','TitleId','dropdown','Y','dropdown',NULL,NULL,'DropdownValidationMessage'END
+GO 
+if NOT Exists(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId = '3203041B-351E-4C8A-98C3-06FAD1C363B1')BEGIN insert into t_Framework_ObjectConfiguration_Column select '3203041B-351E-4C8A-98C3-06FAD1C363B1','EA79CA79-588A-4401-B2E9-BC46992D603A','iTitleId','int',1,'SchoolRegistration','TitleId','dropdown','Y','dropdown',NULL,NULL,'DropdownValidationMessage'END
+GO
+
+/**********************************
+New table		
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES   WHERE TABLE_NAME = N't_TestDrive_Tip')
+BEGIN
+CREATE TABLE [dbo].[t_TestDrive_Tip]
+(
+	  [uTipId] UNIQUEIDENTIFIER NULL
+	, [iMainClientId] INT NULL
+	, [iApplicationTypeId] INT NULL
+	, [dtTipDate] DATETIME NULL
+	, [cIsActive] CHAR(1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [cIsDeleted] CHAR(1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [uUserId] UNIQUEIDENTIFIER NULL
+	, [dtCreatedOn] DATETIME NULL
+	, [dtModifiedOn] DATETIME NULL
+	, [iPageId] INT NULL
+	, [iOrder] INT NULL
+	, [uModifiedByUserId] UNIQUEIDENTIFIER NULL
+)
+END
+Go
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES   WHERE TABLE_NAME = N't_TestDrive_Tip_Data')
+BEGIN
+CREATE TABLE [dbo].[t_TestDrive_Tip_Data]
+(
+	  [uTipDataId] UNIQUEIDENTIFIER NULL
+	, [uTipId] UNIQUEIDENTIFIER NULL
+	, [iLanguageId] INT NULL
+	, [vTipTitle] NVARCHAR(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+)
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+
+--There is only testing data there. Not required to be added.
+

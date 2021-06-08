@@ -1,0 +1,91 @@
+﻿<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: calibri;
+        }
+        .main-wrapper{
+            padding: 20px;
+        }
+        .context-menu {
+            width: 200px;
+            z-index: 1;
+            box-shadow: 1px 2px 1px 1px rgba(29, 22, 22, 0.27);
+            position: fixed;
+            display: none;
+            transition: 0.2s display ease-in;
+            background: #fff;
+            border: 1px solid #ddd;
+        }
+        .context-menu ul {
+            list-style: none;
+            z-index: 1;
+        }
+            .context-menu ul .menu-option {
+                z-index: 1;
+                padding: 3px 10px;
+                font-size: 14px;
+                cursor: pointer;
+            }
+        .context-menu ul .menu-option:hover{
+            background: #ccc;
+        }
+  
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="context-menu">
+            <ul>
+                <li class="menu-option">Back</li>
+                <li class="menu-option">Reload</li>
+                <li class="menu-option">Save</li>
+                <li class="menu-option">Save As</li>
+                <li class="menu-option">Inspect</li>
+            </ul>
+          </div>
+          <p>Right click to view context menu</p>
+    </div>
+    <script>
+        const menu = document.querySelector(".context-menu");
+        const menuOption = document.querySelector(".menu-option");
+        let menuVisible = false;
+
+        const toggleMenu = command => {
+            menu.style.display = command === "show" ? "block" : "none";
+            menuVisible = !menuVisible;
+        };
+
+        const setPosition = ({ top, left }) => {
+            menu.style.left = `${left}px`;
+            menu.style.top = `${top}px`;
+            toggleMenu("show");
+        };
+
+        window.addEventListener("click", e => {
+            if (menuVisible) toggleMenu("hide");
+        });
+
+        menuOption.addEventListener("click", e => {
+            console.log("mouse-option", e.target.innerHTML);
+        });
+
+        window.addEventListener("contextmenu", e => {
+            e.preventDefault();
+            const origin = {
+                left: e.pageX,
+                top: e.pageY
+            };
+            setPosition(origin);
+            return false;
+        });
+
+    </script>
+</body>
+</html>

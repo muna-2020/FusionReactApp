@@ -1,0 +1,7 @@
+﻿ 
+  Following tables updated:
+
+1)	t_LearnCoacher_Email_UserFolder
+2)	t_LearnCoacher_Email_User
+3)	t_LearnCoacher_Email
+

@@ -1,0 +1,41 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_TaskIndexDisplay' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_Test_TaskIndexDisplay ADD dtModifiedOn datetime  DEFAULT (getdate())
+END
+		 
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Test_TaskIndexDisplay set dtModifiedOn= GetDate() Where dtModifiedOn is null
+
+GO
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_TestDrive_Test_GetTestDetailsById
+JEditorProc_TestDrive_Test_GetTestDetailsById
+JProc_TestDrive_Tests_GetTestDetailsForCycles
+Proc_TestDrive_Cycle_GetTaskIndexDisplayDetails
+Proc_TestDrive_JTeacherTestTask_GetAllTasksByTestId
+Proc_Testdrive_StandardCycleProvider_GetAssignedTestForCycle_New
+Proc_TestDrive_StandardTestProvider_GetAllTasksAssignedWithTests
+Proc_TestDrive_StandardTestProvider_GetAllTasksByTestId_New
+Proc_TestDrive_StandardTestProvider_GetAllTasksByTestId_New_Calibration
+Proc_TestDrive_Test_GetAllActivePublicTestsByMainClientId
+Proc_TestDrive_Test_GetAllTestsDetailsByTestXml
+Proc_TestDrive_Test_GetAllUncaliberatedTasksByTestId
+Proc_TestDrive_Test_GetAllUncaliberatedTasksByTestId_Calibration
+Proc_TestDrive_Test_GetTestDetailsById
+Proc_TestDrive_Tests_GetTestDetailsForCycles
+Proc_TestDrive_Tests_GetTestDetailsForCycles_Old
+**********************************/
+
+

@@ -1,0 +1,2722 @@
+/**********************************************************
+
+In Fusion , the CycleTypeId of Highstake cycles are changed to 6.
+the below script updates the Highstake Cyles with CycleTypeId 6.
+
+***********************************************************/
+
+UPDATE t_testdrive_cycle SET iCycleTypeId = 6 WHERE uCycleId IN (
+'44DF05C7-0D17-4D61-86E3-52D8CEB9FED5',
+'6D1C7472-7010-4EA2-B19A-C61C4BA710F5',
+'1F3CDDA4-D5F4-4DF1-82DE-C99CCF2AF318',
+'F8A40091-18E0-45E4-B13F-659E5BD344DB'
+)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+/****************************************************************
+A new column "cIsDeleted" is added and the value for this column for the existing rows are "Null"
+so the procedure was not returning the data fro exising rows.
+Added below condition to make the procedure return the rows
+
+ (PRI.cIsDeleted = 'N' or PRI.cIsDeleted is null) 
+*****************************************************************/
+
+
+alter PROCEDURE [dbo].[Proc_Fusion_Framework_UserPreference_ProfileImage_GetData]                
+(                              
+  @iMainClientId INT,              
+  @uUserId Uniqueidentifier,            
+  @cIsCache char(1)                                              
+)          
+          
+/*******************************************************************************                          
+ Created By: Rohit Kumar             
+ Created Date: 31.01.2018                    
+ Description:                                 
+                          
+ Modified By:                                   
+ Modified Date:                                 
+ Description:                                  
+                           
+ ********************************************************************************/              
+                                   
+As                              
+Begin                              
+ If(@cIsCache='Y' or @uUserId = '00000000-0000-0000-0000-000000000000')            
+ BEGIN            
+  Select (                              
+    Select            
+  PRI.uProfileImageId,            
+  PRI.uUserId,            
+  PRI.vFileName,            
+  PRI.iFileSize,            
+  PRI.iFileVersion,            
+  PRI.vFileType,            
+  PRI.cIsSelected,            
+  PRI.iMainClientId,            
+  PRI.cIsDefault,            
+  PRI.dtModifiedOn,  
+  PRI.cIsDeleted              
+   for json path,INCLUDE_NULL_VALUES, without_array_wrapper) as JSONResult               
+From t_Framework_UserPreference_ProfileImage PRI where                  
+(PRI.iMainClientId=@iMainClientId or PRI.iMainClientId = 0) and (PRI.cIsDeleted = 'N' or PRI.cIsDeleted is null)           
+ END            
+ ELSE            
+   BEGIN            
+       Select (                              
+    Select            
+  PRI.uProfileImageId,            
+  PRI.uUserId,            
+  PRI.vFileName,            
+  PRI.iFileSize,            
+  PRI.iFileVersion,            
+  PRI.vFileType,            
+  PRI.cIsSelected,            
+  PRI.iMainClientId,            
+  PRI.cIsDefault,            
+  PRI.dtModifiedOn,  
+  PRI.cIsDeleted                    
+   for json path,INCLUDE_NULL_VALUES, without_array_wrapper) as JSONResult               
+From t_Framework_UserPreference_ProfileImage PRI where uUserId=@uUserId and (iMainClientId=@iMainClientId or iMainClientId = 0) and (PRI.cIsDeleted = 'N' or PRI.cIsDeleted is null)          
+   END                     
+END  
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/**************************************************************************
+A new column "cIsDeleted" is added and the value for this column for the existing rows are "Null"
+so the procedure was not returning the data fro exising rows.
+Added below condition to make the procedure return the rows
+
+ (BT.cIsDeleted = 'N' or BT.cIsDeleted is null) 
+
+**************************************************************************/
+
+CREATE PROCEDURE [dbo].[Proc_Fusion_Framework_UserPreference_BackgroundTheme_GetData]                  
+(                                
+  @iMainClientId INT,                
+  @uUserId Uniqueidentifier,              
+  @cIsCache char(1)                                                
+)               
+ /*******************************************************************************                            
+ Created By: Rohit Kumar               
+ Created Date: 31.01.2018                      
+ Description:                                   
+                            
+ Modified By:                                     
+ Modified Date:                                   
+ Description:                                    
+                             
+ ********************************************************************************/                                    
+As                                
+Begin                                
+ If(@cIsCache='Y')              
+ BEGIN              
+  Select (                                
+    Select              
+  BT.uBackgroundThemeId,              
+  BT.iMainClientId,              
+  BT.uUserId,              
+  BT.vBackGroundFileName,              
+  BT.vBackgroundFileSize,              
+  BT.vBackgroundFileVersion,              
+  BT.vBackgroundFileType,              
+  BT.vBackgroundColor,              
+  BT.vFontColor,              
+  BT.cIsDefault,              
+  BT.dtModifiedOn,      
+  BT.cIsDeleted      
+   for json path,INCLUDE_NULL_VALUES, without_array_wrapper) as JSONResult                 
+From t_Framework_UserPreference_BackgroundTheme BT where                
+BT.iMainClientId=@iMainClientId and (BT.cIsDeleted = 'N' or BT.cIsDeleted is null)       
+ END              
+ ELSE              
+   BEGIN              
+       Select (                                
+    Select              
+  BT.uBackgroundThemeId,              
+  BT.iMainClientId,              
+  BT.uUserId,              
+  BT.vBackGroundFileName,              
+  BT.vBackgroundFileSize,              
+  BT.vBackgroundFileVersion,              
+  BT.vBackgroundFileType,              
+  BT.vBackgroundColor,              
+  BT.vFontColor,              
+  BT.cIsDefault,              
+  BT.dtModifiedOn,      
+  BT.cIsDeleted      
+  for json path,INCLUDE_NULL_VALUES, without_array_wrapper) as JSONResult                 
+From t_Framework_UserPreference_BackgroundTheme BT where                 
+ BT.uUserId=@uUserId and BT.iMainClientId=@iMainClientId  and (BT.cIsDeleted = 'N' or BT.cIsDeleted is null)            
+   END              
+                       
+END 
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+/****************************************************************************
+In the below procedure , while adding the data, we were just checking if the data is present for the User,
+we were not considering the MainclientId. For the same user for junk MainClientId the data was there, because of this the data was not getting added.
+i have considered even MainClientId also now
+*****************************************************************************/
+
+
+CREATE PROCEDURE [dbo].[Proc_Fusion_Framework_UserPreference_AddData]              
+(          
+ @iMainClientId INT,          
+ @vAddData NVARCHAR(MAX)          
+)          
+/********************************************************************************************                                          
+Created By: Rohit                                         
+Created Date: 24.01.2019                                         
+Description: Add MainClient data                  
+Tables: t_Framework_UserPrefernce,t_Framework_UserPreference_PreferenceValue                  
+                  
+Modified By:                                           
+Modified Date:                                           
+Description:                                           
+                  
+*************************************************************************************************/                  
+AS          
+BEGIN          
+ DECLARE @uUserPreferenceId UNIQUEIDENTIFIER , @uUserId UNIQUEIDENTIFIER        
+ SET @uUserPreferenceId = NEWID()    
+   SET @uUserId = (select uUserId  from OPENJSON(@vAddData)  with(uUserId UNIQUEIDENTIFIER '$.uUserId'))    
+      if(not exists(select uUserPreferenceId from t_Framework_UserPreference where uUserId = @uUserId and iMainClientId = @iMainClientId))    
+   BEGIN     
+   INSERT INTO t_Framework_UserPreference          
+   (          
+    uUserPreferenceId,                
+    iApplicationTypeId,              
+    uUserId,                 
+    iWindowHeight ,                
+    iWindowWidth ,                
+    iGridSize,          
+    iLanguageId,                
+    iTreeWidth,                
+    cUseWindowPopup,                
+    uNavigationSkinId,                
+    uBackgroundThemeId,                
+    uProfileImageId,                
+    iMainClientId ,                
+    dtModifiedOn                
+   )                
+   SELECT           
+    @uUserPreferenceId,           
+    iApplicationTypeId,           
+    uUserId,           
+    iWindowHeight,           
+    iWindowWidth,           
+    iGridSize,           
+    iLanguageId ,           
+    iTreeWidth,           
+    cUseWindowPopup,          
+    uNavigationSkinId,          
+    uBackgroundThemeId,           
+    uProfileImageId,           
+    @iMainClientId,           
+    GETDATE()                
+   FROM OPENJSON(@vAddData) WITH          
+   (          
+    iApplicationTypeId INT '$.iApplicationTypeId',          
+    uUserId UNIQUEIDENTIFIER '$.uUserId',          
+    iWindowHeight INT '$.iWindowHeight',          
+    iWindowWidth INT '$.iWindowWidth',          
+    iGridSize INT '$.iGridSize',          
+    iLanguageId INT '$.iLanguageId',          
+    iTreeWidth INT '$.iTreeWidth',          
+    cUseWindowPopup CHAR '$.cUseWindowPopup',          
+    uNavigationSkinId UNIQUEIDENTIFIER '$.uNavigationSkinId',          
+    uBackgroundThemeId UNIQUEIDENTIFIER '$.uBackgroundThemeId',          
+    uProfileImageId UNIQUEIDENTIFIER '$.uProfileImageId'         
+   )          
+       END    
+      else    
+   BEGIN    
+   set @uUserPreferenceId = (select top 1 uUserPreferenceId from t_Framework_UserPreference where uUserId = @uUserId and iMainClientId = @iMainClientId)    
+   END    
+ --Adding subTable data                  
+ DECLARE @vDataJson NVARCHAR(MAX)          
+ DECLARE Cur_UserPreference CURSOR FOR SELECT VALUE FROM OPENJSON (@vAddData, '$.t_Framework_UserPreference_PreferenceValue')          
+ OPEN Cur_UserPreference          
+ FETCH NEXT FROM Cur_UserPreference INTO @vDataJson          
+ WHILE(@@FETCH_STATUS <> -1)          
+ BEGIN          
+  INSERT INTO t_Framework_UserPreference_PreferenceValue                
+  (          
+   uUserPreferenceId,           
+   vKey,           
+   vValue,           
+   uUserPreferenceValueId          
+  )          
+  SELECT          
+   @uUserPreferenceId,              
+   vKey,                                      
+   vValue,              
+   NEWID()          
+  FROM OPENJSON(@vDataJson) WITH          
+  (          
+   vKey NVARCHAR(500),          
+   vValue NVARCHAR(500)          
+  )          
+  FETCH NEXT FROM Cur_UserPreference INTO @vDataJson          
+ END          
+ CLOSE Cur_UserPreference                  
+ DEALLOCATE Cur_UserPreference                  
+          
+ --Return the data                  
+ Select          
+ (          
+ Select          
+ UP.uUserPreferenceId,                    
+ UP.iApplicationTypeId,                    
+ UP.iMainClientId,                    
+ UP.uUserId,                    
+ UP.iWindowHeight,                    
+ UP.iWindowWidth,                
+ UP.iGridSize,                   
+ UP.iLanguageId,                
+ UP.iTreeWidth,                
+ UP.cUseWindowPopup,                
+ UP.uNavigationSkinId,                
+ UP.uBackgroundThemeId,                
+ UP.uProfileImageId,                
+ UP.dtModifiedOn                          
+ ,ISNULL((                                  
+ Select  PV.uUserPreferenceId , PV.vKey, PV.vValue, PV.uUserPreferenceValueId                                 
+ From t_Framework_UserPreference_PreferenceValue PV                        
+ Where UP.uUserPreferenceId =PV.uUserPreferenceId for json path, include_null_values                              
+ ),'[]')   [t_Framework_UserPreference_PreferenceValue]                           
+ for json path, include_null_values, without_array_wrapper) as jsonresult                                      
+ from t_Framework_UserPreference UP                     
+ where UP.iMainClientId=@iMainClientId and uUserPreferenceId = @uUserPreferenceId                    
+END 
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/******************************************************************
+below scripts were used when the data were not getting modified or added in the below tables
+********************************************************************/
+
+
+select * into t_TestDrive_Member_Teacher from t_TestDrive_Member_Teacher_Old
+drop table t_TestDrive_Member_Teacher_Old
+
+select * into t_TestDrive_Member_Pupil from t_TestDrive_Member_Pupil_Old
+drop table t_TestDrive_Member_Pupil_Old
+
+select * into t_TestDrive_Member_School from t_TestDrive_Member_School_Old
+drop table t_TestDrive_Member_School_Old
+
+
+select * t_TestDrive_Member_school_ExternalSourceMapping from t_TestDrive_Member_school_ExternalSourceMapping_Old
+drop table t_TestDrive_Member_school_ExternalSourceMapping_Old
+
+select * into t_TestDrive_Member_Teacher_ExternalSourceMapping from t_TestDrive_Member_Teacher_ExternalSourceMapping_Old
+drop table t_TestDrive_Member_Teacher_ExternalSourceMapping_Old
+
+select * into t_TestDrive_Member_Pupil_ExternalSourceMapping from t_TestDrive_Member_Pupil_ExternalSourceMapping_Old
+drop table t_TestDrive_Member_Pupil_ExternalSourceMapping_Old
+
+
+select * into t_TestDrive_Member_School_Pupil from t_TestDrive_Member_School_Pupil_Old
+drop table t_TestDrive_Member_School_Pupil_Old
+
+select * into t_TestDrive_Member_Teacher_School from t_TestDrive_Member_Teacher_School_Old
+drop table t_TestDrive_Member_Teacher_School_Old
+
+
+/**********************************************************
+
+The below script updates the default values for dtModifiedOn and cIsDeleted 
+
+***********************************************************/
+
+CREATE Table #Temp(TABLE_NAME nvarchar(max))
+Insert into #Temp (TABLE_NAME)
+select (T.TABLE_NAME)
+from information_schema.tables T where  T.TABLE_NAME <> 'sysdiagrams'   order by T.TABLE_NAME 
+
+DECLARE @vTableName nvarchar(max)
+DECLARE vCursor CURSOR FOR SELECT TABLE_NAME FROM #Temp
+DECLARE @vSQL nvarchar(max)
+OPEN vCursor
+
+FETCH NEXT FROM vCursor INTO @vTableName
+WHILE @@FETCH_STATUS = 0 BEGIN
+    IF EXISTS(SELECT *
+          FROM   INFORMATION_SCHEMA.COLUMNS
+          WHERE  TABLE_NAME = @vTableName
+                 AND COLUMN_NAME = 'dtModifiedOn')
+                           BEGIN 
+                            SET @vSQL = 'UPDATE '+ @vTableName+ ' SET dtModifiedOn = GETDATE() WHERE dtModifiedOn IS NULL'
+                           BEGIN TRY 
+                             EXEC(@vSQL)
+                           END TRY 
+                            BEGIN CATCH 
+                            print 'While updating dtModifiedOn into ' + @vTableName
+                             print ERROR_MESSAGE()
+                           END CATCH 
+                            
+                            END
+       IF EXISTS(SELECT * FROM   INFORMATION_SCHEMA.COLUMNS WHERE  TABLE_NAME = @vTableName AND COLUMN_NAME = 'cIsDeleted')
+              BEGIN
+              SET @vSQL = 'UPDATE '+ @vTableName+ ' SET cIsDeleted = ''N'' WHERE cIsDeleted IS NULL'
+              BEGIN TRY 
+                             EXEC(@vSQL)
+                           END TRY 
+                            BEGIN CATCH 
+                            print 'While updating cIsDeleted into ' +  @vTableName
+                             print ERROR_MESSAGE()
+                           END CATCH 
+              END
+
+    FETCH NEXT FROM vCursor INTO @vTableName
+END
+
+CLOSE vCursor    
+DEALLOCATE vCursor
+
+drop table #Temp
+
+/*******************************************************************************
+Added the cIsDeleted value explicitly 
+**********************************************************************************/
+
+
+alter PROC [dbo].[Proc_Fusion_Extranet_School_AddData]                           
+(                          
+ @iMainClientId int,                          
+ @vAddData nvarchar(max),                          
+ @uUserId uniqueidentifier            
+ )                                        
+AS                                 
+ BEGIN                             
+                           
+ /********************************************************************************************                                                  
+ Created By: Sanjay                                                 
+ Created Date: 29.11.2018                                                 
+ Description: Add School data                          
+ Tables: t_TestDrive_Member_School                          
+ Sample: exec Proc_Fusion_Extranet_School_AddData 97,'<data>', '<uUserId>'                          
+                          
+ Modified By: Arvind K                                                 
+ Modified Date: 15/06/2020                                                
+ Description: To add entry into t_TestDrive_Member_school_ExternalSourceMapping if uSchoolExternalSourceId is passed and also return the uSchoolExternalSourceId             
+            
+ Modified By: Arvind K                                               
+ Modified Date: 18/06/2020                                              
+ Description: To return t_TestDrive_Member_school_ExternalSourceMapping as a sub table                 
+        
+ Modified By: Arun                                              
+ Modified Date: 18/06/2020                                              
+ Description: To take t_TestDrive_Member_school_ExternalSourceMapping as a sub table date                                            
+    
+ Modified By:  Amit Kumar                         
+ Modified Date:  25-08-2020                        
+ Description:  Added new column "uModifiedByUserId"                        
+  *************************************************************************************************/                          
+                          
+    declare @uSchoolId uniqueidentifier                         
+                          
+ set @uSchoolId = NEWID()                          
+ insert into  t_TestDrive_Member_School                                  
+ (                          
+  uSchoolId,vSchoolName,iStateId,iTitleId,vFirstName,vName,vStreet,iZIPCode,vTown,vPhone,vEmail,vPassword,dtCreatedOn,dtModifiedOn,                          
+  vIPLastModifiedFrom,dtWhenLoginlEmailSent,iMainClientId,iLanguageId,cIsTestSchool,iSchoolTypeId,cHasLearnCoacher,                          
+  iProfilePictureFileSize,iProfilePictureFileVersion,vProfilePictureFileType,vPhonePrivate,uUserId,vAdministrationIP,vTestIP,                          
+  vPasswordHash,uLastVisitedTeacherId, cIsExternalMember,cIsDeleted                        
+ )                          
+ select @uSchoolId,                          
+   vSchoolName,                          
+   iStateId,                          
+   iTitleId,                          
+   vFirstName,                          
+   vName,                          
+   vStreet,                          
+   iZIPCode,                          
+   vTown,                          
+   vPhone,                          
+   vEmail,                          
+   vPassword,                          
+   GETDATE(),                          
+   GETDATE(),                          
+   vIPLastModifiedFrom,                          
+   dtWhenLoginlEmailSent,                          
+   @iMainClientId,                          
+   iLanguageId,                          
+   cIsTestSchool,                          
+   iSchoolTypeId,                          
+   cHasLearnCoacher,                          
+   iProfilePictureFileSize,                          
+   iProfilePictureFileVersion,                          
+   vProfilePictureFileType,                          
+   vPhonePrivate,                          
+   @uUserId,                          
+   vAdministrationIP,                          
+   vTestIP,                          
+   vPasswordHash,                          
+   uLastVisitedTeacherId,    
+   cIsExternalMember,
+   'N'                        
+ from OPENJSON(@vAddData)                            
+ with  (                           
+   vSchoolName nvarchar(400),                          
+   iStateId int,                          
+   iTitleId int,                          
+   vFirstName nvarchar(400),                 
+   vName nvarchar(400),                          
+   vStreet nvarchar(400),                          
+   iZIPCode int,                          
+   vTown nvarchar(400),                          
+   vPhone nvarchar(400),                          
+   vEmail nvarchar(400),                          
+   vPassword nvarchar(100),                          
+   dtModifiedOn datetime,         
+   dtCreatedOn datetime,                          
+   vIPLastModifiedFrom nvarchar(200),                          
+   dtWhenLoginlEmailSent datetime,                          
+   iMainClientId int,                          
+   iLanguageId int,                          
+   cIsTestSchool char(1),                          
+   iSchoolTypeId int,                          
+   cHasLearnCoacher char(1),                          
+   iProfilePictureFileSize int,                          
+   iProfilePictureFileVersion int,                          
+   vProfilePictureFileType nvarchar(20),                          
+   vPhonePrivate nvarchar(400),                 
+   uUserId uniqueidentifier,                          
+   vAdministrationIP nvarchar(1000),                          
+   vTestIP nvarchar(1000),                          
+   vPasswordHash nvarchar(500),                          
+   uLastVisitedTeacherId uniqueidentifier,    
+   cIsExternalMember char(1)                          
+  )              
+      
+      
+      
+  ---Adding entry to t_TestDrive_Member_school_ExternalSourceMapping table if uSchoolExternalSourceId is passed       
+  DECLARE @uSchoolExternalSourceId nvarchar(max), @cIsDemoData char(1)        
+  DECLARE Cur_ExternalSourceMappingData CURSOR FOR SELECT uSchoolExternalSourceId,cIsDemoData from OPENJSON (@vAddData, '$.t_TestDrive_Member_school_ExternalSourceMapping')       
+  with (uSchoolExternalSourceId nvarchar(max) , cIsDemoData char(1))                                         
+  OPEN Cur_ExternalSourceMappingData                                              
+  FETCH NEXT FROM Cur_ExternalSourceMappingData INTO @uSchoolExternalSourceId,@cIsDemoData         
+  WHILE(@@FETCH_STATUS<>-1)        
+  BEGIN       
+ if exists (select * from t_TestDrive_Member_school_ExternalSourceMapping where iMainclientId = @iMainClientId and uSchoolExternalSourceId = @uSchoolExternalSourceId)    
+ BEGIN    
+   update t_TestDrive_Member_school_ExternalSourceMapping set uSchoolId =  @uSchoolId , dtModifiedOn = GETDATE()   where iMainclientId = @iMainClientId        
+ END    
+ else    
+ BEGIN    
+  Insert into t_TestDrive_Member_school_ExternalSourceMapping (uSchoolId, uSchoolExternalSourceIdGuid, iMainclientId, uSchoolExternalSourceId, dtCreatedOn, dtModifiedOn, cIsDemoData)          
+  Values(@uSchoolId, newId(),  @iMainClientId, @uSchoolExternalSourceId, GETDATE(), GETDATE(), @cIsDemoData )         
+ END    
+                    
+  Fetch next from Cur_ExternalSourceMappingData into @uSchoolExternalSourceId, @cIsDemoData        
+  END      
+  close Cur_ExternalSourceMappingData                                              
+  deallocate Cur_ExternalSourceMappingData         
+                          
+ /*Return newly added data*/                          
+ select (                               
+   Select  S.uSchoolId,                    
+   S.vSchoolName,                    
+   S.iStateId,                    
+   S.iTitleId,                    
+   S.vFirstName,                    
+   S.vName,                    
+   S.vStreet,                    
+   S.iZIPCode,                    
+   S.vTown,                    
+   S.vPhone,                    
+   S.vEmail,      
+   S.vPassword,                    
+   S.dtCreatedOn,                    
+   S.dtModifiedOn,                    
+   S.vIPLastModifiedFrom,                    
+   S.dtWhenLoginlEmailSent,                    
+   S.cIsDeleted,                    
+   S.iMainClientId,                    
+   S.iLanguageId,                    
+   S.cIsTestSchool,                    
+   S.iSchoolTypeId,                    
+   S.cHasLearnCoacher,                    
+   S.iProfilePictureFileSize,                    
+   S.iProfilePictureFileVersion,                    
+   S.vProfilePictureFileType,                    
+   S.vPhonePrivate,S.uUserId,   
+   S.uModifiedByUserId,                   
+   S.vAdministrationIP,                    
+   S.vTestIP,                    
+   S.vPasswordHash,                    
+   S.uLastVisitedTeacherId,                    
+   S.cIsExternal,                    
+   S.cIsExternalMember,          
+    ISNULL((                                            
+  Select           
+     ES.*          
+  From  t_TestDrive_Member_school_ExternalSourceMapping ES           
+  Where S.uSchoolId = ES.uSchoolId          
+  for json path, include_null_values          
+  ),'[]') [t_TestDrive_Member_school_ExternalSourceMapping]                            
+    for json path, include_null_values, without_array_wrapper) as jsonresult                             
+    from t_TestDrive_Member_School S                                     
+ where S.uSchoolId=@uSchoolId                          
+                          
+END 
+/****************************************************************************************************************************
+the data was not there in the _Active database table        
+***********************************************************************************************************************************/
+
+insert into  t_Framework_ApplicationServers select * from [Fusion_Common_Service].dbo.t_Framework_ApplicationServers  where vtargettype like '%Fusi%'
+
+/*************************************************
+update the resultdatabasedid for the cycle      
+******************************************************/
+update t_testdrive_cycle set iResultDatabaseid = 0
+where ucycleid = '1F3CDDA4-D5F4-4DF1-82DE-C99CCF2AF318'
+
+/******************************************************************
+new columns from active is giving error in the fuson proc       
+*********************************************************************/
+
+ alter procedure [dbo].[Proc_Fusion_CMS_ExtranetTest_AddData]                                    
+(                                    
+@iMainClientId int,                                    
+@vAddData nvarchar(max)                                    
+)                                    
+/********************************************************************************************                                                                    
+  Created By: Muna Sethi                                                                   
+  Created Date: 12.04.2019                                                                   
+  Description: Add ExtranetTest data                                            
+  Tables: t_TestDrive_Test,t_TestDrive_Test_Data,t_TestDrive_Test_TestProperty,t_TestDrive_Test_AdaptiveAlgorithmConfiguration,                          
+          t_TestDrive_Cycle_SchoolYear,t_TestDrive_Test_AssignedSchoolYear,t_TestDrive_Test_Competency,t_TestDrive_Test_Category,                          
+    t_TestDrive_Test_Language,t_testdrive_Cycle_AssignedTestt_TestDrive_Cycle_Class,t_TestDrive_Cycle_Pupil,t_Testdrive_Cycle_Teacher,                          
+    t_TestDrive_Cycle_School,t_TestDrive_Cycle_SchoolYear,t_TestDrive_Cycle_State                                                   
+  Sample: exec Proc_Fusion_CMS_Intranet_Test_AddData 97,@vAddData                                            
+                                            
+  Modified By: Sanjay                                  
+  Modified Date: 15.05.2019                             
+  Description: insert newid in t_TestDrive_Test_Category(uTestCategoryId)    and in  t_TestDrive_Test_Competency(uTestCategoryCompetencyId)                        
+  made cShowIntroductionPage as char(1) while selecting                 
+              
+  Modified By:  Arun                                                         
+Modified Date: 24.06.2019                                                          
+Description:  table name change t_TestDrive_Cycle_Test_SchoolYear--> t_TestDrive_Cycle_SchoolYear        
+    
+ Modified By: Arvind K                                         
+ Modified Date: 11/08/2020                                       
+ Description: Included uModifiedByUserId column                   
+                                            
+         
+        
+*************************************************************************************************/                                                   
+AS                                    
+BEGIN                                            
+                          
+  Declare @uTestId uniqueidentifier                        
+  set @uTestId =NEWID()                        
+                          
+  --Adding Data To t_Testdrive_Test                        
+  insert into t_TestDrive_Test (uTestId, iFolderId, dtCreatedOn, dtModifiedOn, cIsDeleted, iTestTypeId, iSubjectId, iAlgorithmId, iProviderId, iMainClientId,              
+          uUserId, dBound1, cIsAdaptiveTaskSubSubjectChosenSequential, dStartDifficultyFrom,               
+        dStartDifficultyTo, dPrice, cHasResultPageCertificate,cUseMainTestIntroduction, cDisplayTaskNameAsTaskTitle, cUseResultTextByRange, vTestDescription, vTestName,               
+        iResultPageCertificateProviderId, vCertificateTemplate, cHasResultPageText,cIsUseMainTestResult,iResultPageCertificateId,uCertificateTemplateId,               
+           iCategoryId, uSeparationAndCalibrationGroupId)    
+  select                                              
+  @uTestId,-1,GETDATE(),GETDATE(),'N',iTestTypeId,iSubjectId,iAlgorithmId,iProviderId,@iMainClientId,                                    
+  uUserId,dBound1,cIsAdaptiveTaskSubSubjectChosenSequential,dStartDifficultyFrom,                                    
+  dStartDifficultyTo,dPrice,cHasResultPageCertificate,cUseMainTestIntroduction,cDisplayTaskNameAsTaskTitle,cUseResultTextByRange,vTestDescription,vTestName,                                    
+  iResultPageCertificateProviderId,vCertificateTemplate,cHasResultPageText,cIsUseMainTestResult,iResultPageCertificateId,uCertificateTemplateId,                                    
+  iCategoryId, uSeparationAndCalibrationGroupId                        
+  from openjson(@vAddData)                          
+  with (                                    
+  iTestTypeId int,iSubjectId int,iProviderId int,                                    
+  uUserId uniqueidentifier,dBound1 decimal,cIsAdaptiveTaskSubSubjectChosenSequential char(1),dStartDifficultyFrom char(1),                          
+  iAlgorithmId int,dStartDifficultyTo decimal,dPrice decimal,cHasResultPageCertificate char,cUseMainTestIntroduction char(1),                          
+  cDisplayTaskNameAsTaskTitle char(1),cUseResultTextByRange char(1),vTestDescription nvarchar(max),vTestName nvarchar(max),iResultPageCertificateProviderId int,vCertificateTemplate nvarchar(max),                   
+  cHasResultPageText char(1),cIsUseMainTestResult char(1) ,iResultPageCertificateId int,uCertificateTemplateId uniqueidentifier,                                    
+  iCategoryId int,  uSeparationAndCalibrationGroupId uniqueidentifier, uModifiedById uniqueidentifier                                  
+  )                          
+                        
+    ---Adding Data to t_TestDrive_Test_TestProperty                                    
+  insert into t_TestDrive_Test_TestProperty select                                       
+  @uTestId,iTaskIndexDisplayId,iTaskIndexDisplaySkinId,iTestProgressDisplayId,                                    
+  iResultCalculationProviderId,cPunishNegativeAnswers,iThemeId,iDurationOfTestInMinutes,iMinimumTasksBeforeTestLimitIsConsidered,                                    
+  cCheckTestTimeLimitOnServerSide,iNumberOfRepetitions,cIsSolutionAfterTask,vTestLoginPDFTemplate,cDoNotShowIntroductionPage,                                    
+  cHideEndTestButtonEvenIfEnabledByalgorithm,cShowPreviousButtonIfPreviousIsInformationTask,uClassId,cIsForInternalTesting,uCycleId,                                    
+  cShowIntroductionPage,iTaskPageTopLeftImageId,cIsShowResultExcelOnTestComplete,uLoginControlId,                                    
+  iFormId,cIsShowLoginPage,cIsLearnCoacher,cOverrideConstanceAndVariance,vBarcodePosition,iFileVersion,iFileSize,cIsShowMarkAndSolution,                                    
+  cSaveIndividualTaskResult,iTestUsageId,cIsActive,cIsPublic,cIsShowIndexSolution,cShowLinearIndex,cGroupTasksBySubSubject,cIterateTillAllTaskCorrect,                                    
+  cAllowTokenValidityDate,cAllowTokenActivation,cShowTaskNotAnswered,uTestLoginPDFTemplateId,uElementFormulaAttributeTemplateId,uResultAttributeId,                                    
+  dPassValue,vPassConditionOperator,cShowAdditionalResultStatus,vLoginPageFileSize,vLoginPageFileName,cShowTeacherLoginPage,vFormName,vExternalCertificateUrl,                                    
+  uSkinId,vSequenceProvider,uPupilTestLoginPDFTemplateId,cUseDefaultConstantAndVariance,cIsMultiSequenceWrapper,cShowInTree,cUseParentTestProperties,                                    
+  vPaperPencilType,cUseSecuredBrowser,cIsSystemTask,iNumberOfTasks,cIsAdaptiveTest,vTestCompleteNotificationEmailId,cIsShowResultDocumentOnTestComplete,                                    
+  cIsDemoTestActivityRecorded,iTestCompleteCertificateId,cIsSystemGenerated,cHasNTTheme                                     
+  from openjson(@vAddData)                                     
+  with (iTaskIndexDisplayId int,iTaskIndexDisplaySkinId int,iTestProgressDisplayId int,                                    
+  iResultCalculationProviderId int,cPunishNegativeAnswers char(1),iThemeId int,iDurationOfTestInMinutes int,iMinimumTasksBeforeTestLimitIsConsidered int,                                    
+  cCheckTestTimeLimitOnServerSide char(1),iNumberOfRepetitions int,cIsSolutionAfterTask char(1),vTestLoginPDFTemplate nvarchar(max),cDoNotShowIntroductionPage char(1),               
+  cHideEndTestButtonEvenIfEnabledByalgorithm char(1),cShowPreviousButtonIfPreviousIsInformationTask char(1),uClassId uniqueidentifier ,cIsForInternalTesting char(1),uCycleId uniqueidentifier,                                    
+  cShowIntroductionPage char(1),iTaskPageTopLeftImageId int,cIsShowResultExcelOnTestComplete char(1),uLoginControlId uniqueidentifier,                                    
+  iFormId int,cIsShowLoginPage char(1),cIsLearnCoacher char(1),cOverrideConstanceAndVariance char(1),vBarcodePosition nvarchar(max),iFileVersion int,iFileSize int,cIsShowMarkAndSolution char(1),                                    
+  cSaveIndividualTaskResult char(1),iTestUsageId int,cIsActive char(1),cIsPublic char(1),cIsShowIndexSolution char(1),cShowLinearIndex char(1),cGroupTasksBySubSubject char(1),cIterateTillAllTaskCorrect char(1),                                    
+  cAllowTokenValidityDate char(1),cAllowTokenActivation char(1),cShowTaskNotAnswered char(1),uTestLoginPDFTemplateId uniqueidentifier,uElementFormulaAttributeTemplateId uniqueidentifier,uResultAttributeId uniqueidentifier,                                
+   
+   
+  dPassValue decimal,vPassConditionOperator nvarchar(max),cShowAdditionalResultStatus char(1),vLoginPageFileSize nvarchar(max),vLoginPageFileName nvarchar(max),cShowTeacherLoginPage char(1),                          
+  vFormName nvarchar(max),vExternalCertificateUrl nvarchar(max),uSkinId uniqueidentifier,vSequenceProvider nvarchar(max),uPupilTestLoginPDFTemplateId uniqueidentifier,cUseDefaultConstantAndVariance char(1),                          
+  cIsMultiSequenceWrapper char(1),cShowInTree char(1),cUseParentTestProperties char(1),vPaperPencilType nvarchar(max),cUseSecuredBrowser char(1),cIsSystemTask char(1),iNumberOfTasks int,                          
+  cIsAdaptiveTest char(1),vTestCompleteNotificationEmailId nvarchar(max),cIsShowResultDocumentOnTestComplete char(1),                                    
+  cIsDemoTestActivityRecorded char(1),iTestCompleteCertificateId int,cIsSystemGenerated char(1),cHasNTTheme char(1)                                    
+  )                              
+                        
+  ---Adding data to t_TestDrive_Test_Data                                    
+   Insert Into t_TestDrive_Test_Data select newid(),@uTestId,iLanguageId,null,null,tTestInstructionForPupil,tTestResultPageText,vTestTitle,vStartButtonText,vResultPageTopLeftTitle,vIntroductionPageTopLeftTitle,                        
+ iIntroductionPageRightTitleFontSize,vIntroductionPageRightTitle,vTaskPageTopLeftTitle,vResultButtonText,vPassText,vFailText,vExternalTestUrl,vLoginPageFileName,iLoginPageFileSize                        
+   from OPENJSON (@vAddData, '$.t_TestDrive_Test_Data')                           
+   with(uTestDataId uniqueidentifier,iLanguageId int,tTestInstructionForPupil nvarchar(max),tTestResultPageText nvarchar(max),vTestTitle nvarchar(max),                          
+   vStartButtonText nvarchar(max),vResultPageTopLeftTitle nvarchar(max),vIntroductionPageTopLeftTitle nvarchar(max),iIntroductionPageRightTitleFontSize int,                          
+   vIntroductionPageRightTitle nvarchar(max),vTaskPageTopLeftTitle nvarchar(max),vResultButtonText nvarchar(max),vPassText nvarchar(max),vFailText nvarchar(max),                          
+   vExternalTestUrl nvarchar(max),vLoginPageFileName nvarchar(max),iLoginPageFileSize int)                         
+                           
+  ---Adding Data to t_testdrive_Test_Tasks                                                      
+  insert into t_testdrive_Test_Tasks(uTestId,iPageId,iOrderId) select                                                         
+   @uTestId,    iPageId,   iOrderId                                       
+  from openjson(@vAddData,'$.t_testdrive_Test_Tasks')                                                       
+  with (iPageId int,iOrderId int                                                 
+  )        
+      
+   --Adding Data to  t_TestDrive_Test_Language                        
+   Insert into t_TestDrive_Test_Language select                                     
+  NEWID(),@uTestId,iLanguageId,cIsActivatedForTest                                    
+  from openjson(@vAddData,'$.t_TestDrive_Test_Language') with (iLanguageId int,cIsActivatedForTest char(1))                         
+                           
+     ---Adding Data to AdaptiveAlgorithmConfiguration                                    
+   insert into t_TestDrive_Test_AdaptiveAlgorithmConfiguration                                    
+   select uAdaptiveAlgorithmConfigurationId,vAttributeKey,@iMainClientId,@uTestId,vValue                                     
+   from openjson(@vAddData,'$.t_TestDrive_Test_AdaptiveAlgorithmConfiguration')                                     
+   with(                                    
+   uAdaptiveAlgorithmConfigurationId uniqueidentifier,vAttributeKey nvarchar(max),vValue nvarchar(max))                        
+                                 
+                    
+                    
+ ---Adding Data to t_TestDrive_Test_Category                                
+  insert into t_TestDrive_Test_Category select                                     
+ NEWID(),@uTestId,iCategoryId                                    
+  from openjson(@vAddData,'$.t_TestDrive_Test_Category') with (iCategoryId int)                         
+                         
+ ---Adding Data to t_TestDrive_Test_Competency                                    
+  insert into t_TestDrive_Test_Competency select                                     
+  NEWID(),@uTestId,iCategoryCompetencyId                                    
+  from openjson(@vAddData,'$.t_TestDrive_Test_Competency') with (iCategoryCompetencyId int)                          
+                        
+ --- Adding Data to t_TestDrive_Test_AssignedSchoolYear                                 
+  insert into t_TestDrive_Test_AssignedSchoolYear select              
+  iSchoolYearId,@uTestId                                    
+  from openjson(@vAddData,'$.t_TestDrive_Test_AssignedSchoolYear') with (iSchoolYearId int)                         
+                         
+ declare @iOrder int                  
+ select @iOrder=max(iOrderId)+ 1 from t_TestDrive_Cycle_Assignedtest where uCycleId in(select uCycleId from Openjson(@vAddData,'$.t_TestDrive_Cycle_Assignedtest') with (uCycleId uniqueidentifier,iOrderId int))                  
+ --- Adding Data to t_TestDrive_Cycle_Assignedtest                          
+ insert into t_TestDrive_Cycle_Assignedtest select                                     
+  newid(),uCycleId,@uTestId,@iOrder                                    
+  from openjson(@vAddData,'$.t_TestDrive_Cycle_Assignedtest') with (uCycleId uniqueidentifier)                         
+                        
+ ---Adding Data to t_TestDrive_Cycle_State                           
+  insert into [Fusion_Common_Extranet_Dev].[dbo].t_TestDrive_Cycle_State select                                     
+  newid(),iStateId,uCycleId,@uTestId                                 
+  from openjson(@vAddData,'$.t_TestDrive_Cycle_State') with (iStateId int,uCycleId uniqueidentifier)                           
+                        
+  ---Adding Data to t_TestDrive_Cycle_School                           
+  insert into [Fusion_Common_Extranet_Dev].[dbo].t_TestDrive_Cycle_School select                                     
+  newid(),uSchoolId,uCycleId,@uTestId                                 
+  from openjson(@vAddData,'$.t_TestDrive_Cycle_School') with (uSchoolId uniqueidentifier,uCycleId uniqueidentifier)                        
+                        
+   ---Adding Data to t_TestDrive_Cycle_Teacher                           
+  insert into [Fusion_Common_Extranet_Dev].[dbo].t_TestDrive_Cycle_Teacher select                                    
+  newid(),uTeacherId,uCycleId,@uTestId,cIsActive,cIsDeleted,iTestCategoryId,cIsArchive                                 
+  from openjson(@vAddData,'$.t_TestDrive_Cycle_Teacher') with (uTeacherId uniqueidentifier,uCycleId uniqueidentifier,cIsActive char(1),cIsDeleted char(1),iTestCategoryId int, cIsArchive char(1))                        
+                         
+  ---Adding Data to t_TestDrive_Cycle_Class                           
+  insert into [Fusion_Common_Extranet_Dev].[dbo].t_TestDrive_Cycle_Class select                                     
+  newid(),uClassId,uCycleId,@uTestId,GETDATE()                                
+  from openjson(@vAddData,'$.t_TestDrive_Cycle_Class') with (uClassId uniqueidentifier,uCycleId uniqueidentifier)                        
+                         
+ ---Adding Data to t_TestDrive_Cycle_Pupil                          
+  insert into [Fusion_Common_Extranet_Dev].[dbo].t_TestDrive_Cycle_Pupil(ucyclepupilid,uCycleId,uTestId,uClassId,uPupilId,cIsByTeacher,iTestCategoryId,cIsActive,dtTestAssigned,uParentTestId,iRoundId,cIsArchive,iTestPoints,cHasRoundCompleted,iRepitionId,cIsTestCreatedmanually,iMaxRound) select                                     
+  newid(),uCycleId,@uTestId,uClassId,uPupilId,cIsByTeacher,iTestCategoryId,cIsActive,GETDATE(),uParentTestId,iRoundId,cIsArchive,iTestPoints,cHasRoundCompleted,iRepitionId,cIsTestCreatedmanually,iMaxRoundId                                
+  from openjson(@vAddData,'$.t_TestDrive_Cycle_Pupil') with (uCycleId uniqueidentifier,uClassId uniqueidentifier,uPupilId uniqueidentifier,cIsByTeacher char(1),iTestCategoryId int,cIsActive char(1),uParentTestId uniqueidentifier,iRoundId char(1),         
+  cIsArchive char(1),iTestPoints int,cHasRoundCompleted char(1),iRepitionId int,cIsTestCreatedmanually char(1), iMaxRoundId int)                        
+       
+  -----t_TestDrive_Cycle_SchoolYear                          
+  --insert into t_TestDrive_Cycle_SchoolYear select                                     
+  --newid(),uCycleId,@uTestId,iSchoolYearId                                    
+  --from openjson(@vAddData,'$.t_TestDrive_Cycle_SchoolYear') with (uCycleId uniqueidentifier,iSchoolYearId int)                                   
+                                    
+    ---Adding Data to t_TestDrive_Test_AdaptiveAlgorithmConfiguration                                    
+   insert into t_TestDrive_Test_AdaptiveAlgorithmConfiguration                                    
+   select newid(),vAttributeKey,@iMainClientId,@uTestId,vValue                                     
+   from openjson(@vAddData,'$.t_TestDrive_Test_AdaptiveAlgorithmConfiguration')                                     
+   with(vAttributeKey nvarchar(max),vValue nvarchar(max))                                    
+                            
+   --Return the added Test                        
+                        
+   select (                                        
+    select                                         
+    T.uTestId,                          
+ T.iFolderId,                          
+ T.dtCreatedOn,                          
+ T.dtModifiedOn,                          
+ T.cIsDeleted,                          
+ T.iTestTypeId,                          
+ T.iSubjectId,                          
+ T.iAlgorithmId,                      
+ T.iProviderId,                          
+ T.iMainClientId,                          
+ T.uUserId,         
+ T.uModifiedByUserId,                     
+ T.dBound1,                          
+ T.cIsAdaptiveTaskSubSubjectChosenSequential,                          
+ T.dStartDifficultyFrom,                          
+ T.dStartDifficultyTo,                          
+ T.dPrice,                          
+ T.cHasResultPageCertificate,                          
+ T.cUseMainTestIntroduction,                          
+ T.cDisplayTaskNameAsTaskTitle,                          
+ T.cUseResultTextByRange,                          
+ T.vTestDescription,                          
+ T.vTestName,                          
+ T.iResultPageCertificateProviderId,                          
+ T.vCertificateTemplate,                          
+ T.cHasResultPageText,                          
+ T.cIsUseMainTestResult,                          
+ T.iResultPageCertificateId,                          
+ T.uCertificateTemplateId,                          
+ T.iCategoryId,                          
+ T.uModifiedById,                          
+ T.uSeparationAndCalibrationGroupId,                          
+ ISNULL((select count(iTestTaskId) from t_testdrive_Test_Tasks where uTestId = T.uTestId),'0')iTestTaskCount,                         
+ISNULL((                                                     
+           Select                         
+     TP.iTestPropertyId,                                                                   
+           TP.iTaskIndexDisplayId,                                               
+           TP.iTaskIndexDisplaySkinId,                                                                  
+           TP.iTestProgressDisplayId,                                                                  
+           TP.iResultCalculationProviderId,                                         
+           TP.cPunishNegativeAnswers,                                                                  
+           TP.iThemeId,                                                                  
+           TP.iDurationOfTestInMinutes,                                                                             
+     TP.iMinimumTasksBeforeTestLimitIsConsidered,                                                            
+           TP.cCheckTestTimeLimitOnServerSide,                                                     
+           TP.iNumberOfRepetitions,                                                   
+           TP.cIsSolutionAfterTask,                                                                  
+           TP.vTestLoginPDFTemplate,                                                                  
+           TP.cDoNotShowIntroductionPage,                                      
+           TP.cHideEndTestButtonEvenIfEnabledByalgorithm,                                                                  
+           TP.cShowPreviousButtonIfPreviousIsInformationTask,                                                                  
+           TP.uClassId,                                                                  
+           TP.cIsForInternalTesting,                                                                  
+           TP.uCycleId,                                                                  
+           TP.cShowIntroductionPage,                                              
+        TP.iTaskPageTopLeftImageId,                                                                  
+           TP.cIsShowResultExcelOnTestComplete,                                                                  
+           TP.uLoginControlId,                                                                  
+           TP.iFormId,                                          
+           TP.cIsShowLoginPage,                                                                  
+           TP.cIsLearnCoacher,                                                                  
+           TP.cOverrideConstanceAndVariance,                                                                  
+           TP.vBarcodePosition,                                                                  
+           TP.iFileVersion,                                                                  
+           TP.iFileSize,                                                                  
+           TP.cIsShowMarkAndSolution,                                                                  
+           TP.cSaveIndividualTaskResult,                                                                  
+           TP.iTestUsageId,                                                                  
+           TP.cIsActive,                                                                  
+           TP.cIsPublic,                                                                  
+           TP.cIsShowIndexSolution,                                                                  
+           TP.cShowLinearIndex,                                                                  
+           TP.cGroupTasksBySubSubject,                                                                  
+           TP.cIterateTillAllTaskCorrect,                                        
+           TP.cAllowTokenValidityDate,                                                                  
+           TP.cAllowTokenActivation,                                                                  
+           TP.cShowTaskNotAnswered,                                                                  
+           TP.uTestLoginPDFTemplateId,           
+           TP.uElementFormulaAttributeTemplateId,                                                                  
+           TP.uResultAttributeId,                                                                  
+           TP.dPassValue,                                                                  
+           TP.vPassConditionOperator,                                                                  
+           TP.cShowAdditionalResultStatus,                                                                  
+           TP.vLoginPageFileSize,                                                                  
+           TP.vLoginPageFileName,                                             
+           TP.cShowTeacherLoginPage,                                                                  
+           TP.vFormName,                                                                  
+           TP.vExternalCertificateUrl,                                                                  
+           TP.uSkinId,                    
+           TP.vSequenceProvider,                                                                  
+           TP.uPupilTestLoginPDFTemplateId,                                                                  
+           TP.cUseDefaultConstantAndVariance,                                                         
+           TP.cIsMultiSequenceWrapper,                                                                  
+           TP.cShowInTree,                                                                  
+           TP.cUseParentTestProperties,                                                                  
+           TP.vPaperPencilType,                                                                  
+           TP.cUseSecuredBrowser,                                                                  
+           TP.cIsSystemTask,                                                                  
+           TP.iNumberOfTasks,TP.cIsAdaptiveTest,                                                               
+           TP.vTestCompleteNotificationEmailId,                                                 
+           TP.cIsShowResultDocumentOnTestComplete,                                                                  
+           TP.cIsDemoTestActivityRecorded,                                                                  
+           TP.iTestCompleteCertificateId,                                                  
+           TP.cIsSystemGenerated,                                                               
+           TP.cHasNTTheme                         
+     from t_TestDrive_Test_TestProperty TP                         
+     where TP.uTestId =T.uTestId FOR JSON PATH, INCLUDE_NULL_VALUES                        
+     ),'[]')'t_TestDrive_Test_TestProperty',            
+        
+   ISNULL(                                                                    
+    (                                                              
+    select TT.iTestTaskId,                                                      
+     TT.uTestId,                                                      
+     TT.iPageId,                        
+     TT.iOrderId                        
+   from  t_testdrive_Test_Tasks TT                                                                    
+    where TT.uTestId=T.uTestId                                                                    
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                                                    
+    ) 't_testdrive_Test_Tasks',       
+                                    
+    ISNULL(                            
+      (select                           
+    TD.uTestDataId,                          
+  TD.uTestId,                          
+    TD.iLanguageId,                          
+    TD.vTestName,                          
+    TD.vTestDescription,                          
+    TD.tTestInstructionForPupil,  TD.tTestResultPageText,                          
+    TD.vTestTitle,                          
+    TD.vStartButtonText,                          
+    TD.vResultPageTopLeftTitle,                          
+    TD.vIntroductionPageTopLeftTitle,                          
+    TD.iIntroductionPageRightTitleFontSize,                          
+    TD.vIntroductionPageRightTitle,                          
+    TD.vTaskPageTopLeftTitle,                          
+    TD.vResultButtonText,                          
+    TD.vPassText,                          
+    TD.vFailText,                          
+    TD.vExternalTestUrl,                          
+    TD.vLoginPageFileName,                          
+    TD.iLoginPageFileSize                          
+    from t_TestDrive_Test_Data TD                                        
+       where TD.uTestId=T.uTestId                                        
+       FOR JSON PATH, INCLUDE_NULL_VALUES),'[]'                                        
+    )'t_TestDrive_Test_Data',                                                     
+    ISNULL(                                        
+      (select                           
+   TAC.uAdaptiveAlgorithmConfigurationId,                          
+   TAC.vAttributeKey,                          
+   TAC.iMainClientId,                          
+   TAC.uTestId,                          
+   TAC.vValue from t_TestDrive_Test_AdaptiveAlgorithmConfiguration TAC                                        
+   where TAC.uTestId=T.uTestId                                        
+   FOR JSON PATH, INCLUDE_NULL_VALUES),'[]'                          
+    ) 't_TestDrive_Test_AdaptiveAlgorithmConfiguration',                                        
+    ISNULL(                                        
+    (                                        
+    select TAS.iAssignedSchoolYearId,                          
+   TAS.iSchoolYearId,                          
+      TAS.uTestId from  t_TestDrive_Test_AssignedSchoolYear TAS                                        
+    where TAS.uTestId=T.uTestId                                        
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                        
+    ) 't_TestDrive_Test_AssignedSchoolYear',                                        
+    ISNULL(                                        
+    (                                        
+    select TC.uTestCategoryCompetencyId,                          
+     TC.uTestId,                          
+     TC.iCategoryCompetencyId from  t_TestDrive_Test_Competency TC                                        
+where TC.uTestId=T.uTestId                                        
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                        
+    ) 't_TestDrive_Test_Competency',                                        
+    ISNULL(                                        
+    (                                        
+    select TCA.uTestCategoryId,                          
+     TCA.uTestId,                          
+     TCA.iCategoryId from  t_TestDrive_Test_Category TCA                                        
+    where TCA.uTestId=T.uTestId                                        
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                     
+    ) 't_TestDrive_Test_Category',                                        
+    ISNULL(                                        
+    (                                        
+    select TL.uTestLanguageId,                          
+     TL.uTestId,                          
+     TL.iLanguageId,                          
+     TL.cIsActivatedForTest from  t_TestDrive_Test_Language TL                                        
+    where TL.uTestId=T.uTestId                          
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                        
+    ) 't_TestDrive_Test_Language',                                   
+    ISNULL(                                        
+    (                                        
+    select CAT.uCycleAssignedTestId,                          
+     CAT.uCycleId,                          
+     CAT.uTestId,                          
+     CAT.iOrderId from  t_TestDrive_Cycle_AssignedTest CAT                                        
+    where CAT.uTestId=T.uTestId                                        
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                        
+    ) 't_TestDrive_Cycle_AssignedTest',                                    
+     ISNULL(                                        
+    (                                        
+    select CST.uCycleStateId,                  
+     CST.iStateId,                          
+     CST.uCycleId,                          
+     CST.uTestId from  [Fusion_Common_Extranet_Dev].[dbo].t_TestDrive_Cycle_State CST                              
+    where CST.uTestId=T.uTestId                                        
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                        
+    ) 't_TestDrive_Cycle_State',                          
+ ISNULL(                                        
+    (                                        
+    select CS.uCycleSchoolId,                          
+    CS.uSchoolId,                          
+    CS.uCycleId,                          
+    CS.uTestId from  [Fusion_Common_Extranet_Dev].[dbo].t_TestDrive_Cycle_School CS                                        
+    where CS.uTestId=T.uTestId                                        
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                        
+    ) 't_TestDrive_Cycle_School',                          
+ --ISNULL(                                        
+ --   (                                        
+ --   select CSY.uTestSchoolYearId,CSY.uTestId,                          
+ --    CSY.iSchoolYearId,                          
+ --    CSY.uCycleId from  [Fusion_Common_Extranet_Dev].[dbo].t_TestDrive_Cycle_SchoolYear CSY                                        
+ --   where CSY.uTestId=T.uTestId                                        
+ --   FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                        
+ --   ) 't_TestDrive_Cycle_SchoolYear',                          
+ ISNULL(                                        
+    (                                        
+       select CC.uCycleClassId,                          
+     CC.uClassId,                          
+           CC.uCycleId,                          
+     CC.uTestId,                          
+     CC.dtTestAssigned from  [Fusion_Common_Extranet_Dev].[dbo].t_TestDrive_Cycle_Class CC                                        
+    where CC.uTestId=T.uTestId                                        
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                        
+    ) 't_TestDrive_Cycle_Class',                          
+  ISNULL(                                        
+    (                                        
+    select CT.uCycleTeacherId,                          
+     CT.uTeacherId,                          
+     CT.uCycleId,                          
+     CT.uTestId,                          
+     CT.cIsActive,                          
+     CT.cIsDeleted,                       
+     CT.iTestCategoryId from  [Fusion_Common_Extranet_Dev].[dbo].t_Testdrive_Cycle_Teacher CT                                        
+    where CT.uTestId=T.uTestId                                        
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                        
+    ) 't_TestDrive_Cycle_Teacher',                           
+    ISNULL(                                        
+    (                                        
+      select CP.uCyclePupilId,                          
+   CP.uCycleId,                          
+   CP.uTestId,     
+   CP.uClassId,                          
+   CP.uPupilId,                          
+   CP.cIsByTeacher,                          
+   CP.iTestCategoryId,                          
+   CP.cIsActive,                          
+   CP.dtTestAssigned,                          
+   CP.uParentTestId,                          
+   CP.iRoundId,                          
+   CP.cIsArchive,                          
+   CP.iTestPoints,                          
+   CP.cHasRoundCompleted,                          
+ CP.iRepitionId,                          
+   CP.cIsTestCreatedManually from [Fusion_Common_Extranet_Dev].[dbo].t_TestDrive_Cycle_Pupil CP                                        
+    where CP.uTestId=T.uTestId                                      
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                        
+    ) 't_TestDrive_Cycle_Pupil'                                 
+    FOR JSON PATH,INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER                                         
+ ) as jsonresult                                        
+  from t_TestDrive_Test T                                                                                                 
+  where T.uTestId=@uTestId                              
+                                  
+END 
+
+--------------------------------------------------------------------------------------------------------------
+
+ALTER procedure [dbo].[Proc_Fusion_CMS_ExtranetTest_GetData]                         
+(                                                                                        
+  @iMainClientId INT,                                       
+  @iOffSet int = 0 ,                                      
+  @iInterval int = 4000,                                        
+  @uCycleId uniqueidentifier,                                            
+  @uPupilId uniqueidentifier,                                            
+  @uClassId uniqueidentifier,                                            
+  @uTeacherId uniqueidentifier,                                            
+  @uSchoolId uniqueidentifier,                
+  @uTestId uniqueidentifier,                              
+  @iStateId int,                          
+  @dtFromDate datetime,                                            
+  @dtToDate datetime,                          
+  @cIsCache CHAR(1),                                      
+  @dtCreatedON datetime,                                                 
+  @cIsFilterBasedOnDate char(1)                                      
+)                                                                                  
+AS                                                                        
+Begin                                                                    
+/********************************************************************************************                                                                                    
+  Created By: Muna Sethi                                                                                   
+  Created Date: 03.04.2019                                                                                  
+  Description: Get ExtranetTest data                                                            
+  Tables: t_TestDrive_Test,t_TestDrive_Test_Data,t_TestDrive_Test_TestProperty,t_TestDrive_Test_AdaptiveAlgorithmConfiguration,                                                                  
+          t_TestDrive_Test_AssignedSchoolYear,t_TestDrive_Test_Competency,t_TestDrive_Test_Category,t_TestDrive_Test_Language,t_testdrive_Cycle_AssignedTest                                             
+          t_TestDrive_Cycle_Class,t_TestDrive_Cycle_Pupil,t_Testdrive_Cycle_Teacher,t_TestDrive_Cycle_School,t_TestDrive_Cycle_SchoolYear,t_TestDrive_Cycle_State                                                        
+  Sample: exec Proc_Fusion_CMS_ExtranetTest_GetData 97,0,6000, '00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-00000000000
+  
+    
+      
+        
+          
+            
+              
+0',-1,'Y','4/15/2019 5:03:47 PM','N'                                          
+                                                            
+Modified By:  Arun                                                   
+Modified Date: 24.06.2019                                                    
+Description:  table name change t_TestDrive_Cycle_Test_SchoolYear--> t_TestDrive_Cycle_SchoolYear    
+  
+ Modified By: Arvind K                                       
+ Modified Date: 10/08/2020                                     
+ Description: Included uModifiedByUserId column                                                                    
+                                                            
+*************************************************************************************************/                                                                   
+                                                         
+ IF (@cIsCache = 'Y')                                                        
+  BEGIN                                                        
+                                                                     
+   select (                                            
+    select                                             
+    T.uTestId,                       
+ T.iFolderId,                              
+ T.dtCreatedOn,                              
+ T.dtModifiedOn,                              
+ T.cIsDeleted,                              
+ T.iTestTypeId,                              
+ T.iSubjectId,                              
+ T.iAlgorithmId,                              
+ T.iProviderId,       
+ T.iMainClientId,                              
+ T.uUserId,          
+  T.uModifiedByUserId,                       
+ T.dBound1,          
+ T.cIsAdaptiveTaskSubSubjectChosenSequential,                              
+ T.dStartDifficultyFrom,                              
+ T.dStartDifficultyTo,                 
+ T.dPrice,                              
+ T.cHasResultPageCertificate,                              
+ T.cUseMainTestIntroduction,                            
+ T.cDisplayTaskNameAsTaskTitle,                              
+ T.cUseResultTextByRange,                              
+ T.vTestDescription,                              
+ T.vTestName,                              
+ T.iResultPageCertificateProviderId,                              
+ T.vCertificateTemplate,                              
+ T.cHasResultPageText,                              
+ T.cIsUseMainTestResult,                              
+ T.iResultPageCertificateId,                              
+ T.uCertificateTemplateId,                              
+ T.iCategoryId,                              
+ T.uModifiedById,                              
+ T.uSeparationAndCalibrationGroupId,       
+ ISNULL((select count(iTestTaskId) from t_testdrive_Test_Tasks where uTestId = T.uTestId),'0')iTestTaskCount,                            
+ ISNULL((                                               
+           Select                   
+     TP.iTestPropertyId,                                                             
+           TP.iTaskIndexDisplayId,                                                            
+           TP.iTaskIndexDisplaySkinId,                                                            
+           TP.iTestProgressDisplayId,                                                            
+           TP.iResultCalculationProviderId,                                   
+           TP.cPunishNegativeAnswers,                                                            
+           TP.iThemeId,                                                            
+           TP.iDurationOfTestInMinutes,                                                                       
+     TP.iMinimumTasksBeforeTestLimitIsConsidered,                                                      
+           TP.cCheckTestTimeLimitOnServerSide,                                               
+           TP.iNumberOfRepetitions,                                             
+           TP.cIsSolutionAfterTask,                                                            
+           TP.vTestLoginPDFTemplate,                                                            
+           TP.cDoNotShowIntroductionPage,                                                            
+           TP.cHideEndTestButtonEvenIfEnabledByalgorithm,                                                            
+           TP.cShowPreviousButtonIfPreviousIsInformationTask,                                                            
+           TP.uClassId,                                                            
+           TP.cIsForInternalTesting,                                                            
+           TP.uCycleId,                                                            
+           TP.cShowIntroductionPage,                                        
+        TP.iTaskPageTopLeftImageId,                                                            
+           TP.cIsShowResultExcelOnTestComplete,                                                            
+           TP.uLoginControlId,                                                            
+           TP.iFormId,                                    
+           TP.cIsShowLoginPage,                                                       
+           TP.cIsLearnCoacher,                                                            
+           TP.cOverrideConstanceAndVariance,                                                            
+           TP.vBarcodePosition,                                                            
+           TP.iFileVersion,                              
+           TP.iFileSize,                                                            
+           TP.cIsShowMarkAndSolution,                                                            
+           TP.cSaveIndividualTaskResult,                                                            
+           TP.iTestUsageId,                                                            
+           TP.cIsActive,                                                            
+           TP.cIsPublic,                                                            
+           TP.cIsShowIndexSolution,                                                            
+           TP.cShowLinearIndex,                                                            
+           TP.cGroupTasksBySubSubject,                                                            
+           TP.cIterateTillAllTaskCorrect,                                                            
+           TP.cAllowTokenValidityDate,                                                            
+           TP.cAllowTokenActivation,                                                            
+           TP.cShowTaskNotAnswered,                                                            
+           TP.uTestLoginPDFTemplateId,                                                            
+           TP.uElementFormulaAttributeTemplateId,                                                            
+           TP.uResultAttributeId,                                                            
+           TP.dPassValue,                                                            
+           TP.vPassConditionOperator,                                                            
+           TP.cShowAdditionalResultStatus,                                                            
+           TP.vLoginPageFileSize,                                                            
+           TP.vLoginPageFileName,                                       
+           TP.cShowTeacherLoginPage,                                                            
+           TP.vFormName,                                                            
+           TP.vExternalCertificateUrl,                                                            
+           TP.uSkinId,              
+           TP.vSequenceProvider,                                                            
+           TP.uPupilTestLoginPDFTemplateId,                                                            
+           TP.cUseDefaultConstantAndVariance,                                                   
+           TP.cIsMultiSequenceWrapper,                                                            
+           TP.cShowInTree,                                                            
+           TP.cUseParentTestProperties,                                                            
+           TP.vPaperPencilType,                                                            
+           TP.cUseSecuredBrowser,                                                            
+           TP.cIsSystemTask,                                                            
+           TP.iNumberOfTasks,TP.cIsAdaptiveTest,                                                         
+           TP.vTestCompleteNotificationEmailId,                                           
+           TP.cIsShowResultDocumentOnTestComplete,                                                            
+           TP.cIsDemoTestActivityRecorded,                                                            
+           TP.iTestCompleteCertificateId,        
+           TP.cIsSystemGenerated,                                                          
+           TP.cHasNTTheme                   
+     from t_TestDrive_Test_TestProperty TP                   
+     where TP.uTestId =T.uTestId FOR JSON PATH, INCLUDE_NULL_VALUES                  
+     ),'[]')'t_TestDrive_Test_TestProperty',          
+    
+   ISNULL(                                                            
+   (                                                      
+    select TT.iTestTaskId,                       
+     TT.uTestId,                                              
+     TT.iPageId,                
+     TT.iOrderId                
+   from  t_testdrive_Test_Tasks TT                                                            
+    where TT.uTestId=T.uTestId                                                            
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                                          
+    ) 't_testdrive_Test_Tasks',              
+                                      
+    ISNULL(                                            
+      (select                 
+    TD.uTestDataId,                              
+    TD.uTestId,             
+    TD.iLanguageId,                              
+    TD.vTestName,                              
+    TD.vTestDescription,                              
+    TD.tTestInstructionForPupil,                              
+    TD.tTestResultPageText,                              
+    TD.vTestTitle,                              
+    TD.vStartButtonText,                              
+    TD.vResultPageTopLeftTitle,                              
+    TD.vIntroductionPageTopLeftTitle,                              
+    TD.iIntroductionPageRightTitleFontSize,                              
+    TD.vIntroductionPageRightTitle,                              
+    TD.vTaskPageTopLeftTitle,                              
+    TD.vResultButtonText,                              
+    TD.vPassText,                     
+    TD.vFailText,                              
+    TD.vExternalTestUrl,                              
+    TD.vLoginPageFileName,                              
+    TD.iLoginPageFileSize                              
+    from t_TestDrive_Test_Data TD                                            
+       where TD.uTestId=T.uTestId                                            
+       FOR JSON PATH, INCLUDE_NULL_VALUES),'[]'                                  
+    )'t_TestDrive_Test_Data',                                                         
+    ISNULL(                                            
+      (select                               
+   TAC.uAdaptiveAlgorithmConfigurationId,                              
+   TAC.vAttributeKey,                              
+   TAC.iMainClientId,                              
+   TAC.uTestId,                              
+   TAC.vValue from t_TestDrive_Test_AdaptiveAlgorithmConfiguration TAC                                            
+   where TAC.uTestId=T.uTestId                                            
+   FOR JSON PATH, INCLUDE_NULL_VALUES),'[]'                                            
+    ) 't_TestDrive_Test_AdaptiveAlgorithmConfiguration',                                            
+    ISNULL(                                            
+    (                                            
+    select TAS.iAssignedSchoolYearId,                              
+   TAS.iSchoolYearId,                              
+      TAS.uTestId from  t_TestDrive_Test_AssignedSchoolYear TAS                                            
+    where TAS.uTestId=T.uTestId                                            
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                            
+    ) 't_TestDrive_Test_AssignedSchoolYear',                                            
+    ISNULL(                                            
+    (                                      
+    select TC.uTestCategoryCompetencyId,                              
+     TC.uTestId,                              
+     TC.iCategoryCompetencyId from  t_TestDrive_Test_Competency TC                                            
+    where TC.uTestId=T.uTestId                                            
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                            
+    ) 't_TestDrive_Test_Competency',                                            
+    ISNULL(                             
+    (                                            
+    select TCA.uTestCategoryId,                              
+     TCA.uTestId,                              
+     TCA.iCategoryId from  t_TestDrive_Test_Category TCA                                            
+    where TCA.uTestId=T.uTestId                                            
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                         
+    ) 't_TestDrive_Test_Category',                                            
+    ISNULL(                                      
+    (                                            
+    select TL.uTestLanguageId,                              
+     TL.uTestId,                              
+   TL.iLanguageId,                              
+     TL.cIsActivatedForTest from  t_TestDrive_Test_Language TL                
+    where TL.uTestId=T.uTestId                                            
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'           
+    ) 't_TestDrive_Test_Language',                                       
+    ISNULL(                                            
+    (                                            
+    select CAT.uCycleAssignedTestId,                              
+     CAT.uCycleId,                              
+     CAT.uTestId,                              
+     CAT.iOrderId from  t_TestDrive_Cycle_AssignedTest CAT                                            
+    where CAT.uTestId=T.uTestId                                     
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                            
+    ) 't_TestDrive_Cycle_AssignedTest',                                        
+     ISNULL(                                            
+    (                                            
+    select CST.uCycleStateId,                              
+     CST.iStateId,                              
+     CST.uCycleId,                              
+     CST.uTestId from [Fusion_Common_Extranet_Dev].[dbo].t_TestDrive_Cycle_State CST                       
+    where CST.uTestId=T.uTestId                                            
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                            
+    ) 't_TestDrive_Cycle_State',                              
+ ISNULL(                                            
+    (                                            
+    select CS.uCycleSchoolId,                              
+    CS.uSchoolId,                              
+    CS.uCycleId,                              
+    CS.uTestId from  [Fusion_Common_Extranet_Dev].[dbo].t_TestDrive_Cycle_School CS                   
+    where CS.uTestId=T.uTestId                                            
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                            
+    ) 't_TestDrive_Cycle_School',                              
+ --ISNULL(                                            
+ --   (                                            
+ --   select CSY.uTestSchoolYearId,CSY.uTestId,                              
+ --    CSY.iSchoolYearId,                              
+ --    CSY.uCycleId from  [Fusion_Common_Extranet].[dbo].t_TestDrive_Cycle_SchoolYear CSY                                            
+ --   where CSY.uTestId=T.uTestId                                    
+ --   FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                            
+ --   ) 't_TestDrive_Cycle_SchoolYear',                              
+ ISNULL(                                            
+    (                                            
+       select CC.uCycleClassId,                              
+     CC.uClassId,                              
+           CC.uCycleId,                         
+     CC.uTestId,                              
+     CC.dtTestAssigned from  [Fusion_Common_Extranet_Dev].[dbo].t_TestDrive_Cycle_Class CC                                            
+    where CC.uTestId=T.uTestId                                            
+FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                            
+    ) 't_TestDrive_Cycle_Class',                              
+  ISNULL(                                            
+    (                                            
+    select CT.uCycleTeacherId,                              
+     CT.uTeacherId,                              
+     CT.uCycleId,                              
+     CT.uTestId,                              
+     CT.cIsActive,                              
+     CT.cIsDeleted,                              
+     CT.iTestCategoryId from  [Fusion_Common_Extranet_Dev].[dbo].t_Testdrive_Cycle_Teacher CT                                            
+    where CT.uTestId=T.uTestId                                            
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                            
+    ) 't_TestDrive_Cycle_Teacher',                               
+    ISNULL(                                            
+    (                                            
+      select CP.uCyclePupilId,                              
+   CP.uCycleId,                              
+   CP.uTestId,                              
+   CP.uClassId,                           
+   CP.uPupilId,                              
+   CP.cIsByTeacher,                              
+   CP.iTestCategoryId,                              
+   CP.cIsActive,                              
+   CP.dtTestAssigned,                              
+   CP.uParentTestId,                              
+   CP.iRoundId,                              
+   CP.cIsArchive,                              
+   CP.iTestPoints,                              
+   CP.cHasRoundCompleted,                              
+   CP.iRepitionId,                              
+   CP.cIsTestCreatedManually from [Fusion_Common_Extranet_Dev].[dbo].t_TestDrive_Cycle_Pupil CP                               
+    where CP.uTestId=T.uTestId                                           
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                            
+    ) 't_TestDrive_Cycle_Pupil'                                     
+    FOR JSON PATH,INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER                                             
+ ) as jsonresult                                            
+  from t_TestDrive_Test T                                            
+  inner join t_TestDrive_Test_TestProperty TP on TP.uTestId =T.uTestId                                
+  where T.iMainClientId = @iMainClientId  AND T.iFolderId =-1  AND (iTestUsageId=2 OR iTestUsageId=3)                                    
+  AND ((@cIsFilterBasedOnDate ='Y' AND T.dtCreatedOn>@dtCreatedON ) OR @cIsFilterBasedOnDate='N')                                          
+ORDER BY T.dtCreatedOn                                                     
+OFFSET @iOffSet ROWS                                                    
+FETCH NEXT @iInterval ROWS ONLY                                               
+                                                                       
+  END                                                        
+ ELSE                         
+ BEGIN                                                      
+            
+      Declare @TempTable Table(                              
+    uTestId uniqueidentifier                              
+      )                              
+                  
+   IF(@uTestId<>'00000000-0000-0000-0000-000000000000')                
+   BEGIN            
+   insert into @TempTable select uTestId from t_TestDrive_Test where uTestId=@uTestId            
+   END              
+   ELSE            
+   BEGIN                          
+    INSERT INTO @TempTable(uTestId)                              
+    SELECT uTestId FROM                               
+    t_TestDrive_Cycle_State CS                                                
+    WHERE CS.iStateId = @iStateId and CS.uCycleId= @uCycleId                                               
+    UNION                                                
+    SELECT uTestId FROM                                                 
+    t_TestDrive_Cycle_School CSCH                                                
+    WHERE CSCH.uSchoolId = @uSchoolId and CSCH.uCycleId=@uCycleId                                            
+    UNION                                             
+    SELECT uTestId FROM                                                
+    t_Testdrive_Cycle_Teacher CT                                                
+    WHERE CT.uTeacherId = @uTeacherId and CT.uCycleId=@uCycleId                                            
+   UNION                                                
+    SELECT uTestId FROM                                                 
+    t_TestDrive_Cycle_Class CC                                                
+    WHERE CC.uClassId = @uClassId and CC.uCycleId=@uCycleId                             
+    UNION                                                
+    SELECT uTestId FROM                                                 
+    t_TestDrive_Cycle_Pupil CP                                                
+    WHERE CP.uPupilId = @uPupilId and Cp.uCycleId=@uCycleId             
+   END                                              
+                                             
+      select(                                                                      
+      select                                             
+      TT.uTestId,                             
+     T.iFolderId,                              
+     T.dtCreatedOn,                              
+     T.dtModifiedOn,                              
+     T.cIsDeleted,                              
+     T.iTestTypeId,                          
+     T.iSubjectId,                              
+     T.iAlgorithmId,                              
+     T.iProviderId,                     
+     T.iMainClientId,                              
+     T.uUserId,     
+  T.uModifiedByUserId,                            
+     T.dBound1,                              
+     T.cIsAdaptiveTaskSubSubjectChosenSequential,                              
+     T.dStartDifficultyFrom,                              
+     T.dStartDifficultyTo,                              
+     T.dPrice,                              
+     T.cHasResultPageCertificate,                              
+     T.cUseMainTestIntroduction,                              
+     T.cDisplayTaskNameAsTaskTitle,                              
+     T.cUseResultTextByRange,              
+     T.vTestDescription,                      
+     T.vTestName,                              
+     T.iResultPageCertificateProviderId,                              
+     T.vCertificateTemplate,                              
+     T.cHasResultPageText,                              
+     T.cIsUseMainTestResult,                              
+     T.iResultPageCertificateId,                              
+     T.uCertificateTemplateId,                              
+     T.iCategoryId,                              
+     T.uModifiedById,                              
+     T.uSeparationAndCalibrationGroupId,                               
+      ISNULL((select count(iTestTaskId) from t_testdrive_Test_Tasks where uTestId = T.uTestId),'0')iTestTaskCount,                            
+ ISNULL((                                               
+           Select                   
+     TP.iTestPropertyId,                                                             
+           TP.iTaskIndexDisplayId,                                                            
+           TP.iTaskIndexDisplaySkinId,                                                            
+           TP.iTestProgressDisplayId,                                                            
+           TP.iResultCalculationProviderId,                                   
+           TP.cPunishNegativeAnswers,                                                            
+           TP.iThemeId,                                                            
+           TP.iDurationOfTestInMinutes,                                                                       
+     TP.iMinimumTasksBeforeTestLimitIsConsidered,                                                      
+           TP.cCheckTestTimeLimitOnServerSide,                                               
+           TP.iNumberOfRepetitions,                                             
+           TP.cIsSolutionAfterTask,                                                            
+           TP.vTestLoginPDFTemplate,                                                            
+           TP.cDoNotShowIntroductionPage,                                                            
+           TP.cHideEndTestButtonEvenIfEnabledByalgorithm,                                                            
+           TP.cShowPreviousButtonIfPreviousIsInformationTask,                                                            
+           TP.uClassId,                                                            
+           TP.cIsForInternalTesting,                                                            
+           TP.uCycleId,                                                            
+           TP.cShowIntroductionPage,                                        
+        TP.iTaskPageTopLeftImageId,                                                            
+           TP.cIsShowResultExcelOnTestComplete,                                                            
+           TP.uLoginControlId,                                                            
+           TP.iFormId,                                    
+         TP.cIsShowLoginPage,                                                            
+           TP.cIsLearnCoacher,                                                            
+           TP.cOverrideConstanceAndVariance,                                                            
+           TP.vBarcodePosition,                                                            
+           TP.iFileVersion,                                                            
+           TP.iFileSize,                                                            
+           TP.cIsShowMarkAndSolution,                                                            
+           TP.cSaveIndividualTaskResult,                                                            
+           TP.iTestUsageId,                                                            
+           TP.cIsActive,                                                            
+           TP.cIsPublic,                                                            
+           TP.cIsShowIndexSolution,                                                            
+           TP.cShowLinearIndex,                                                            
+           TP.cGroupTasksBySubSubject,                                                            
+           TP.cIterateTillAllTaskCorrect,                                                            
+           TP.cAllowTokenValidityDate,                                                            
+           TP.cAllowTokenActivation,                                                            
+           TP.cShowTaskNotAnswered,                                                            
+           TP.uTestLoginPDFTemplateId,                                                            
+           TP.uElementFormulaAttributeTemplateId,                                                            
+           TP.uResultAttributeId,                                                            
+           TP.dPassValue,                                                            
+           TP.vPassConditionOperator,                                                            
+           TP.cShowAdditionalResultStatus,                        
+           TP.vLoginPageFileSize,                                                            
+           TP.vLoginPageFileName,                                       
+           TP.cShowTeacherLoginPage,                                                            
+           TP.vFormName,                                                            
+           TP.vExternalCertificateUrl,                                                            
+           TP.uSkinId,              
+           TP.vSequenceProvider,                                                            
+           TP.uPupilTestLoginPDFTemplateId,                                                            
+           TP.cUseDefaultConstantAndVariance,                                                   
+           TP.cIsMultiSequenceWrapper,                                                            
+           TP.cShowInTree,                                                            
+           TP.cUseParentTestProperties,                                                            
+           TP.vPaperPencilType,                                                            
+           TP.cUseSecuredBrowser,                                                            
+           TP.cIsSystemTask,                                                            
+           TP.iNumberOfTasks,TP.cIsAdaptiveTest,                                                         
+           TP.vTestCompleteNotificationEmailId,                                           
+           TP.cIsShowResultDocumentOnTestComplete,                                                            
+           TP.cIsDemoTestActivityRecorded,                                                            
+           TP.iTestCompleteCertificateId,                                            
+           TP.cIsSystemGenerated,                                                          
+           TP.cHasNTTheme                   
+     from t_TestDrive_Test_TestProperty TP                   
+     where TP.uTestId =T.uTestId FOR JSON PATH, INCLUDE_NULL_VALUES                  
+     ),'[]')'t_TestDrive_Test_TestProperty',    
+   ISNULL(                                                            
+   (                                                      
+    select TT.iTestTaskId,                       
+     TT.uTestId,                                              
+     TT.iPageId,                
+     TT.iOrderId                
+   from  t_testdrive_Test_Tasks TT                                                            
+    where TT.uTestId=T.uTestId                                                            
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                                          
+    ) 't_testdrive_Test_Tasks',                                                            
+    ISNULL(                                            
+      (select TD.uTestDataId,                              
+    TD.uTestId,                
+    TD.iLanguageId,                              
+    TD.vTestName,                              
+    TD.vTestDescription,                              
+    TD.tTestInstructionForPupil,                              
+    TD.tTestResultPageText,                              
+    TD.vTestTitle,                              
+    TD.vStartButtonText,                              
+    TD.vResultPageTopLeftTitle,                              
+    TD.vIntroductionPageTopLeftTitle,                              
+    TD.iIntroductionPageRightTitleFontSize,                              
+    TD.vIntroductionPageRightTitle,                              
+    TD.vTaskPageTopLeftTitle,                              
+    TD.vResultButtonText,                              
+    TD.vPassText,                              
+    TD.vFailText,                              
+    TD.vExternalTestUrl,                              
+    TD.vLoginPageFileName,                              
+    TD.iLoginPageFileSize from t_TestDrive_Test_Data TD                                            
+      where TD.uTestId=TT.uTestId                                            
+      FOR JSON PATH, INCLUDE_NULL_VALUES),'[]'                                            
+    )'t_TestDrive_Test_Data',                                 
+    ISNULL(                                            
+      (select TAC.uAdaptiveAlgorithmConfigurationId,                              
+      TAC.vAttributeKey,                              
+      TAC.iMainClientId,                              
+      TAC.uTestId,                              
+      TAC.vValue from t_TestDrive_Test_AdaptiveAlgorithmConfiguration TAC                                            
+      where TAC.uTestId=TT.uTestId                                  
+      FOR JSON PATH, INCLUDE_NULL_VALUES),'[]'                                            
+    ) 't_TestDrive_Test_AdaptiveAlgorithmConfiguration',                                        
+    ISNULL(                                            
+    (                                            
+       select CAT.uCycleAssignedTestId,                              
+     CAT.uCycleId,                              
+     CAT.uTestId,                              
+     CAT.iOrderId from  t_TestDrive_Cycle_AssignedTest CAT                                            
+    where CAT.uTestId=T.uTestId                                            
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                            
+    ) 't_TestDrive_Cycle_AssignedTest',                              
+      ISNULL(                                            
+    (                                            
+       select TC.uTestCategoryCompetencyId,                              
+     TC.uTestId,                              
+     TC.iCategoryCompetencyId from  t_TestDrive_Test_Competency TC                                            
+    where TC.uTestId=TT.uTestId                                            
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                            
+    ) 't_TestDrive_Test_Competency',                                 
+    ISNULL(                                            
+    (                                            
+       select TCA.uTestCategoryId,                              
+     TCA.uTestId,                              
+     TCA.iCategoryId from  t_TestDrive_Test_Category TCA                                            
+    where TCA.uTestId=TT.uTestId                                            
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                            
+    ) 't_TestDrive_Test_Category',                                            
+    ISNULL(                                            
+    (                                            
+       select TL.uTestLanguageId,                              
+     TL.uTestId,                              
+     TL.iLanguageId,                              
+     TL.cIsActivatedForTest from  t_TestDrive_Test_Language TL                                            
+    where TL.uTestId=TT.uTestId                                            
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                            
+    ) 't_TestDrive_Test_Language',                              
+    ISNULL(                                            
+    (                                            
+       select TAS.iAssignedSchoolYearId,                              
+      TAS.iSchoolYearId,                              
+      TAS.uTestId from  t_TestDrive_Test_AssignedSchoolYear TAS                       
+    where TAS.uTestId=TT.uTestId                                            
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                            
+    ) 't_TestDrive_Test_AssignedSchoolYear',                                            
+      ISNULL(                           
+    (                                            
+    select CST.uCycleStateId,                              
+     CST.iStateId,                    
+     CST.uCycleId,                              
+     CST.uTestId from  [Fusion_Common_Extranet_Dev].[dbo].t_TestDrive_Cycle_State CST                                                
+    where CST.uTestId=T.uTestId                                            
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                            
+    ) 't_TestDrive_Cycle_State',                              
+    ISNULL(                                            
+    (                                            
+    select CS.uCycleSchoolId,                              
+    CS.uSchoolId,                              
+    CS.uCycleId,                              
+    CS.uTestId from  [Fusion_Common_Extranet_Dev].[dbo].t_TestDrive_Cycle_School CS                                            
+    where CS.uTestId=T.uTestId                                            
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                            
+    ) 't_TestDrive_Cycle_School',                              
+    --ISNULL(                                            
+    --(                                            
+    --select CSY.uTestSchoolYearId,CSY.uTestId,                              
+    -- CSY.iSchoolYearId,                              
+    -- CSY.uCycleId from  [Fusion_Common_Extranet].[dbo].t_TestDrive_Cycle_SchoolYear CSY                                            
+    --where CSY.uTestId=T.uTestId                                            
+    --FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                            
+    --) 't_TestDrive_Cycle_SchoolYear',                              
+    ISNULL(                                            
+    (                                            
+       select CC.uCycleClassId,                              
+     CC.uClassId,                              
+        CC.uCycleId,                              
+     CC.uTestId,                              
+     CC.dtTestAssigned from  [Fusion_Common_Extranet_Dev].[dbo].t_TestDrive_Cycle_Class CC                                            
+    where CC.uTestId=T.uTestId                                            
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                            
+    ) 't_TestDrive_Cycle_Class',                              
+     ISNULL(                                            
+    (                                            
+    select CT.uCycleTeacherId,                              
+     CT.uTeacherId,                              
+     CT.uCycleId,                              
+     CT.uTestId,                              
+     CT.cIsActive,                              
+     CT.cIsDeleted,                              
+     CT.iTestCategoryId from  [Fusion_Common_Extranet_Dev].[dbo].t_Testdrive_Cycle_Teacher CT                                            
+    where CT.uTestId=T.uTestId                                            
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                            
+    ) 't_TestDrive_Cycle_Teacher',                               
+    ISNULL(                                            
+    (                                            
+      select CP.uCyclePupilId,                              
+      CP.uCycleId,                              
+      CP.uTestId,                              
+      CP.uClassId,                              
+      CP.uPupilId,                              
+      CP.cIsByTeacher,                              
+      CP.iTestCategoryId,                              
+      CP.cIsActive,                              
+      CP.dtTestAssigned,                              
+      CP.uParentTestId,                              
+      CP.iRoundId,                              
+      CP.cIsArchive,                              
+      CP.iTestPoints,                              
+      CP.cHasRoundCompleted,                              
+     CP.iRepitionId,                              
+      CP.cIsTestCreatedManually from [Fusion_Common_Extranet_Dev].[dbo].t_TestDrive_Cycle_Pupil CP                                            
+    where CP.uTestId=T.uTestId                                           
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                            
+    ) 't_TestDrive_Cycle_Pupil'                                               
+    FOR JSON PATH,INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER                                             
+      )  as JsonResult                                                            
+      FROM @TempTable TT                                     
+      INNER JOIN t_TestDrive_Test T on T.uTestId=TT.uTestId                                          
+      INNER JOIN t_TestDrive_Test_TestProperty TP on TP.uTestId =TT.uTestId                                     
+      where T.iMainClientId = @iMainClientId  and T.cIsDeleted = 'N' AND T.iFolderId =-1 AND (TP.iTestUsageId=2 OR TP.iTestUsageId=3)                           
+   AND T.dtCreatedOn                         
+    BETWEEN case when @dtFromDate =null then '01-01-1000' else @dtFromDate end                        
+     AND case when @dtToDate =null then GETDATE() else @dtToDate end                  
+             
+   END                                                                             
+End 
+
+
+----------------------------------------------------------------------------------------------------------
+ALTER procedure [dbo].[Proc_Fusion_CMS_ExtranetTest_EditData]                        
+(                        
+@iMainClientId int,                        
+@vEditData nvarchar(max)                        
+)                        
+/********************************************************************************************                                                        
+  Created By: Muna Sethi                                                       
+  Created Date: 16.04.2019                                                       
+  Description: Update ExtranetTest data                                
+  Tables: t_TestDrive_Test,t_TestDrive_Test_Data,t_TestDrive_Test_TestProperty,t_TestDrive_Test_AdaptiveAlgorithmConfiguration,              
+          t_TestDrive_Cycle_SchoolYear,t_TestDrive_Test_AssignedSchoolYear,t_TestDrive_Test_Competency,t_TestDrive_Test_Category,              
+    t_TestDrive_Test_Language,t_testdrive_Cycle_AssignedTest,t_TestDrive_Cycle_Class,t_TestDrive_Cycle_Pupil,t_Testdrive_Cycle_Teacher,              
+    t_TestDrive_Cycle_School,t_TestDrive_Cycle_SchoolYear,t_TestDrive_Cycle_State                                       
+  Sample: exec Proc_Fusion_CMS_ExtranetTest_EditData 97,@vEditData                                
+                                
+Modified By:  Arun                                                     
+Modified Date: 24.06.2019                                                      
+Description:  table name change t_TestDrive_Cycle_Test_SchoolYear--> t_TestDrive_Cycle_SchoolYear     
+    
+ Modified By: Arvind K                                         
+ Modified Date: 10/08/2020                                       
+ Description: Included uModifiedByUserId column                        
+                                
+*************************************************************************************************/                                       
+AS                        
+BEGIN                                
+                       
+   declare @uTestId uniqueidentifier,@vTestDescription nvarchar(max),@vTestName nvarchar(max)                                 
+   select @uTestId=uTestId,@vTestDescription=vTestDescription,@vTestName=vTestName from openjson(@vEditData)                     
+   with (uTestId uniqueidentifier,vTestDescription nvarchar(max),vTestName nvarchar(max))                       
+                   
+ ---Updating data to Test Table                    
+                
+  update T              
+  Set               
+  T.iFolderId=ISNULL(TJson.iFolderId,T.iFolderId),              
+  T.dtCreatedOn=GETDATE(),              
+  T.dtModifiedOn=GETDATE(),              
+  T.iTestTypeId=ISNULL(TJson.iTestTypeId,T.iTestTypeId),              
+  T.iSubjectId=ISNULL(TJson.iSubjectId,T.iSubjectId),              
+  T.iAlgorithmId=ISNULL(TJson.iAlgorithmId,T.iAlgorithmId),              
+  T.iProviderId=ISNULL(TJson.iProviderId,T.iProviderId),              
+  T.uModifiedByUserId=ISNULL(TJson.uUserId,T.uUserId),              
+  T.dBound1=ISNULL(TJson.dBound1,T.dBound1),              
+  T.cIsAdaptiveTaskSubSubjectChosenSequential=ISNULL(TJson.cIsAdaptiveTaskSubSubjectChosenSequential,T.cIsAdaptiveTaskSubSubjectChosenSequential),                
+  T.dStartDifficultyFrom=ISNULL(TJson.dStartDifficultyFrom,T.dStartDifficultyFrom),              
+  T.dStartDifficultyTo=ISNULL(TJson.dStartDifficultyTo,T.dStartDifficultyTo),              
+  T.dPrice=ISNULL(TJson.dPrice,T.dPrice),              
+  T.cHasResultPageCertificate=ISNULL(TJson.cHasResultPageCertificate,T.cHasResultPageCertificate),              
+  T.cUseMainTestIntroduction=ISNULL(TJson.cUseMainTestIntroduction,T.cUseMainTestIntroduction),              
+  T.cDisplayTaskNameAsTaskTitle=ISNULL(TJson.cDisplayTaskNameAsTaskTitle,T.cDisplayTaskNameAsTaskTitle),              
+  T.cUseResultTextByRange=ISNULL(TJson.cUseResultTextByRange,T.cUseResultTextByRange),              
+  T.vTestDescription=ISNULL(@vTestDescription,T.vTestDescription),              
+  T.vTestName=ISNULL(@vTestName,T.vTestName),                        
+  T.iResultPageCertificateProviderId=ISNULL(TJson.iResultPageCertificateProviderId,T.iResultPageCertificateProviderId),              
+  T.vCertificateTemplate=ISNULL(TJson.vCertificateTemplate,T.vCertificateTemplate),              
+  T.cHasResultPageText=ISNULL(TJson.cHasResultPageText,T.cHasResultPageText),              
+  T.cIsUseMainTestResult=ISNULL(TJson.cIsUseMainTestResult,T.cIsUseMainTestResult),              
+  T.iResultPageCertificateId=ISNULL(TJson.iResultPageCertificateId,T.iResultPageCertificateId),              
+  T.uCertificateTemplateId=ISNULL(TJson.uCertificateTemplateId,T.uCertificateTemplateId),                        
+  T.iCategoryId=ISNULL(TJson.iCategoryId,T.iCategoryId),               
+  T.uModifiedById=ISNULL(TJson.uModifiedById,T.uModifiedById),               
+  T.uSeparationAndCalibrationGroupId=ISNULL(TJson.uSeparationAndCalibrationGroupId,T.uSeparationAndCalibrationGroupId)              
+  from t_TestDrive_Test T,openjson(@vEditData)              
+  with (iFolderId int,                        
+  iTestTypeId int,iSubjectId int,iProviderId int,                        
+  uUserId uniqueidentifier,dBound1 decimal,cIsAdaptiveTaskSubSubjectChosenSequential char,dStartDifficultyFrom char,              
+  iAlgorithmId int,dStartDifficultyTo decimal,dPrice decimal,cHasResultPageCertificate char,cUseMainTestIntroduction char,                 
+  cDisplayTaskNameAsTaskTitle char,cUseResultTextByRange char,iResultPageCertificateProviderId int,vCertificateTemplate nvarchar(max),              
+  cHasResultPageText char,cIsUseMainTestResult char ,iResultPageCertificateId int,uCertificateTemplateId uniqueidentifier,                        
+  iCategoryId int, uModifiedById uniqueidentifier, uSeparationAndCalibrationGroupId uniqueidentifier                         
+  )  TJson               
+  where T.uTestId=@uTestId              
+              
+ ---Updating Data to Test Property                        
+                
+  update  TP               
+  Set              
+  TP.iTaskIndexDisplayId=ISNULL(TPJson.iTaskIndexDisplayId,TP.iTaskIndexDisplayId),              
+  TP.iTaskIndexDisplaySkinId=ISNULL(TPJson.iTaskIndexDisplaySkinId,TP.iTaskIndexDisplaySkinId),              
+  TP.iTestProgressDisplayId=ISNULL(TPJson.iTestProgressDisplayId,TP.iTestProgressDisplayId),                        
+  TP.iResultCalculationProviderId=ISNULL(TPJson.iResultCalculationProviderId,TP.iResultCalculationProviderId),              
+  TP.cPunishNegativeAnswers=ISNULL(TPJson.cPunishNegativeAnswers,TP.cPunishNegativeAnswers),              
+  TP.iThemeId=ISNULL(TPJson.iThemeId,TP.iThemeId),              
+  TP.iDurationOfTestInMinutes=ISNULL(TPJson.iDurationOfTestInMinutes,TP.iDurationOfTestInMinutes),              
+  TP.iMinimumTasksBeforeTestLimitIsConsidered=ISNULL(TPJson.iMinimumTasksBeforeTestLimitIsConsidered,TP.iMinimumTasksBeforeTestLimitIsConsidered),                        
+  TP.cCheckTestTimeLimitOnServerSide=ISNULL(TPJson.cCheckTestTimeLimitOnServerSide,TP.cCheckTestTimeLimitOnServerSide),              
+  TP.iNumberOfRepetitions=ISNULL(TPJson.iNumberOfRepetitions,TP.iNumberOfRepetitions),              
+  TP.cIsSolutionAfterTask=ISNULL(TPJson.cIsSolutionAfterTask,TP.cIsSolutionAfterTask),              
+  TP.vTestLoginPDFTemplate=ISNULL(TPJson.vTestLoginPDFTemplate,TP.vTestLoginPDFTemplate),              
+  TP.cDoNotShowIntroductionPage=ISNULL(TPJson.cDoNotShowIntroductionPage,TP.cDoNotShowIntroductionPage),                        
+  TP.cHideEndTestButtonEvenIfEnabledByalgorithm=ISNULL(TPJson.cHideEndTestButtonEvenIfEnabledByalgorithm,TP.cHideEndTestButtonEvenIfEnabledByalgorithm),              
+  TP.cShowPreviousButtonIfPreviousIsInformationTask=ISNULL(TPJson.cShowPreviousButtonIfPreviousIsInformationTask,TP.cShowPreviousButtonIfPreviousIsInformationTask),              
+  TP.uClassId=ISNULL(TPJson.uClassId,TP.uClassId),              
+  TP.cIsForInternalTesting=ISNULL(TPJson.cIsForInternalTesting,TP.cIsForInternalTesting),              
+  TP.uCycleId=ISNULL(TPJson.uCycleId,TP.uCycleId),                        
+  TP.cShowIntroductionPage=ISNULL(TPJson.cShowIntroductionPage,TP.cShowIntroductionPage),              
+  TP.iTaskPageTopLeftImageId=ISNULL(TPJson.iTaskPageTopLeftImageId,TP.iTaskPageTopLeftImageId),              
+  TP.cIsShowResultExcelOnTestComplete=ISNULL(TPJson.cIsShowResultExcelOnTestComplete,TP.cIsShowResultExcelOnTestComplete),              
+  TP.uLoginControlId=ISNULL(TPJson.uLoginControlId,TP.uLoginControlId),                        
+  TP.iFormId=ISNULL(TPJson.iFormId,TP.iFormId),            TP.cIsShowLoginPage=ISNULL(TPJson.cIsShowLoginPage,TP.cIsShowLoginPage),              
+  TP.cIsLearnCoacher=ISNULL(TPJson.cIsLearnCoacher,TP.cIsLearnCoacher),              
+  TP.cOverrideConstanceAndVariance=ISNULL(TPJson.cOverrideConstanceAndVariance,TP.cOverrideConstanceAndVariance),              
+  TP.vBarcodePosition=ISNULL(TPJson.vBarcodePosition,TP.vBarcodePosition),              
+  TP.iFileVersion=ISNULL(TPJson.iFileVersion,TP.iFileVersion),              
+  TP.iFileSize=ISNULL(TPJson.iFileSize,TP.iFileSize),              
+  TP.cIsShowMarkAndSolution=ISNULL(TPJson.cIsShowMarkAndSolution,TP.cIsShowMarkAndSolution),                        
+  TP.cSaveIndividualTaskResult=ISNULL(TPJson.cSaveIndividualTaskResult,TP.cSaveIndividualTaskResult),              
+  TP.iTestUsageId=ISNULL(TPJson.iTestUsageId,TP.iTestUsageId),              
+  TP.cIsActive=ISNULL(TPJson.cIsActive,TP.cIsActive),              
+  TP.cIsPublic=ISNULL(TPJson.cIsPublic,TP.cIsPublic),              
+  TP.cIsShowIndexSolution=ISNULL(TPJson.cIsShowIndexSolution,TP.cIsShowIndexSolution),              
+  TP.cShowLinearIndex=ISNULL(TPJSon.cShowLinearIndex,TP.cShowLinearIndex),              
+  TP.cGroupTasksBySubSubject=ISNULL(TPJson.cGroupTasksBySubSubject,TP.cGroupTasksBySubSubject),              
+  TP.cIterateTillAllTaskCorrect=ISNULL(TPJson.cIterateTillAllTaskCorrect,TP.cIterateTillAllTaskCorrect),                        
+  TP.cAllowTokenValidityDate=ISNULL(TPJson.cAllowTokenValidityDate,TP.cAllowTokenValidityDate),              
+  TP.cAllowTokenActivation=ISNULL(TPJson.cAllowTokenActivation,TP.cShowTaskNotAnswered),              
+  TP.cShowTaskNotAnswered=ISNULL(TPJson.cShowTaskNotAnswered,TP.cShowTaskNotAnswered),              
+  TP.uTestLoginPDFTemplateId=ISNULL(TPJson.uTestLoginPDFTemplateId,TP.uTestLoginPDFTemplateId),              
+  TP.uElementFormulaAttributeTemplateId=ISNULL(TPJson.uElementFormulaAttributeTemplateId,TP.uElementFormulaAttributeTemplateId),              
+  TP.uResultAttributeId=ISNULL(TPJson.uResultAttributeId,TP.uResultAttributeId),                        
+  TP.dPassValue=ISNULL(TPJson.dPassValue,TP.dPassValue),              
+  TP.vPassConditionOperator=ISNULL(TPJson.vPassConditionOperator,TP.vPassConditionOperator),              
+  TP.cShowAdditionalResultStatus=ISNULL(TPJson.cShowAdditionalResultStatus,TP.cShowAdditionalResultStatus),              
+  TP.vLoginPageFileSize=ISNULL(TPJson.vLoginPageFileSize,TP.vLoginPageFileSize),              
+  TP.vLoginPageFileName=ISNULL(TPJson.vLoginPageFileName,TP.vLoginPageFileName),              
+  TP.cShowTeacherLoginPage=ISNULL(TPJson.cShowTeacherLoginPage,TP.cShowTeacherLoginPage),              
+  TP.vFormName=ISNULL(TPJson.vFormName,TP.vFormName),              
+  TP.vExternalCertificateUrl=ISNULL(TPJson.vExternalCertificateUrl,TP.vExternalCertificateUrl),                        
+  TP.uSkinId=ISNULL(TPJson.uSkinId,TP.uSkinId),              
+  TP.vSequenceProvider=ISNULL(TPJson.vSequenceProvider,TP.vSequenceProvider),              
+  TP.uPupilTestLoginPDFTemplateId=ISNULL(TPJson.uPupilTestLoginPDFTemplateId,TP.uPupilTestLoginPDFTemplateId),              
+  TP.cUseDefaultConstantAndVariance=ISNULL(TPJson.cUseDefaultConstantAndVariance,TP.cUseDefaultConstantAndVariance),              
+  TP.cIsMultiSequenceWrapper=ISNULL(TPJson.cIsMultiSequenceWrapper,TP.cIsMultiSequenceWrapper),              
+  TP.cShowInTree=ISNULL(TPJson.cShowInTree,TP.cShowInTree),              
+ TP.cUseParentTestProperties=ISNULL(TPJson.cUseParentTestProperties,TP.cUseParentTestProperties),                        
+  TP.vPaperPencilType=ISNULL(TPJson.vPaperPencilType,TP.vPaperPencilType),              
+  TP.cUseSecuredBrowser=ISNULL(TPJson.cUseSecuredBrowser,TP.cUseSecuredBrowser),              
+  TP.cIsSystemTask=ISNULL(TPJson.cIsSystemTask,TP.cIsSystemTask),              
+  TP.iNumberOfTasks=ISNULL(TPJson.iNumberOfTasks,TP.iNumberOfTasks),              
+  TP.cIsAdaptiveTest=ISNULL(TPJson.cIsAdaptiveTest,TP.cIsAdaptiveTest),              
+  TP.vTestCompleteNotificationEmailId=ISNULL(TPJson.vTestCompleteNotificationEmailId,TP.vTestCompleteNotificationEmailId),              
+  TP.cIsShowResultDocumentOnTestComplete=ISNULL(TPJSon.cIsShowResultDocumentOnTestComplete,TP.cIsShowResultDocumentOnTestComplete),                        
+  TP.cIsDemoTestActivityRecorded=ISNULL(TPJson.cIsDemoTestActivityRecorded,TP.cIsDemoTestActivityRecorded),              
+  TP.iTestCompleteCertificateId=ISNULL(TPjson.iTestCompleteCertificateId,TP.iTestCompleteCertificateId),              
+  TP.cIsSystemGenerated=ISNULL(TPJson.cIsSystemGenerated,TP.cIsSystemGenerated),              
+  TP.cHasNTTheme=ISNULL(TPJson.cHasNTTheme,TP.cHasNTTheme)              
+              
+  from t_TestDrive_Test_TestProperty TP,openjson(@vEditData,'$.t_TestDrive_Test_TestProperty')                         
+  with (              
+  iTestPropertyId int,iTaskIndexDisplayId int,iTaskIndexDisplaySkinId int,iTestProgressDisplayId int,uCycleId uniqueidentifier,uClassId uniqueidentifier,                       
+  iResultCalculationProviderId int,cPunishNegativeAnswers char,iThemeId int,iDurationOfTestInMinutes int,iMinimumTasksBeforeTestLimitIsConsidered int,                        
+  cCheckTestTimeLimitOnServerSide char,iNumberOfRepetitions int,cIsSolutionAfterTask char,vTestLoginPDFTemplate nvarchar(max),cDoNotShowIntroductionPage char,                        
+  cHideEndTestButtonEvenIfEnabledByalgorithm char,cShowPreviousButtonIfPreviousIsInformationTask char,cIsForInternalTesting char,uCycleId uniqueidentifier,                        
+  cShowIntroductionPage int,iTaskPageTopLeftImageId int,cIsShowResultExcelOnTestComplete char,uLoginControlId uniqueidentifier,                        
+  iFormId int,cIsShowLoginPage char,cIsLearnCoacher char,cOverrideConstanceAndVariance char,vBarcodePosition nvarchar(max),iFileVersion int,iFileSize int,cIsShowMarkAndSolution char,                        
+  cSaveIndividualTaskResult char,iTestUsageId int,cIsActive char,cIsPublic char,cIsShowIndexSolution char,cShowLinearIndex char,cGroupTasksBySubSubject char,cIterateTillAllTaskCorrect char,                        
+  cAllowTokenValidityDate char,cAllowTokenActivation char,cShowTaskNotAnswered char,uTestLoginPDFTemplateId uniqueidentifier,uElementFormulaAttributeTemplateId uniqueidentifier,uResultAttributeId uniqueidentifier,                        
+  dPassValue decimal,vPassConditionOperator nvarchar(max),cShowAdditionalResultStatus char,vLoginPageFileSize nvarchar(max),vLoginPageFileName nvarchar(max),cShowTeacherLoginPage char,              
+  vFormName nvarchar(max),vExternalCertificateUrl nvarchar(max),uSkinId uniqueidentifier,vSequenceProvider nvarchar(max),uPupilTestLoginPDFTemplateId uniqueidentifier,cUseDefaultConstantAndVariance char,              
+  cIsMultiSequenceWrapper char,cShowInTree char,cUseParentTestProperties char,vPaperPencilType nvarchar(max),cUseSecuredBrowser char,cIsSystemTask char,iNumberOfTasks int,              
+  cIsAdaptiveTest char,vTestCompleteNotificationEmailId nvarchar(max),cIsShowResultDocumentOnTestComplete char,                        
+  cIsDemoTestActivityRecorded char,iTestCompleteCertificateId int,cIsSystemGenerated char,cHasNTTheme char                        
+  ) TPJson              
+  where  TP.uTestId=@uTestId                 
+              
+                       
+   ---Updating data to Test Data table               
+                        
+   Declare @uTestDataId uniqueidentifier,@iLanguageId int,@tTestInstructionForPupil nvarchar(max), @vLoginPageFileName nvarchar(max),                      
+   @tTestResultPageText nvarchar(max),@vTestTitle nvarchar(max),@vStartButtonText nvarchar(max),@vResultPageTopLeftTitle nvarchar(max),@vIntroductionPageTopLeftTitle nvarchar(max),                        
+   @iIntroductionPageRightTitleFontSize int,@vIntroductionPageRightTitle nvarchar(max),@vTaskPageTopLeftTitle nvarchar(max),@vResultButtonText nvarchar(max),@vPassText nvarchar(max),              
+   @vFailText nvarchar(max),@vExternalTestUrl nvarchar(max),@iLoginPageFileSize int              
+                                     
+   Declare Cur_ExtranetTestData CURSOR                                                                                
+   For               
+   Select                         
+   uTestDataId,iLanguageId,tTestInstructionForPupil,tTestResultPageText,vTestTitle,vStartButtonText,vResultPageTopLeftTitle,vIntroductionPageTopLeftTitle,                        
+   iIntroductionPageRightTitleFontSize,vIntroductionPageRightTitle,vTaskPageTopLeftTitle,vResultButtonText,vPassText,vFailText,vExternalTestUrl,vLoginPageFileName,iLoginPageFileSize                        
+   from OPENJSON (@vEditData, '$.t_TestDrive_Test_Data')               
+    with(uTestDataId uniqueidentifier,iLanguageId int,tTestInstructionForPupil nvarchar(max),tTestResultPageText nvarchar(max),vTestTitle nvarchar(max),              
+    vStartButtonText nvarchar(max),vResultPageTopLeftTitle nvarchar(max),vIntroductionPageTopLeftTitle nvarchar(max),iIntroductionPageRightTitleFontSize int,              
+  vIntroductionPageRightTitle nvarchar(max),vTaskPageTopLeftTitle nvarchar(max),vResultButtonText nvarchar(max),vPassText nvarchar(max),vFailText nvarchar(max),              
+    vExternalTestUrl nvarchar(max),vLoginPageFileName nvarchar(max),iLoginPageFileSize int)                                              
+                    
+   open Cur_ExtranetTestData                                                
+                                      
+   Fetch next from Cur_ExtranetTestData into @uTestDataId ,@iLanguageId ,@tTestInstructionForPupil ,@tTestResultPageText ,@vTestTitle ,@vStartButtonText ,@vResultPageTopLeftTitle ,@vIntroductionPageTopLeftTitle,                        
+   @iIntroductionPageRightTitleFontSize ,@vIntroductionPageRightTitle ,@vTaskPageTopLeftTitle ,@vResultButtonText ,@vPassText ,@vFailText ,@vExternalTestUrl,                       
+   @vLoginPageFileName ,@iLoginPageFileSize              
+   WHILE(@@FETCH_STATUS <> -1)                                                
+   BEGIN                                         
+ IF EXISTS( SELECT uTestDataId from t_TestDrive_Test_Data where uTestDataId=@uTestDataId)              
+ BEGIN              
+  update t_TestDrive_Test_Data              
+  set              
+  vTestName=ISNULL(@vTestName,vTestName),              
+  vTestDescription=ISNULL(@vTestDescription,vTestDescription),              
+  tTestInstructionForPupil=ISNULL(@tTestInstructionForPupil,tTestInstructionForPupil),              
+  tTestResultPageText=ISNULL(@tTestResultPageText,tTestResultPageText),              
+  vTestTitle=ISNULL(@vTestTitle,vTestTitle),              
+  vStartButtonText=ISNULL(@vStartButtonText,vStartButtonText),              
+  vResultPageTopLeftTitle=ISNULL(@vResultPageTopLeftTitle,vResultPageTopLeftTitle),              
+  vIntroductionPageTopLeftTitle=ISNULL(@vIntroductionPageTopLeftTitle,vIntroductionPageTopLeftTitle),                     
+  iIntroductionPageRightTitleFontSize=ISNULL(@iIntroductionPageRightTitleFontSize,iIntroductionPageRightTitleFontSize),              
+  vIntroductionPageRightTitle=ISNULL(@vIntroductionPageRightTitle,vIntroductionPageRightTitle),              
+  vTaskPageTopLeftTitle=ISNULL(@vTaskPageTopLeftTitle,vTaskPageTopLeftTitle),              
+  vResultButtonText=ISNULL(@vResultButtonText,vResultButtonText),              
+  vPassText=ISNULL(@vPassText,vPassText),              
+  vFailText=ISNULL(@vFailText,vFailText),              
+  vExternalTestUrl=ISNULL(@vExternalTestUrl,vExternalTestUrl),                        
+  vLoginPageFileName=ISNULL(@vLoginPageFileName,vLoginPageFileName),              
+  iLoginPageFileSize=ISNULL(@iLoginPageFileSize,iLoginPageFileSize)                                      
+  where uTestId=@uTestId and iLanguageId=@iLanguageId              
+     END              
+  ELSE              
+  BEGIN            
+      Insert Into t_TestDrive_Test_Data               
+   values (              
+      newid(),@uTestId,@iLanguageId,null,null,@tTestInstructionForPupil,@tTestResultPageText,@vTestTitle,@vStartButtonText,@vResultPageTopLeftTitle,@vIntroductionPageTopLeftTitle,                
+            @iIntroductionPageRightTitleFontSize,@vIntroductionPageRightTitle,@vTaskPageTopLeftTitle,@vResultButtonText,@vPassText,@vFailText,@vExternalTestUrl,@vLoginPageFileName,@iLoginPageFileSize)              
+  END                  
+                                 
+   Fetch next from Cur_ExtranetTestData into @uTestDataId ,@iLanguageId ,@tTestInstructionForPupil ,@tTestResultPageText ,@vTestTitle ,@vStartButtonText ,@vResultPageTopLeftTitle ,@vIntroductionPageTopLeftTitle,                        
+   @iIntroductionPageRightTitleFontSize ,@vIntroductionPageRightTitle ,@vTaskPageTopLeftTitle ,@vResultButtonText ,@vPassText ,@vFailText ,@vExternalTestUrl ,                       
+   @vLoginPageFileName ,@iLoginPageFileSize              
+                                          
+   END                              
+   CLOSE Cur_ExtranetTestData                                      
+   DEALLOCATE Cur_ExtranetTestData               
+              
+    
+       -- updating task data                  
+                  
+                    
+   Declare @iPageId int,@iOrderId int , @vAction nvarchar(10)                 
+   Declare Cur_ExtranetTestTask CURSOR                                                                                                
+   For                               
+   Select iPageId,iOrderId, vAction                              
+   from OPENJSON (@vEditData, '$.t_testdrive_Test_Tasks')                               
+    with(iPageId int,iOrderId int, vAction nvarchar(10))                               
+   OPEN Cur_ExtranetTestTask                               
+   Fetch next from Cur_ExtranetTestTask into @iPageId,@iOrderId,@vAction                                            
+    WHILE(@@FETCH_STATUS <> -1)                                    
+   BEGIN             
+     IF(@vAction = 'New')                          
+      BEGIN                              
+     insert into t_testdrive_Test_Tasks(uTestId,iPageId,iOrderId) values(@uTestId,@iPageId,@iOrderId)                              
+      END                 
+      ELSE                
+      BEGIN                              
+     Delete from t_testdrive_Test_Tasks where uTestId = @uTestId and iPageId = @iPageId                    
+      END                              
+   Fetch next from Cur_ExtranetTestTask into @iPageId,@iOrderId, @vAction                                           
+    END                              
+   CLOSE Cur_ExtranetTestTask                                                      
+   DEALLOCATE Cur_ExtranetTestTask     
+    
+    
+   ----updating data for t_TestDrive_Test_Language               
+              
+   Declare @uTestLanguageId uniqueidentifier,@cIsActivatedForTest char              
+                               
+   Declare Cur_ExtranetTestLanguage CURSOR                                                                                
+   For               
+   Select  uTestLanguageId,cIsActivatedForTest              
+   from OPENJSON (@vEditData, '$.t_TestDrive_Test_Language')               
+    with(uTestLanguageId uniqueidentifier,cIsActivatedForTest char)                                              
+                    
+   OPEN Cur_ExtranetTestLanguage                                                
+                                      
+   Fetch next from Cur_ExtranetTestLanguage into  @uTestLanguageId,@cIsActivatedForTest                             
+   WHILE(@@FETCH_STATUS <> -1)                                                
+   BEGIN                    
+     IF EXISTS(select uTestLanguageId from t_TestDrive_Test_Language where uTestLanguageId=@uTestLanguageId)              
+  BEGIN              
+    Update t_TestDrive_Test_Language              
+    set cIsActivatedForTest=ISNULL(@cIsActivatedForTest,cIsActivatedForTest)              
+    where uTestId=@uTestId and iLanguageId=@iLanguageId              
+  END            
+  ELSE              
+  BEGIN              
+    Insert into t_TestDrive_Test_Language values(newid(),@uTestId,@iLanguageId,@cIsActivatedForTest)              
+  END              
+  Fetch next from Cur_ExtranetTestLanguage into  @uTestLanguageId,@cIsActivatedForTest              
+   END              
+   CLOSE Cur_ExtranetTestLanguage                  
+   DEALLOCATE Cur_ExtranetTestLanguage              
+              
+   ---updating data for AdaptiveAlgorithmConfiguration              
+              
+   Declare @uAdaptiveAlgorithmConfigurationId uniqueidentifier,@vAttributeKey nvarchar(max),@vValue nvarchar(max)              
+                               
+   Declare Cur_ExtranetTestAlgorithmConfiguration CURSOR                                                                                
+   For               
+   Select uAdaptiveAlgorithmsConfiguration,vAttributeKey,vValue              
+   from OPENJSON (@vEditData, '$.t_TestDrive_Test_AdaptiveAlgorithmConfiguration')               
+    with(uAdaptiveAlgorithmsConfiguration uniqueidentifier,vAttributeKey nvarchar(max),vValue nvarchar(max))                                              
+                    
+   OPEN Cur_ExtranetTestAlgorithmConfiguration                                                
+                                      
+   Fetch next from Cur_ExtranetTestAlgorithmConfiguration into @uAdaptiveAlgorithmConfigurationId,@vAttributeKey,@vValue                            
+   WHILE(@@FETCH_STATUS <> -1)                                                
+   BEGIN                    
+     IF EXISTS(select uAdaptiveAlgorithmConfigurationId from t_TestDrive_Test_AdaptiveAlgorithmConfiguration where uAdaptiveAlgorithmConfigurationId=@uAdaptiveAlgorithmConfigurationId)              
+  BEGIN              
+    Update t_TestDrive_Test_AdaptiveAlgorithmConfiguration              
+    set               
+       vAttributeKey=iSNULL(@vAttributeKey,vAttributeKey),              
+    vValue=ISNULL(@vValue,vValue)              
+    where uTestId=@uTestId and iMainClientId=@iMainClientId              
+  END              
+  ELSE              
+  BEGIN              
+    insert into t_TestDrive_Test_AdaptiveAlgorithmConfiguration values( newid(),@vAttributeKey,@iMainClientId,@uTestId,@vValue)              
+  END              
+  Fetch next from Cur_ExtranetTestAlgorithmConfiguration into @uAdaptiveAlgorithmConfigurationId,@vAttributeKey,@vValue                            
+   END              
+  CLOSE Cur_ExtranetTestAlgorithmConfiguration                                      
+  DEALLOCATE Cur_ExtranetTestAlgorithmConfiguration              
+              
+  ---updating Data to t_TestDrive_Test_Category              
+              
+   Delete from t_TestDrive_Test_Category               
+   where iCategoryId not in (Select iCategoryId  from OPENJSON (@vEditData, '$.t_TestDrive_Test_Category')  with(iCategoryId int))              
+   AND uTestId=@uTestId               
+              
+   Declare @uTestCategoryId uniqueidentifier,@iCategoryId int              
+                               
+   Declare Cur_ExtranetTestCategory CURSOR                                                                                
+   For               
+   Select uTestCategoryId,iCategoryId              
+   from OPENJSON (@vEditData, '$.t_TestDrive_Test_Category')               
+    with(uTestCategoryId uniqueidentifier,iCategoryId int)              
+   OPEN Cur_ExtranetTestCategory              
+   Fetch next from Cur_ExtranetTestCategory into @uTestCategoryId,@iCategoryId                            
+   WHILE(@@FETCH_STATUS <> -1)                                                
+   BEGIN                    
+     IF NOT EXISTS(select uTestCategoryId from t_TestDrive_Test_Category where uTestCategoryId=@uTestCategoryId)              
+  BEGIN              
+    insert into t_TestDrive_Test_Category values(newid(),@uTestId,@iCategoryId)              
+  END              
+  Fetch next from Cur_ExtranetTestCategory into @uTestCategoryId,@iCategoryId              
+   END              
+   CLOSE Cur_ExtranetTestCategory                                      
+   DEALLOCATE Cur_ExtranetTestCategory              
+               
+              
+  ---Updating Data to t_TestDrive_Test_Competency              
+                
+                
+   Declare @uTestCategoryCompetencyId uniqueidentifier,@iCategoryCompetencyId int              
+                
+   Delete from t_TestDrive_Test_Competency               
+   where iCategoryCompetencyId not in (Select iCategoryCompetencyId  from OPENJSON (@vEditData, '$.t_TestDrive_Test_Competency')  with(iCategoryCompetencyId int))              
+   AND uTestId=@uTestId               
+   Declare Cur_ExtranetTestCompetency CURSOR                                                                                
+   For               
+   Select uTestCategoryCompetencyId,iCategoryCompetencyId              
+   from OPENJSON (@vEditData, '$.t_TestDrive_Test_Competency')               
+    with(uTestCategoryCompetencyId uniqueidentifier,iCategoryCompetencyId int)               
+   OPEN Cur_ExtranetTestCompetency               
+   Fetch next from Cur_ExtranetTestCompetency into @uTestCategoryCompetencyId,@iCategoryCompetencyId                            
+    WHILE(@@FETCH_STATUS <> -1)                    
+    BEGIN                    
+      IF NOT EXISTS(select uTestCategoryCompetencyId from t_TestDrive_Test_Competency where uTestCategoryCompetencyId=@uTestCategoryCompetencyId)              
+   BEGIN              
+     insert into t_TestDrive_Test_Competency values(newid(),@uTestId,@iCategoryCompetencyId)              
+   END              
+  Fetch next from Cur_ExtranetTestCompetency into @uTestCategoryCompetencyId,@iCategoryCompetencyId              
+    END              
+   CLOSE Cur_ExtranetTestCompetency                                      
+   DEALLOCATE Cur_ExtranetTestCompetency              
+              
+  ---Updating Data to t_TestDrive_Test_AssignedSchoolYear              
+              
+   Declare @iAssignedSchoolYearId int,@iSchoolYearId int              
+                 
+   Delete from t_TestDrive_Test_AssignedSchoolYear               
+   where iSchoolYearId not in (Select iSchoolYearId  from OPENJSON (@vEditData, '$.t_TestDrive_Test_AssignedSchoolYear')  with(iSchoolYearId int))              
+   AND uTestId=@uTestId              
+                               
+  Declare Cur_ExtranetTestAssignedSchoolYear CURSOR                                                                                
+  For               
+  Select iAssignedSchoolYearId,iSchoolYearId              
+  from OPENJSON (@vEditData, '$.t_TestDrive_Test_AssignedSchoolYear')               
+    with(iAssignedSchoolYearId int,iSchoolYearId int)                
+  OPEN Cur_ExtranetTestAssignedSchoolYear                               
+   Fetch next from Cur_ExtranetTestAssignedSchoolYear into @iAssignedSchoolYearId,@iSchoolYearId                            
+   WHILE(@@FETCH_STATUS <> -1)                                                
+   BEGIN                    
+     IF NOT EXISTS(select iAssignedSchoolYearId from t_TestDrive_Test_AssignedSchoolYear where iAssignedSchoolYearId=@iAssignedSchoolYearId)              
+  BEGIN              
+    insert into t_TestDrive_Test_AssignedSchoolYear values(@iSchoolYearId,@uTestId)              
+  END              
+ Fetch next from Cur_ExtranetTestAssignedSchoolYear into @uTestCategoryCompetencyId,@iCategoryCompetencyId              
+   END              
+  CLOSE Cur_ExtranetTestAssignedSchoolYear                                      
+  DEALLOCATE Cur_ExtranetTestAssignedSchoolYear              
+                      
+   ----------Return the data                        
+                 
+   select (                                
+    select                                 
+    T.uTestId,                  
+ T.iFolderId,                  
+ T.dtCreatedOn,                  
+ T.dtModifiedOn,                  
+ T.cIsDeleted,                  
+ T.iTestTypeId,                  
+ T.iSubjectId,                  
+ T.iAlgorithmId,                  
+ T.iProviderId,                  
+ T.iMainClientId,                  
+ T.uUserId,        
+  T.uModifiedByUserId,               
+ T.dBound1,                  
+ T.cIsAdaptiveTaskSubSubjectChosenSequential,                  
+ T.dStartDifficultyFrom,                  
+ T.dStartDifficultyTo,                  
+ T.dPrice,                  
+T.cHasResultPageCertificate,                  
+ T.cUseMainTestIntroduction,                  
+ T.cDisplayTaskNameAsTaskTitle,                  
+ T.cUseResultTextByRange,                  
+ T.vTestDescription,                  
+ T.vTestName,                  
+ T.iResultPageCertificateProviderId,                  
+ T.vCertificateTemplate,                  
+ T.cHasResultPageText,                  
+ T.cIsUseMainTestResult,                  
+ T.iResultPageCertificateId,                  
+ T.uCertificateTemplateId,                  
+ T.iCategoryId,                  
+ T.uModifiedById,                  
+ T.uSeparationAndCalibrationGroupId,                  
+ ISNULL((select count(iTestTaskId) from t_testdrive_Test_Tasks where uTestId = T.uTestId),'0')iTestTaskCount,               
+ ISNULL((                                                 
+           Select                     
+     TP.iTestPropertyId,                                                               
+           TP.iTaskIndexDisplayId,                                                              
+           TP.iTaskIndexDisplaySkinId,                                                              
+           TP.iTestProgressDisplayId,                                                              
+           TP.iResultCalculationProviderId,                                     
+           TP.cPunishNegativeAnswers,                                                              
+           TP.iThemeId,                                                              
+           TP.iDurationOfTestInMinutes,                                                                         
+     TP.iMinimumTasksBeforeTestLimitIsConsidered,                                                        
+           TP.cCheckTestTimeLimitOnServerSide,                                                 
+           TP.iNumberOfRepetitions,                                               
+           TP.cIsSolutionAfterTask,                                                              
+           TP.vTestLoginPDFTemplate,                                                              
+           TP.cDoNotShowIntroductionPage,                                                              
+           TP.cHideEndTestButtonEvenIfEnabledByalgorithm,                                                              
+           TP.cShowPreviousButtonIfPreviousIsInformationTask,                                                              
+           TP.uClassId,                                                              
+           TP.cIsForInternalTesting,                      
+           TP.uCycleId,                                                              
+           TP.cShowIntroductionPage,                                          
+        TP.iTaskPageTopLeftImageId,                                                              
+           TP.cIsShowResultExcelOnTestComplete,                                                              
+           TP.uLoginControlId,                                                              
+           TP.iFormId,                                      
+TP.cIsShowLoginPage,                                                              
+           TP.cIsLearnCoacher,                                                              
+           TP.cOverrideConstanceAndVariance,                                                              
+           TP.vBarcodePosition,                                                              
+           TP.iFileVersion,                                                              
+           TP.iFileSize,                                                              
+           TP.cIsShowMarkAndSolution,                                                              
+           TP.cSaveIndividualTaskResult,                                                              
+           TP.iTestUsageId,                                                              
+           TP.cIsActive,                                                              
+           TP.cIsPublic,                                                              
+           TP.cIsShowIndexSolution,                                                              
+           TP.cShowLinearIndex,                                                              
+           TP.cGroupTasksBySubSubject,                                                              
+           TP.cIterateTillAllTaskCorrect,                                                              
+           TP.cAllowTokenValidityDate,                                                              
+           TP.cAllowTokenActivation,                                                              
+           TP.cShowTaskNotAnswered,                                                              
+           TP.uTestLoginPDFTemplateId,                                                              
+           TP.uElementFormulaAttributeTemplateId,                                                              
+           TP.uResultAttributeId,                                                              
+           TP.dPassValue,                                                              
+           TP.vPassConditionOperator,                                                              
+           TP.cShowAdditionalResultStatus,                                                              
+           TP.vLoginPageFileSize,                                                              
+           TP.vLoginPageFileName,                                         
+           TP.cShowTeacherLoginPage,                                                              
+           TP.vFormName,                                                              
+           TP.vExternalCertificateUrl,                                                              
+           TP.uSkinId,                
+           TP.vSequenceProvider,                                                              
+           TP.uPupilTestLoginPDFTemplateId,                                                              
+           TP.cUseDefaultConstantAndVariance,                                                     
+           TP.cIsMultiSequenceWrapper,                                                              
+           TP.cShowInTree,                                                              
+           TP.cUseParentTestProperties,                                                              
+           TP.vPaperPencilType,                                                              
+           TP.cUseSecuredBrowser,                                                              
+           TP.cIsSystemTask,                       
+           TP.iNumberOfTasks,TP.cIsAdaptiveTest,                                                           
+           TP.vTestCompleteNotificationEmailId,                                             
+           TP.cIsShowResultDocumentOnTestComplete,                                                              
+           TP.cIsDemoTestActivityRecorded,                          
+           TP.iTestCompleteCertificateId,                                              
+           TP.cIsSystemGenerated,                                                            
+           TP.cHasNTTheme                     
+     from t_TestDrive_Test_TestProperty TP                     
+     where TP.uTestId =T.uTestId FOR JSON PATH, INCLUDE_NULL_VALUES                    
+     ),'[]')'t_TestDrive_Test_TestProperty',                
+  ISNULL(                                                              
+    (                                                        
+    select TT.iTestTaskId,                                                
+     TT.uTestId,                                                
+     TT.iPageId,                  
+     TT.iOrderId                  
+   from  t_testdrive_Test_Tasks TT                                                              
+    where TT.uTestId=T.uTestId                                                              
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                                           
+    ) 't_testdrive_Test_Tasks',             
+    ISNULL(                                
+      (select                   
+    TD.uTestDataId,                  
+  TD.uTestId,                  
+    TD.iLanguageId,                  
+    TD.vTestName,                  
+    TD.vTestDescription,                  
+    TD.tTestInstructionForPupil,                  
+    TD.tTestResultPageText,                  
+    TD.vTestTitle,                  
+    TD.vStartButtonText,                  
+    TD.vResultPageTopLeftTitle,                  
+    TD.vIntroductionPageTopLeftTitle,                  
+    TD.iIntroductionPageRightTitleFontSize,                  
+    TD.vIntroductionPageRightTitle,                  
+    TD.vTaskPageTopLeftTitle,                  
+    TD.vResultButtonText,                  
+    TD.vPassText,                  
+    TD.vFailText,                  
+    TD.vExternalTestUrl,                  
+    TD.vLoginPageFileName,                  
+    TD.iLoginPageFileSize                  
+    from t_TestDrive_Test_Data TD                                
+       where TD.uTestId=T.uTestId                  
+       FOR JSON PATH, INCLUDE_NULL_VALUES),'[]'                                
+    )'t_TestDrive_Test_Data',                                             
+    ISNULL(                                
+      (select                   
+   TAC.uAdaptiveAlgorithmConfigurationId,                  
+   TAC.vAttributeKey,                  
+   TAC.iMainClientId,                  
+   TAC.uTestId,                  
+   TAC.vValue from t_TestDrive_Test_AdaptiveAlgorithmConfiguration TAC                                
+   where TAC.uTestId=T.uTestId                                
+   FOR JSON PATH, INCLUDE_NULL_VALUES),'[]'                                
+    ) 't_TestDrive_Test_AdaptiveAlgorithmConfiguration',                                
+    ISNULL(                                
+    (                                
+    select TAS.iAssignedSchoolYearId,                  
+   TAS.iSchoolYearId,                  
+      TAS.uTestId from  t_TestDrive_Test_AssignedSchoolYear TAS                                
+    where TAS.uTestId=T.uTestId                                
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                
+    ) 't_TestDrive_Test_AssignedSchoolYear',                                
+    ISNULL(                                
+    (                                
+    select TC.uTestCategoryCompetencyId,                  
+     TC.uTestId,                  
+     TC.iCategoryCompetencyId from  t_TestDrive_Test_Competency TC                                
+    where TC.uTestId=T.uTestId                                
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                
+    ) 't_TestDrive_Test_Competency',                                
+    ISNULL(                                
+    (                                
+    select TCA.uTestCategoryId,                  
+   TCA.uTestId,                  
+     TCA.iCategoryId from  t_TestDrive_Test_Category TCA                                
+    where TCA.uTestId=T.uTestId                                
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                             
+    ) 't_TestDrive_Test_Category',                                
+    ISNULL(                                
+    (                                
+    select TL.uTestLanguageId,                  
+     TL.uTestId,                  
+     TL.iLanguageId,                  
+     TL.cIsActivatedForTest from  t_TestDrive_Test_Language TL                                
+    where TL.uTestId=T.uTestId                                
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                
+    ) 't_TestDrive_Test_Language',                           
+    ISNULL(                                
+    (                                
+    select CAT.uCycleAssignedTestId,                  
+     CAT.uCycleId,                  
+     CAT.uTestId,                  
+     CAT.iOrderId from  t_TestDrive_Cycle_AssignedTest CAT                                
+    where CAT.uTestId=T.uTestId                                
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                
+    ) 't_TestDrive_Cycle_AssignedTest',                            
+     ISNULL(                                
+    (                                
+    select CST.uCycleStateId,                  
+     CST.iStateId,                  
+     CST.uCycleId,                  
+     CST.uTestId from  [Fusion_Common_Extranet_Dev].[dbo].t_TestDrive_Cycle_State CST                                    
+    where CST.uTestId=T.uTestId                                
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                
+    ) 't_TestDrive_Cycle_State',                  
+ ISNULL(                                
+    (                                
+    select CS.uCycleSchoolId,                  
+    CS.uSchoolId,                  
+    CS.uCycleId,                  
+    CS.uTestId from  t_TestDrive_Cycle_School CS                                
+    where CS.uTestId=T.uTestId                                
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                
+    ) 't_TestDrive_Cycle_School',                  
+ --ISNULL(                                
+ --   (                                
+ --   select CSY.uTestSchoolYearId,CSY.uTestId,                  
+ --    CSY.iSchoolYearId,                  
+ --    CSY.uCycleId from  t_TestDrive_Cycle_SchoolYear CSY                                
+ --   where CSY.uTestId=T.uTestId                                
+ --   FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                
+ --   ) 't_TestDrive_Cycle_SchoolYear',                  
+ ISNULL(                                
+    (                                
+       select CC.uCycleClassId,                  
+ CC.uClassId,                  
+           CC.uCycleId,                  
+     CC.uTestId,                  
+     CC.dtTestAssigned from  [Fusion_Common_Extranet_Dev].[dbo].t_TestDrive_Cycle_Class CC                                
+    where CC.uTestId=T.uTestId                                
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                
+    ) 't_TestDrive_Cycle_Class',                  
+  ISNULL(                                
+    (                                
+    select CT.uCycleTeacherId,                  
+     CT.uTeacherId,                  
+     CT.uCycleId,                  
+     CT.uTestId,                  
+     CT.cIsActive,                  
+     CT.cIsDeleted,                  
+     CT.iTestCategoryId from  [Fusion_Common_Extranet_Dev].[dbo].t_Testdrive_Cycle_Teacher CT                                
+    where CT.uTestId=T.uTestId                                
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                
+    ) 't_TestDrive_Cycle_Teacher',                   
+    ISNULL(                                
+    (    
+      select CP.uCyclePupilId,                  
+   CP.uCycleId,                  
+   CP.uTestId,                  
+   CP.uClassId,                  
+   CP.uPupilId,                  
+   CP.cIsByTeacher,                  
+   CP.iTestCategoryId,                  
+   CP.cIsActive,                  
+   CP.dtTestAssigned,                  
+   CP.uParentTestId,                  
+   CP.iRoundId,                  
+   CP.cIsArchive,                  
+   CP.iTestPoints,                  
+   CP.cHasRoundCompleted,                  
+   CP.iRepitionId,                  
+   CP.cIsTestCreatedManually from [Fusion_Common_Extranet_Dev].[dbo].t_TestDrive_Cycle_Pupil CP                
+    where CP.uTestId=T.uTestId                               
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                
+    ) 't_TestDrive_Cycle_Pupil'                         
+    FOR JSON PATH,INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER                                 
+ ) as jsonresult                                
+  from t_TestDrive_Test T                                                        
+  where T.uTestId=@uTestId              
+END 
+
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+ALTER procedure [dbo].[Proc_Fusion_CMS_ExtranetTest_DeleteData]                  
+(                  
+ @iMainClientId int,                            
+ @vDeleteData nvarchar(max)                  
+)                  
+/********************************************************************************************                                                            
+Created By: Muna Sethi                                                           
+Created Date: 16.04.2019                                                           
+Description: Delete ExtranetTask data                                    
+Tables: t_TestDrive_Test,t_TestDrive_Test_Data,t_TestDrive_Test_TestProperty,t_TestDrive_Test_AdaptiveAlgorithmConfiguration,                  
+t_TestDrive_Cycle_SchoolYear,t_TestDrive_Test_AssignedSchoolYear,t_TestDrive_Test_Competency,t_TestDrive_Test_Category,                  
+t_TestDrive_Test_Language,t_testdrive_Cycle_AssignedTestt_TestDrive_Cycle_Class,t_TestDrive_Cycle_Pupil,t_Testdrive_Cycle_Teacher,                  
+t_TestDrive_Cycle_School,t_TestDrive_Cycle_SchoolYear,t_TestDrive_Cycle_State                                           
+Sample: exec Proc_Fusion_CMS_ExtranetTest_DeleteData 97,@vDeleteData                                    
+                                    
+Modified By:  Arun                                                   
+Modified Date: 24.06.2019                                                    
+Description:  table name change t_TestDrive_Cycle_Test_SchoolYear--> t_TestDrive_Cycle_SchoolYear                            
+                                    
+*************************************************************************************************/                  
+AS                  
+BEGIN                  
+  Declare @uTestId uniqueidentifier                
+ set @uTestId = (select uTestId from openjson(@vDeleteData) with (uTestId uniqueidentifier))                      
+     if(exists(select TeacherTableAction from openjson(@vDeleteData)with(TeacherTableAction char(1))))                              
+  BEGIN              
+  update  CT                                 
+    Set                                            
+     CT.cIsArchive=ISNULL(TPJson.cIsArchive,CT.cIsArchive),                                             
+     CT.cIsActive=ISNULL(TPJson.cIsActive,CT.cIsActive),                                              
+     CT.cIsDeleted=ISNULL(TPJson.cIsDeleted,CT.cIsDeleted)              
+    from [Fusion_Common_Extranet_Dev].[dbo].t_TestDrive_Cycle_Teacher CT,openjson(@vDeleteData,'$.t_TestDrive_Cycle_Teacher')                                           
+    with (                                
+    cIsArchive char(1),cIsActive char(1),cIsDeleted char(1)                                  
+    ) TPJson                                
+    where  CT.uTestId=@uTestId               
+  END              
+  ELSE              
+  BEGIN              
+  update t_TestDrive_Test                                
+  Set                                
+   cIsDeleted='Y',                                
+  dtModifiedOn=GETDATE()                                
+  where uTestId in (select uTestId from openjson(@vDeleteData) with (uTestId uniqueidentifier))        
+ END                 
+    ----------Return the data                       
+    select (                                    
+     select                                     
+      T.uTestId,                      
+      T.iFolderId,                      
+      T.dtCreatedOn,                      
+      T.dtModifiedOn,                      
+      T.cIsDeleted,                      
+      T.iTestTypeId,                      
+      T.iSubjectId,                      
+      T.iAlgorithmId,                      
+      T.iProviderId,                      
+      T.iMainClientId,                      
+      T.uUserId,     
+   T.uModifiedByUserId,                       
+      T.dBound1,                      
+      T.cIsAdaptiveTaskSubSubjectChosenSequential,                      
+      T.dStartDifficultyFrom,                  
+      T.dStartDifficultyTo,                      
+      T.dPrice,                      
+      T.cHasResultPageCertificate,                      
+      T.cUseMainTestIntroduction,                      
+      T.cDisplayTaskNameAsTaskTitle,                      
+      T.cUseResultTextByRange,                      
+      T.vTestDescription,                      
+      T.vTestName,                      
+      T.iResultPageCertificateProviderId,                      
+      T.vCertificateTemplate,                      
+      T.cHasResultPageText,                      
+      T.cIsUseMainTestResult,                      
+      T.iResultPageCertificateId,                      
+      T.uCertificateTemplateId,                      
+      T.iCategoryId,                      
+      T.uModifiedById,                      
+      T.uSeparationAndCalibrationGroupId,           
+   ISNULL((                                                 
+           Select                     
+     TP.iTestPropertyId,                                                               
+           TP.iTaskIndexDisplayId,                                                              
+           TP.iTaskIndexDisplaySkinId,                                                              
+           TP.iTestProgressDisplayId,                                                              
+           TP.iResultCalculationProviderId,                                     
+           TP.cPunishNegativeAnswers,                                                
+           TP.iThemeId,                                                              
+           TP.iDurationOfTestInMinutes,                                                                         
+     TP.iMinimumTasksBeforeTestLimitIsConsidered,                                                        
+           TP.cCheckTestTimeLimitOnServerSide,                                                 
+           TP.iNumberOfRepetitions,                                               
+           TP.cIsSolutionAfterTask,                                                              
+           TP.vTestLoginPDFTemplate,                                                              
+           TP.cDoNotShowIntroductionPage,                                                              
+           TP.cHideEndTestButtonEvenIfEnabledByalgorithm,                                                              
+           TP.cShowPreviousButtonIfPreviousIsInformationTask,                                                              
+           TP.uClassId,                                                              
+           TP.cIsForInternalTesting,                                                              
+           TP.uCycleId,                                                              
+           TP.cShowIntroductionPage,                                          
+        TP.iTaskPageTopLeftImageId,                                                              
+           TP.cIsShowResultExcelOnTestComplete,                                                              
+           TP.uLoginControlId,                                                              
+           TP.iFormId,                                      
+           TP.cIsShowLoginPage,                                                              
+           TP.cIsLearnCoacher,                                                              
+           TP.cOverrideConstanceAndVariance,                                                              
+           TP.vBarcodePosition,                                                              
+           TP.iFileVersion,                                                              
+           TP.iFileSize,                                                              
+           TP.cIsShowMarkAndSolution,                                                              
+           TP.cSaveIndividualTaskResult,                                                              
+          TP.iTestUsageId,                                                              
+           TP.cIsActive,                                                              
+           TP.cIsPublic,                         
+           TP.cIsShowIndexSolution,                                                              
+           TP.cShowLinearIndex,                                                              
+           TP.cGroupTasksBySubSubject,                                                              
+           TP.cIterateTillAllTaskCorrect,                                                              
+           TP.cAllowTokenValidityDate,                                                              
+           TP.cAllowTokenActivation,                                                              
+           TP.cShowTaskNotAnswered,                                                              
+           TP.uTestLoginPDFTemplateId,                                                              
+           TP.uElementFormulaAttributeTemplateId,                                                              
+           TP.uResultAttributeId,                                                              
+           TP.dPassValue,                                                              
+           TP.vPassConditionOperator,                                                              
+           TP.cShowAdditionalResultStatus,                                                              
+           TP.vLoginPageFileSize,                                                              
+     TP.vLoginPageFileName,                                         
+           TP.cShowTeacherLoginPage,                                                              
+           TP.vFormName,                                                              
+           TP.vExternalCertificateUrl,                                                              
+           TP.uSkinId,                
+           TP.vSequenceProvider,                                                              
+           TP.uPupilTestLoginPDFTemplateId,                                                              
+           TP.cUseDefaultConstantAndVariance,                                                     
+           TP.cIsMultiSequenceWrapper,                                                              
+           TP.cShowInTree,                                                              
+           TP.cUseParentTestProperties,                                                              
+           TP.vPaperPencilType,                                                              
+           TP.cUseSecuredBrowser,                                                              
+           TP.cIsSystemTask,                                                              
+           TP.iNumberOfTasks,TP.cIsAdaptiveTest,                                                           
+           TP.vTestCompleteNotificationEmailId,                                             
+           TP.cIsShowResultDocumentOnTestComplete,                                                              
+           TP.cIsDemoTestActivityRecorded,                                                              
+           TP.iTestCompleteCertificateId,                                              
+           TP.cIsSystemGenerated,                                                            
+           TP.cHasNTTheme                     
+     from t_TestDrive_Test_TestProperty TP                     
+     where TP.uTestId =T.uTestId FOR JSON PATH, INCLUDE_NULL_VALUES                    
+     ),'[]')'t_TestDrive_Test_TestProperty',      
+    ISNULL(                                                            
+    (                                                      
+    select TT.iTestTaskId,                                              
+     TT.uTestId,                                              
+     TT.iPageId,                
+     TT.iOrderId                
+   from  t_testdrive_Test_Tasks TT                                                            
+    where TT.uTestId=T.uTestId                                                      
+    FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'              
+    ) 't_testdrive_Test_Tasks',                                  
+      ISNULL(                                    
+      (select                       
+        TD.uTestDataId,                      
+        TD.uTestId,                      
+        TD.iLanguageId,                      
+        TD.vTestName,                      
+        TD.vTestDescription,                      
+        TD.tTestInstructionForPupil,                      
+        TD.tTestResultPageText,                      
+        TD.vTestTitle,                      
+        TD.vStartButtonText,                      
+        TD.vResultPageTopLeftTitle,                      
+        TD.vIntroductionPageTopLeftTitle,                      
+        TD.iIntroductionPageRightTitleFontSize,                      
+        TD.vIntroductionPageRightTitle,                      
+        TD.vTaskPageTopLeftTitle,                      
+        TD.vResultButtonText,                      
+        TD.vPassText,                      
+        TD.vFailText,                      
+        TD.vExternalTestUrl,                      
+        TD.vLoginPageFileName,                      
+        TD.iLoginPageFileSize                      
+        from t_TestDrive_Test_Data TD                                    
+      where TD.uTestId=T.uTestId                                    
+      FOR JSON PATH, INCLUDE_NULL_VALUES),'[]'                                    
+      )'t_TestDrive_Test_Data',                                                 
+      ISNULL(                                    
+      (select                       
+        TAC.uAdaptiveAlgorithmConfigurationId,                      
+        TAC.vAttributeKey,                      
+        TAC.iMainClientId,                      
+        TAC.uTestId,                      
+        TAC.vValue from t_TestDrive_Test_AdaptiveAlgorithmConfiguration TAC                                    
+      where TAC.uTestId=T.uTestId                                    
+      FOR JSON PATH, INCLUDE_NULL_VALUES),'[]'                                    
+      ) 't_TestDrive_Test_AdaptiveAlgorithmConfiguration',                                    
+      ISNULL(                                    
+      (                                
+      select TAS.iAssignedSchoolYearId,                      
+        TAS.iSchoolYearId,                      
+        TAS.uTestId from  t_TestDrive_Test_AssignedSchoolYear TAS                                    
+      where TAS.uTestId=T.uTestId                                    
+      FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                    
+      ) 't_TestDrive_Test_AssignedSchoolYear',                                    
+      ISNULL(                                    
+      (                                    
+      select TC.uTestCategoryCompetencyId,                      
+        TC.uTestId,                      
+        TC.iCategoryCompetencyId from  t_TestDrive_Test_Competency TC                                    
+      where TC.uTestId=T.uTestId                                    
+      FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                    
+      ) 't_TestDrive_Test_Competency',                                    
+      ISNULL(                                    
+      (                                    
+      select TCA.uTestCategoryId,                      
+        TCA.uTestId,                      
+        TCA.iCategoryId from  t_TestDrive_Test_Category TCA                                    
+      where TCA.uTestId=T.uTestId                                    
+      FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                 
+      ) 't_TestDrive_Test_Category',                            
+      ISNULL(                                    
+      (                           
+      select TL.uTestLanguageId,                      
+        TL.uTestId,                      
+        TL.iLanguageId,                      
+        TL.cIsActivatedForTest from  t_TestDrive_Test_Language TL                                    
+      where TL.uTestId=T.uTestId                                    
+      FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                
+      ) 't_TestDrive_Test_Language',                               
+      ISNULL(                                    
+      (                                    
+      select CAT.uCycleAssignedTestId,                      
+        CAT.uCycleId,                      
+        CAT.uTestId,                      
+        CAT.iOrderId from  t_TestDrive_Cycle_AssignedTest CAT                                    
+      where CAT.uTestId=T.uTestId                                    
+      FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                    
+      ) 't_TestDrive_Cycle_AssignedTest',                                
+      ISNULL(                               
+      (                                    
+      select CST.uCycleStateId,                      
+        CST.iStateId,                      
+        CST.uCycleId,                      
+        CST.uTestId from  [Fusion_Common_Extranet_Dev].[dbo].t_TestDrive_Cycle_State CST                                        
+      where CST.uTestId=T.uTestId                                    
+      FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                    
+      ) 't_TestDrive_Cycle_State',                      
+      ISNULL(                                    
+      (                                    
+      select CS.uCycleSchoolId,                      
+        CS.uSchoolId,                      
+        CS.uCycleId,                      
+        CS.uTestId from  [Fusion_Common_Extranet_Dev].[dbo].t_TestDrive_Cycle_School CS                                    
+      where CS.uTestId=T.uTestId                                    
+      FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                    
+      ) 't_TestDrive_Cycle_School',                      
+      --ISNULL(                                    
+      --(                                    
+      --select CSY.uTestSchoolYearId,CSY.uTestId,                      
+      --  CSY.iSchoolYearId,                      
+      --  CSY.uCycleId from  [Fusion_Common_Extranet].[dbo].t_TestDrive_Cycle_SchoolYear CSY                                    
+      --where CSY.uTestId=T.uTestId                                    
+      --FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                    
+      --) 't_TestDrive_Cycle_SchoolYear',                      
+      ISNULL(                                    
+      (                                    
+      select CC.uCycleClassId,                      
+        CC.uClassId,                      
+        CC.uCycleId,                      
+        CC.uTestId,                      
+        CC.dtTestAssigned from  [Fusion_Common_Extranet_Dev].[dbo].t_TestDrive_Cycle_Class CC                                    
+      where CC.uTestId=T.uTestId                                    
+      FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                    
+      ) 't_TestDrive_Cycle_Class',                      
+      ISNULL(                                    
+      (                                    
+      select CT.uCycleTeacherId,                      
+        CT.uTeacherId,                      
+        CT.uCycleId,                      
+        CT.uTestId,                      
+        CT.cIsActive,                      
+        CT.cIsDeleted,                      
+        CT.iTestCategoryId from  [Fusion_Common_Extranet_Dev].[dbo].t_Testdrive_Cycle_Teacher CT                                    
+      where CT.uTestId=T.uTestId                                    
+      FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                    
+      ) 't_TestDrive_Cycle_Teacher',                     
+      ISNULL(                                    
+      (                                    
+      select CP.uCyclePupilId,                      
+        CP.uCycleId,                      
+        CP.uTestId,                      
+        CP.uClassId,                      
+        CP.uPupilId,                      
+        CP.cIsByTeacher,                      
+        CP.iTestCategoryId,                      
+        CP.cIsActive,                      
+        CP.dtTestAssigned,                      
+        CP.uParentTestId,                      
+        CP.iRoundId,                      
+        CP.cIsArchive,                      
+        CP.iTestPoints,                      
+        CP.cHasRoundCompleted,                      
+        CP.iRepitionId,                      
+        CP.cIsTestCreatedManually from [Fusion_Common_Extranet_Dev].[dbo].t_TestDrive_Cycle_Pupil CP                                    
+      where CP.uTestId=T.uTestId                                   
+      FOR JSON PATH,INCLUDE_NULL_VALUES),'[]'                                    
+      ) 't_TestDrive_Cycle_Pupil'                             
+     FOR JSON PATH,INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER                                     
+    ) as jsonresult                                    
+    from t_TestDrive_Test T                                                   
+    where T.uTestId in (select  TJson.uTestId from openjson(@vDeleteData) with (uTestId uniqueidentifier)  TJson)                
+END 
+
+
+------------------------------------------------------------------------------------------------------------------------------   
+GO
+CREATE PROCEDURE Proc_Fusion_Extranet_PupilLicense_GetData_NEW      
+(        
+ @iMainClientId INT,    
+ @vPrimaryKeyValue nvarchar(max)             
+)         
+AS        
+  /********************************************************************************************                                                              
+  Created By: Ayyappa                                                             
+  Created Date: 10.06.2020                                                           
+  Description: Gets PupilLicense Data  
+  Proc_Fusion_Extranet_PupilLicense_GetData_NEW 115,'0'
+  *************************************************************************************************/                  
+-----------Common approach to fetch data in Batch--------------              
+Declare @uPupilLicenseId uniqueidentifier                   
+If(@vPrimaryKeyValue = '0')              
+	BEGIN              
+		Set @uPupilLicenseId = '00000000-0000-0000-0000-000000000000'      
+	END              
+Else              
+	Begin              
+		Set @uPupilLicenseId = Cast(@vPrimaryKeyValue as uniqueidentifier)              
+	END                        
+---------------------------------------------------------------      
+BEGIN        
+	 SELECT top (5000) 
+	 ( SELECT ( SELECT 
+		PL.uPupilLicenseId,PL.uPupilId,PL.uSchoolId,PL.vLicenseJSON,PL.dtCreatedOn,PL.uUserId,PL.dtModifiedOn,PL.uModifiedByUserId 
+	 for json path, include_null_values, without_array_wrapper)) as JSONResult        
+	 FROM t_TestDrive_Member_Pupil_License PL       
+	 INNER JOIN t_TestDrive_Member_School S  ON S.uSchoolId = PL.uSchoolId        
+	 WHERE S.iMainClientId = @iMainClientId and uPupilLicenseId > @uPupilLicenseId  
+	 ORDER BY PL.uPupilLicenseId      
+END 
+GO

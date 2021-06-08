@@ -1,0 +1,14 @@
+﻿/**********************************
+Renamed Table
+**********************************/
+EXEC sp_rename 't_TestDrive_Test_ResultAttribute_ElementFormulaAttribute_ElementSpecific','t_TestDrive_Test_ResultAttribute_ElementAttribute_ElementSpecific'
+GO
+
+/**********************************
+Angular procs
+**********************************/
+/********************ModifiedProc********************
+Proc_CMS_CMSContainer_SaveElementPointOverrideInformation
+Proc_CMS_CMSPageContent_GetAllTasksElementOverridePoints
+Proc_Testdrive_StandardResultCalculation_GetElementOverrideAttributes
+*************************************************/

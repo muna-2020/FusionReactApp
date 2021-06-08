@@ -1,0 +1,111 @@
+﻿<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+		*{
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: calibri;
+		}
+        .tab_container {
+            width: 1024px;
+            position: relative;
+            border: 1px solid #ccc;
+            margin: 0px auto;
+        }
+
+            .tab_container label img {
+                width: 30px;
+                margin-right: 15px;
+            }
+		.tab_container input[name="tabs"], .tab_container section {
+		clear: both;
+		padding-top: 10px;
+		display: none;
+		}
+		.tab_container section {
+			height: calc(100% - 85px);
+			overflow-y: auto;
+		}
+		.tab_container label {
+		display: flex;
+		float: left;
+		width: 20%;
+		padding: 10px 0px;
+		cursor: pointer;
+		background: #f0f0f0;
+		justify-content: center;
+		align-items: center;
+		border-right: 1px solid #efe2e2;
+		}
+
+		#tab1:checked ~ #content1,
+		#tab2:checked ~ #content2,
+		#tab3:checked ~ #content3,
+		#tab4:checked ~ #content4,
+		#tab5:checked ~ #content5 {
+		display: block;
+		padding: 20px;
+		background: #fff;
+		color: #999;
+		border-bottom: 2px solid #f0f0f0;
+		}
+		.tab_container .tab-content h3  {
+		text-align: center;
+		}
+		.tab_container [id^="tab"]:checked + label {
+		background: #e0dddd;
+		}
+
+		/*Media query*/
+		@media only screen and (max-width: 1024px) {
+		.tab_container {
+			width: 100%;
+		}
+		}
+	</style>
+</head>
+<body>
+    <div class="main-wrapper">
+		<div class="tab_container">
+			<input id="tab1" type="radio" name="tabs" checked>
+			<label for="tab1"><span>Tab 1</span></label>
+
+			<input id="tab2" type="radio" name="tabs">
+			<label for="tab2"><span>Tab 2</span></label>
+
+			<input id="tab3" type="radio" name="tabs">
+			<label for="tab3"><span>Tab 3</span></label>
+
+			<input id="tab4" type="radio" name="tabs">
+			<label for="tab4"><span>Tab 4</span></label>
+
+			<input id="tab5" type="radio" name="tabs">
+			<label for="tab5"><span>Tab 5</span></label>
+
+			<section id="content1" class="tab-content">
+				<h3>Tab 1 Content</h3>
+			</section>
+
+			<section id="content2" class="tab-content">
+				<h3>Tab 2 Content</h3>
+			</section>
+
+			<section id="content3" class="tab-content">
+				<h3>Tab 3 Content</h3>
+			</section>
+
+			<section id="content4" class="tab-content">
+				<h3>Tab 4 Content</h3>
+			</section>
+
+			<section id="content5" class="tab-content">
+				<h3>Tab 5 Content</h3>
+			</section>
+		</div>
+    </div>
+</body>
+</html>

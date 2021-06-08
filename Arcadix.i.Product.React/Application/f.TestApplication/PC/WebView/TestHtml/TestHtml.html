@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+    var JConfiguration = { "OnlineBaseUrl": "https://testdevfusionlernlupe.arcadixdevelopment.com/", "ApplicationTypeName": "TestApplication", "LoginPageUrl": "", "TargetDeviceId": "7", "LogTimeDetails": "N", "UseLocalStorage": "", "EnableCryptography": "", "StoreToLocalStorage": "", "IsOffline": "N", "IsOfflineData": "N", "BaseUrl": "https://testdevfusionlernlupe.arcadixdevelopment.com/", "TargetGroupId": "", "LoginUrl": "", "IsSSL": "N", "InterfaceLanguageId": "3", "LanguageCultureInfo": "de", "CultureName": "", "WebRepositoryPath": "http://localhost:9002/Repository/", "WebDataPath": "http://localhost:9002/Data/", "MainClientId": "97", "ClientUserId": "00000000-0000-0000-0000-000000000000", "ClientUserName": "", "IsMasterLogin": "N", "IsSecondMasterLogin": "N", "ClientRoles": "", "IsTouchEnable": "", "ApplicationTypeId": "2", "NoOfRounds": "0", "NoOfTasksForSystemTest": "0", "TestApplicationUrl": "TestApplicationBaseUrlForPopup", "IntranetSkinPath": "http://localhost:9002/Themes/Default/c.Intranet/Skin2018", "CockpitSkinPath": "http://localhost:9002/Themes/Default/c.Cockpit/Skin2018", "ExtranetSkinPath": "http://localhost:9002/Themes/Default/d.Extranet/Skin2018", "TestApplicationSkinPath": "http://localhost:9002/Themes/Default/f.TestApplication/Skin2018", "SupportApplication": "http://localhost:9002/Themes/Default/SupportApplication", "ProductManagementSkinPath": "http://localhost:9002/Themes/Default/c.ProductManagement/Skin2018", "EditorSkinPath": "http://localhost:9002/Themes/Default/e.Editor/Skin2018", "MainClientIdentifier": "Lernlupe", "CurrencyInfo": "CHE", "CountryCultureInfo": "ch", "Locale": { "DATETIME_FORMATS": { "DAY": ["Freitag", "Samstag", "Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag"], "MONTH": ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"], "SHORTMONTH": ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"], "SHORTDAY": ["So.", "Mo.", "Di.", "Mi.", "Do.", "Fr.", "Sa."], "DATEFORMAT": "dd.MM.yyyy" } }, "BasePhysicalPath": "G:\\Arcadix\\Product.Fusion", "SignalRHubUrl": "https://signalr.arcadixdevelopment.com/SignalR/ArcadixHub", "ApplicationFolderName": "Application/f.TestApplication/", "ApplicationName": "TestApplication", "JSVersionNumber": "1982020", "MaximumDiskSpace": "", "DeviceType": "PC", "VirtualDirName": "/", "IsDevelopment": true, "IsSSREnabled": false, "strHostUrl": "localhost:9002", "strDeviceType": "PC", "SessionKey": "1908202010165404", "Performance": false, "TargetApplicationTypeId": "2" };
+    var TestState = {};
+    window.module = {};
+    var global = {};
+    var PageJson = window.temp;
+
+
+    </script>
+    <script type="module" src="ClientBuild/index.js"></script>
+    <script type="text/javascript">
+    function GetPageJson() {
+        alert(PageJson);
+    }
+    window.addEventListener("message", receiveMessage, false);       
+    function receiveMessage(event) {
+      alert(event.data);
+      switch (event.data.ButtonType) {
+        case "AnswerJson":
+          window.ReactNativeWebView.postMessage(ContentRef.current.GetUserResponse());
+          break;
+        case "Evaluation":
+
+          break;
+        case "TryAgain":
+
+          break;
+      }
+    }
+
+    function tryAgainTask() {
+      ContentRef.current.TryAgainTask();
+    }
+
+    </script>
+
+</head>
+
+<body onload="GetPageJson()">
+    <div class="content">
+        <div id="divRootClient">
+
+        </div>
+
+
+    </div>
+
+</body>
+
+</html>

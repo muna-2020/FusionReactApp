@@ -1,0 +1,32 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_MainClient_Font' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_CMS_MainClient_Font ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+
+update t_CMS_MainClient_Font set uModifiedByUserId = uUserId  Where uModifiedByUserId is null
+
+GO
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+JEditorProc_CMS_CMSPageContent_AssignedFonts
+JEditorProc_CMS_CMSPageContent_GetAllAssignedFonts
+Proc_CMS_CMSPageContent_AssignedFonts
+Proc_CMS_CMSPageContent_GetAllAssignedFonts
+****************************************************************/
+
+/********************Procs need to Review**********************
+JEditorProc_CMS_CMSPageContent_AssignedFonts :Changed
+Proc_CMS_CMSPageContent_AssignedFonts :Changed
+****************************************************************/
+

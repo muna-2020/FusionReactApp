@@ -1,0 +1,54 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_WrapperTestAssignment' AND COLUMN_NAME = 'uWrapperTestAssignmentId') 
+BEGIN
+ALTER TABLE t_TestDrive_Test_WrapperTestAssignment ADD uWrapperTestAssignmentId uniqueidentifier NOT NULL DEFAULT (newid())
+
+END
+
+/**********************************
+Default Values
+**********************************/
+
+
+GO
+/**********************************
+Old proc modified
+**********************************/
+
+/********************AllDependentProc********************
+FProc_TestDrive_Test_GetTestDetailsById
+JEditorProc_TestDrive_Test_GetTestDetailsById
+JProc_CMS_Test_GetTests
+JProc_TestDrive_aWrapperTestProvider_GetTestIdsAssignedtoWrapperTest
+JProc_TestDrive_GetTestsAssignedtoWrapperTest
+JProc_TestDrive_Tests_GetTestDetailsForCycles
+Proc_CMS_Test_ngGetTestDataByFolderId
+Proc_Fusion_Intranet_WrapperTest_GetData
+Proc_Fusion_Intranet_WrapperTest_GetData_New
+Proc_TestDrive_aWrapperTestProvider_GetTestIdsAssignedtoWrapperTest
+Proc_Testdrive_GetAllWrapperTestTasks
+Proc_TestDrive_SPSSUtility_GetTestTasks
+Proc_TestDrive_SPSSUtility_GetTestTaskSubjects
+Proc_Testdrive_StandardCycleProvider_GetAssignedTestForCycle_New
+Proc_TestDrive_Test_AssignTestToWrapperTest
+Proc_TestDrive_Test_CopyPasteTest
+Proc_TestDrive_Test_CopyPasteTest_New
+Proc_TestDrive_Test_GetAllActivePublicTestsByMainClientId
+Proc_TestDrive_Test_GetAllTestByFolderId
+Proc_TestDrive_Test_GetAllTestsDetailsByTestXml
+Proc_TestDrive_Test_GetTestDetailsById
+Proc_TestDrive_Test_GetWrapperTestByTestId
+Proc_TestDrive_Test_MoveTest
+Proc_TestDrive_Test_MoveTestUpDown
+Proc_TestDrive_Test_RemoveTestFromWrapperTestList
+Proc_TestDrive_Tests_GetTestDetailsForCycles
+Proc_TestDrive_Tests_GetTestDetailsForCycles_Old
+****************************************************************/
+
+/********************Procs updated**********************
+
+****************************************************************/
+

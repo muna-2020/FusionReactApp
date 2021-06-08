@@ -1,0 +1,75 @@
+﻿<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: calibri;
+        }
+        .main-wrapper {
+            padding: 20px;
+        }
+        .file-upload-example input[type='file'] {
+            padding: 10px;
+            border: 2px dashed #ccc;
+        }
+        .file-upload-example button {
+            padding: 5px 10px;
+        }
+        .file-upload-example ul {
+            list-style: none;
+            margin: 20px 0px;
+        }
+
+        .fileList li {
+            padding: 10px;
+            border: 1px solid #ccc;
+            width: 250px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            .fileList li img {
+                width: 15px;
+            }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <section class="content-wrapper file-upload-example">
+            <input name="filesToUpload[]" id="filesToUpload" type="file" multiple="" onchange="fileUpload()" />
+            <ul id="fileList" class="filelist"></ul>
+            <button>Upload</button>
+        </section>
+    </div>
+    <script>
+        function fileUpload(){
+            //get the input and UL list
+            var input = document.getElementById('filesToUpload').files;
+            var list = document.getElementById('fileList');
+
+
+            //for every file...
+            for (var x = 0; x < input.length; x++) {
+                //add to list
+                var li = document.createElement('li');
+                li.innerHTML = input[x].name + "<img class='close' src='https://image.flaticon.com/icons/svg/2089/2089650.svg' alt=''/>";
+                list.append(li);
+            }
+
+            // Click on a close button to hide the current list item
+            var close = document.getElementsByClassName("close");
+            for (var i = 0; i < close.length; i++) {
+                close[i].onclick = function() {
+                    this.parentElement.remove();
+                }
+            }
+        }
+    </script>
+</body>
+</html>

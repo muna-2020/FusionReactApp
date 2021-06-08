@@ -1,0 +1,42 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_WorkflowType' AND COLUMN_NAME = 'dtCreatedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_WorkflowType ADD dtCreatedOn datetime  
+END
+
+GO	 
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_WorkflowType' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_WorkflowType ADD dtModifiedOn datetime  
+END
+
+GO		   
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_WorkflowType' AND COLUMN_NAME = 'vWorkflowTypeIdentifier') 
+BEGIN
+ALTER TABLE t_TestDrive_WorkflowType ADD vWorkflowTypeIdentifier nvarchar(50)  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_WorkflowType set dtCreatedOn = getdate() where dtCreatedOn is null
+
+GO
+update t_TestDrive_WorkflowType set dtModifiedOn = getdate() where dtModifiedOn is null
+
+GO
+update t_TestDrive_WorkflowType set vWorkflowTypeIdentifier = 'Task Object' where vWorkflowTypeIdentifier is null
+
+GO
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+JEditorProc_Testdrive_Workflow_GetTaskWorkflowStatusByMainClientUser
+Proc_Testdrive_Workflow_GetTaskWorkflowStatusByMainClientUser
+Proc_Testdrive_Workflow_GetWorkflowTypes
+****************************************************************/

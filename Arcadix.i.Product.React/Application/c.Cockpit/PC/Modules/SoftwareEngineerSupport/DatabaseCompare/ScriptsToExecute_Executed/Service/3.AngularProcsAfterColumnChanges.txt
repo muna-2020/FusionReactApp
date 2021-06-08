@@ -1,0 +1,1853 @@
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ALTER Proc [dbo].[JEditorProc_CMS_CMSPageContent_AssignedFonts](@iMainClientId int,@vFontXml varchar(max),@uUserId uniqueidentifier)
+As
+ declare @iXmlPointer int, @uFontId uniqueidentifier,@uMainClientFontId uniqueidentifier
+Begin 
+       EXECUTE sp_xml_preparedocument @iXmlPointer OUTPUT, @vFontXml              
+       DECLARE cursor_Font CURSOR FOR SELECT * FROM openXML (@iXmlPointer,  '/Fonts/Font') WITH ( value UNIQUEIDENTIFIER '@value' )             
+        OPEN cursor_Font               
+        FETCH NEXT FROM cursor_Font INTO @uFontId               
+        WHILE( @@FETCH_STATUS <> -1 )              
+            BEGIN              
+               if not exists(select * from t_CMS_MainClient_Font where uFontId = @uFontId and iMainClientId=@iMainClientId and cIsdelete = 'N')
+                  begin
+                      insert into t_CMS_MainClient_Font values(NEWID(),@uFontId,@iMainClientId,'N',GETDATE(),@uUserId, NULL)                
+                  end  
+				   FETCH NEXT FROM cursor_Font INTO @uFontId                                            
+            END             
+        CLOSE cursor_Font              
+        DEALLOCATE cursor_Font  
+        update t_CMS_MainClient_Font set cIsdelete = 'Y' where uMainClientFontId in (select uMainClientFontId from t_CMS_MainClient_Font where ufontid not in(SELECT value FROM openXML (@iXmlPointer,  '/Fonts/Font') WITH ( value UNIQUEIDENTIFIER '@value'))
+ and iMainClientId=@iMainClientId and cIsdelete = 'N')       
+        EXEC sp_xml_removedocument @iXmlPointer    
+End 
+
+go
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ALTER Proc [dbo].[Proc_CMS_CMSPageContent_AssignedFonts]
+(
+@iMainClientId int,@vFontXml varchar(max),@uUserId uniqueidentifier
+)
+As
+ declare @iXmlPointer int, @uFontId uniqueidentifier,@uMainClientFontId uniqueidentifier
+Begin 
+       EXECUTE sp_xml_preparedocument @iXmlPointer OUTPUT, @vFontXml              
+       DECLARE cursor_Font CURSOR FOR SELECT * FROM openXML (@iXmlPointer,  '/Fonts/Font') WITH ( value UNIQUEIDENTIFIER '@value' )             
+        OPEN cursor_Font               
+        FETCH NEXT FROM cursor_Font INTO @uFontId               
+        WHILE( @@FETCH_STATUS <> -1 )              
+            BEGIN              
+               if not exists(select * from t_CMS_MainClient_Font where uFontId = @uFontId and iMainClientId=@iMainClientId and cIsdelete = 'N')
+                  begin
+                      insert into t_CMS_MainClient_Font values(NEWID(),@uFontId,@iMainClientId,'N',GETDATE(),@uUserId, NULL)                
+                  end  
+				   FETCH NEXT FROM cursor_Font INTO @uFontId                                            
+            END             
+        CLOSE cursor_Font              
+        DEALLOCATE cursor_Font  
+        update t_CMS_MainClient_Font set cIsdelete = 'Y' where uMainClientFontId in (select uMainClientFontId from t_CMS_MainClient_Font where ufontid not in(SELECT value FROM openXML (@iXmlPointer,  '/Fonts/Font') WITH ( value UNIQUEIDENTIFIER '@value'))
+ and iMainClientId=@iMainClientId and cIsdelete = 'N')       
+        EXEC sp_xml_removedocument @iXmlPointer    
+End
+
+go
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ALTER ProcEDURE [dbo].[Proc_Framework_ClientUser_RegisterLoggedInUserSystemInformation]    
+(         
+ @uUserId uniqueidentifier,    
+ @vIPAddress nvarchar(200),    
+ @iApplicationTypeId int,    
+ @AdditionalInfo nvarchar(500),
+ @cIsManualLogin char(1),
+ @iMainClientId int
+)        
+AS          
+BEGIN          
+ /********************************************************************************************              
+ Created By:  Sricharan Kalavagunta              
+ Create Date:  12.20.2013    
+ Description:  Saves the logged in User system info to database    
+      
+ Modified By: Arvind K                                     
+ Modified Date: 12/08/2020                                   
+ Description: Included default value for uModifiedByUserId column     
+ ********************************************************************************************/ 
+ declare @uAggregateAttributeId uniqueidentifier,
+		@uAggregateAttributeValueId uniqueidentifier,
+		@name nvarchar(200),
+		@value nvarchar(200),
+		@displayorder nvarchar(200),
+		@label nvarchar(500),
+		@id nvarchar(500)    
+
+
+
+	INSERT INTO t_TestDrive_Member_LoggedinUserInformation (uUserId,iApplicationTypeId,vIPAddress,dtDateTimeOfLogin,vAdditionalInformation, cIsManualLogin, dtDateTimeOfLogout,iMainClientId)
+	VALUES (@uUserId,@iApplicationTypeId,@vIPAddress,getDate(),@AdditionalInfo,@cIsManualLogin,NULL,@iMainClientId)    
+
+	if exists(select * from t_TestDrive_AggregateAttribute where iMainClientId =@iMainClientId and vAttributeName='Intranet30')
+	BEGIN
+		update t_TestDrive_AggregateAttribute_Value set vValue =(select COUNT(*) from t_TestDrive_Member_LoggedinUserInformation where iApplicationTypeId = 4 and iMainClientId = @iMainClientId and dtDateTimeOfLogin>=GETDATE()-30 )
+		where uAggregateAttributeId in(select uAggregateAttributeId from t_TestDrive_AggregateAttribute where iMainClientId =@iMainClientId and vAttributeName='Intranet30')
+	END
+	ELSE
+	BEGIN
+		set @uAggregateAttributeId =newid()
+		set @uAggregateAttributeValueId =newid()
+		insert into t_TestDrive_AggregateAttribute(uAggregateAttributeId, iMainClientId, vAttributeName, cIsSingleValue, uUserId, dtModifiedOn, cIsExecuting)  
+		values(@uAggregateAttributeId,@iMainClientId,'Intranet30','Y','00000000-0000-0000-0000-000000000000',GETDATE(),'N')
+		insert into t_TestDrive_AggregateAttribute_Value (uAggregateAttributeValueId,uAggregateAttributeId,uParentAggregateAttributeValueId,vObjectId,vValue,iDisplayOrder,cHasLabel)  
+		select @uAggregateAttributeValueId,@uAggregateAttributeId,null,null,(select COUNT(*) from t_TestDrive_Member_LoggedinUserInformation where iApplicationTypeId = 4 and iMainClientId = @iMainClientId and dtDateTimeOfLogin>=GETDATE()-30) ,1,'N'
+		
+	END
+
+	if exists(select * from t_TestDrive_AggregateAttribute where iMainClientId =@iMainClientId and vAttributeName='Teacher30')
+	BEGIN
+		update t_TestDrive_AggregateAttribute_Value set vValue =(select COUNT(*) from t_TestDrive_Member_LoggedinUserInformation where iApplicationTypeId = 1 and iMainClientId = @iMainClientId and dtDateTimeOfLogin>=GETDATE()-30 )
+		where uAggregateAttributeId in(select uAggregateAttributeId from t_TestDrive_AggregateAttribute where iMainClientId =@iMainClientId and vAttributeName='Teacher30')
+	END
+	ELSE
+	BEGIN
+		set @uAggregateAttributeId =newid()
+		set @uAggregateAttributeValueId =newid()
+		insert into t_TestDrive_AggregateAttribute (uAggregateAttributeId, iMainClientId, vAttributeName, cIsSingleValue, uUserId, dtModifiedOn, cIsExecuting)  
+		values(@uAggregateAttributeId,@iMainClientId,'Teacher30','Y','00000000-0000-0000-0000-000000000000',GETDATE(),'N')
+		insert into t_TestDrive_AggregateAttribute_Value (uAggregateAttributeValueId,uAggregateAttributeId,uParentAggregateAttributeValueId,vObjectId,vValue,iDisplayOrder,cHasLabel)  
+		select @uAggregateAttributeValueId,@uAggregateAttributeId,null,null,(select COUNT(*) from t_TestDrive_Member_LoggedinUserInformation where iApplicationTypeId = 1 and iMainClientId = @iMainClientId and dtDateTimeOfLogin>=GETDATE()-30) ,1,'N'
+		
+	END
+
+	if exists(select * from t_TestDrive_AggregateAttribute where iMainClientId =@iMainClientId and vAttributeName='School30')
+	BEGIN
+		update t_TestDrive_AggregateAttribute_Value set vValue =(select COUNT(*) from t_TestDrive_Member_LoggedinUserInformation where iApplicationTypeId = 6 and iMainClientId = @iMainClientId and dtDateTimeOfLogin>=GETDATE()-30 )
+		where uAggregateAttributeId in(select uAggregateAttributeId from t_TestDrive_AggregateAttribute where iMainClientId =@iMainClientId and vAttributeName='School30')
+	END
+	ELSE
+	BEGIN
+		set @uAggregateAttributeId =newid()
+		set @uAggregateAttributeValueId =newid()
+		insert into t_TestDrive_AggregateAttribute (uAggregateAttributeId, iMainClientId, vAttributeName, cIsSingleValue, uUserId, dtModifiedOn, cIsExecuting)  
+		values(@uAggregateAttributeId,@iMainClientId,'School30','Y','00000000-0000-0000-0000-000000000000',GETDATE(),'N')
+		insert into t_TestDrive_AggregateAttribute_Value (uAggregateAttributeValueId,uAggregateAttributeId,uParentAggregateAttributeValueId,vObjectId,vValue,iDisplayOrder,cHasLabel)  
+		select @uAggregateAttributeValueId,@uAggregateAttributeId,null,null,(select COUNT(*) from t_TestDrive_Member_LoggedinUserInformation where iApplicationTypeId = 6 and iMainClientId = @iMainClientId and dtDateTimeOfLogin>=GETDATE()-30) ,1,'N'
+		
+	END
+
+	if exists(select * from t_TestDrive_AggregateAttribute where iMainClientId =@iMainClientId and vAttributeName='Pupil30')
+	BEGIN
+		update t_TestDrive_AggregateAttribute_Value set vValue =(select COUNT(*) from t_TestDrive_Member_LoggedinUserInformation where iApplicationTypeId = 16 and iMainClientId = @iMainClientId and dtDateTimeOfLogin>=GETDATE()-30 )
+		where uAggregateAttributeId in(select uAggregateAttributeId from t_TestDrive_AggregateAttribute where iMainClientId =@iMainClientId and vAttributeName='Pupil30')
+	END
+	ELSE
+	BEGIN
+		set @uAggregateAttributeId =newid()
+		set @uAggregateAttributeValueId =newid()
+		insert into t_TestDrive_AggregateAttribute (uAggregateAttributeId, iMainClientId, vAttributeName, cIsSingleValue, uUserId, dtModifiedOn, cIsExecuting)  
+		values(@uAggregateAttributeId,@iMainClientId,'Pupil30','Y','00000000-0000-0000-0000-000000000000',GETDATE(),'N')
+		insert into t_TestDrive_AggregateAttribute_Value (uAggregateAttributeValueId,uAggregateAttributeId,uParentAggregateAttributeValueId,vObjectId,vValue,iDisplayOrder,cHasLabel)  
+		select @uAggregateAttributeValueId,@uAggregateAttributeId,null,null,(select COUNT(*) from t_TestDrive_Member_LoggedinUserInformation where iApplicationTypeId = 16 and iMainClientId = @iMainClientId and dtDateTimeOfLogin>=GETDATE()-30) ,1,'N'
+		
+	END
+
+  if exists(select * from t_TestDrive_AggregateAttribute where iMainClientId =@iMainClientId and vAttributeName='Intranet60')
+	BEGIN
+		update t_TestDrive_AggregateAttribute_Value set vValue =(select COUNT(*) from t_TestDrive_Member_LoggedinUserInformation where iApplicationTypeId = 4 and iMainClientId = @iMainClientId and dtDateTimeOfLogin>=GETDATE()-60 )
+		where uAggregateAttributeId in(select uAggregateAttributeId from t_TestDrive_AggregateAttribute where iMainClientId =@iMainClientId and vAttributeName='Intranet60')
+	END
+	ELSE
+	BEGIN
+		set @uAggregateAttributeId =newid()
+		set @uAggregateAttributeValueId =newid()
+		insert into t_TestDrive_AggregateAttribute (uAggregateAttributeId, iMainClientId, vAttributeName, cIsSingleValue, uUserId, dtModifiedOn, cIsExecuting)  
+		values(@uAggregateAttributeId,@iMainClientId,'Intranet60','Y','00000000-0000-0000-0000-000000000000',GETDATE(),'N')
+		insert into t_TestDrive_AggregateAttribute_Value (uAggregateAttributeValueId,uAggregateAttributeId,uParentAggregateAttributeValueId,vObjectId,vValue,iDisplayOrder,cHasLabel)  
+		select @uAggregateAttributeValueId,@uAggregateAttributeId,null,null,(select COUNT(*) from t_TestDrive_Member_LoggedinUserInformation where iApplicationTypeId = 4 and iMainClientId = @iMainClientId and dtDateTimeOfLogin>=GETDATE()-60) ,1,'N'
+		
+	END
+
+	if exists(select * from t_TestDrive_AggregateAttribute where iMainClientId =@iMainClientId and vAttributeName='Teacher60')
+	BEGIN
+		update t_TestDrive_AggregateAttribute_Value set vValue =(select COUNT(*) from t_TestDrive_Member_LoggedinUserInformation where iApplicationTypeId = 1 and iMainClientId = @iMainClientId and dtDateTimeOfLogin>=GETDATE()-60 )
+		where uAggregateAttributeId in(select uAggregateAttributeId from t_TestDrive_AggregateAttribute where iMainClientId =@iMainClientId and vAttributeName='Teacher60')
+	END
+	ELSE
+	BEGIN
+		set @uAggregateAttributeId =newid()
+		set @uAggregateAttributeValueId =newid()
+		insert into t_TestDrive_AggregateAttribute (uAggregateAttributeId, iMainClientId, vAttributeName, cIsSingleValue, uUserId, dtModifiedOn, cIsExecuting)  
+		values(@uAggregateAttributeId,@iMainClientId,'Teacher60','Y','00000000-0000-0000-0000-000000000000',GETDATE(),'N')
+		insert into t_TestDrive_AggregateAttribute_Value (uAggregateAttributeValueId,uAggregateAttributeId,uParentAggregateAttributeValueId,vObjectId,vValue,iDisplayOrder,cHasLabel)  
+		select @uAggregateAttributeValueId,@uAggregateAttributeId,null,null,(select COUNT(*) from t_TestDrive_Member_LoggedinUserInformation where iApplicationTypeId = 1 and iMainClientId = @iMainClientId and dtDateTimeOfLogin>=GETDATE()-60) ,1,'N'
+		
+	END
+
+	if exists(select * from t_TestDrive_AggregateAttribute where iMainClientId =@iMainClientId and vAttributeName='School60')
+	BEGIN
+		update t_TestDrive_AggregateAttribute_Value set vValue =(select COUNT(*) from t_TestDrive_Member_LoggedinUserInformation where iApplicationTypeId = 6 and iMainClientId = @iMainClientId and dtDateTimeOfLogin>=GETDATE()-60 )
+		where uAggregateAttributeId in(select uAggregateAttributeId from t_TestDrive_AggregateAttribute where iMainClientId =@iMainClientId and vAttributeName='School60')
+	END
+	ELSE
+	BEGIN
+		set @uAggregateAttributeId =newid()
+		set @uAggregateAttributeValueId =newid()
+		insert into t_TestDrive_AggregateAttribute (uAggregateAttributeId, iMainClientId, vAttributeName, cIsSingleValue, uUserId, dtModifiedOn, cIsExecuting)  
+		values(@uAggregateAttributeId,@iMainClientId,'School60','Y','00000000-0000-0000-0000-000000000000',GETDATE(),'N')
+		insert into t_TestDrive_AggregateAttribute_Value (uAggregateAttributeValueId,uAggregateAttributeId,uParentAggregateAttributeValueId,vObjectId,vValue,iDisplayOrder,cHasLabel)  
+		select @uAggregateAttributeValueId,@uAggregateAttributeId,null,null,(select COUNT(*) from t_TestDrive_Member_LoggedinUserInformation where iApplicationTypeId = 6 and iMainClientId = @iMainClientId and dtDateTimeOfLogin>=GETDATE()-60) ,1,'N'
+		
+	END
+
+		if exists(select * from t_TestDrive_AggregateAttribute where iMainClientId =@iMainClientId and vAttributeName='Pupil60')
+	BEGIN
+		update t_TestDrive_AggregateAttribute_Value set vValue =(select COUNT(*) from t_TestDrive_Member_LoggedinUserInformation where iApplicationTypeId = 16 and iMainClientId = @iMainClientId and dtDateTimeOfLogin>=GETDATE()-60 )
+		where uAggregateAttributeId in(select uAggregateAttributeId from t_TestDrive_AggregateAttribute where iMainClientId =@iMainClientId and vAttributeName='Pupil60')
+	END
+	ELSE
+	BEGIN
+		set @uAggregateAttributeId =newid()
+		set @uAggregateAttributeValueId =newid()
+		insert into t_TestDrive_AggregateAttribute (uAggregateAttributeId, iMainClientId, vAttributeName, cIsSingleValue, uUserId, dtModifiedOn, cIsExecuting)  
+		values(@uAggregateAttributeId,@iMainClientId,'Pupil60','Y','00000000-0000-0000-0000-000000000000',GETDATE(),'N')
+		insert into t_TestDrive_AggregateAttribute_Value (uAggregateAttributeValueId,uAggregateAttributeId,uParentAggregateAttributeValueId,vObjectId,vValue,iDisplayOrder,cHasLabel)   
+		select @uAggregateAttributeValueId,@uAggregateAttributeId,null,null,(select COUNT(*) from t_TestDrive_Member_LoggedinUserInformation where iApplicationTypeId = 16 and iMainClientId = @iMainClientId and dtDateTimeOfLogin>=GETDATE()-60) ,1,'N'
+		
+	END
+
+
+	if exists(select * from t_TestDrive_AggregateAttribute where iMainClientId =@iMainClientId and vAttributeName='Intranet90')
+	BEGIN
+		update t_TestDrive_AggregateAttribute_Value set vValue =(select COUNT(*) from t_TestDrive_Member_LoggedinUserInformation where iApplicationTypeId = 4 and iMainClientId = @iMainClientId and dtDateTimeOfLogin>=GETDATE()-90 )
+		where uAggregateAttributeId in(select uAggregateAttributeId from t_TestDrive_AggregateAttribute where iMainClientId =@iMainClientId and vAttributeName='Intranet90')
+	END
+	ELSE
+	BEGIN
+		set @uAggregateAttributeId =newid()
+		set @uAggregateAttributeValueId =newid()
+		insert into t_TestDrive_AggregateAttribute (uAggregateAttributeId, iMainClientId, vAttributeName, cIsSingleValue, uUserId, dtModifiedOn, cIsExecuting)  
+		values(@uAggregateAttributeId,@iMainClientId,'Intranet90','Y','00000000-0000-0000-0000-000000000000',GETDATE(),'N')
+		insert into t_TestDrive_AggregateAttribute_Value (uAggregateAttributeValueId,uAggregateAttributeId,uParentAggregateAttributeValueId,vObjectId,vValue,iDisplayOrder,cHasLabel)  
+		select @uAggregateAttributeValueId,@uAggregateAttributeId,null,null,(select COUNT(*) from t_TestDrive_Member_LoggedinUserInformation where iApplicationTypeId = 4 and iMainClientId = @iMainClientId and dtDateTimeOfLogin>=GETDATE()-90) ,1,'N'
+		
+	END
+	if exists(select * from t_TestDrive_AggregateAttribute where iMainClientId =@iMainClientId and vAttributeName='Teacher90')
+	BEGIN
+		update t_TestDrive_AggregateAttribute_Value set vValue =(select COUNT(*) from t_TestDrive_Member_LoggedinUserInformation where iApplicationTypeId = 1 and iMainClientId = @iMainClientId and dtDateTimeOfLogin>=GETDATE()-90 )
+		where uAggregateAttributeId in(select uAggregateAttributeId from t_TestDrive_AggregateAttribute where iMainClientId =@iMainClientId and vAttributeName='Teacher90')
+	END
+	ELSE
+	BEGIN
+		set @uAggregateAttributeId =newid()
+		set @uAggregateAttributeValueId =newid()
+		insert into t_TestDrive_AggregateAttribute (uAggregateAttributeId, iMainClientId, vAttributeName, cIsSingleValue, uUserId, dtModifiedOn, cIsExecuting)  
+		values(@uAggregateAttributeId,@iMainClientId,'Teacher90','Y','00000000-0000-0000-0000-000000000000',GETDATE(),'N')
+		insert into t_TestDrive_AggregateAttribute_Value (uAggregateAttributeValueId,uAggregateAttributeId,uParentAggregateAttributeValueId,vObjectId,vValue,iDisplayOrder,cHasLabel)   
+		select @uAggregateAttributeValueId,@uAggregateAttributeId,null,null,(select COUNT(*) from t_TestDrive_Member_LoggedinUserInformation where iApplicationTypeId = 1 and iMainClientId = @iMainClientId and dtDateTimeOfLogin>=GETDATE()-90) ,1,'N'
+		
+	END
+	if exists(select * from t_TestDrive_AggregateAttribute where iMainClientId =@iMainClientId and vAttributeName='School90')
+	BEGIN
+		update t_TestDrive_AggregateAttribute_Value set vValue =(select COUNT(*) from t_TestDrive_Member_LoggedinUserInformation where iApplicationTypeId = 6 and iMainClientId = @iMainClientId and dtDateTimeOfLogin>=GETDATE()-90 )
+		where uAggregateAttributeId in(select uAggregateAttributeId from t_TestDrive_AggregateAttribute where iMainClientId =@iMainClientId and vAttributeName='School90')
+	END
+	ELSE
+	BEGIN
+		set @uAggregateAttributeId =newid()
+		set @uAggregateAttributeValueId =newid()
+		insert into t_TestDrive_AggregateAttribute (uAggregateAttributeId, iMainClientId, vAttributeName, cIsSingleValue, uUserId, dtModifiedOn, cIsExecuting)  
+		values(@uAggregateAttributeId,@iMainClientId,'School90','Y','00000000-0000-0000-0000-000000000000',GETDATE(),'N')
+		insert into t_TestDrive_AggregateAttribute_Value (uAggregateAttributeValueId,uAggregateAttributeId,uParentAggregateAttributeValueId,vObjectId,vValue,iDisplayOrder,cHasLabel)  
+		select @uAggregateAttributeValueId,@uAggregateAttributeId,null,null,(select COUNT(*) from t_TestDrive_Member_LoggedinUserInformation where iApplicationTypeId =6 and iMainClientId = @iMainClientId and dtDateTimeOfLogin>=GETDATE()-90) ,1,'N'
+		
+	END
+		if exists(select * from t_TestDrive_AggregateAttribute where iMainClientId =@iMainClientId and vAttributeName='Pupil90')
+	BEGIN
+		update t_TestDrive_AggregateAttribute_Value set vValue =(select COUNT(*) from t_TestDrive_Member_LoggedinUserInformation where iApplicationTypeId = 16 and iMainClientId = @iMainClientId and dtDateTimeOfLogin>=GETDATE()-90 )
+		where uAggregateAttributeId in(select uAggregateAttributeId from t_TestDrive_AggregateAttribute where iMainClientId =@iMainClientId and vAttributeName='Pupil90')
+	END
+	ELSE
+	BEGIN
+		set @uAggregateAttributeId =newid()
+		set @uAggregateAttributeValueId =newid()
+		insert into t_TestDrive_AggregateAttribute (uAggregateAttributeId, iMainClientId, vAttributeName, cIsSingleValue, uUserId, dtModifiedOn, cIsExecuting)  
+		values(@uAggregateAttributeId,@iMainClientId,'Pupil90','Y','00000000-0000-0000-0000-000000000000',GETDATE(),'N')
+		insert into t_TestDrive_AggregateAttribute_Value (uAggregateAttributeValueId,uAggregateAttributeId,uParentAggregateAttributeValueId,vObjectId,vValue,iDisplayOrder,cHasLabel)  
+		select @uAggregateAttributeValueId,@uAggregateAttributeId,null,null,(select COUNT(*) from t_TestDrive_Member_LoggedinUserInformation where iApplicationTypeId =16 and iMainClientId = @iMainClientId and dtDateTimeOfLogin>=GETDATE()-90) ,1,'N'
+		
+	END
+	SELECT uUserId,iApplicationTypeId,vIPAddress,dtDateTimeOfLogin,vAdditionalInformation FROM t_TestDrive_Member_LoggedinUserInformation         
+	WHERE uUserId = @uUserId AND iApplicationTypeId = @iApplicationTypeId AND cIsManualLogin = 'Y'
+    ORDER BY dtDateTimeOfLogin DESC     
+
+END
+
+GO
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ALTER ProcEDURE [dbo].[Proc_TestDrive_Language_SaveLanguageForApplicationType]       
+(                 
+   @strDataXML ntext,          
+   @iMainClientId int         
+)                
+AS            
+BEGIN            
+/********************************************************************************************              
+            
+Created By:  suman      
+Created Date: 26.02.2010            
+Description: Saves the languge for respective ApplicationType and MainClientId.        
+            
+Modified By: Arvind K    
+Modified Date: 11/08/2020      
+Description: Included column list for Insert statements             
+            
+********************************************************************************************/              
+   Declare @XmlDoc as int,           
+     @ApplicationTypeId as int ,      
+  @iLanguageId as int       
+   EXEC sp_xml_preparedocument @XmlDoc OUTPUT, @strDataXML        
+        
+   /***********Deletes the all the entries where @MainClientId and ApplicationTypeId not in the Xml************/        
+           
+   Delete From t_Framework_Language_MainClient        
+      Where iMainClientId = @iMainClientId AND        
+         iApplicationTypeId in (Select ApplicationTypeId         
+    From OpenXML(@XmlDoc, 'Input/ApplicationType/LanguageDetail')        
+    With (ApplicationTypeId int './@ApplicationTypeId'))                 
+           
+   /***********Save data from XML***********/        
+        
+   Declare Save_cursor cursor        
+   For Select ApplicationTypeId,LanguageId         
+   From OpenXML(@XmlDoc, 'Input/ApplicationType/LanguageDetail')        
+   With (ApplicationTypeId int './@ApplicationTypeId',LanguageId int './@LanguageId')        
+           
+   Open Save_cursor            
+   Fetch Next From Save_cursor Into @ApplicationTypeId,@iLanguageId        
+        
+   While( @@FETCH_STATUS <> -1 )        
+   Begin        
+    If(@ApplicationTypeId > 0)        
+      Begin        
+     If ( not exists ( Select * From t_Framework_Language_MainClient                
+             Where iMainClientId = @iMainClientId AND        
+             iApplicationTypeId = @ApplicationTypeId and iLanguageId = @iLanguageId) )                                                 
+         Begin                           
+          Insert  Into t_Framework_Language_MainClient(iLanguageId, iMainClientId, iApplicationTypeId) Values (                
+    @iLanguageId,      
+              @iMainClientId,                
+              @ApplicationTypeId           
+            )                        
+         End                        
+             
+      End        
+    Fetch Next From Save_cursor Into @ApplicationTypeId,@iLanguageId        
+   End                        
+   CLOSE Save_cursor                                
+   DEALLOCATE Save_cursor                                       
+   EXEC sp_xml_removedocument @XmlDoc      
+SELECT * FROM  t_Framework_Language_MainClient  Where iMainClientId = @iMainClientId        
+                   
+END 
+
+go
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ALTER ProcEDURE [dbo].Proc_Framework_Navigation_PinToStartMenu      
+(      
+ @uUserId UNIQUEIDENTIFIER,      
+ @iNavigationId INT      
+)      
+AS      
+Begin      
+/********************************************************************************************      
+        
+  Created By: Arvind Sharma      
+  Created Date: 25.03.2009      
+  Description:       
+  Modified By:       
+  Modified Date:       
+  Description:       
+      
+********************************************************************************************/      
+DECLARE @intDisplayOrder AS INT      
+IF not exists(select * from t_Framework_Navigation_StartNavigation where iNavigationId = @iNavigationId)    
+BEGIN    
+SELECT @intDisplayOrder = isnull(max(iDisplayOrder),0)+1 from t_Framework_Navigation_StartNavigation      
+INSERT INTO t_Framework_Navigation_StartNavigation values(@iNavigationId,@uUserId,@intDisplayOrder)      
+End    
+End 
+
+go
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ALTER Procedure [Proc_TestDrive_XmlConfiguration_SaveXmlConfigurationValue]         
+(                                      
+  @uXMLConfigurationId uniqueidentifier,                              
+  @iMainClientId INT ,        
+  @iStateId INT ,      
+  @vValue nvarchar(max)
+                                
+)                                      
+AS                                       
+BEGIN                                      
+/********************************************************************************************                                      
+ Created By:  Arvind Sharma                                      
+ Create Date:  19.08.2014                                      
+ Description:                                       
+
+ Modified By: Arvind K                                     
+ Modified Date: 12/08/2020                                   
+ Description: Included column list for Insert statement                                      
+
+********************************************************************************************/                                      
+   if exists(SELECT * FROM t_Framework_XMLConfiguration where iMainClientId =0 AND uXMLConfigurationId=@uXMLConfigurationId)
+	   BEGIN
+			insert into t_Framework_XMLConfiguration (uXMLConfigurationId, iMainClientId, iConfigurationFileId, vParentKey, vSubParentKey, vKey, vValue, cIsEditable, iStateId)
+			select newid(),@iMainClientId,iConfigurationFileId,vParentKey,vSubParentKey,vKey,@vValue,'Y' ,@iStateId
+			from t_Framework_XMLConfiguration where uXMLConfigurationId=@uXMLConfigurationId
+	   END
+   ELSE
+
+	   BEGIN
+			update t_Framework_XMLConfiguration set vValue =@vValue where uXMLConfigurationId =@uXMLConfigurationId and iMainClientId =@iMainClientId
+	   END
+	   select * from t_Framework_XMLConfiguration where uXMLConfigurationId =@uXMLConfigurationId
+END
+
+go
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ALTER Procedure Proc_Framework_Profile_SaveUserPreferenceDetails(
+@strXml ntext
+)
+as 
+
+/********************************************************************************************              
+
+Created By:  Arun Menon     
+Created Date: 27/11/2015      
+Description:  New proc to insert UserPrefernce Details for  Extranet Profile
+
+ Modified By: Arvind K                                     
+ Modified Date: 12/08/2020                                   
+ Description: Included column list for Insert Statement            
+
+********************************************************************************************/  
+
+BEGIN
+
+DECLARE @strmainxml XML = @strXml;
+DECLARE @uUserPreferenceId uniqueidentifier;
+
+Select @uUserPreferenceId=col.value('(@uUserPreferenceId)[1]', 'uniqueidentifier') FROM @strmainxml.nodes('/ExtranetProfile/UserPreferences/UserPreference') tab(col);
+
+   IF(@uUserPreferenceId= '00000000-0000-0000-0000-000000000000')
+     Begin
+       Set @uUserPreferenceId= newid();
+        INSERT INTO t_Framework_UserPreference (uUserPreferenceId,	iApplicationTypeId,	uUserId,	iWindowHeight,	iWindowWidth,	iGridSize,	iLanguageId,	iTreeWidth,	cUseWindowPopup,	uNavigationSkinId,	uBackgroundThemeId)
+          SELECT 
+             @uUserPreferenceId,
+             col.value('(@iApplicationTypeId)[1]', 'int'),
+             col.value('(@uUserId)[1]', 'uniqueidentifier'),
+             col.value('(@iWindowHeight)[1]', 'int'),
+			 col.value('(@iWindowWidth)[1]', 'int'),
+             col.value('(@iGridSize)[1]', 'int'),
+             col.value('(@iLanguageId)[1]', 'int'),
+			 col.value('(@iTreeWidth)[1]', 'int'),
+             col.value('(@cUseWindowPopup)[1]', 'char(1)'),
+             col.value('(@uNavigationSkinId)[1]', 'uniqueidentifier'),
+			 col.value('(@uBackgroundThemeId)[1]', 'uniqueidentifier')
+		 FROM @strmainxml.nodes('/ExtranetProfile/UserPreferences/UserPreference') tab(col);
+      End
+   ELSE
+     Begin
+       UPDATE t_Framework_UserPreference set uNavigationSkinId=col.value('(@uNavigationSkinId)[1]', 'uniqueidentifier'),uBackgroundThemeId=col.value('(@uBackgroundThemeId)[1]', 'uniqueidentifier')
+	   FROM @strmainxml.nodes('/ExtranetProfile/UserPreferences/UserPreference') tab(col)
+	   where uUserPreferenceId=col.value('(@uUserPreferenceId)[1]', 'uniqueidentifier');
+    End
+
+	 Select * from t_Framework_UserPreference where uUserPreferenceId=@uUserPreferenceId;
+
+END
+
+go
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ALTER Procedure Proc_Framework_Profile_SaveBackGroundThemeDetails(
+@strXml ntext
+)
+as 
+
+/********************************************************************************************              
+
+Created By:  Arun Menon     
+Created Date: 27/11/2015      
+Description:  New proc to insert BackGround Theme Details for  Extranet Profile
+
+ Modified By: Arvind K                                     
+ Modified Date: 12/08/2020                                   
+ Description: Included column list for Insert Statement             
+
+********************************************************************************************/  
+
+BEGIN
+
+DECLARE @strmainxml XML = @strXml;
+DECLARE @uBackgroundThemeId uniqueidentifier;
+
+Select @uBackgroundThemeId=col.value('(@uBackgroundThemeId)[1]', 'uniqueidentifier') FROM @strmainxml.nodes('/ExtranetProfile/BackGroundThemes/BackGroundTheme') tab(col);
+  IF(@uBackgroundThemeId= '00000000-0000-0000-0000-000000000000')
+    Begin
+      Set @uBackgroundThemeId= newid();
+      INSERT INTO t_Framework_UserPreference_BackgroundTheme (uBackgroundThemeId,iMainClientId,uUserId,vBackgroundFileName,vBackgroundFileSize,vBackgroundFileVersion,vBackgroundFileType,vBackgroundColor,vFontColor) 
+          SELECT 
+             @uBackgroundThemeId,
+             col.value('(@iMainClientId)[1]', 'int'),
+             col.value('(@uUserId)[1]', 'uniqueidentifier'),
+             col.value('(@vBackgroundFileName)[1]', 'nvarchar(500)'),
+			 col.value('(@vBackgroundFileSize)[1]', 'nvarchar(10)'),
+             col.value('(@vBackgroundFileVersion)[1]', 'nvarchar(10)'),
+             col.value('(@vBackgroundFileType)[1]', 'nvarchar(10)'),
+			 col.value('(@vBackgroundColor)[1]', 'nvarchar(50)'),
+             col.value('(@vFontColor)[1]', 'nvarchar(50)')
+           FROM @strmainxml.nodes('/ExtranetProfile/BackGroundThemes/BackGroundTheme') tab(col);
+     
+    End
+ ELSE
+     Begin
+       UPDATE t_Framework_UserPreference_BackgroundTheme set vBackgroundFileName=col.value('(@vBackgroundFileName)[1]', 'nvarchar(500)'),vBackgroundFileSize= col.value('(@vBackgroundFileSize)[1]', 'nvarchar(10)'),
+	   vBackgroundFileVersion=col.value('(@vBackgroundFileVersion)[1]', 'nvarchar(10)'),vBackgroundFileType= col.value('(@vBackgroundFileType)[1]', 'nvarchar(10)'),
+	   vBackgroundColor=col.value('(@vBackgroundColor)[1]', 'nvarchar(50)'),vFontColor= col.value('(@vFontColor)[1]', 'nvarchar(50)')
+	   FROM @strmainxml.nodes('/ExtranetProfile/BackGroundThemes/BackGroundTheme') tab(col)
+	   where uBackgroundThemeId=col.value('(@uBackgroundThemeId)[1]', 'uniqueidentifier');
+    End
+
+ Select * from t_Framework_UserPreference_BackgroundTheme where uBackgroundThemeId=@uBackgroundThemeId;
+
+END
+
+go
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ ALTER Procedure [Proc_TestDrive_MainClientApplicationType_SaveMainClientApplicationTypeData]      
+(           
+   @strDataXML ntext,    
+   @iMainClientId int   
+)          
+AS      
+BEGIN      
+/********************************************************************************************        
+      
+Created By:  Sikkandar Basha        
+Created Date: 11.06.2008      
+Description: Saves the MainClientApplicationType Details with Respective MainClientId.  
+      
+ Modified By: Arvind K                                       
+ Modified Date: 12/08/2020                                     
+ Description: Included column list for Insert Statement      
+      
+********************************************************************************************/        
+   Declare @XmlDoc as int,     
+     @ApplicationTypeId as int  
+   EXEC sp_xml_preparedocument @XmlDoc OUTPUT, @strDataXML  
+  
+   /***********Deletes the all the entries where @MainClientId and ApplicationTypeId not in the Xml************/  
+     
+   Delete From t_Framework_MainClient_ApplicationType  
+      Where iMainClientId = @iMainClientId AND  
+         iApplicationTypeId not in (Select ApplicationTypeId   
+    From OpenXML(@XmlDoc, 'Data/ApplicationTypes/ApplicationTypeId')  
+    With (ApplicationTypeId int '.'))           
+     
+   /***********Save data from XML***********/  
+  
+   Declare Save_cursor cursor  
+   For Select ApplicationTypeId   
+   From OpenXML(@XmlDoc, 'Data/ApplicationTypes/ApplicationTypeId')  
+   With (ApplicationTypeId int '.')  
+     
+   Open Save_cursor      
+   Fetch Next From Save_cursor Into @ApplicationTypeId  
+  
+   While( @@FETCH_STATUS <> -1 )  
+   Begin  
+    If(@ApplicationTypeId > 0)  
+      Begin  
+     If ( not exists ( Select * From t_Framework_MainClient_ApplicationType          
+             Where iMainClientId = @iMainClientId AND  
+             iApplicationTypeId = @ApplicationTypeId ) )                                           
+         Begin                     
+          Insert  Into t_Framework_MainClient_ApplicationType(iMainClientId, iApplicationTypeId, vIPLockList)  
+          Values (          
+              @iMainClientId,          
+              @ApplicationTypeId,null  
+            )                  
+         End                  
+       
+      End  
+    Fetch Next From Save_cursor Into @ApplicationTypeId  
+   End                  
+   CLOSE Save_cursor                          
+   DEALLOCATE Save_cursor                                 
+   EXEC sp_xml_removedocument @XmlDoc              
+END   
+ 
+ go
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ALTER Procedure [dbo].[proc_TestDrive_Deployement_CreateMainClientConfiguration]                
+(                
+ @vMainClientName nvarchar(200),              
+ @vWebsiteName nvarchar(200)   ,      
+ @iMainClientConfigurationId int,       
+ @iSchoolClientConfigurationId int,      
+ @iTeacherClientConfigurationId int,      
+ @iIntranetClientConfigurationId int,      
+ @iTestApplicationClientConfigurationId int           
+)                
+AS                
+Begin                
+/********************************************************************************************                
+                  
+  Created By: suman                
+  Created Date: 15.05.2009                
+  Description: Creates MainClientConfiguration                
+  Modified By: <Modified By,,>                
+  Modified Date: <Modified Date,,>                
+  Description: <AlterDescription,,>                
+                
+********************************************************************************************/                
+declare @iMainClientId int;                
+declare @TeacherClientId int;              
+declare @SchoolClientId int;              
+declare @IntranetClientId int;              
+declare @TestApplicationClientId int;              
+              
+/*Check if already the mainclient name exists else insert the main client details*/              
+If ( not exists ( select * from t_Framework_MainClient_Data where vMainClientName = @vMainClientName))              
+ begin              
+  insert into t_Framework_MainClient              
+    (vMainClientIdentifier,vManagerName,vStreet,iZIPCode,vTown,vPhone,vEmail,iMainClientConfigurationId)                
+  values(@vMainClientName,@vMainClientName,'TestStreet',0,'TestTown','9886011613','suman@arcadix.com',@iMainClientConfigurationId)                
+                
+  /*Get the mainclientid for the new mainclient*/              
+  select @iMainClientId =iMainClientId  from t_Framework_MainClient where vMainClientIdentifier=@vMainClientName and                
+  vManagerName=@vMainClientName              
+                  
+  /*insert the new mainclient name for the new mainclientid*/              
+  insert into t_Framework_MainClient_Data(iMainClientId,vMainClientName,iLanguageId) values(@iMainClientId,@vMainClientName,3)              
+                
+  /*Extranet Teacher Client details Insertion*/              
+  insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,cIsForFusion)              
+        values(@iTeacherClientConfigurationId,@iMainClientId,1,@vMainClientName+'Teacher','Teacher','N')              
+              
+  /*select the new Teacher client id for the new mainclient*/              
+  select @TeacherClientId=iClientId from t_Framework_Client where iMainClientId=@iMainClientId and iApplicationTypeId=1              
+              
+  /*Extranet school Client details Insertion*/              
+  insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle)              
+        values(@iSchoolClientConfigurationId,@iMainClientId,6,@vMainClientName+'School','School')              
+  /*select the new school client id for the new mainclient*/              
+  select @SchoolClientId=iClientId from t_Framework_Client where iMainClientId=@iMainClientId and iApplicationTypeId=6              
+              
+  /*Intranet Client details Insertion*/              
+  insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle)              
+        values(@iIntranetClientConfigurationId,@iMainClientId,4,@vMainClientName+'Intranet','Intranet')              
+  /*select the new intranet client id for the new mainclient*/              
+  select @IntranetClientId=iClientId from t_Framework_Client where iMainClientId=@iMainClientId and iApplicationTypeId=4              
+              
+  /*TestApplication Client  details Insertion*/              
+  insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle)              
+        values(@iTestApplicationClientConfigurationId,@iMainClientId,2,@vMainClientName+'TestApplication','TestApplicationLogin')              
+  /*select the new test applicationclient id for the new mainclient*/              
+  select @TestApplicationClientId=iClientId from t_Framework_Client where iMainClientId=@iMainClientId and iApplicationTypeId=2              
+                
+ /*insert host url details for each client into the table t_Framework_Client_HostURL */              
+  insert into t_Framework_Client_HostURL(iClientId,vHostURL,cIsDeleted,iThemeId,cIsForFusion)              
+          values(@TeacherClientId,@vWebsiteName+'/'+@vMainClientName+'ExtranetTeacher','N',NULL,'N')              
+  insert into t_Framework_Client_HostURL(iClientId,vHostURL,cIsDeleted,iThemeId,cIsForFusion)              
+          values(@SchoolClientId,@vWebsiteName+'/'+@vMainClientName+'ExtranetSchool','N',NULL,'N')              
+  insert into t_Framework_Client_HostURL(iClientId,vHostURL,cIsDeleted,iThemeId,cIsForFusion)              
+          values(@IntranetClientId,@vWebsiteName+'/'+@vMainClientName+'Intranet','N',NULL,'N')              
+  insert into t_Framework_Client_HostURL(iClientId,vHostURL,cIsDeleted,iThemeId,cIsForFusion)              
+          values(@TestApplicationClientId,@vWebsiteName+'/'+@vMainClientName+'Test','N',NULL,'N')              
+                
+  /*insert clientid to corresponding roleid for each client into the table t_Framework_Client_Role*/              
+  insert into t_Framework_Client_Role(iClientId,iRoleId)values(@TeacherClientId,101125)            
+  insert into t_Framework_Client_Role(iClientId,iRoleId)values(@SchoolClientId,101124)              
+  insert into t_Framework_Client_Role(iClientId,iRoleId)values(@IntranetClientId,101034)            
+  /*assign new role for generic certificate teacher*/            
+  insert into t_Framework_Client_Role(iClientId,iRoleId)values(@TeacherClientId,101128)              
+                 
+  /*insert Mainclientid for each applicationTypeId into the table t_Framework_MainClient_ApplicationType*/              
+  insert into t_Framework_MainClient_ApplicationType(iMainClientId,iApplicationTypeId) values(@iMainClientId,1)              
+  insert into t_Framework_MainClient_ApplicationType(iMainClientId,iApplicationTypeId) values(@iMainClientId,6)              
+  insert into t_Framework_MainClient_ApplicationType(iMainClientId,iApplicationTypeId) values(@iMainClientId,4)              
+  insert into t_Framework_MainClient_ApplicationType(iMainClientId,iApplicationTypeId) values(@iMainClientId,2)              
+              
+ end               
+else              
+ begin              
+  print 'MainClientName already exists'              
+ end               
+ select M.iMainClientId,            
+  M.vEmail,              
+  MD.vMainCLientName,       
+  HU.vHostURL,             
+  C.iClientId,              
+  C.vClientName              
+ from t_Framework_MainClient M               
+ inner join t_Framework_MainClient_Data MD on M.iMainClientId=MD.iMainClientId                
+ inner join t_Framework_Client C on M.iMainClientId=C.iMainClientId                
+ inner join t_Framework_Client_HostURL HU on C.iClientId=HU.iClientId              
+ where M.iMainClientId=@iMainClientId and C.cIsForFusion='N' and HU.cIsForFusion='N'             
+               
+End 
+
+go
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ALTER ProcEDURE [dbo].[JProc_TestDrive_GateKeeper_GetCurrentURL]            
+(            
+ @iMainClientId int,            
+ @vTargetType nvarchar(200)            
+)            
+AS            
+Begin              
+/********************************************************************************************              
+            
+Created By: Sasikumar Balakrishnan              
+Created Date: 22.01.2008              
+Description:             
+              
+Modified By: Gopi               
+Modified Date: 20.05.2008              
+Description:Modified for New version               
+            
+Modified By: Sendil            
+Modified Date: 30.10.2009            
+Description:iTesturlId - iGateKeeperId, vTestUrl - vHostName, column names are renamed    
+  
+Modified By:   Arvind K                   
+Modified Date:  01.09.2020      
+Description:  Modified proc to return data based on cIsForFusion          
+********************************************************************************************/              
+Declare @uTestURLId uniqueidentifier,            
+    @iNoOfTimeShown int,            
+    @iNumberOfTimeToBeShown int,            
+ @vCurrentURL nvarchar(max),            
+ @vQueryString nvarchar(max),      
+ @vApplName NVARCHAR(MAX)            
+            
+if Exists ( Select  uApplicationServerId            
+            from    t_Framework_ApplicationServers            
+            where   cIsCurrentURL = 'Y' and cIsActive='Y' and Isnull(iNumberOfTimeShown,0) < iNumberOfTimeToBeShown       
+     and iMainClientId=@iMainClientId and Ltrim(RTrim(vTargetType)) = @vTargetType and (cIsForFusion IS NULL or cIsForFusion = 'N') )     
+Begin              
+            
+        Select top 1 @uTestURLId = uApplicationServerId,            
+                @iNoOfTimeShown = Isnull(iNumberOfTimeShown,0),            
+                @iNumberOfTimeToBeShown = iNumberOfTimeToBeShown,            
+    @vCurrentURL = vHostName, @vQueryString=vQueryString, @vApplName = vApplicationName           
+        from    t_Framework_ApplicationServers            
+        where   cIsCurrentURL = 'Y' and cIsActive='Y'            
+                and Isnull(iNumberOfTimeShown,0) < iNumberOfTimeToBeShown  and iMainClientId=@iMainClientId            
+    and Ltrim(RTrim(vTargetType)) = @vTargetType  and (cIsForFusion IS NULL or cIsForFusion = 'N')          
+order by iOrder            
+        print @iNoOfTimeShown            
+--Condition 2               
+        Update  t_Framework_ApplicationServers            
+        set     iNumberOfTimeShown = @iNoOfTimeShown + 1,iUrlDisplayCounter = isnull(iUrlDisplayCounter,0)+1            
+        where   cIsCurrentURL = 'Y' and cIsActive='Y'            
+                and  uApplicationServerId = @uTestURLId and iMainClientId=@iMainClientId and Ltrim(RTrim(vTargetType)) = @vTargetType    
+    and (cIsForFusion IS NULL or cIsForFusion = 'N')          
+                           
+    End              
+Else             
+    Begin              
+--Condition 1               
+        if Exists ( Select uApplicationServerId            
+                    from    t_Framework_ApplicationServers            
+                    where   cIsCurrentURL = 'N' and iMainClientId=@iMainClientId and cIsActive='Y'   
+       and Ltrim(RTrim(vTargetType)) = @vTargetType and (cIsForFusion IS NULL or cIsForFusion = 'N') )       
+            Begin              
+                Select top 1            
+                        @uTestURLId = uApplicationServerId,            
+                        @vCurrentURL = vHostName,            
+                        @iNoOfTimeShown = Isnull(iNumberOfTimeShown,0), @vQueryString=vQueryString, @vApplName = vApplicationName      
+                from    t_Framework_ApplicationServers            
+                where   cIsCurrentURL = 'N' and iMainClientId=@iMainClientId and cIsActive='Y' and Ltrim(RTrim(vTargetType)) = @vTargetType and (cIsForFusion IS NULL or cIsForFusion = 'N')
+						            
+    order by iOrder            
+            
+                Update  t_Framework_ApplicationServers            
+                set     cIsCurrentURL = 'Y',            
+ iNumberOfTimeShown = @iNoOfTimeShown + 1            
+    ,iUrlDisplayCounter = isnull(iUrlDisplayCounter,0)+1            
+                where   uApplicationServerId = @uTestURLId  and iMainClientId=@iMainClientId and cIsActive='Y' and (cIsForFusion IS NULL or cIsForFusion = 'N')        
+    and Ltrim(RTrim(vTargetType)) = @vTargetType            
+            End              
+        Else             
+            Begin              
+--Conditin 3 Reset              
+               Update  t_Framework_ApplicationServers            
+                set     cIsCurrentURL = 'N',            
+                        iNumberOfTimeShown = 0  where iMainClientId=@iMainClientId and cIsActive='Y'  and (cIsForFusion IS NULL or cIsForFusion = 'N')          
+    and Ltrim(RTrim(vTargetType)) = @vTargetType            
+                Select top 1            
+@uTestURLId = uApplicationServerId,            
+                        @vCurrentURL = vHostName,            
+                        @iNoOfTimeShown = iNumberOfTimeShown, @vQueryString=vQueryString, @vApplName = vApplicationName            
+                from    t_Framework_ApplicationServers            
+                where   cIsCurrentURL = 'N' and iMainClientId=@iMainClientId and cIsActive='Y'  and (cIsForFusion IS NULL or cIsForFusion = 'N')         
+    and Ltrim(RTrim(vTargetType)) = @vTargetType            
+    order by iOrder              
+                Update  t_Framework_ApplicationServers            
+                set     cIsCurrentURL = 'Y',            
+                        iNumberOfTimeShown = @iNoOfTimeShown + 1            
+    ,iUrlDisplayCounter = isnull(iUrlDisplayCounter,0)+1            
+                where   uApplicationServerId = @uTestURLId  and iMainClientId=@iMainClientId and cIsActive='Y' and (cIsForFusion IS NULL or cIsForFusion = 'N')           
+    and Ltrim(RTrim(vTargetType)) = @vTargetType            
+            End               
+    End              
+            
+select( Select  @vCurrentURL  vCurrentURL, @vQueryString vQueryString, @vApplName vApplicationName  for json path, without_array_wrapper                  
+) as JSONResult                    
+End 
+
+go
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ALTER ProcEDURE [Proc_LoadDistribution_GetApplicationServerDetails]       
+      
+@iMainClientId int,      
+@vTarget nvarchar(max)      
+      
+AS      
+BEGIN       
+ /********************************************************************************************                      
+   Created By:   Arvind Sharma                   
+   Created Date:  02.12.2014      
+   Description:  Gets the Application server names      
+  
+   Modified By:   Arvind K                   
+   Modified Date:  01.09.2020      
+   Description:  Modified proc to return data based on cIsForFusion   
+********************************************************************************************/            
+if exists(Select * from [t_Framework_ApplicationServers] where iMainClientId =@iMainClientId and vTargetType =@vTarget and cIsForFusion <> 'Y')      
+BEGIN      
+ Select * from [t_Framework_ApplicationServers] where iMainClientId =@iMainClientId and vTargetType =@vTarget and (cIsForFusion IS NULL or cIsForFusion = 'N')     
+END      
+ELSE      
+BEGIN      
+ Select * from [t_Framework_ApplicationServers] where iMainClientId =0 and vTargetType =@vTarget  and (cIsForFusion IS NULL or cIsForFusion = 'N')    
+END      
+      
+END
+
+go
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ALTER ProcEDURE [dbo].[Proc_TestDrive_GateKeeper_GetCurrentURL]     
+(      
+ @iMainClientId int,      
+ @vTargetType nvarchar(200)      
+)      
+AS      
+Begin        
+/********************************************************************************************        
+      
+Created By: Sasikumar Balakrishnan        
+Created Date: 22.01.2008        
+Description:       
+        
+Modified By: Gopi         
+Modified Date: 20.05.2008        
+Description:Modified for New version         
+      
+Modified By: Sendil      
+Modified Date: 30.10.2009      
+Description:iTesturlId - iGateKeeperId, vTestUrl - vHostName, column names are renamed  
+  
+Modified By:   Arvind K                   
+Modified Date:  01.09.2020      
+Description:  Modified proc to return data based on cIsForFusion       
+********************************************************************************************/        
+    Declare @uTestURLId uniqueidentifier,      
+        @iNoOfTimeShown int,      
+        @iNumberOfTimeToBeShown int,      
+  @vCurrentURL nvarchar(max),      
+  @vQueryString nvarchar(max),    
+  @vApplicationName nvarchar(max)      
+      
+    if Exists ( Select  uApplicationServerId      
+                from    t_Framework_ApplicationServers      
+                where   cIsCurrentURL = 'Y' and cIsActive='Y'      
+                        and Isnull(iNumberOfTimeShown,0) < iNumberOfTimeToBeShown and iMainClientId=@iMainClientId   
+      and Ltrim(RTrim(vTargetType)) = @vTargetType and (cIsForFusion IS NULL or cIsForFusion = 'N'))       
+        Begin        
+      
+            Select top 1      
+     @uTestURLId = uApplicationServerId,      
+                    @iNoOfTimeShown = Isnull(iNumberOfTimeShown,0),      
+                    @iNumberOfTimeToBeShown = iNumberOfTimeToBeShown,      
+     @vCurrentURL = vHostName, @vQueryString=vQueryString ,@vApplicationName=vApplicationName    
+            from    t_Framework_ApplicationServers      
+            where   cIsCurrentURL = 'Y' and cIsActive='Y'      
+                    and Isnull(iNumberOfTimeShown,0) < iNumberOfTimeToBeShown  and iMainClientId=@iMainClientId      
+      and Ltrim(RTrim(vTargetType)) = @vTargetType and (cIsForFusion IS NULL or cIsForFusion = 'N')    
+   order by iOrder      
+            print @iNoOfTimeShown      
+--Condition 2         
+            Update  t_Framework_ApplicationServers      
+            set     iNumberOfTimeShown = @iNoOfTimeShown + 1,iUrlDisplayCounter = isnull(iUrlDisplayCounter,0)+1      
+            where   cIsCurrentURL = 'Y' and cIsActive='Y'      
+                    and  uApplicationServerId = @uTestURLId and iMainClientId=@iMainClientId and Ltrim(RTrim(vTargetType)) = @vTargetType and (cIsForFusion IS NULL or cIsForFusion = 'N')
+                     
+        End        
+    Else       
+        Begin        
+--Condition 1         
+            if Exists ( Select uApplicationServerId      
+                        from    t_Framework_ApplicationServers      
+                        where   cIsCurrentURL = 'N' and iMainClientId=@iMainClientId and cIsActive='Y'   
+      and Ltrim(RTrim(vTargetType)) = @vTargetType and (cIsForFusion IS NULL or cIsForFusion = 'N'))       
+                Begin        
+                    Select top 1      
+                            @uTestURLId = uApplicationServerId,      
+                            @vCurrentURL = vHostName,      
+                            @iNoOfTimeShown = Isnull(iNumberOfTimeShown,0), @vQueryString=vQueryString ,@vApplicationName=vApplicationName     
+                    from    t_Framework_ApplicationServers      
+                    where   cIsCurrentURL = 'N' and iMainClientId=@iMainClientId and cIsActive='Y'  and (cIsForFusion IS NULL or cIsForFusion = 'N')      
+        and Ltrim(RTrim(vTargetType)) = @vTargetType      
+       order by iOrder      
+      
+                    Update  t_Framework_ApplicationServers  
+                    set     cIsCurrentURL = 'Y',      
+                            iNumberOfTimeShown = @iNoOfTimeShown + 1      
+       ,iUrlDisplayCounter = isnull(iUrlDisplayCounter,0)+1      
+                    where   uApplicationServerId = @uTestURLId  and iMainClientId=@iMainClientId and cIsActive='Y'  and (cIsForFusion IS NULL or cIsForFusion = 'N')   
+        and Ltrim(RTrim(vTargetType)) = @vTargetType      
+                End        
+            Else       
+                Begin        
+--Conditin 3 Reset        
+                    Update  t_Framework_ApplicationServers      
+                    set     cIsCurrentURL = 'N',      
+                            iNumberOfTimeShown = 0  where iMainClientId=@iMainClientId and cIsActive='Y' and (cIsForFusion IS NULL or cIsForFusion = 'N')    
+        and Ltrim(RTrim(vTargetType)) = @vTargetType      
+                    Select top 1      
+                @uTestURLId = uApplicationServerId,      
+                            @vCurrentURL = vHostName,      
+                            @iNoOfTimeShown = iNumberOfTimeShown, @vQueryString=vQueryString ,@vApplicationName=vApplicationName     
+                    from    t_Framework_ApplicationServers      
+                    where   cIsCurrentURL = 'N' and iMainClientId=@iMainClientId and cIsActive='Y'   and (cIsForFusion IS NULL or cIsForFusion = 'N')   
+        and Ltrim(RTrim(vTargetType)) = @vTargetType      
+       order by iOrder        
+                    Update  t_Framework_ApplicationServers      
+                    set     cIsCurrentURL = 'Y',      
+                            iNumberOfTimeShown = @iNoOfTimeShown + 1      
+       ,iUrlDisplayCounter = isnull(iUrlDisplayCounter,0)+1      
+                    where   uApplicationServerId = @uTestURLId  and iMainClientId=@iMainClientId and cIsActive='Y'  and (cIsForFusion IS NULL or cIsForFusion = 'N')    
+       and Ltrim(RTrim(vTargetType)) = @vTargetType      
+                End         
+        End        
+      
+    Select  @vCurrentURL  vCurrentURL, @vQueryString vQueryString ,@vApplicationName vApplicationName    
+End 
+
+
+
+ALTER PROC [dbo].[JProc_Framework_Exception_GetExceptionDetailsForManClientAndApplication]      
+       
+(                
+ @iMainClientId int,    
+ @iApplicationTypeId int                
+)                
+AS                
+BEGIN                
+    
+/********************************************************************************************                    
+Created By:  Arvind Sharma                    
+Create Date:  24.11.2014     
+Description:  Get Exception Details by MainClient and ApplicationType      
+      
+    
+********************************************************************************************/                      
+     SELECT(SELECT     
+      uExceptionId,     
+      iMainClientId,    
+      iClientId,    
+      replace(vURL,'/','/ ') vURL,    
+      vMessage,    
+      vDescription,    
+      vBrowser,    
+      CONVERT(DATE,dtDateTime,102) [dtDateTime]    
+     
+     for json path , INCLUDE_NULL_VALUES , WITHOUT_ARRAY_WRAPPER     
+  ) as JSONResult  FROM  t_framework_Exception    
+     where CONVERT(DATE,dtDateTime,104) =  CONVERT(DATE,GETDATE()-1,104)     
+     and iMainClientId=@iMainClientId and iClientId in(select iClientId from t_Framework_Client where iMainClientId =@iMainClientId and iApplicationTypeId=@iApplicationTypeId  and cIsForFusion='N'  )
+	  
+     ORDER BY  dtDateTime DESC    
+     
+END      
+go
+
+ALTER PROCEDURE [dbo].[JProc_Framework_FrameworkClient_GetActiveClientDetails]      
+ @iMainClientId INT      
+AS      
+BEGIN      
+ /********************************************************************************************            
+   Created By:  R.Navaneeth        
+   Create Date:  26-08-2015       
+   Description:  Get all active client, host url for mainclient      
+   ********************************************************************************************/      
+ select(SELECT C.iApplicationTypeId, C.iClientId, CH.vHostURL, TC.cIsSSL   
+ for json path, include_null_values, without_array_wrapper            
+  ) as JSONResult    
+  FROM t_Framework_Client C      
+ INNER JOIN t_Framework_Client_HostURL CH ON C.iClientId = CH.iClientId      
+ INNER JOIN t_Framework_MainClient_ThemeConfiguration TC ON TC.iMainClientId = @iMainClientId      
+ WHERE      
+  CH.cIsActive = 'Y'      
+ AND c.iMainClientId = @iMainClientId  and C.cIsForFusion='N'  and  CH.cIsForFusion='N'   
+ ORDER BY c.iApplicationTypeId      
+END  
+ Go
+ ALTER procedure [dbo].[JProc_Framework_FrameworkClient_GetAllClientsForMainClient]        
+(                              
+ @iMainClientId int                              
+)                              
+As                                 
+Begin                                
+/********************************************************************************************                                        
+  Created BY : Arvind Shama                                        
+  Create Date : 07.06.2007                                        
+  Description : Gets all Clients details                              
+  Modified BY :  Sikkandar Basha                              
+  Modified Date :  04.04.2008                              
+  Description :  To Get all Clients based on MainClient                          
+  Modified BY :  Gopi                              
+  Modified Date :18.05.2009                              
+  Description :  To Get the themeId                        
+  Modified BY :  Arvind Sharma                              
+  Modified Date : 12.08.2009                    
+  Description :  changed to return all the columns from hosturl table                    
+********************************************************************************************/                                     
+if(@iMainClientId<>-1)          
+BEGIN          
+Select(         
+select        
+C.iMainClientId,C.iApplicationTypeId,C.vClientName,C.vPageTitle,C.iAgeOfAudienceId,        
+CH.*,TFMTC.cIsSSL,CL.vLoginControl,CL.cShowFormDefinition,CL.cShowClassInformation,TFC.vLoginURL,C.iClientConfigurationId          
+ FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER           
+)as Jsonresult        
+from t_Framework_Client C                           
+inner join t_Framework_ClientConfiguration TFC on TFC.iClientConfigurationId = C.iClientConfigurationId          
+left outer join t_Framework_Client_HostUrl CH on C.iClientId = CH.iClientId  and CH.cIsDeleted ='N' and CH.cIsActive = 'Y'            
+Left outer join t_Framework_LoginControl CL on CH.uLoginControlId = CL.uLoginControlId                    
+INNER JOIN t_Framework_MainClient_ThemeConfiguration TFMTC ON TFMTC.iMainClientId = C.iMainClientId                          
+where C.iMainClientId = @iMainClientId  and C.cIsDeleted = 'N' and cIsActive = 'Y'  and C.cIsForFusion = 'N' and CH.cIsForFusion = 'N'                            
+order By vClientName ,CH.iHostURLId                              
+END          
+ELSE          
+BEGIN          
+Select (        
+select         
+C.iMainClientId,C.iApplicationTypeId,C.vClientName,C.vPageTitle,C.iAgeOfAudienceId,        
+CH.*,TFMTC.cIsSSL,CL.vLoginControl,CL.cShowFormDefinition,CL.cShowClassInformation,TFC.vLoginURL,C.iClientConfigurationId          
+FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER           
+) as Jsonresult        
+from t_Framework_Client C                           
+inner join t_Framework_ClientConfiguration TFC on TFC.iClientConfigurationId = C.iClientConfigurationId          
+left outer join t_Framework_Client_HostUrl CH on C.iClientId = CH.iClientId  and CH.cIsDeleted ='N' and CH.cIsActive = 'Y'                
+Left outer join t_Framework_LoginControl CL on CH.uLoginControlId = CL.uLoginControlId                    
+INNER JOIN t_Framework_MainClient_ThemeConfiguration TFMTC ON TFMTC.iMainClientId = C.iMainClientId  and C.cIsForFusion = 'N'                 
+where C.cIsDeleted = 'N' and cIsActive = 'Y' and CH.cIsForFusion = 'N'              
+END          
+End 
+Go
+
+ALTER PROCEDURE [dbo].[JProc_Framework_FrameworkClient_GetClientConfiguration]                                                                                          
+(                                                                                                      
+ @vHostString nvarchar(500),                                                
+ @vHostDomain nvarchar(500)                                                
+)                                                                                          
+AS                                                                                                          
+BEGIN                                                                                                  
+/********************************************************************************************                                                                                                
+ Modified By: sendil                                                               
+ Modified Date: 28.08.2009                                  
+ Description: proc changed to get new column login control from the Hosturl table.                          
+                      
+ Modified By: Gopi                                                               
+ Modified Date: 07.07.2010                                                                   
+ Description: Proc changed to get new column iFormId from t_Framework_Client_HostUrl table                         
+                     
+ Modified By: Sendil                    
+ Modified Date: 21.10.2010                    
+ Description: Proc changed to get only non deleted host urls            
+         
+ Modified By: Navaneeth                 
+ Modified Date: 25.07.2013                 
+ Description: Proc changed to get vMobileStartPage, vTableSTartPage columns  from t_Framework_Client_HostUrl table                                  
+********************************************************************************************/                                                                                     
+        
+                      
+ Begin                                                              
+ if(exists(select * from t_Framework_Client_HostUrl where vHostURL = @vHostString ))                                                
+  Begin                                                
+   SELECT(SELECT FC.iMainClientId, CC.iClientConfigurationId,CC.vClientConfigurationName,CC.cIsSystemClient,CC.iGridPageSize,CC.vBorderlessPagesMaster,    
+   CC.vClientIdentifier,CC.vClientProviderIdentifier,CC.vLoginControl,CC.vLoginURL,CC.vMainMaster,CC.vMemberShipProvider,CC.vPageMaster,CC.vPopupMaster,    
+   CC.vRoleProvider,CC.vSkin,CC.vWebsiteMaster ,CH.vHostURL,FC.vPageTitle,TH.vThemeKeyWord,iHostUrlId,                                                                        
+   FC.iApplicationTypeId,FC.iClientId,FC.vClientName,TFMTC.cIsSSL,                                                      
+   FAT.vApplicationName, LC.vLoginControl HostUrlLoginControl,CH.uTestId,CH.iFormId,FAT.vApplicationGroupName, TAG.vAgeOfAudienceName,            
+   CH.iLanguageId,CH.vStartPage,CH.vMobileStartPage,CH.vTabletStartPage, TAG.iAgeOfAudienceId ,CH.vImageHostURL,CH.vCssHostURL,CH.vDataHostURL,        
+   CH.iTargetGroupId, TMG.vTargetGroupName,CH.cIsAngularApplication,CH.iTargetDeviceId        
+            
+  for json path,INCLUDE_NULL_VALUES, without_array_wrapper              
+  ) as JSONResult      
+  FROM t_Framework_ClientConfiguration CC                                                                    
+   INNER JOIN t_Framework_Client FC ON FC.iClientConfigurationId = CC.iClientConfigurationId                                                                                                   
+   INNER JOIN t_Framework_Client_HostUrl CH ON CH.iClientId = FC.iClientId                                                                                                          
+   INNER JOIN t_Framework_ApplicationType FAT ON FC.iApplicationTypeId = FAT.iApplicationTypeId                                                                           
+   LEFT OUTER JOIN t_Framework_MainClient TFM ON FC.iMainClientId = TFM.iMainClientId                                    
+   LEFT OUTER JOIN t_Framework_LoginControl LC ON LC.uLoginControlId = CH.uLoginControlId                        
+   INNER JOIN t_Framework_MainClient_ThemeConfiguration TFMTC ON TFMTC.iMainClientId = FC.iMainClientId                                                       
+   Left outer join t_TestDrive_Theme TH on CH.iThemeId = TH.iThemeId              
+   left outer join t_Framework_MainClient_AgeOfAudience TAA on TAA.iAgeOfAudienceId = FC.iAgeOfAudienceId              
+   left outer join t_Framework_MainClient_AgeOfAudience_Data TAG on TAG.iAgeOfAudienceId = TAA.iAgeOfAudienceId                 
+   left outer join t_Framework_MainClient_Configuration_TargetGroup TMG on TMG.iTargetGroupId = CH.iTargetGroupId                 
+  where vHostURL = @vHostString and CH.cIsDeleted = 'N' and FC.cIsForFusion='N' and CH.cIsForFusion='N'                                                                                          
+  End                                                
+ else         
+  Begin                                                
+   SELECT(SELECT FC.iMainClientId, CC.iClientConfigurationId,CC.vClientConfigurationName,CC.cIsSystemClient,CC.iGridPageSize,CC.vBorderlessPagesMaster,    
+   CC.vClientIdentifier,CC.vClientProviderIdentifier,CC.vLoginControl,CC.vLoginURL,CC.vMainMaster,CC.vMemberShipProvider,CC.vPageMaster,CC.vPopupMaster,    
+   CC.vRoleProvider,CC.vSkin,CC.vWebsiteMaster ,CH.vHostURL,FC.vPageTitle,TH.vThemeKeyWord,iHostUrlId,                                                                   
+   FC.iApplicationTypeId,FC.iClientId,FC.vClientName,TFMTC.cIsSSL,                                                      
+   FAT.vApplicationName, LC.vLoginControl HostUrlLoginControl,CH.uTestId,CH.iFormId,FAT.vApplicationGroupName, TAG.vAgeOfAudienceName,            
+   CH.iLanguageId,CH.vStartPage,CH.vMobileStartPage,CH.vTabletStartPage, TAG.iAgeOfAudienceId,CH.vImageHostURL,CH.vCssHostURL,CH.vDataHostURL,        
+   CH.iTargetGroupId, TMG.vTargetGroupName,CH.cIsAngularApplication,CH.iTargetDeviceId        
+         
+   for json path, INCLUDE_NULL_VALUES,without_array_wrapper   
+                
+  ) as JSONResult       
+  FROM t_Framework_ClientConfiguration CC                                                                    
+   INNER JOIN t_Framework_Client FC ON FC.iClientConfigurationId = CC.iClientConfigurationId                                                            
+   INNER JOIN t_Framework_Client_HostUrl CH ON CH.iClientId = FC.iClientId                                                                  
+   INNER JOIN t_Framework_ApplicationType FAT ON FC.iApplicationTypeId = FAT.iApplicationTypeId                                                                      
+   LEFT OUTER JOIN t_Framework_MainClient TFM ON FC.iMainClientId = TFM.iMainClientId                         
+   LEFT OUTER JOIN t_Framework_LoginControl LC ON LC.uLoginControlId = CH.uLoginControlId                                                  
+   INNER JOIN t_Framework_MainClient_ThemeConfiguration TFMTC ON TFMTC.iMainClientId = FC.iMainClientId                                        
+   Left outer join t_TestDrive_Theme TH on CH.iThemeId = TH.iThemeId              
+   left outer join t_Framework_MainClient_AgeOfAudience TAA on TAA.iAgeOfAudienceId = FC.iAgeOfAudienceId                 
+   left outer join t_Framework_MainClient_AgeOfAudience_Data TAG on TAG.iAgeOfAudienceId = TAA.iAgeOfAudienceId        
+   left outer join t_Framework_MainClient_Configuration_TargetGroup TMG on TMG.iTargetGroupId = CH.iTargetGroupId                          
+   where vHostURL = @vHostDomain and CH.cIsDeleted = 'N'  and FC.cIsForFusion='N'  and CH.cIsForFusion='N'                                  
+  End                                                
+ END                                                                  
+END   
+  Go
+ALTER PROCEDURE JProc_Framework_FrameworkClient_GetClientConfigurationByClientId                                                                                      
+(                                                                                                        
+ @iClientId INT                                                                                                            
+)                                                                                            
+AS                                                                                                            
+BEGIN                                                                                                    
+/********************************************************************************************                                                                                                  
+ Changed By : Raghavendra Prasanna                                                                                  
+ Changed By : 12.06.2017        
+ Description : PROC TO get Client AND Client Configuration details based ON CLientId        
+      
+ Modify By: Tathagata Sinha Roy      
+ Modified Date: 14.06.2017      
+ Description: Proper Json format, add include_null_values      
+********************************************************************************************/                                                                                                          
+ Begin                                                                    
+  SELECT(  
+  SELECT [vClientConfigurationName]                          
+      ,CC.[vLoginControl]                          
+      ,[vMemberShipProvider]                          
+      ,[vRoleProvider]                          
+      ,[vMainMaster]                          
+      ,[vPageMaster]                          
+      ,[vBorderlessPagesMaster]                          
+      ,[vPopupMaster]                          
+      ,[iGridPageSize]                          
+      ,[vClientProviderIdentifier]                          
+      ,[cIsSystemClient]                          
+      ,[vWebsiteMaster]                          
+      ,[vLoginURL]                          
+ ,CH.vHostURL,FC.vPageTitle,TH.vThemeKeyWord,                                                                              
+ FC.iApplicationTypeId,FC.iClientId,FC.vClientName,FC.iMainClientId,                                                        
+ FAT.vApplicationName,TFMD.vMainClientName,CH.iThemeId,TMTC.cIsSSL,                                  
+ CHL.vLoginControl HostUrlLoginControl,CH.uTestId,CH.iFormId,FAT.vApplicationGroupName, TAG.vAgeOfAudienceName ,CC.vSkin ,CC.vClientIdentifier,              
+ CH.iLanguageId ,CH.vStartPage,TAG.iAgeOfAudienceId ,CH.vImageHostURL,CH.vCssHostURL,CH.vDataHostURL,CH.iTargetGroupId, TMG.vTargetGroupName,  
+ CH.vMobileStartPage, CH.vTabletStartPage,           
+ CH.cIsAngularApplication,CH.iTargetDeviceId,TFMD.iLanguageId MainClientLanguageId          
+                                                                                 
+   for json path, include_null_values, without_array_wrapper                
+   ) as JSONResult             
+   FROM t_Framework_ClientConfiguration CC             
+   INNER JOIN t_Framework_Client FC ON CC.iClientConfigurationId = FC.iClientConfigurationId                       
+   INNER JOIN t_Framework_Client_HostUrl CH ON CH.iClientId = FC.iClientId                                                                                                            
+   INNER JOIN t_Framework_ApplicationType FAT ON FC.iApplicationTypeId = FAT.iApplicationTypeId                                                           
+   LEFT OUTER JOIN t_Framework_MainClient TFM ON FC.iMainClientId = TFM.iMainClientId                                                
+   INNER JOIN t_Framework_MainClient_Data TFMD ON TFM.iMainClientId = TFMD.iMainClientId                                    
+   inner join t_Framework_MainClient_ThemeConfiguration TMTC on TMTC.iMainClientId = TFM.iMainClientId                                   
+   LEFT OUTER join t_Framework_LoginControl CHL on CH.uLoginControlId = CHL.uLoginControlId                         
+   Left outer join t_TestDrive_Theme TH on CH.iThemeId = TH.iThemeId                        
+   left outer join t_Framework_MainClient_AgeOfAudience TAA on TAA.iAgeOfAudienceId = FC.iAgeOfAudienceId                       
+   left outer join t_Framework_MainClient_AgeOfAudience_Data TAG on TAG.iAgeOfAudienceId = TAA.iAgeOfAudienceId          
+   left outer join t_Framework_MainClient_Configuration_TargetGroup TMG on TMG.iTargetGroupId = CH.iTargetGroupId                                          
+   where FC.iClientId = @iClientId  and CH.cIsDeleted='N'  and CH.cIsActive = 'Y'  and FC.cIsForFusion='N' and CH.cIsForFusion='N'                                                                                            
+ END                                                                    
+END 
+GO
+ALTER PROCEDURE  [dbo].[JProc_Framework_FrameworkClient_GetClientConfigurationForMainClient]        
+(        
+ @iMainClientId int        
+)        
+AS        
+BEGIN        
+/********************************************************************************************                                              
+ Changed By : Sikkandar Basha                           
+ Changed By : 09.04.2008                       
+ Description : Proc to get ClientConfiguration based on MainClient        
+                
+Modify By: Tathagata Sinha Roy  
+Modified Date: 14.06.2017  
+Description: Proper Json format, add include_null_values        
+********************************************************************************************/                                                      
+           
+ Select(Select FCC.iClientConfigurationId,FCC.vClientConfigurationName,FCC.cIsSystemClient,FCC.iGridPageSize,Fcc.iMainClientId,    
+ Fcc.vBorderlessPagesMaster,FCC.vClientIdentifier,FCC.vClientProviderIdentifier, FCC.vLoginControl,FCC.vLoginURL,FCC.vMainMaster,FCC.vMemberShipProvider,    
+ FCC.vPageMaster,FCC.vPopupMaster,FCC.vRoleProvider,FCC.vSkin,FCC.vWebsiteMaster,FC.iAgeOfAudienceId,FC.iApplicationTypeId,FC.iClientId,FC.vClientName,FC.vPageTitle,TAA.vAgeOfAudience,    
+ TAG.vAgeOfAudienceName   for json path, include_null_values, without_array_wrapper            
+  ) as JSONResult       
+  From t_Framework_ClientConfiguration FCC         
+ JOIN t_Framework_Client FC  ON FCC.iClientConfigurationId =  FC.iClientConfigurationId        
+ left outer join t_Framework_MainClient_AgeOfAudience TAA on TAA.iAgeOfAudienceId = FC.iAgeOfAudienceId         
+ left outer join t_Framework_MainClient_AgeOfAudience_Data TAG on TAG.iAgeOfAudienceId = TAA.iAgeOfAudienceId         
+ Where FC.iMainClientId = @iMainClientId  and FC.cIsForFusion='N' 
+           
+END   
+ GO
+ ALTER Procedure [dbo].[JProc_Framework_FrameworkMainClient_GetStateSpecificConfiguration]                
+(                
+ @iStateId as int,              
+ @iMainClientId int,                
+ @iClientId int                
+)                
+as                
+Begin                
+/********************************************************************************************                              
+  Created BY : Sendil                              
+  Create Date : 11.03.2011                
+  Description : Gets Clients state specific configuration                
+                          
+Modify By: Tathagata Sinha Roy  
+Modified Date: 15.06.2017  
+Description: Proper Json format, add include_null_values                 
+********************************************************************************************/                           
+ if exists (select * from t_Framework_MainClient_Configuration_IndividualStateVersion where iStateId = @iStateId and iClientId = @iClientId)              
+   Begin              
+ print '1'          
+  SELECT(SELECT TM.iMainClientConfigurationId,iStateId,vPhysicalDataPath,vPhysicalFileStreamingPath,vLearncoacherConnectionString,          
+  vLearncoacherDatabaseName,TSM.iClientId, TSM.vExtranetConnectionString,TSM.vIntranetConnectionString,TSM.vExtranetDatabaseName,TSM.vIntranetDatabaseName          
+  for json path, include_null_values, without_array_wrapper              
+  ) as JSONResult       
+  FROM t_Framework_MainClient_Configuration_IndividualStateVersion TSM                 
+  JOIN t_Framework_MainClient TM on TSM.iMainClientConfigurationId = TM.iMainClientConfigurationId               
+  Join t_Framework_Client TC on TC.iMainClientId = TM.iMainClientId              
+  where TSM.iStateId = @iStateId and TC.iClientId = @iClientId and TC.iMainClientId = @iMainClientId and TSM.iClientId = @iClientId and TC.cIsForFusion='N'                    
+   end              
+ else if exists (select * from t_Framework_MainClient_Configuration_IndividualStateVersion where iStateId = 0 and iClientId = @iClientId)              
+  Begin              
+ print '2'          
+  SELECT(SELECT TM.iMainClientConfigurationId,iStateId,vPhysicalDataPath,vPhysicalFileStreamingPath,vLearncoacherConnectionString,          
+  vLearncoacherDatabaseName,TSM.iClientId, TSM.vExtranetConnectionString,TSM.vIntranetConnectionString,TSM.vExtranetDatabaseName,TSM.vIntranetDatabaseName          
+  for json path, include_null_values, without_array_wrapper              
+  ) as JSONResult     
+  FROM t_Framework_MainClient_Configuration_IndividualStateVersion TSM                 
+  JOIN t_Framework_MainClient TM on TSM.iMainClientConfigurationId = TM.iMainClientConfigurationId               
+  Join t_Framework_Client TC on TC.iMainClientId = TM.iMainClientId              
+  where TSM.iStateId = 0 and TC.iClientId = @iClientId and TC.iMainClientId = @iMainClientId and TSM.iClientId = @iClientId   and TC.cIsForFusion='N'                   
+  End              
+ else if exists (select * from t_Framework_MainClient_Configuration_IndividualStateVersion where iStateId = @iStateId and iClientId = 0)              
+  Begin              
+ print '3'          
+  SELECT(SELECT TM.iMainClientConfigurationId,iStateId,vPhysicalDataPath,vPhysicalFileStreamingPath,vLearncoacherConnectionString,          
+  vLearncoacherDatabaseName,TSM.iClientId,TSM.vExtranetConnectionString,TSM.vIntranetConnectionString,TSM.vExtranetDatabaseName,TSM.vIntranetDatabaseName          
+  for json path, include_null_values, without_array_wrapper              
+  ) as JSONResult      
+  FROM t_Framework_MainClient_Configuration_IndividualStateVersion TSM                 
+  JOIN t_Framework_MainClient TM on TSM.iMainClientConfigurationId = TM.iMainClientConfigurationId               
+  Join t_Framework_Client TC on TC.iMainClientId = TM.iMainClientId   and TC.cIsForFusion='N'            
+  where TSM.iStateId = @iStateId and TC.iMainClientId = @iMainClientId and TSM.iClientId = 0                   
+  End              
+End   
+go
+  
+    
+ALTER PROC Proc_Framework_Exception_GetExceptionDetailsForManClientAndApplication    
+     
+(              
+ @iMainClientId int,  
+ @iApplicationTypeId int              
+)              
+AS              
+BEGIN              
+  
+/********************************************************************************************                  
+Created By:  Arvind Sharma                  
+Create Date:  24.11.2014   
+Description:  Get Exception Details by MainClient and ApplicationType    
+    
+  
+********************************************************************************************/                    
+     SELECT   
+      uExceptionId,   
+      iMainClientId,  
+      iClientId,  
+      replace(vURL,'/','/ ') vURL,  
+      vMessage,  
+      vDescription,  
+      vBrowser,  
+      CONVERT(DATE,dtDateTime,102) [dtDateTime]  
+   
+     FROM  t_framework_Exception  
+     where CONVERT(DATE,dtDateTime,104) =  CONVERT(DATE,GETDATE()-1,104)   
+     and iMainClientId=@iMainClientId and iClientId in(select iClientId from t_Framework_Client where iMainClientId =@iMainClientId and iApplicationTypeId=@iApplicationTypeId  and cIsForFusion='N')  
+    
+	 ORDER BY  dtDateTime DESC  
+   
+END    
+  GO
+  ALTER PROCEDURE Proc_Framework_FrameworkClient_GetActiveClientDetails  
+ @iMainClientId INT  
+AS  
+BEGIN  
+ /********************************************************************************************        
+   Created By:  R.Navaneeth    
+   Create Date:  26-08-2015   
+   Description:  Get all active client, host url for mainclient  
+   ********************************************************************************************/  
+ SELECT C.iApplicationTypeId, C.iClientId, CH.vHostURL, TC.cIsSSL FROM t_Framework_Client C  
+ INNER JOIN t_Framework_Client_HostURL CH ON C.iClientId = CH.iClientId  
+ INNER JOIN t_Framework_MainClient_ThemeConfiguration TC ON TC.iMainClientId = @iMainClientId  
+ WHERE  
+  CH.cIsActive = 'Y'  and C.cIsForFusion='N'
+ AND c.iMainClientId = @iMainClientId   
+ ORDER BY c.iApplicationTypeId  
+END
+Go
+ALTER procedure [dbo].[Proc_Framework_FrameworkClient_GetAllClientsForMainClient]                      
+(                        
+ @iMainClientId int                        
+)                        
+As                           
+Begin                          
+/********************************************************************************************                                  
+  Created BY : Arvind Shama                                  
+  Create Date : 07.06.2007                                  
+  Description : Gets all Clients details                        
+  Modified BY :  Sikkandar Basha                        
+  Modified Date :  04.04.2008                        
+  Description :  To Get all Clients based on MainClient                    
+  Modified BY :  Gopi                        
+  Modified Date :18.05.2009                        
+  Description :  To Get the themeId                  
+  Modified BY :  Arvind Sharma                        
+  Modified Date : 12.08.2009              
+  Description :  changed to return all the columns from hosturl table              
+********************************************************************************************/                               
+if(@iMainClientId<>-1)    
+BEGIN    
+Select C.*,CH.*,TFMTC.cIsSSL,CL.vLoginControl,CL.cShowFormDefinition,CL.cShowClassInformation,TFC.vLoginURL    
+from t_Framework_Client C                     
+inner join t_Framework_ClientConfiguration TFC on TFC.iClientConfigurationId = C.iClientConfigurationId    
+left outer join t_Framework_Client_HostUrl CH on C.iClientId = CH.iClientId  and CH.cIsDeleted ='N' and CH.cIsActive = 'Y'      
+Left outer join t_Framework_LoginControl CL on CH.uLoginControlId = CL.uLoginControlId              
+INNER JOIN t_Framework_MainClient_ThemeConfiguration TFMTC ON TFMTC.iMainClientId = C.iMainClientId                    
+where C.iMainClientId = @iMainClientId  and C.cIsDeleted = 'N' and cIsActive = 'Y' and C.cIsForFusion = 'N' and CH.cIsForFusion = 'N'                      
+order By vClientName ,CH.iHostURLId                        
+END    
+ELSE    
+BEGIN    
+Select C.*,CH.*,TFMTC.cIsSSL,CL.vLoginControl,CL.cShowFormDefinition,CL.cShowClassInformation,TFC.vLoginURL    
+from t_Framework_Client C                     
+inner join t_Framework_ClientConfiguration TFC on TFC.iClientConfigurationId = C.iClientConfigurationId    
+left outer join t_Framework_Client_HostUrl CH on C.iClientId = CH.iClientId  and CH.cIsDeleted ='N' and CH.cIsActive = 'Y'          
+Left outer join t_Framework_LoginControl CL on CH.uLoginControlId = CL.uLoginControlId              
+INNER JOIN t_Framework_MainClient_ThemeConfiguration TFMTC ON TFMTC.iMainClientId = C.iMainClientId and C.cIsForFusion = 'N'     
+where C.cIsDeleted = 'N' and cIsActive = 'Y'   and CH.cIsForFusion = 'N'      
+END    
+End     
+Go
+ALTER procedure [Proc_Framework_FrameworkClient_GetAllHostUrlDetailsByMainClient]       
+(      
+ @iMainClientId int      
+)      
+AS            
+Begin            
+/********************************************************************************************      
+   Created By:  Arvind Sharma        
+   Create Date:  10.07.2010            
+   Description:  Gets all the Host url Details      
+           
+   Modified By:       
+   Modified Date:      
+   Description:       
+            
+********************************************************************************************/      
+      
+SELECT C.*,CH.*,TC.cIsSSL FROM t_Framework_Client C      
+INNER JOIN t_Framework_Client_HostURL CH ON C.iClientId = CH.iClientId      
+INNER join t_Framework_MainClient_ThemeConfiguration TC ON TC.iMainClientId = C.iMainClientId      
+WHERE C.iMainClientId =@iMainClientId and C.cIsDeleted='N' and C.cIsForFusion='N' and CH.cIsForFusion='N'    
+      
+END 
+go
+ALTER PROCEDURE [dbo].[Proc_Framework_FrameworkClient_GetClientConfiguration]                                                                                    
+(                                                                                                
+ @vHostString nvarchar(500),                                          
+ @vHostDomain nvarchar(500)                                          
+)                                                                                    
+AS                                                                                                    
+BEGIN                                                                                            
+/********************************************************************************************                                                                                          
+ Modified By: sendil                                                         
+ Modified Date: 28.08.2009                            
+ Description: proc changed to get new column login control from the Hosturl table.                    
+                
+ Modified By: Gopi                                                         
+ Modified Date: 07.07.2010                                                             
+ Description: Proc changed to get new column iFormId from t_Framework_Client_HostUrl table                   
+               
+ Modified By: Sendil              
+ Modified Date: 21.10.2010              
+ Description: Proc changed to get only non deleted host urls      
+   
+ Modified By: Navaneeth           
+ Modified Date: 25.07.2013           
+ Description: Proc changed to get vMobileStartPage, vTableSTartPage columns  from t_Framework_Client_HostUrl table                            
+********************************************************************************************/                                                                               
+  
+                
+ Begin                                                        
+ if(exists(select * from t_Framework_Client_HostUrl where vHostURL = @vHostString ))                                          
+  Begin                                          
+   SELECT FC.iMainClientId, CC.*,CH.vHostURL,FC.vPageTitle,TH.vThemeKeyWord,                                                                    
+   FC.iApplicationTypeId,FC.iClientId,FC.vClientName,TFMTC.cIsSSL,                                                
+   FAT.vApplicationName, LC.vLoginControl HostUrlLoginControl,CH.uTestId,CH.iFormId,FAT.vApplicationGroupName, TAG.vAgeOfAudienceName,      
+   CH.iLanguageId,CH.vStartPage,CH.vMobileStartPage,CH.vTabletStartPage, TAG.iAgeOfAudienceId ,CH.vImageHostURL,CH.vCssHostURL,CH.vDataHostURL,  
+   CH.iTargetGroupId, TMG.vTargetGroupName,CH.cIsAngularApplication,CH.iTargetDeviceId  
+   FROM t_Framework_ClientConfiguration CC                                                              
+   INNER JOIN t_Framework_Client FC ON FC.iClientConfigurationId = CC.iClientConfigurationId                                                                                             
+   INNER JOIN t_Framework_Client_HostUrl CH ON CH.iClientId = FC.iClientId                                                                                                    
+   INNER JOIN t_Framework_ApplicationType FAT ON FC.iApplicationTypeId = FAT.iApplicationTypeId                                                                     
+   LEFT OUTER JOIN t_Framework_MainClient TFM ON FC.iMainClientId = TFM.iMainClientId                              
+   LEFT OUTER JOIN t_Framework_LoginControl LC ON LC.uLoginControlId = CH.uLoginControlId                  
+   INNER JOIN t_Framework_MainClient_ThemeConfiguration TFMTC ON TFMTC.iMainClientId = FC.iMainClientId                                                 
+   Left outer join t_TestDrive_Theme TH on CH.iThemeId = TH.iThemeId        
+   left outer join t_Framework_MainClient_AgeOfAudience TAA on TAA.iAgeOfAudienceId = FC.iAgeOfAudienceId        
+   left outer join t_Framework_MainClient_AgeOfAudience_Data TAG on TAG.iAgeOfAudienceId = TAA.iAgeOfAudienceId           
+   left outer join t_Framework_MainClient_Configuration_TargetGroup TMG on TMG.iTargetGroupId = CH.iTargetGroupId           
+  where vHostURL = @vHostString and CH.cIsDeleted = 'N'  and FC.cIsForFusion='N' and CH.cIsForFusion='N'                                                                                        
+  End                                          
+ else   
+  Begin                                          
+   SELECT FC.iMainClientId, CC.*,CH.vHostURL,FC.vPageTitle,TH.vThemeKeyWord,                                                             
+   FC.iApplicationTypeId,FC.iClientId,FC.vClientName,TFMTC.cIsSSL,                                                
+   FAT.vApplicationName, LC.vLoginControl HostUrlLoginControl,CH.uTestId,CH.iFormId,FAT.vApplicationGroupName, TAG.vAgeOfAudienceName,      
+   CH.iLanguageId,CH.vStartPage,CH.vMobileStartPage,CH.vTabletStartPage, TAG.iAgeOfAudienceId,CH.vImageHostURL,CH.vCssHostURL,CH.vDataHostURL,  
+   CH.iTargetGroupId, TMG.vTargetGroupName,CH.cIsAngularApplication,CH.iTargetDeviceId    
+   FROM t_Framework_ClientConfiguration CC                                                              
+   INNER JOIN t_Framework_Client FC ON FC.iClientConfigurationId = CC.iClientConfigurationId                                                      
+   INNER JOIN t_Framework_Client_HostUrl CH ON CH.iClientId = FC.iClientId                                                            
+   INNER JOIN t_Framework_ApplicationType FAT ON FC.iApplicationTypeId = FAT.iApplicationTypeId                                                                
+   LEFT OUTER JOIN t_Framework_MainClient TFM ON FC.iMainClientId = TFM.iMainClientId                   
+   LEFT OUTER JOIN t_Framework_LoginControl LC ON LC.uLoginControlId = CH.uLoginControlId                                            
+   INNER JOIN t_Framework_MainClient_ThemeConfiguration TFMTC ON TFMTC.iMainClientId = FC.iMainClientId                                  
+   Left outer join t_TestDrive_Theme TH on CH.iThemeId = TH.iThemeId        
+   left outer join t_Framework_MainClient_AgeOfAudience TAA on TAA.iAgeOfAudienceId = FC.iAgeOfAudienceId           
+   left outer join t_Framework_MainClient_AgeOfAudience_Data TAG on TAG.iAgeOfAudienceId = TAA.iAgeOfAudienceId  
+   left outer join t_Framework_MainClient_Configuration_TargetGroup TMG on TMG.iTargetGroupId = CH.iTargetGroupId                    
+   where vHostURL = @vHostDomain and CH.cIsDeleted = 'N'  and FC.cIsForFusion='N'  and CH.cIsForFusion='N'                                 
+  End                                          
+ END                                                            
+END  
+go
+ALTER procedure [dbo].[Proc_Framework_FrameworkClient_GetClientConfiguration_JobSkills]                                                                                  
+(                                                                                              
+ @vHostString nvarchar(500),                                        
+ @vHostDomain nvarchar(500)                                        
+)                                                                                  
+AS                                                                                                  
+BEGIN                                                                                          
+/********************************************************************************************                                                                                        
+ Modified By: sendil                                                       
+ Modified Date: 28.08.2009                          
+ Description: proc changed to get new column login control from the Hosturl table.                  
+              
+ Modified By: Gopi                                                       
+ Modified Date: 07.07.2010                                                           
+ Description: Proc changed to get new column iFormId from t_Framework_Client_HostUrl table                 
+             
+ Modified By: Sendil            
+ Modified Date: 21.10.2010            
+ Description: Proc changed to get only non deleted host urls                       
+********************************************************************************************/                                                                                                
+ Begin                                                      
+ if(exists(select * from t_Framework_Client_HostUrl where vHostURL = @vHostString ))                                        
+  Begin                                        
+   SELECT FC.iMainClientId, CC.*,CH.vHostURL,FC.vPageTitle,TH.vThemeKeyWord,                                                                  
+   FC.iApplicationTypeId,FC.iClientId,FC.vClientName,TFMTC.cIsSSL,                                              
+   FAT.vApplicationName, LC.vLoginControl HostUrlLoginControl,CH.uTestId,CH.iFormId,FAT.vApplicationGroupName, TAG.vAgeOfAudienceName      
+   FROM t_Framework_ClientConfiguration CC                                                            
+   INNER JOIN t_Framework_Client FC ON FC.iClientConfigurationId = CC.iClientConfigurationId                                                                                           
+   INNER JOIN t_Framework_Client_HostUrl CH ON CH.iClientId = FC.iClientId                                                                                                  
+   INNER JOIN t_Framework_ApplicationType FAT ON FC.iApplicationTypeId = FAT.iApplicationTypeId                                                                   
+   LEFT OUTER JOIN t_Framework_MainClient TFM ON FC.iMainClientId = TFM.iMainClientId                            
+   LEFT OUTER JOIN t_Framework_LoginControl LC ON LC.uLoginControlId = CH.uLoginControlId                
+   INNER JOIN t_Framework_MainClient_ThemeConfiguration TFMTC ON TFMTC.iMainClientId = FC.iMainClientId                                               
+   Left outer join t_TestDrive_Theme TH on CH.iThemeId = TH.iThemeId      
+   left outer join t_Framework_MainClient_AgeOfAudience TAA on TAA.iAgeOfAudienceId = FC.iAgeOfAudienceId         
+   left outer join t_Framework_MainClient_AgeOfAudience_Data TAG on TAG.iAgeOfAudienceId = TAA.iAgeOfAudienceId         
+   where CH.vHostURL = @vHostString and CH.cIsDeleted = 'N'   and FC.cIsForFusion='N' and CH.cIsForFusion='N'                                                                                       
+  End                                        
+ else                                        
+  Begin                                        
+   SELECT FC.iMainClientId, CC.*,CH.vHostURL,FC.vPageTitle,TH.vThemeKeyWord,                                                           
+   FC.iApplicationTypeId,FC.iClientId,FC.vClientName,TFMTC.cIsSSL,                                              
+   FAT.vApplicationName, LC.vLoginControl HostUrlLoginControl,CH.uTestId,CH.iFormId,FAT.vApplicationGroupName, TAG.vAgeOfAudienceName                           
+                  
+   FROM t_Framework_ClientConfiguration CC                                                            
+   INNER JOIN t_Framework_Client FC ON FC.iClientConfigurationId = CC.iClientConfigurationId                                                    
+   INNER JOIN t_Framework_Client_HostUrl CH ON CH.iClientId = FC.iClientId                                                          
+   INNER JOIN t_Framework_ApplicationType FAT ON FC.iApplicationTypeId = FAT.iApplicationTypeId                                                              
+   LEFT OUTER JOIN t_Framework_MainClient TFM ON FC.iMainClientId = TFM.iMainClientId                 
+   LEFT OUTER JOIN t_Framework_LoginControl LC ON LC.uLoginControlId = CH.uLoginControlId                                          
+   INNER JOIN t_Framework_MainClient_ThemeConfiguration TFMTC ON TFMTC.iMainClientId = FC.iMainClientId                                
+   Left outer join t_TestDrive_Theme TH on CH.iThemeId = TH.iThemeId      
+   left outer join t_Framework_MainClient_AgeOfAudience TAA on TAA.iAgeOfAudienceId = FC.iAgeOfAudienceId         
+   left outer join t_Framework_MainClient_AgeOfAudience_Data TAG on TAG.iAgeOfAudienceId = TAA.iAgeOfAudienceId         
+   where CH.vHostURL = @vHostDomain and CH.cIsDeleted = 'N' and FC.cIsForFusion='N'  and CH.cIsForFusion='N'                                  
+  End                                        
+ END                                                          
+END  
+ go
+       
+ALTER procedure  [dbo].[Proc_Framework_FrameworkClient_GetClientConfigurationForMainClient]      
+(      
+ @iMainClientId int      
+)      
+AS      
+BEGIN      
+/********************************************************************************************                                            
+ Changed By : Sikkandar Basha                         
+ Changed By : 09.04.2008                     
+ Description : Proc to get ClientConfiguration based on MainClient      
+              
+ Modified By:           
+ Modified Date:       
+ Description:       
+********************************************************************************************/                                                    
+         
+ Select   
+  FCC.iClientConfigurationId,  
+  FCC.vClientConfigurationName,  
+  FCC.vLoginControl,  
+  FCC.vMemberShipProvider,  
+  FCC.vRoleProvider,  
+  FCC.vMainMaster,  
+  FCC.vPageMaster,  
+  FCC.vBorderlessPagesMaster,  
+  FCC.vPopupMaster,  
+  FCC.iGridPageSize,  
+  FCC.vClientProviderIdentifier,  
+  FCC.cIsSystemClient,  
+  FCC.vWebsiteMaster,  
+  FCC.vLoginURL,  
+  FCC.iMainClientId,  
+  FCC.vSkin,  
+  FCC.vClientIdentifier,  
+  FCC.vSecretKeyForToken,  
+  FCC.vSecretKeyForEncryption,  
+  FC.iClientId,  
+  FC.iClientConfigurationId,  
+  FC.iMainClientId,  
+  FC.iApplicationTypeId,  
+  FC.vClientName,  
+  FC.vPageTitle,  
+  FC.iAgeOfAudienceId,  
+  FC.dtModifiedOn,  
+  FC.cIsDeleted,  
+  TAA.iAgeOfAudienceId,  
+  TAA.vAgeOfAudience,  
+  TAG.iAgeOfAudienceDataId,  
+  TAG.iLanguageId,  
+  TAG.cIsTranslatedBySystem,  
+  TAG.vAgeOfAudienceName From t_Framework_ClientConfiguration FCC       
+ JOIN t_Framework_Client FC  ON FCC.iClientConfigurationId =  FC.iClientConfigurationId      
+ left outer join t_Framework_MainClient_AgeOfAudience TAA on TAA.iAgeOfAudienceId = FC.iAgeOfAudienceId       
+ left outer join t_Framework_MainClient_AgeOfAudience_Data TAG on TAG.iAgeOfAudienceId = TAA.iAgeOfAudienceId       
+ Where FC.iMainClientId = 97   and FC.cIsForFusion ='N'  
+         
+END 
+go
+  
+ALTER Proc Proc_Framework_FrameworkMainClient_GetStateSpecificConfiguration            
+(            
+ @iStateId as int,          
+ @iMainClientId int,            
+ @iClientId int            
+)            
+as            
+Begin            
+/********************************************************************************************                          
+  Created BY : Sendil                          
+  Create Date : 11.03.2011            
+  Description : Gets Clients state specific configuration            
+                      
+  Modified BY :               
+  Modified Date :             
+  Description :               
+********************************************************************************************/                       
+ if exists (select * from t_Framework_MainClient_Configuration_IndividualStateVersion where iStateId = @iStateId and iClientId = @iClientId)          
+   Begin          
+ print '1'      
+  SELECT TM.iMainClientConfigurationId,iStateId,vPhysicalDataPath,vPhysicalFileStreamingPath,vLearncoacherConnectionString,      
+  vLearncoacherDatabaseName,TSM.iClientId, TSM.vExtranetConnectionString,TSM.vIntranetConnectionString,TSM.vExtranetDatabaseName,TSM.vIntranetDatabaseName      
+  FROM t_Framework_MainClient_Configuration_IndividualStateVersion TSM             
+  JOIN t_Framework_MainClient TM on TSM.iMainClientConfigurationId = TM.iMainClientConfigurationId           
+  Join t_Framework_Client TC on TC.iMainClientId = TM.iMainClientId          
+  where TSM.iStateId = @iStateId and TC.iClientId = @iClientId and TC.iMainClientId = @iMainClientId and TSM.iClientId = @iClientId and TC.cIsForFusion ='N'          
+   end          
+ else if exists (select * from t_Framework_MainClient_Configuration_IndividualStateVersion where iStateId = 0 and iClientId = @iClientId)          
+  Begin          
+ print '2'      
+  SELECT TM.iMainClientConfigurationId,iStateId,vPhysicalDataPath,vPhysicalFileStreamingPath,vLearncoacherConnectionString,      
+  vLearncoacherDatabaseName,TSM.iClientId, TSM.vExtranetConnectionString,TSM.vIntranetConnectionString,TSM.vExtranetDatabaseName,TSM.vIntranetDatabaseName      
+  FROM t_Framework_MainClient_Configuration_IndividualStateVersion TSM             
+  JOIN t_Framework_MainClient TM on TSM.iMainClientConfigurationId = TM.iMainClientConfigurationId           
+  Join t_Framework_Client TC on TC.iMainClientId = TM.iMainClientId          
+  where TSM.iStateId = 0 and TC.iClientId = @iClientId and TC.iMainClientId = @iMainClientId and TSM.iClientId = @iClientId and TC.cIsForFusion ='N'       
+  End          
+ else if exists (select * from t_Framework_MainClient_Configuration_IndividualStateVersion where iStateId = @iStateId and iClientId = 0)          
+  Begin          
+ print '3'      
+  SELECT TM.iMainClientConfigurationId,iStateId,vPhysicalDataPath,vPhysicalFileStreamingPath,vLearncoacherConnectionString,      
+  vLearncoacherDatabaseName,TSM.iClientId,TSM.vExtranetConnectionString,TSM.vIntranetConnectionString,TSM.vExtranetDatabaseName,TSM.vIntranetDatabaseName      
+  FROM t_Framework_MainClient_Configuration_IndividualStateVersion TSM             
+  JOIN t_Framework_MainClient TM on TSM.iMainClientConfigurationId = TM.iMainClientConfigurationId           
+  Join t_Framework_Client TC on TC.iMainClientId = TM.iMainClientId          
+  where TSM.iStateId = @iStateId and TC.iMainClientId = @iMainClientId and TSM.iClientId = 0 and TC.cIsForFusion ='N'        
+  End          
+End
+go
+ALTER procedure [dbo].[proc_TestDrive_Deployement_CreateMainClientConfiguration]                
+(                
+ @vMainClientName nvarchar(200),              
+ @vWebsiteName nvarchar(200)   ,      
+ @iMainClientConfigurationId int,       
+ @iSchoolClientConfigurationId int,      
+ @iTeacherClientConfigurationId int,      
+ @iIntranetClientConfigurationId int,      
+ @iTestApplicationClientConfigurationId int           
+)                
+AS                
+Begin                
+/********************************************************************************************                
+                  
+  Created By: suman                
+  Created Date: 15.05.2009                
+  Description: Creates MainClientConfiguration                
+  Modified By: <Modified By,,>                
+  Modified Date: <Modified Date,,>                
+  Description: <AlterDescription,,>                
+                
+********************************************************************************************/                
+declare @iMainClientId int;                
+declare @TeacherClientId int;              
+declare @SchoolClientId int;              
+declare @IntranetClientId int;              
+declare @TestApplicationClientId int;              
+              
+/*Check if already the mainclient name exists else insert the main client details*/              
+If ( not exists ( select * from t_Framework_MainClient_Data where vMainClientName = @vMainClientName))              
+ begin              
+  insert into t_Framework_MainClient              
+    (vMainClientIdentifier,vManagerName,vStreet,iZIPCode,vTown,vPhone,vEmail,iMainClientConfigurationId)                
+  values(@vMainClientName,@vMainClientName,'TestStreet',0,'TestTown','9886011613','suman@arcadix.com',@iMainClientConfigurationId)                
+                
+  /*Get the mainclientid for the new mainclient*/              
+  select @iMainClientId =iMainClientId  from t_Framework_MainClient where vMainClientIdentifier=@vMainClientName and                
+  vManagerName=@vMainClientName              
+                  
+  /*insert the new mainclient name for the new mainclientid*/              
+  insert into t_Framework_MainClient_Data(iMainClientId,vMainClientName,iLanguageId) values(@iMainClientId,@vMainClientName,3)              
+                
+  /*Extranet Teacher Client details Insertion*/              
+  insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,cIsForFusion)              
+        values(@iTeacherClientConfigurationId,@iMainClientId,1,@vMainClientName+'Teacher','Teacher','N')              
+              
+  /*select the new Teacher client id for the new mainclient*/              
+  select @TeacherClientId=iClientId from t_Framework_Client where iMainClientId=@iMainClientId and iApplicationTypeId=1              
+              
+  /*Extranet school Client details Insertion*/              
+  insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle)              
+        values(@iSchoolClientConfigurationId,@iMainClientId,6,@vMainClientName+'School','School')              
+  /*select the new school client id for the new mainclient*/              
+  select @SchoolClientId=iClientId from t_Framework_Client where iMainClientId=@iMainClientId and iApplicationTypeId=6              
+              
+  /*Intranet Client details Insertion*/              
+  insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle)              
+        values(@iIntranetClientConfigurationId,@iMainClientId,4,@vMainClientName+'Intranet','Intranet')              
+  /*select the new intranet client id for the new mainclient*/              
+  select @IntranetClientId=iClientId from t_Framework_Client where iMainClientId=@iMainClientId and iApplicationTypeId=4              
+              
+  /*TestApplication Client  details Insertion*/              
+  insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle)              
+        values(@iTestApplicationClientConfigurationId,@iMainClientId,2,@vMainClientName+'TestApplication','TestApplicationLogin')              
+  /*select the new test applicationclient id for the new mainclient*/              
+  select @TestApplicationClientId=iClientId from t_Framework_Client where iMainClientId=@iMainClientId and iApplicationTypeId=2              
+                
+ /*insert host url details for each client into the table t_Framework_Client_HostURL */              
+  insert into t_Framework_Client_HostURL(iClientId,vHostURL,cIsDeleted,iThemeId,cIsForFusion)              
+          values(@TeacherClientId,@vWebsiteName+'/'+@vMainClientName+'ExtranetTeacher','N',NULL,'N')              
+  insert into t_Framework_Client_HostURL(iClientId,vHostURL,cIsDeleted,iThemeId,cIsForFusion)              
+          values(@SchoolClientId,@vWebsiteName+'/'+@vMainClientName+'ExtranetSchool','N',NULL,'N')              
+  insert into t_Framework_Client_HostURL(iClientId,vHostURL,cIsDeleted,iThemeId,cIsForFusion)              
+          values(@IntranetClientId,@vWebsiteName+'/'+@vMainClientName+'Intranet','N',NULL,'N')              
+  insert into t_Framework_Client_HostURL(iClientId,vHostURL,cIsDeleted,iThemeId,cIsForFusion)              
+          values(@TestApplicationClientId,@vWebsiteName+'/'+@vMainClientName+'Test','N',NULL,'N')              
+                
+  /*insert clientid to corresponding roleid for each client into the table t_Framework_Client_Role*/              
+  insert into t_Framework_Client_Role(iClientId,iRoleId)values(@TeacherClientId,101125)            
+  insert into t_Framework_Client_Role(iClientId,iRoleId)values(@SchoolClientId,101124)              
+  insert into t_Framework_Client_Role(iClientId,iRoleId)values(@IntranetClientId,101034)            
+  /*assign new role for generic certificate teacher*/            
+  insert into t_Framework_Client_Role(iClientId,iRoleId)values(@TeacherClientId,101128)              
+                 
+  /*insert Mainclientid for each applicationTypeId into the table t_Framework_MainClient_ApplicationType*/              
+  insert into t_Framework_MainClient_ApplicationType(iMainClientId,iApplicationTypeId) values(@iMainClientId,1)              
+  insert into t_Framework_MainClient_ApplicationType(iMainClientId,iApplicationTypeId) values(@iMainClientId,6)              
+  insert into t_Framework_MainClient_ApplicationType(iMainClientId,iApplicationTypeId) values(@iMainClientId,4)              
+  insert into t_Framework_MainClient_ApplicationType(iMainClientId,iApplicationTypeId) values(@iMainClientId,2)              
+              
+ end               
+else              
+ begin              
+  print 'MainClientName already exists'              
+ end               
+ select M.iMainClientId,            
+  M.vEmail,              
+  MD.vMainCLientName,       
+  HU.vHostURL,             
+  C.iClientId,              
+  C.vClientName              
+ from t_Framework_MainClient M               
+ inner join t_Framework_MainClient_Data MD on M.iMainClientId=MD.iMainClientId                
+ inner join t_Framework_Client C on M.iMainClientId=C.iMainClientId                
+ inner join t_Framework_Client_HostURL HU on C.iClientId=HU.iClientId              
+ where M.iMainClientId=@iMainClientId and C.cIsForFusion='N' and HU.cIsForFusion='N'             
+               
+End  
+ Go
+ ALTER procedure [Proc_TestDrive_MainClientApplicationType_SaveMainClientApplicationTypeData]      
+(           
+   @strDataXML ntext,    
+   @iMainClientId int   
+)          
+AS      
+BEGIN      
+/********************************************************************************************        
+      
+Created By:  Sikkandar Basha        
+Created Date: 11.06.2008      
+Description: Saves the MainClientApplicationType Details with Respective MainClientId.  
+      
+ Modified By: Arvind K                                       
+ Modified Date: 12/08/2020                                     
+ Description: Included column list for Insert Statement      
+      
+********************************************************************************************/        
+   Declare @XmlDoc as int,     
+     @ApplicationTypeId as int  
+   EXEC sp_xml_preparedocument @XmlDoc OUTPUT, @strDataXML  
+  
+   /***********Deletes the all the entries where @MainClientId and ApplicationTypeId not in the Xml************/  
+     
+   Delete From t_Framework_MainClient_ApplicationType  
+      Where iMainClientId = @iMainClientId AND  
+         iApplicationTypeId not in (Select ApplicationTypeId   
+    From OpenXML(@XmlDoc, 'Data/ApplicationTypes/ApplicationTypeId')  
+    With (ApplicationTypeId int '.'))           
+     
+   /***********Save data from XML***********/  
+  
+   Declare Save_cursor cursor  
+   For Select ApplicationTypeId   
+   From OpenXML(@XmlDoc, 'Data/ApplicationTypes/ApplicationTypeId')  
+   With (ApplicationTypeId int '.')  
+     
+   Open Save_cursor      
+   Fetch Next From Save_cursor Into @ApplicationTypeId  
+  
+   While( @@FETCH_STATUS <> -1 )  
+   Begin  
+    If(@ApplicationTypeId > 0)  
+      Begin  
+     If ( not exists ( Select * From t_Framework_MainClient_ApplicationType          
+             Where iMainClientId = @iMainClientId AND  
+             iApplicationTypeId = @ApplicationTypeId ) )                                           
+         Begin                     
+          Insert  Into t_Framework_MainClient_ApplicationType(iMainClientId, iApplicationTypeId, vIPLockList)  
+          Values (          
+              @iMainClientId,          
+              @ApplicationTypeId,null  
+            )                  
+         End                  
+       
+      End  
+    Fetch Next From Save_cursor Into @ApplicationTypeId  
+   End                  
+   CLOSE Save_cursor                          
+   DEALLOCATE Save_cursor                                 
+   EXEC sp_xml_removedocument @XmlDoc              
+END   
+  
+ go
+ ALTER PROCEDURE [dbo].Proc_Framework_Member_PageUserPreference_SaveUserPreferenceValues                                
+(                                      
+ @uUserId uniqueIdentifier,                              
+ @vKey NVARCHAR(500),                        
+ @vValue NVARCHAR(500),              
+ @iApplicationId int                       
+)                              
+AS                                     
+BEGIN                                   
+ /********************************************************************************************                                            
+  Created By:  Arvind Sharma                                            
+  Create Date: 20.07.2012                                
+  Description: Sets the user preference sprcific values                                         
+ ********************************************************************************************/                 
+ DECLARE @uUserPreferenceId uniqueidentifier                 
+ if not EXISTS( SELECT * FROM t_Framework_UserPreference where uUserId = @uUserId)              
+ BEGIN              
+ insert into t_Framework_UserPreference(uUserPreferenceId,iApplicationTypeId,uUserId) values (NEWID(),@iApplicationId,@uUserId)              
+               
+ END              
+ SELECT @uUserPreferenceId = uUserPreferenceId from t_Framework_UserPreference where uUserId = @uUserId and iApplicationTypeId =@iApplicationId              
+                               
+ IF EXISTS( SELECT * FROM t_Framework_UserPreference_PreferenceValue where uUserPreferenceId = @uUserPreferenceId and vKey =@vkey)                        
+ BEGIN                        
+  UPDATE  t_Framework_UserPreference_PreferenceValue                          
+  SET vValue = @vValue,dtModifiedOn = GetDate() WHERE uUserPreferenceId = @uUserPreferenceId and vKey = @vKey                      
+ END                        
+ ELSE                        
+ BEGIN                        
+  INSERT INTO t_Framework_UserPreference_PreferenceValue(uUserPreferenceId,vKey,vValue,uUserPreferenceValueId,dtCreatedOn,dtModifiedOn)                        
+  VALUES(@uUserPreferenceId,@vKey,@vValue,NEWID(),GETDATE(),GETDATE())                        
+ END                              
+END
+  
+  
+

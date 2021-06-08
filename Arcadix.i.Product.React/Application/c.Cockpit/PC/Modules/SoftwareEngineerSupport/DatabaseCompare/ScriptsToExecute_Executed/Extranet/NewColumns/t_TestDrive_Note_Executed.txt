@@ -1,0 +1,36 @@
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Note' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Note ADD uModifiedByUserId uniqueidentifier  
+END
+Go
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Note set uModifiedByUserId = uUserId  
+Go
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_TestDrive_Notes_GetNotesForMainClient
+JProc_TestDrive_Notes_GetNotesForMainClient_Sync
+JProc_TestDrive_Notes_GetNotesForUser
+JProc_TestDrive_Notes_SaveNotesForUser
+JProc_TestDrive_Notes_SaveNotesForUser_New
+JProc_TestDrive_Notes_SaveNotesForUser_NewProc
+JProc_TestDrive_Notes_SaveNotesForUser_Test
+Proc_TestDrive_Notes_GetNotesForUser
+Proc_TestDrive_Notes_SaveNotesForUser
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/

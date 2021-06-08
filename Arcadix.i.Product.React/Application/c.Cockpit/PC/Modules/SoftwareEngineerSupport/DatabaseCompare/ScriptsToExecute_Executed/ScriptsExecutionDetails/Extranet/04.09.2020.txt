@@ -1,0 +1,13 @@
+﻿ 
+  Following tables updated:
+
+	1) t_LearnCoacher_Semester
+	2) t_LearnCoacher_SchoolYearPeriod
+	3) t_TestDrive_Mapping
+	4) t_TestDrive_Member_State
+	5) t_TestDrive_Note
+
+
+procs Updated:
+
+Proc_TestDrive_StellwerkExternalDataSourceProvider_MapAndSaveMemberData

@@ -1,0 +1,104 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_ApplicationServers' AND COLUMN_NAME = 'cIsDeleted') 
+BEGIN
+ALTER TABLE t_Framework_ApplicationServers ADD cIsDeleted char(1)  
+END
+
+GO	 
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_ApplicationServers' AND COLUMN_NAME = 'uUserId') 
+BEGIN
+ALTER TABLE t_Framework_ApplicationServers ADD uUserId uniqueidentifier  
+END
+
+GO	   
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_ApplicationServers' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_Framework_ApplicationServers ADD dtModifiedOn datetime  
+END
+	
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_ApplicationServers' AND COLUMN_NAME = 'dtCreatedOn') 
+BEGIN
+ALTER TABLE t_Framework_ApplicationServers ADD dtCreatedOn datetime  
+END
+
+GO					   
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_ApplicationServers' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_Framework_ApplicationServers ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO							 
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_ApplicationServers' AND COLUMN_NAME = 'uTargetTypeId') 
+BEGIN
+ALTER TABLE t_Framework_ApplicationServers ADD uTargetTypeId uniqueidentifier  
+END
+
+GO								   
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_ApplicationServers' AND COLUMN_NAME = 'vGroup') 
+BEGIN
+ALTER TABLE t_Framework_ApplicationServers ADD vGroup nvarchar(MAX)  
+END
+
+GO										 
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_ApplicationServers' AND COLUMN_NAME = 'iLanguageId') 
+BEGIN
+ALTER TABLE t_Framework_ApplicationServers ADD iLanguageId int  
+END
+	
+GO	
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_ApplicationServers' AND COLUMN_NAME = 'vAdminUserName') 
+BEGIN
+ALTER TABLE t_Framework_ApplicationServers ADD vAdminUserName nvarchar(MAX)  
+END
+
+GO													 
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_ApplicationServers' AND COLUMN_NAME = 'vAdminPassword') 
+BEGIN
+ALTER TABLE t_Framework_ApplicationServers ADD vAdminPassword nvarchar(MAX)  
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_ApplicationServers' AND COLUMN_NAME = 'cIsForFusion') 
+BEGIN
+ALTER TABLE t_Framework_ApplicationServers ADD cIsForFusion char(1)  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_Framework_ApplicationServers set cIsDeleted ='N' Where cIsDeleted is null
+
+GO
+update t_Framework_ApplicationServers set uUserId = newid() Where uUserId is null
+
+GO
+update t_Framework_ApplicationServers set dtModifiedOn =getdate() Where dtModifiedOn is null
+
+GO
+update t_Framework_ApplicationServers set dtCreatedOn=getdate() Where dtCreatedOn is null 
+
+GO
+update t_Framework_ApplicationServers set uModifiedByUserId = uUserId Where uModifiedByUserId is null
+
+GO
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+JProc_TestDrive_GateKeeper_GetCurrentURL
+Proc_LoadDistribution_GetApplicationServerDetails
+Proc_TestDrive_GateKeeper_GetCurrentURL
+Proc_TestDrive_PageGateKeeper_UpdateDisplayCounter
+****************************************************************/
+
+/********************Procs need to Review**********************
+JProc_TestDrive_GateKeeper_GetCurrentURL
+Proc_LoadDistribution_GetApplicationServerDetails
+Proc_TestDrive_GateKeeper_GetCurrentURL
+Proc_TestDrive_PageGateKeeper_UpdateDisplayCounter
+****************************************************************/

@@ -1,0 +1,60 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_ElementType' AND COLUMN_NAME = 'dtCreatedOn') 
+BEGIN
+ALTER TABLE t_CMS_ElementType ADD dtCreatedOn datetime  
+END
+
+GO	  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_ElementType' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_CMS_ElementType ADD dtModifiedOn datetime  
+END
+	
+GO	
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_ElementType' AND COLUMN_NAME = 'vMainElementClass_Fusion') 
+BEGIN
+ALTER TABLE t_CMS_ElementType ADD vMainElementClass_Fusion nvarchar(200)  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_CMS_ElementType set  dtCreatedOn=GetDate() where dtCreatedOn is null 
+update t_CMS_ElementType set  dtModifiedOn=GetDate() where dtModifiedOn is null
+
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_CMS_CMSContainer_GetElementsForContainer
+FProc_CMS_CMSElement_GetElementFolderDetails
+FProc_CMS_CMSElement_GetElementsToBeDeleted
+FProc_CMS_CMSElement_GetElementType
+FProc_CMS_CMSElement_GetElementTypeDetails
+FProc_CMS_CMSElement_GetSubElementsToBeDeleted
+FProc_CMS_CMSInput_GetElementInputDetailsById
+FProc_TestDrive_BaseObject_CMSElementType_GetData
+JEditorProc_CMS_CMSContainer_GetElementsForContainer
+JEditorProc_CMS_CMSElement_GetElementFolderDetails
+JEditorProc_CMS_CMSElement_GetElementsToBeDeleted
+JEditorProc_CMS_CMSElement_GetElementType
+JEditorProc_CMS_CMSElement_GetElementTypeDetails
+JEditorProc_CMS_CMSElement_GetSubElementsToBeDeleted
+JProc_CMS_CMSDocument_GetDocumentElements
+JProc_CMS_CMSElement_GetCMSElementFolders
+JProc_CMS_CMSElement_GetElementType
+JProc_CMS_CMSImage_GetImageElements
+Proc_CMS_CMSContainer_GetElementsForContainer
+Proc_CMS_CMSElement_GetElementFolderDetails
+Proc_CMS_CMSElement_GetElementsToBeDeleted
+Proc_CMS_CMSElement_GetElementType
+Proc_CMS_CMSElement_GetElementTypeDetails
+Proc_CMS_CMSElement_GetSubElementsToBeDeleted
+Proc_CMS_Element_GetType
+*****************************************************/
+

@@ -1,0 +1,34 @@
+﻿/**********************************
+Rename Table
+**********************************/
+EXEC sp_rename 't_TestDrive_ResultDatabase_IndividualStateVersion_School','t_TestDrive_ResultDatabase_StateVersion_School'
+
+/**********************************
+Fusion procs modified
+**********************************/
+/********************ModifiedProc********************
+p_Object_ResultDatabase_GetData
+p_TestApplication_ResultDatabase_InsertSchoolResultDatabase
+Proc_Fusion_Object_ResultDatabase_GetData
+*************************************************/
+
+/**********************************
+Angular procs modified
+**********************************/
+/********************ModifiedProc********************
+JProc_TestDrive_Cycle_InsertSchoolResultDatabase
+JProc_Testdrive_ResultDatabase_GetResultDatabaseDetails
+JProc_Testdrive_ResultDatabase_GetResultDatabaseDetails_New
+JProc_Testdrive_ResultDatabase_GetResultDatabaseDetails_New_13_05_2019
+JProc_Testdrive_ResultDatabase_GetResultDatabaseDetails_New_13_05_2019_Backup
+JProc_Testdrive_ResultDatabase_GetResultDatabaseDetails_New_15_07_2019
+Proc_TestDrive_Cycle_GetAllStateResultDataBaseDetailsByStateId
+Proc_TestDrive_Cycle_GetResultDatabaseDetailsByStateIdAndSchool
+Proc_TestDrive_Cycle_GetResultDatabaseDetailsByStateIdAndSchool_03_07_2019
+Proc_TestDrive_Cycle_GetResultDatabaseDetailsForSchoolYearPeriod
+Proc_TestDrive_Cycle_GetResultDatabaseDetailsForSchoolYearPeriod_07_08_2020
+Proc_TestDrive_Cycle_GetSchoolUniqueResultDatabaseCount
+Proc_TestDrive_Cycle_GetSchoolUniqueResultDatabaseCount_New
+Proc_TestDrive_Cycle_InsertSchoolResultDatabase
+Proc_TestDrive_Cycle_InsertSchoolResultDatabase_New
+*************************************************/

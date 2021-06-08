@@ -1,0 +1,38 @@
+﻿/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_testdrive_Task_Question' AND COLUMN_NAME = 'uUserId') 
+BEGIN
+ALTER TABLE t_testdrive_Task_Question ADD uUserId uniqueidentifier  
+END
+
+GO  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_testdrive_Task_Question' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_testdrive_Task_Question ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_testdrive_Task_Question' AND COLUMN_NAME = 'cIsDeleted') 
+BEGIN
+ALTER TABLE t_testdrive_Task_Question ADD cIsDeleted Char(1)  where cIsDeleted is NULL
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_testdrive_Task_Question set cIsDeleted= 'N'
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+Proc_Fusion_Intranet_TaskQuestion_AddData
+Proc_Fusion_Intranet_TaskQuestion_DeleteData
+Proc_Fusion_Intranet_TaskQuestion_EditData
+Proc_Fusion_Intranet_TaskQuestion_GetData
+***********************************************************/
+
+

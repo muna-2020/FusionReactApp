@@ -1,0 +1,54 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_FileSystem_ElementFolder' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_CMS_FileSystem_ElementFolder ADD uModifiedByUserId uniqueidentifier  
+END			 
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_CMS_FileSystem_ElementFolder set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_CMS_CMSElement_GetElementFolderDetails
+FProc_TestDrive_BaseObject_CMSElementFolder_AddData
+FProc_TestDrive_BaseObject_CMSElementFolder_DeleteData
+FProc_TestDrive_BaseObject_CMSElementFolder_EditData
+FProc_TestDrive_BaseObject_CMSElementFolder_GetData
+GetFolderHierarchy
+JEditorProc_CMS_CMSElement_GetElementFolderDetails
+JProc_CMS_CMSElement_GetCMSElementFolders
+Proc_CMS_CMSElement_CopyPasteFolder
+Proc_CMS_CMSElement_CopyPasteFolder_New
+Proc_CMS_CMSElement_DeleteElementFolders
+Proc_CMS_CMSElement_GetElementFolderDetails
+Proc_CMS_CMSElement_MoveElementFolder
+Proc_CMS_CMSElement_MoveElementFolder_New
+Proc_CMS_CMSElements_AddEditElementFolder
+Proc_CMS_Element_GetElementDetailsByFolderRecusively
+***********************************************************/
+
+/********************these Procs are not there**********************
+Proc_CMS_Element_GetElementDetailsByFolderRecusively
+*****************************************************/
+
+/********************Procs need to Review**********************
+FProc_TestDrive_BaseObject_CMSElementFolder_AddData
+FProc_TestDrive_BaseObject_CMSElementFolder_DeleteData
+FProc_TestDrive_BaseObject_CMSElementFolder_EditData
+Proc_CMS_CMSElement_CopyPasteFolder
+Proc_CMS_CMSElement_CopyPasteFolder_New
+Proc_CMS_CMSElement_DeleteElementFolders
+Proc_CMS_CMSElement_MoveElementFolder
+Proc_CMS_CMSElement_MoveElementFolder_New
+Proc_CMS_CMSElements_AddEditElementFolder
+*****************************************************/

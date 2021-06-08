@@ -1,0 +1,97 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_Container_Element' AND COLUMN_NAME = 'iElementId_New') 
+BEGIN
+ALTER TABLE t_CMS_Container_Element ADD iElementId_New int  
+END  
+	
+GO	
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_Container_Element' AND COLUMN_NAME = 'iFusionOrder') 
+BEGIN
+ALTER TABLE t_CMS_Container_Element ADD iFusionOrder int  
+END
+	 
+GO
+
+/**********************************
+Default Values
+**********************************/
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_CMS_CMSAudio_DeleteByElementId
+FProc_CMS_CMSContainer_GetElementsForContainer
+FProc_CMS_CMSContainer_LinkElementsToContainer
+FProc_CMS_CMSElement_GetCommentsByElementId
+FProc_CMS_CMSElement_GetElementsToBeDeleted
+FProc_CMS_CMSFlash_DeleteByElementId
+FProc_CMS_CMSGameObjects_DeleteByElementId
+FProc_CMS_CMSGenericDragDrop_GetElementGenericDragDropDetailsById
+FProc_CMS_CMSImage_DeleteByElementId
+FProc_CMS_CMSPage_GetElementLinkedPageIdsListByElementId
+FProc_CMS_CMSScene_DeleteByElementId
+FProc_CMS_CMSTheatrePlay_DeleteByElementId
+FProc_CMS_CMSVideo_DeleteByElementId
+JEditorProc_CMS_CMSAudio_DeleteByElementId
+JEditorProc_CMS_CMSContainer_GetElementsForContainer
+JEditorProc_CMS_CMSContainer_LinkElementsToContainer
+JEditorProc_CMS_CMSElement_GetCommentsByElementId
+JEditorProc_CMS_CMSElement_GetElementsToBeDeleted
+JEditorProc_CMS_CMSFlash_DeleteByElementId
+JEditorProc_CMS_CMSGameObjects_DeleteByElementId
+JEditorProc_CMS_CMSGenericDragDrop_GetElementGenericDragDropDetailsById
+JEditorProc_CMS_CMSImage_DeleteByElementId
+JEditorProc_CMS_CMSPage_GetElementLinkedPageIdsListByElementId
+JEditorProc_CMS_CMSScene_DeleteByElementId
+JEditorProc_CMS_CMSTheatrePlay_DeleteByElementId
+JEditorProc_CMS_CMSVideo_DeleteByElementId
+Proc_CMS_CMSAudio_DeleteByElementId
+Proc_CMS_CMSContainer_GetElementsForContainer
+Proc_CMS_CMSContainer_LinkElementsToContainer
+Proc_CMS_CMSElement_GetCommentsByElementId
+Proc_CMS_CMSElement_GetElementsToBeDeleted
+Proc_CMS_CMSFlash_DeleteByElementId
+Proc_CMS_CMSGameObjects_DeleteByElementId
+Proc_CMS_CMSGenericDragDrop_GetElementGenericDragDropDetailsById
+Proc_CMS_CMSImage_DeleteByElementId
+Proc_CMS_CMSPage_GetAnchorsLinkedToPage
+Proc_CMS_CMSPage_GetAnimationUsage
+Proc_CMS_CMSPage_GetElementLinkedPageIdsListByElementId
+Proc_CMS_CMSPageContent_GetAllDictationTasksByTestId
+Proc_CMS_CMSScene_DeleteByElementId
+Proc_CMS_CMSTestDrivePage_GetAllTasksBySubjectAnCompetencyDetails
+Proc_CMS_CMSTestDrivePage_GetAllTasksBySubjectAndSchoolYearDifficult_Testing
+Proc_CMS_CMSTestDrivePage_GetAllTasksBySubjectId
+Proc_CMS_CMSTestDrivePage_GetAllTasksBySubjectId_New
+Proc_CMS_CMSTestDrivePage_GetTasksForMultipleTaskUsages
+Proc_CMS_CMSTheatrePlay_DeleteByElementId
+Proc_CMS_CMSVideo_DeleteByElementId
+Proc_Testdrive_DeleteAllTasksByMainclientId
+Proc_TestDrive_JTeacherTestTask_GetAllTasksByTestId
+Proc_TestDrive_PaperPencil_DeletePaperPencilImage
+Proc_TestDrive_PaperPencil_GetPaperPencilTestDetails
+Proc_TestDrive_PaperPencil_SavePaperPencilMarkerData
+Proc_TestDrive_StandardTestProvider_GetAllTasksAssignedWithTests
+Proc_TestDrive_StandardTestProvider_GetAllTasksByTestId
+Proc_TestDrive_StandardTestProvider_GetAllTasksByTestId_New
+Proc_TestDrive_StandardTestProvider_GetAllTasksByTestId_New_Calibration
+Proc_TestDrive_Test_GetElementResultAttributesByPageId
+***********************************************************/
+
+/********************These procs are there **********************
+Proc_CMS_CMSPage_GetAnimationUsage
+Proc_TestDrive_StandardTestProvider_GetAllTasksByTestId_New_Calibration
+****************************************************************/
+
+/********************Procs need to Review**********************
+FProc_CMS_CMSContainer_LinkElementsToContainera (No Changes Required)
+JEditorProc_CMS_CMSContainer_LinkElementsToContainer (No Changes Required)
+Proc_CMS_CMSContainer_LinkElementsToContainer (No Changes Required)
+Proc_TestDrive_PaperPencil_SavePaperPencilMarkerData (No Changes Required)
+****************************************************************/

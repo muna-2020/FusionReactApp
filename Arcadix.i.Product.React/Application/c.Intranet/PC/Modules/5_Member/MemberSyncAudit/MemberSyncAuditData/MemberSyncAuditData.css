@@ -1,0 +1,314 @@
+﻿body {
+}
+
+.divAutoFLow{
+    max-height:85%;
+    overflow:auto;
+}
+
+.memberSync__title {
+    padding: 14px 10px;
+    font: 14px "dosis", Tahoma, Arial;
+}
+
+.page-contentMainTitle {
+    font: 18px "dosis", Tahoma, Arial;
+    display: inline-block;
+    padding: 10px 0;
+    font-weight: bold;
+}
+
+    .page-contentMainTitle.hdr {
+        display: block;
+    }
+
+.highlight {
+    background-color: #FFBABA !important;
+    color: #D8000C;
+}
+
+    .highlight td {
+        background: #FFBABA !important;
+    }
+
+.memberAuditTable {
+    border-right: 1px solid #ccc;
+}
+
+
+.auditTableTitle {
+    display: table-caption;
+}
+
+.memberAuditTable a {
+    color: #000;
+    text-decoration: none;
+}
+
+.memberAuditTable td.dateCol {
+    border: 1px solid #ccc;
+    min-width: 150px;
+}
+
+.memberAuditTable__FaultedRow {
+    display: table-row;
+    background-color: #FFBABA !important;
+    color: #D8000C;
+}
+
+
+.memberAuditTable th, .memberAuditTable td {
+    padding: 5px;
+    font: 14px "dosis", Tahoma, Arial;
+    display: table-cell;
+    text-align: justify;
+    border: 1px solid #bbb;
+    background: #fff;
+    vertical-align: top;
+}
+
+
+
+
+#resp-table-body {
+}
+
+.memberAuditTable td:hover {
+    background-color: #f7f7f7;
+    cursor: pointer;
+}
+
+.memberAuditTable.inner .memberAuditTable td:hover {
+    background-color: transparent;
+}
+
+.memberAudit__table tr:first-child:hover {
+    background-color: #ccc;
+}
+
+.memberAuditTable__FaultedRow:hover {
+    background-color: #FFBABA !important;
+}
+
+.memberAuditTable.inner {
+    display: table-cell;
+    border: 1px solid #ccc;
+    border-right: none;
+    border-bottom: none;
+}
+
+    .memberAuditTable td .fileName, .memberAuditTable.inner .fileName {
+        text-decoration: underline;
+        display: block;
+    }
+
+.jsonCol {
+    width: 350px;
+    white-space: normal;
+    min-width: 350px;
+}
+
+.memberAuditTable.inner td {
+    border: none;
+}
+
+.auditDetails td, .auditDetails th {
+    border: 1px solid #ccc !important;
+    padding: 5px;
+}
+
+.memberAuditTable th, .auditDetails th {
+    background-color: #ccc;
+    white-space: nowrap;
+    text-align: left;
+    border-right: 1px solid #bbb !IMPORTANT;
+}
+
+.process__btn {
+    height: 25px;
+    background: #ffe8bf;
+    border: 1px solid transparent;
+}
+
+    .process__btn:hover {
+        border: 1px solid #FBAF2A;
+        cursor: pointer;
+        background: #fbaf2a;
+        color: #fff;
+    }
+
+.auditDataRow {
+    padding: 0;
+}
+
+.navigationLists li {
+    width: 100%;
+}
+
+    .navigationLists li ul {
+        padding-left: 15px;
+    }
+
+.not-togglable {
+    vertical-align: bottom;
+}
+
+.gridTable {
+    border-spacing: 0;
+}
+
+.topNavigation h5 {
+    margin: 3px 0 0 0
+} 
+
+
+/*body {
+}
+
+.memberSync__title {
+    padding: 10px;
+    font: 14px "dosis", Tahoma, Arial;
+}
+
+.page-contentMainTitle {
+    font: 18px "dosis", Tahoma, Arial;
+    display: inline-block;
+    padding: 10px 0;
+    font-weight: bold;
+}
+
+.highlight {
+    background-color: #FFBABA !important;
+    color: #D8000C;
+}
+
+.highlight td:hover {
+    background: #FFBABA;
+}
+
+.memberAuditTable {
+    border-right: 1px solid #ccc;
+}
+
+
+.auditTableTitle {
+    display: table-caption;
+}
+
+.memberAuditTable a {
+    color: #000;
+    text-decoration: none;
+}
+
+.memberAuditTable td.dateCol {
+    border: 1px solid #ccc;
+ min-width: 150px;
+}
+
+.memberAuditTable__FaultedRow {
+    display: table-row;
+    background-color: #FFBABA !important;
+    color: #D8000C;
+}
+
+
+.memberAuditTable th, .memberAuditTable td {
+    padding: 5px;
+    font: 14px "dosis", Tahoma, Arial;
+    display: table-cell;
+    text-align: justify;
+    border: 1px solid #bbb;
+    background: #fff;
+    vertical-align:top
+}
+
+
+
+
+#resp-table-body {
+}
+
+.memberAuditTable td:hover {
+    background-color: #f7f7f7;
+    cursor: pointer;
+}
+
+.memberAuditTable.inner .memberAuditTable td:hover {
+    background-color: transparent;
+}
+
+.memberAudit__table tr:first-child:hover {
+    background-color: #ccc;
+}
+
+.memberAuditTable__FaultedRow:hover {
+    background-color: #FFBABA !important;
+}
+
+.memberAuditTable.inner {
+    display: table-cell;
+    border: 1px solid #ccc;
+    border-right: none;
+    border-bottom: none;
+}
+
+    .memberAuditTable td .fileName, .memberAuditTable.inner .fileName {
+        text-decoration: underline;
+        display: block;
+    }
+
+.jsonCol {
+    width: 350px;
+    white-space: normal;
+    min-width: 350px;
+}
+
+.memberAuditTable.inner td {
+    border: none;
+}
+
+.auditDetails td, .auditDetails th {
+    border: 1px solid #ccc !important;
+    padding: 5px;
+}
+
+.memberAuditTable th, .auditDetails th {
+    background-color: #ccc;
+    white-space: nowrap;
+    text-align: left;
+    border-right: 1px solid #bbb !IMPORTANT;
+}
+
+.process__btn {
+    height: 25px;
+    background: #ffe8bf;
+    border: 1px solid transparent;
+}
+
+.process__btn:hover {
+    border: 1px solid #FBAF2A;
+    cursor: pointer;
+    background: #fbaf2a;
+    color: #fff;
+}
+
+.auditDataRow {
+    padding: 0;
+}
+.navigationLists li {
+    width: 100%;
+}
+.navigationLists li ul {
+    padding-left : 15px;
+
+}
+.not-togglable {
+    vertical-align: bottom;
+}
+.gridTable {
+    border-spacing: 0;
+}
+
+.topNavigation h5 {
+    margin: 3px 0 0 0
+}*/ 

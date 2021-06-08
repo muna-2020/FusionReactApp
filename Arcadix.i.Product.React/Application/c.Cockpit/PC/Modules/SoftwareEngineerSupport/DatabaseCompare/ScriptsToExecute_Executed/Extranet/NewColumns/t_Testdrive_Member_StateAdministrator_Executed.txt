@@ -1,0 +1,36 @@
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Testdrive_Member_StateAdministrator' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+    ALTER TABLE t_Testdrive_Member_StateAdministrator ADD uModifiedByUserId uniqueidentifier  
+END
+Go
+/**********************************
+Default Values
+**********************************/
+update t_Testdrive_Member_StateAdministrator set uModifiedByUserId = uUserId  
+Go
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_Testdrive_StateMembership_ValidateUser
+Proc_TestDrive_JStateProfile_GetStateAdminProfileImageDetails
+Proc_TestDrive_JStateProfile_SaveStateAdminProfileImage
+Proc_TestDrive_Member_GetMemberDetailsForDashboard
+Proc_TestDrive_State_GetStateDetailByStateAdministratorId
+Proc_TestDrive_State_SaveStateAdminPassword
+Proc_TestDrive_State_SaveStateDependingTablesData
+Proc_Testdrive_StateMembership_ValidateUser
+***********************************************************/
+
+
+
+/********************Procs to Review**********************
+
+***********************************************************/

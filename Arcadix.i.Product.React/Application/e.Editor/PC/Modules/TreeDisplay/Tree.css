@@ -1,0 +1,60 @@
+﻿.all {
+    list-style-type: none;
+    font-family: calibri;
+}
+
+.folder-tre ul {
+    padding: 0;
+    margin: 0;
+}
+
+    .folder-tre ul.nested {
+        padding-left: 23px;
+    }
+
+.caret::before {
+    content: "+";
+    color: black;
+    display: inline-block;
+    margin-right: 8px;
+    width: 10px;
+    border: 1px solid darkgrey;
+    height: 10px;
+    display: inline-flex;
+    justify-content: center;
+    line-height: 8px;
+    position: relative;
+    top: -2px;
+}
+
+.folder-tre ul li img {
+    position: relative;
+    top: 2px;
+    margin-right: 6px;
+}
+
+.caret-down::before {
+    content: "-";
+}
+
+.nested {
+    display: none;
+}
+
+.folder-tre ul li {
+    line-height: 27px;
+    font-size: 14px;
+    text-transform: capitalize;
+}
+
+.active {
+    display: block;
+}
+
+.hidenode {
+    display: none;
+}
+
+.shownode {
+    display:block;
+}

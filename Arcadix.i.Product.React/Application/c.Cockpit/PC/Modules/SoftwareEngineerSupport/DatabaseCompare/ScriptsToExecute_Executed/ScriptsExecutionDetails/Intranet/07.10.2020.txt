@@ -1,0 +1,203 @@
+﻿
+/**********************************
+Following tables updated:
+1) t_TestDrive_Test_ResultAttribute
+2) t_TestDrive_Test_ResultAttribute_ElementRule
+3) t_TestDrive_Test_TaskIndexDisplay
+4) t_TestDrive_Test_TestProgressDisplay
+5) t_TestDrive_Test_WrapperTestAssignment
+6) t_TestDrive_Cycle
+7) t_testdrive_Category_Competency_CandoItems
+8) t_TestDrive_Competency_Planner
+**********************************/
+
+/**********************************
+Following procs updated:
+1) Proc_TestDrive_Test_ElementObjectRules_SaveAsCutomTemplate - t_TestDrive_Test_ResultAttribute_ElementRule
+**********************************/
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_ResultAttribute_ElementRule' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Test_ResultAttribute_ElementRule ADD uModifiedByUserId uniqueidentifier  
+END		 
+
+GO
+/**********************************
+Default Values
+*********************************/
+update t_TestDrive_Test_ResultAttribute_ElementRule set uModifiedByUserId= uUserId Where uModifiedByUserId is null
+
+GO
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_TaskIndexDisplay' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_Test_TaskIndexDisplay ADD dtModifiedOn datetime  DEFAULT (getdate())
+END
+		 
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Test_TaskIndexDisplay set dtModifiedOn= GetDate() Where dtModifiedOn is null
+
+GO
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_TestProgressDisplay' AND COLUMN_NAME = 'dtModifiedOn')  
+BEGIN
+ALTER TABLE t_TestDrive_Test_TestProgressDisplay ADD dtModifiedOn datetime  DEFAULT (getdate())
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_TestProgressDisplay' AND COLUMN_NAME = 'cIsForFusion') 
+BEGIN
+ALTER TABLE t_TestDrive_Test_TestProgressDisplay ADD cIsForFusion char(1)  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Test_TestProgressDisplay set dtModifiedOn= GetDate() Where dtModifiedOn is null
+
+GO
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_WrapperTestAssignment' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Test_WrapperTestAssignment ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Test_WrapperTestAssignment set uModifiedByUserId= uUserId Where uModifiedByUserId is null
+
+GO
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Cycle' AND COLUMN_NAME = 'uUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Cycle ADD uUserId uniqueidentifier  
+END	  
+	
+GO	
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Cycle' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Cycle ADD uModifiedByUserId uniqueidentifier  
+END			 
+
+GO
+/**********************************
+Default Values
+**********************************/
+--update t_TestDrive_Cycle set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_testdrive_Category_Competency_CandoItems' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_testdrive_Category_Competency_CandoItems ADD uModifiedByUserId uniqueidentifier  
+END			 
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_testdrive_Category_Competency_CandoItems set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Competency_Planner' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Competency_Planner ADD uModifiedByUserId uniqueidentifier  
+END		 
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Competency_Planner set uModifiedByUserId=uUserId where uModifiedByUserId is null
+
+GO
+
+  
+ALTER PROCEDURE [dbo].Proc_TestDrive_Test_ElementObjectRules_SaveAsCutomTemplate      
+(      
+   @iMainClientId int,      
+   @uUserId uniqueidentifier,      
+   @uElementFormulaAttributeTemplateId uniqueidentifier,       
+   @vTemplateName nvarchar(200),      
+   @iLanguageId int    
+)        
+AS       
+BEGIN     
+Declare      
+@uNewElementFormulaAttributeTemplateId uniqueidentifier,      
+@uNewResultAttributeId uniqueidentifier,      
+@uNewResultAttributeFormulaId uniqueidentifier,       
+@uResultAttributeId uniqueidentifier ,@iCalculationLevelId int ,@vAttributeKey nvarchar(200),@iOrder int,@cIsDeleted char(1),@cIsVisible char(1),@vUnit nvarchar(50),      
+@cIsForWholeTask char(1),@dTaskCorrectPoints decimal(8,2),@dTasksWrongPoints decimal(8,2),@dTaskNotAnsweredPoints decimal(8,2),@cIsAdaptive char(1), @iBaseTemplateId int     
+/********************************************************************************************    
+Created By:  Praveen       
+Created Date: 21.02.2012       
+Description:  Procedure to save ElementObjectRules      
+      
+Modified By:     
+Modified Date:       
+Description:       
+********************************************************************************************/     
+  set @uNewElementFormulaAttributeTemplateId = newid()       
+  -- Templates      
+ declare curTemplate cursor for select cIsForWholeTask,dTaskCorrectPoints,dTasksWrongPoints,dTaskNotAnsweredPoints,iElementFormulaAttributeBaseTypeId from t_TestDrive_Test_ResultAttribute_ElementFormulaAttribute_Template     
+ where uElementFormulaAttributeTemplateId = @uElementFormulaAttributeTemplateId    
+ open curTemplate       
+ FETCH next from curTemplate into @cIsForWholeTask,@dTaskCorrectPoints,@dTasksWrongPoints,@dTaskNotAnsweredPoints ,@iBaseTemplateId     
+ while (@@fetch_status <> -1)       
+ BEGIN        
+  insert into t_TestDrive_Test_ResultAttribute_ElementFormulaAttribute_Template ([uElementFormulaAttributeTemplateId],[iMainClientId],[uUserId],[dtCreatedOn],[dtModifiedOn],[cIsDeleted],[cIsForWholeTask],    
+  [dTaskCorrectPoints],[dTasksWrongPoints],[dTaskNotAnsweredPoints],[cIsSystem],[iElementFormulaAttributeBaseTypeId],cIsDefault)      
+  values(@uNewElementFormulaAttributeTemplateId,@iMainClientId,@uUserId,getdate(),getdate(),'N',@cIsForWholeTask,@dTaskCorrectPoints,@dTasksWrongPoints,@dTaskNotAnsweredPoints,'N',@iBaseTemplateId,'N')     
+    
+   insert into t_TestDrive_Test_ResultAttribute_ElementFormulaAttribute_Template_Data ([uElementFormulaAttributeTemplateDataId],[uElementFormulaAttributeTemplateId],[iLanguageId],[vTemplateName])       
+  values(newid(),@uNewElementFormulaAttributeTemplateId,@iLanguageId,@vTemplateName)     
+  FETCH next from curTemplate into @cIsForWholeTask,@dTaskCorrectPoints,@dTasksWrongPoints,@dTaskNotAnsweredPoints,@iBaseTemplateId       
+ END     
+ CLOSE curTemplate     
+ DEALLOCATE curTemplate     
+      
+ insert into t_TestDrive_Test_ResultAttribute_ElementRule (uTestElementRuleId,uElementFormulaAttributeTemplateId,iElementTypeId,iElementRuleId,dtCreatedOn,dtModifiedOn,uUserId) select NEWID(),@uNewElementFormulaAttributeTemplateId,iElementTypeId,iElementRuleId,getdate(),getdate(),@uUserId     
+ from t_TestDrive_Test_ResultAttribute_ElementRule where uElementFormulaAttributeTemplateId = @uElementFormulaAttributeTemplateId    
+      
+ insert into t_TestDrive_Test_ResultAttribute_ElementFormulaAttribute  ( uElementFormulaAttributeId,uElementFormulaAttributeTemplateId,iElementTypeId,dElementObjectsCorrect,dElementObjectsWrong,dElementObjectsNotAnswered,dUpperBoundValue,dLowerBoundValue,
+uUserId,dtCreatedOn,dtModifiedOn,cIsForElement )   
+ select NEWID(),@uNewElementFormulaAttributeTemplateId,iElementTypeId,dElementObjectsCorrect,dElementObjectsWrong,dElementObjectsNotAnswered,dUpperBoundValue,dLowerBoundValue,@uUserId,getDate(),getdate(),cIsForElement    
+  from t_TestDrive_Test_ResultAttribute_ElementFormulaAttribute where uElementFormulaAttributeTemplateId = @uElementFormulaAttributeTemplateId      
+      
+ Select FT.uElementFormulaAttributeTemplateId,FTD.vTemplateName from t_TestDrive_Test_ResultAttribute_ElementFormulaAttribute_Template FT       
+ inner join t_TestDrive_Test_ResultAttribute_ElementFormulaAttribute_Template_Data FTD on FTD.uElementFormulaAttributeTemplateId = FT.uElementFormulaAttributeTemplateId     
+ where FT.uElementFormulaAttributeTemplateId = @uNewElementFormulaAttributeTemplateId      
+      
+End  

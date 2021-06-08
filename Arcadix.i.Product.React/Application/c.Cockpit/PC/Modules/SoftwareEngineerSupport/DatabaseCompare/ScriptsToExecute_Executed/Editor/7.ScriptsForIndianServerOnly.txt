@@ -1,0 +1,6 @@
+/**************************************************************************************************
+ the result database connection strings are updated to common for main and state specific databases.
+**************************************************************************************************/
+
+update t_TestDrive_ResultDatabase_individualstateversion set vDatabaseName='Fusion_Common_Result_Active',vResultDatabaseConnectionString='server=192.168.129.126;database=Fusion_Common_Result_Active;uid=TestDriveCommon;pwd=ksdfkd933dkdk99d98d;Max Pool Size=800;',vDatabaseProvider='SqlServer'
+update t_TestDrive_ResultDatabase set vDatabaseName='Fusion_Common_Result_Active',vResultDatabaseConnectionString='server=192.168.129.126;database=Fusion_Common_Result_Active;uid=TestDriveCommon;pwd=ksdfkd933dkdk99d98d;Max Pool Size=800;'vDatabaseProvider='SqlServer'

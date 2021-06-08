@@ -1,0 +1,40 @@
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Testdrive_Member_MemberSurvey' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+	ALTER TABLE t_Testdrive_Member_MemberSurvey ADD dtModifiedOn datetime  
+END
+Go
+	  
+	  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Testdrive_Member_MemberSurvey' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_Testdrive_Member_MemberSurvey ADD uModifiedByUserId uniqueidentifier  
+END
+Go
+
+/**********************************
+Default Values
+**********************************/
+update t_Testdrive_Member_MemberSurvey set dtModifiedOn = dtAnsweredOn
+Go
+update t_Testdrive_Member_MemberSurvey set uModifiedByUserId = uUserId 
+Go
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_TestDrive_Survey_AddSurveyData
+JProc_TestDrive_Survey_GetSurveyData
+JProc_TestDrive_Survey_GetSurveyDataForExport
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/

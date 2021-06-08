@@ -1,0 +1,347 @@
+﻿/**********************************
+Following tables updated:
+	1) t_TestDrive_Test_LinearAdaptivePointMapping
+	2) t_TestDrive_Test_Navigation
+	3) t_TestDrive_Test_ResultAttribute_ElementFormulaAttribute
+	4) t_TestDrive_Test_ResultAttribute_ElementFormulaAttribute_ElementSpecific
+	5) t_TestDrive_Test_ResultAttribute_ElementFormulaAttribute_Template
+**********************************/
+
+/**********************************
+Following Procs updated:
+   1) Proc_CMS_TestNavigationToTest_SaveNavigations - t_TestDrive_Test_Navigation
+   2) Proc_TestDrive_Test_ElementObjectRules_SaveAsCutomTemplate - t_TestDrive_Test_ResultAttribute_ElementFormulaAttribute
+**********************************/
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_LinearAdaptivePointMapping' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Test_LinearAdaptivePointMapping ADD uModifiedByUserId uniqueidentifier  
+END				 
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Test_LinearAdaptivePointMapping set uModifiedByUserId= uUserId Where uModifiedByUserId is null
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_Navigation' AND COLUMN_NAME = 'uModifiedByUserId')
+BEGIN
+ALTER TABLE t_TestDrive_Test_Navigation ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Test_Navigation set uModifiedByUserId= uUserId Where uModifiedByUserId is null
+
+GO
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_ResultAttribute_ElementFormulaAttribute' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Test_ResultAttribute_ElementFormulaAttribute ADD uModifiedByUserId uniqueidentifier  
+END		 
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Test_ResultAttribute_ElementFormulaAttribute set uModifiedByUserId= uUserId Where uModifiedByUserId is null
+
+GO
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_ResultAttribute_ElementFormulaAttribute_ElementSpecific' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Test_ResultAttribute_ElementFormulaAttribute_ElementSpecific ADD uModifiedByUserId uniqueidentifier  
+END
+ 
+ GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Test_ResultAttribute_ElementFormulaAttribute_ElementSpecific set uModifiedByUserId= uUserId Where uModifiedByUserId is null
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_ResultAttribute_ElementFormulaAttribute_Template' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Test_ResultAttribute_ElementFormulaAttribute_Template ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Test_ResultAttribute_ElementFormulaAttribute_Template set uModifiedByUserId= uUserId Where uModifiedByUserId is null
+
+GO
+
+/**********************************
+Procs
+**********************************/
+ALTER Procedure [dbo].[Proc_CMS_TestNavigationToTest_SaveNavigations]      
+  
+(   
+  
+@uTestId uniqueidentifier,     
+  
+@tSaveXml ntext,     
+  
+@tNameDataXml ntext,  
+  
+@uUserId uniqueidentifier,    
+  
+@iLanguageId int      
+  
+)          
+  
+As           
+  
+/********************************************************************************************     
+  
+ Created By: Praveen       
+  
+ Create Date:  13.05.2013         
+  
+ Description:  Saves the navigations for test in presentation test   
+  
+  
+  
+ Modified By:          
+  
+ Modified Date :          
+  
+ Description:            
+  
+ ********************************************************************************************/     
+  
+Begin   
+  
+Declare @iNameDataXmlPointer int,@iNavigationXmlPointer int,@vAccessId nvarchar(50),@vAccessPid nvarchar(50),@vName nvarchar(500),@cIsActive char(1),@cHasRealPid char(1),@uNavigationId uniqueidentifier,@iOrder int,@uPid uniqueidentifier,@uId uniqueidentifier,@cIsNewNode char(1),@iTaskId int,@iDataLanguageId int  
+  
+Execute sp_xml_preparedocument @iNavigationXmlPointer OUTPUT,@tSaveXml   
+  
+Execute sp_xml_preparedocument @iNameDataXmlPointer OUTPUT,@tNameDataXml   
+  
+  
+  
+update  t_TestDrive_Test_Navigation set cIsDelete='Y' where uTestNavigationId not in ( Select IsNULL(Id,'00000000-0000-0000-0000-000000000000') from OpenXml(@iNavigationXmlPointer,'/Input/Data')                      
+  
+    with(Id uniqueidentifier 'Id')   
+  
+ ) and uTestId=@uTestId    
+  
+  
+  
+create table #TempTable(  
+  
+Id uniqueidentifier,  
+  
+vAccessId nvarchar(50))    
+  
+  
+  
+ declare Cursor_SaveNavigation Cursor For  
+  
+    Select * from OpenXml(@iNavigationXmlPointer,'/Input/Data')   
+  
+    with(Id uniqueidentifier 'Id',vName nvarchar(500) 'Name',Pid uniqueidentifier 'Pid',cIsActive char(1) 'IsActive',cHasRealPid char(1) 'HasRealPid',vAccessPid nvarchar(50) 'AccessPid',vAccessId nvarchar(50) 'AccessId',cIsNewNode char(1) 'IsNewNode',TaskId int 'TaskId',iOrder int 'NavigationOrder')               
+  
+  
+  
+ open Cursor_SaveNavigation       
+  
+ Fetch Next from Cursor_SaveNavigation into @uId,@vName,@uPid,@cIsActive,@cHasRealPid,@vAccessPid, @vAccessId ,@cIsNewNode,@iTaskId,@iOrder   
+  
+ while(@@FETCH_STATUS <> -1)    
+  
+ Begin   
+  
+ if(@cIsNewNode ='Y')  
+  
+ Begin  
+  
+  Set @uNavigationId = NEWID()   
+  
+  insert into #TempTable values (@uNavigationId,@vAccessId)  
+  
+  if(@cHasRealPid = 'N')  
+  
+  Begin   
+  
+   select @uPid=Id from #TempTable where vAccessId = @vAccessPid  
+  
+  End    
+  
+  
+  
+  insert into t_TestDrive_Test_Navigation(uTestNavigationId, uTestId, iPageId, iOrder, cIsActive, cIsDelete, dtCreatedOn, dtModifiedOn, uUserId, uParentTestNavigationId) values(@uNavigationId,@uTestId,@iTaskId,@iOrder,@cIsActive,'N',GETDATE(),GETDATE(),@uUserId,@uPid)  
+  
+  insert into t_TestDrive_Test_Navigation_Data values(NEWID(),@uNavigationId,@iLanguageId,@vName)  
+  
+  end  
+  
+  else  
+  
+  Begin  
+  
+    update t_TestDrive_Test_Navigation set cIsActive = @cIsActive,iPageId=@iTaskId,iOrder=@iOrder where uTestNavigationId = @uId  
+  
+    update t_TestDrive_Test_Navigation_Data set vNavigationName = @vName where uTestNavigationId = @uId and iLanguageId = @iLanguageId  
+  
+  ENd  
+  
+   Fetch Next from Cursor_SaveNavigation into @uId,@vName,@uPid,@cIsActive,@cHasRealPid,@vAccessPid, @vAccessId ,@cIsNewNode,@iTaskId,@iOrder  
+  
+ End    
+  
+  close Cursor_SaveNavigation   
+  
+  Deallocate Cursor_SaveNavigation    
+  
+  EXEC sp_xml_removedocument @iNavigationXmlPointer      
+  
+  
+  
+  
+  
+  /************** Save Navigation Name in data table**************************/  
+  
+  
+  
+  declare Cursor_DataNameSave Cursor For  
+  
+   Select * from OpenXml(@iNameDataXmlPointer,'Input/Data')  
+  
+   with(vName nvarchar(500) 'Name',LanguageId int 'LanguageId',Id uniqueidentifier 'NavigationId',vAccessId nvarchar(50) 'AccessId',cIsNewNode char(1) 'IsNewNode')  
+  
+  
+  
+   open Cursor_DataNameSave   
+  
+   Fetch Next From Cursor_DataNameSave into @vName,@iDataLanguageId,@uId,@vAccessId,@cIsNewNode  
+  
+    while(@@FETCH_STATUS <> -1)    
+  
+ Begin   
+  
+   if(@cIsNewNode = 'Y')  
+  
+   Begin  
+  
+     select @uId=Id from #TempTable where vAccessId = @vAccessId  
+  
+   End  
+  
+  
+  
+   if(exists(select * from t_TestDrive_Test_Navigation_Data where uTestNavigationId = @uId and iLanguageId = @iDataLanguageId))  
+  
+   Begin  
+  
+          update t_TestDrive_Test_Navigation_Data set vNavigationName = @vName where uTestNavigationId = @uId and iLanguageId = @iDataLanguageId  
+  
+   End  
+  
+   Else  
+  
+   Begin  
+  
+          insert into t_TestDrive_Test_Navigation_Data values (newId(),@uId,@iDataLanguageId,@vName)  
+  
+   End  
+  
+  
+  
+   Fetch Next From Cursor_DataNameSave into @vName,@iDataLanguageId,@uId,@vAccessId,@cIsNewNode  
+  
+   End    
+  
+    close Cursor_DataNameSave   
+  
+  Deallocate Cursor_DataNameSave    
+  
+  EXEC sp_xml_removedocument @iNameDataXmlPointer  
+  
+  
+  
+  drop table #TempTable      
+  
+End
+
+GO
+
+ALTER PROCEDURE [dbo].Proc_TestDrive_Test_ElementObjectRules_SaveAsCutomTemplate    
+(    
+   @iMainClientId int,    
+   @uUserId uniqueidentifier,    
+   @uElementFormulaAttributeTemplateId uniqueidentifier,     
+   @vTemplateName nvarchar(200),    
+   @iLanguageId int  
+)      
+AS     
+BEGIN   
+Declare    
+@uNewElementFormulaAttributeTemplateId uniqueidentifier,    
+@uNewResultAttributeId uniqueidentifier,    
+@uNewResultAttributeFormulaId uniqueidentifier,     
+@uResultAttributeId uniqueidentifier ,@iCalculationLevelId int ,@vAttributeKey nvarchar(200),@iOrder int,@cIsDeleted char(1),@cIsVisible char(1),@vUnit nvarchar(50),    
+@cIsForWholeTask char(1),@dTaskCorrectPoints decimal(8,2),@dTasksWrongPoints decimal(8,2),@dTaskNotAnsweredPoints decimal(8,2),@cIsAdaptive char(1), @iBaseTemplateId int   
+/********************************************************************************************  
+Created By:  Praveen     
+Created Date: 21.02.2012     
+Description:  Procedure to save ElementObjectRules    
+    
+Modified By:   
+Modified Date:     
+Description:     
+********************************************************************************************/   
+  set @uNewElementFormulaAttributeTemplateId = newid()     
+  -- Templates    
+ declare curTemplate cursor for select cIsForWholeTask,dTaskCorrectPoints,dTasksWrongPoints,dTaskNotAnsweredPoints,iElementFormulaAttributeBaseTypeId from t_TestDrive_Test_ResultAttribute_ElementFormulaAttribute_Template   
+ where uElementFormulaAttributeTemplateId = @uElementFormulaAttributeTemplateId  
+ open curTemplate     
+ FETCH next from curTemplate into @cIsForWholeTask,@dTaskCorrectPoints,@dTasksWrongPoints,@dTaskNotAnsweredPoints ,@iBaseTemplateId   
+ while (@@fetch_status <> -1)     
+ BEGIN      
+  insert into t_TestDrive_Test_ResultAttribute_ElementFormulaAttribute_Template ([uElementFormulaAttributeTemplateId],[iMainClientId],[uUserId],[dtCreatedOn],[dtModifiedOn],[cIsDeleted],[cIsForWholeTask],  
+  [dTaskCorrectPoints],[dTasksWrongPoints],[dTaskNotAnsweredPoints],[cIsSystem],[iElementFormulaAttributeBaseTypeId],cIsDefault)    
+  values(@uNewElementFormulaAttributeTemplateId,@iMainClientId,@uUserId,getdate(),getdate(),'N',@cIsForWholeTask,@dTaskCorrectPoints,@dTasksWrongPoints,@dTaskNotAnsweredPoints,'N',@iBaseTemplateId,'N')   
+  
+   insert into t_TestDrive_Test_ResultAttribute_ElementFormulaAttribute_Template_Data ([uElementFormulaAttributeTemplateDataId],[uElementFormulaAttributeTemplateId],[iLanguageId],[vTemplateName])     
+  values(newid(),@uNewElementFormulaAttributeTemplateId,@iLanguageId,@vTemplateName)   
+  FETCH next from curTemplate into @cIsForWholeTask,@dTaskCorrectPoints,@dTasksWrongPoints,@dTaskNotAnsweredPoints,@iBaseTemplateId     
+ END   
+ CLOSE curTemplate   
+ DEALLOCATE curTemplate   
+    
+ insert into t_TestDrive_Test_ResultAttribute_ElementRule  select NEWID(),@uNewElementFormulaAttributeTemplateId,iElementTypeId,iElementRuleId,getdate(),getdate(),@uUserId   
+ from t_TestDrive_Test_ResultAttribute_ElementRule where uElementFormulaAttributeTemplateId = @uElementFormulaAttributeTemplateId  
+    
+ insert into t_TestDrive_Test_ResultAttribute_ElementFormulaAttribute  ( uElementFormulaAttributeId,uElementFormulaAttributeTemplateId,iElementTypeId,dElementObjectsCorrect,dElementObjectsWrong,dElementObjectsNotAnswered,dUpperBoundValue,dLowerBoundValue,uUserId,dtCreatedOn,dtModifiedOn,cIsForElement ) 
+ select NEWID(),@uNewElementFormulaAttributeTemplateId,iElementTypeId,dElementObjectsCorrect,dElementObjectsWrong,dElementObjectsNotAnswered,dUpperBoundValue,dLowerBoundValue,@uUserId,getDate(),getdate(),cIsForElement  
+  from t_TestDrive_Test_ResultAttribute_ElementFormulaAttribute where uElementFormulaAttributeTemplateId = @uElementFormulaAttributeTemplateId    
+    
+ Select FT.uElementFormulaAttributeTemplateId,FTD.vTemplateName from t_TestDrive_Test_ResultAttribute_ElementFormulaAttribute_Template FT     
+ inner join t_TestDrive_Test_ResultAttribute_ElementFormulaAttribute_Template_Data FTD on FTD.uElementFormulaAttributeTemplateId = FT.uElementFormulaAttributeTemplateId   
+ where FT.uElementFormulaAttributeTemplateId = @uNewElementFormulaAttributeTemplateId    
+    
+End

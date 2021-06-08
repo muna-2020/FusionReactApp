@@ -1,0 +1,3202 @@
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_Document' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_LearnCoacher_Document ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_Document set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_LearnCoacher_Document_CopyFolder_04_05_2020
+JProc_LearnCoacher_Document_CopyFolder_07_07_2020
+JProc_LearnCoacher_Document_CopyFolder_20_05_2020
+JProc_LearnCoacher_Document_CopyFolder_Final
+JProc_LearnCoacher_Document_CopyFolder_Final_07_08_2019
+JProc_LearnCoacher_Document_CopyFolder_New
+JProc_LearnCoacher_Document_CopyFolders
+JProc_LearnCoacher_Document_DeleteDocument
+JProc_LearnCoacher_Document_DeleteDocument_Final
+JProc_LearnCoacher_Document_DeleteFolder
+JProc_LearnCoacher_Document_DeleteFolder_04_05_2020
+JProc_LearnCoacher_Document_DeleteFolder_Final
+JProc_LearnCoacher_Document_DeleteFolder_Final_07_08_2019
+JProc_LearnCoacher_Document_GetDocuments
+JProc_LearnCoacher_Document_GetDocumentsForMainClient
+JProc_LearnCoacher_Document_GetDocumentsForMainClient_1892018
+JProc_LearnCoacher_Document_GetDocumentsForMainClient_20_05_2020
+JProc_LearnCoacher_Document_GetDocumentsForMainClient_Final
+JProc_LearnCoacher_Document_GetDocumentsForMainClient_Sync
+JProc_LearnCoacher_Document_GetFoldersAndDocumentsForMainClientId
+JProc_LearnCoacher_Document_UploadFiles
+JProc_LearnCoacher_Document_UploadFiles_09_06_2020
+JProc_LearnCoacher_Document_UploadFiles_1892018
+JProc_LearnCoacher_Document_UploadFiles_20_05_2020
+JProc_LearnCoacher_Document_UploadFiles_30_06_2020
+JProc_LearnCoacher_Document_UploadFiles_Final
+JProc_LearnCoacher_Document_ViewStatus_ForMainClient
+JProc_LearnCoacher_Document_ViewStatus_ForMainClient_Final
+JProc_LearnCoacher_News_GetDocumentsToUploadToOneDrive
+JProc_LearnCoacher_SaveDocumentFileId
+JProc_LearnCoacher_SaveDocumentFileId_01_07_2020
+JProc_LearnCoacher_SaveDocumentFileId_1892018
+JProc_LearnCoacher_SaveDocumentFileId_20_05_2020
+JProc_LearnCoacher_SaveDocumentFileId_Final
+JProc_LearnCoacher_SaveDocumentFileId_Final_12_06_2020
+Proc_TestDrive_MiscExport_GetDocumentCount
+
+***********************************************************/
+
+
+/********************Procs to Review*************************
+JProc_LearnCoacher_Document_CopyFolder_04_05_2020 (Not Modified)
+JProc_LearnCoacher_Document_CopyFolder_07_07_2020 (Not Modified)
+JProc_LearnCoacher_Document_CopyFolder_20_05_2020 (Not Modified)
+
+JProc_LearnCoacher_Document_CopyFolder_Final (Modified)
+JProc_LearnCoacher_Document_CopyFolder_Final_07_08_2019 (Modified)
+JProc_LearnCoacher_Document_CopyFolder_New (Modified)
+JProc_LearnCoacher_Document_CopyFolders (Modified)
+
+JProc_LearnCoacher_Document_UploadFiles (No Change Required)
+JProc_LearnCoacher_Document_UploadFiles_09_06_2020 (No Change Required)
+JProc_LearnCoacher_Document_UploadFiles_1892018  (No Change Required)
+JProc_LearnCoacher_Document_UploadFiles_20_05_2020 (No Change Required)
+JProc_LearnCoacher_Document_UploadFiles_30_06_2020 (No Change Required)
+JProc_LearnCoacher_Document_UploadFiles_Final (No Change Required)
+
+**************************************************************/
+
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Learncoacher_Document_Data' AND COLUMN_NAME = 'vFileId') 
+BEGIN
+	ALTER TABLE t_Learncoacher_Document_Data ADD vFileId nvarchar(max)  
+END
+
+/**********************************
+Default Values
+**********************************/  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_LearnCoacher_Document_CopyFolders
+JProc_LearnCoacher_Document_GetDocuments
+JProc_LearnCoacher_Document_GetFoldersAndDocumentsForMainClientId
+***********************************************************/
+
+
+
+/********************Procs to Review**********************
+JProc_LearnCoacher_Document_CopyFolders (Modified)
+***********************************************************/
+
+
+/**********************************
+New Columns
+**********************************/
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_Document_Folder' AND COLUMN_NAME = 'uModifiedByUserId') 
+  BEGIN
+      ALTER TABLE t_LearnCoacher_Document_Folder ADD uModifiedByUserId uniqueidentifier  
+ END
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_Document_Folder set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_LearnCoacher_Document_AddFolder
+JProc_LearnCoacher_Document_AddFolder_04_05_2020
+JProc_LearnCoacher_Document_AddFolder_1892018
+JProc_LearnCoacher_Document_AddFolder_Final
+JProc_LearnCoacher_Document_AddFolder_Final_07_08_2019
+JProc_LearnCoacher_Document_AssignUsers
+JProc_LearnCoacher_Document_AssignUsers_Final
+JProc_LearnCoacher_Document_AssignUsers_Final_07_08_2019
+JProc_LearnCoacher_Document_AssignUsers_New
+JProc_LearnCoacher_Document_AssignUsers_Old
+JProc_LearnCoacher_Document_CopyFolder_04_05_2020
+JProc_LearnCoacher_Document_CopyFolder_07_07_2020
+JProc_LearnCoacher_Document_CopyFolder_20_05_2020
+JProc_LearnCoacher_Document_CopyFolder_Final
+JProc_LearnCoacher_Document_CopyFolder_Final_07_08_2019
+JProc_LearnCoacher_Document_CopyFolder_New
+JProc_LearnCoacher_Document_CopyFolders
+JProc_LearnCoacher_Document_DeleteFolder
+JProc_LearnCoacher_Document_DeleteFolder_04_05_2020
+JProc_LearnCoacher_Document_DeleteFolder_Final
+JProc_LearnCoacher_Document_DeleteFolder_Final_07_08_2019
+JProc_LearnCoacher_Document_GetDocuments
+JProc_LearnCoacher_Document_GetDocumentsForMainClient
+JProc_LearnCoacher_Document_GetDocumentsForMainClient_1892018
+JProc_LearnCoacher_Document_GetDocumentsForMainClient_20_05_2020
+JProc_LearnCoacher_Document_GetDocumentsForMainClient_Final
+JProc_LearnCoacher_Document_GetFolders
+JProc_LearnCoacher_Document_GetFoldersAndDocumentsForMainClientId
+JProc_LearnCoacher_Document_GetFoldersForMainClient
+JProc_LearnCoacher_Document_GetFoldersForMainClient_04_05_2020
+JProc_LearnCoacher_Document_GetFoldersForMainClient_1892018
+JProc_LearnCoacher_Document_GetFoldersForMainClient_Final
+JProc_LearnCoacher_Document_GetFoldersForMainClient_Final_07_08_2019
+JProc_LearnCoacher_Document_GetFoldersForMainClient_Sync
+JProc_LearnCoacher_Document_MoveFolders
+JProc_LearnCoacher_Document_MoveFolders_04_05_2020
+JProc_LearnCoacher_Document_MoveFolders_1892018
+JProc_LearnCoacher_Document_MoveFolders_19_05_2020
+JProc_LearnCoacher_Document_MoveFolders_Final
+JProc_LearnCoacher_Document_MoveFolders_Final_07_08_2019
+JProc_LearnCoacher_Document_UpdateFolder
+JProc_LearnCoacher_Document_UpdateFolder_01_05_2020
+JProc_LearnCoacher_Document_UpdateFolder_1892018
+JProc_LearnCoacher_Document_UpdateFolder_Final
+JProc_LearnCoacher_Document_UpdateFolder_Final_07_08_2019
+JProc_LearnCoacher_Document_ViewStatus_ForMainClient
+JProc_LearnCoacher_Document_ViewStatus_ForMainClient_Final
+***********************************************************/
+
+
+/********************Procs to Review**********************
+JProc_LearnCoacher_Document_AddFolder (No Change Required)
+JProc_LearnCoacher_Document_AssignUsers (No Change Required)
+
+JProc_LearnCoacher_Document_AddFolder_1892018 (Modified)
+JProc_LearnCoacher_Document_AddFolder_Final (Modified)
+JProc_LearnCoacher_Document_AddFolder_Final_07_08_2019 (Modified)
+JProc_LearnCoacher_Document_AssignUsers_Final (Modified - Review)
+JProc_LearnCoacher_Document_AssignUsers_Final_07_08_2019 (Modified)
+JProc_LearnCoacher_Document_AssignUsers_New (Modified - Review)
+JProc_LearnCoacher_Document_AssignUsers_Old (Modified)
+JProc_LearnCoacher_Document_CopyFolder_Final (Modified)
+JProc_LearnCoacher_Document_CopyFolder_Final_07_08_2019 (Modified)
+JProc_LearnCoacher_Document_CopyFolder_New (Modified)
+JProc_LearnCoacher_Document_CopyFolders (Modified)
+JProc_LearnCoacher_Document_MoveFolders_1892018 (Modified)
+JProc_LearnCoacher_Document_MoveFolders_Final (Modified)
+JProc_LearnCoacher_Document_MoveFolders_Final_07_08_2019 (Modified)
+
+JProc_LearnCoacher_Document_AddFolder_04_05_2020 (Not Modified)
+JProc_LearnCoacher_Document_CopyFolder_04_05_2020 (Not Modified)
+JProc_LearnCoacher_Document_CopyFolder_07_07_2020 (Not Modified)
+JProc_LearnCoacher_Document_CopyFolder_20_05_2020 (Not Modified)
+JProc_LearnCoacher_Document_MoveFolders_04_05_2020 (Not Modified)
+JProc_LearnCoacher_Document_MoveFolders_19_05_2020 (Not Modified)
+***********************************************************/
+
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_Document_Folder_User' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_LearnCoacher_Document_Folder_User ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_Document_Folder_User  set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_LearnCoacher_Document_AddFolder
+JProc_LearnCoacher_Document_AddFolder_04_05_2020
+JProc_LearnCoacher_Document_AddFolder_1892018
+JProc_LearnCoacher_Document_AddFolder_Final
+JProc_LearnCoacher_Document_AddFolder_Final_07_08_2019
+JProc_LearnCoacher_Document_AssignUsers
+JProc_LearnCoacher_Document_AssignUsers_Final
+JProc_LearnCoacher_Document_AssignUsers_Final_07_08_2019
+JProc_LearnCoacher_Document_AssignUsers_New
+JProc_LearnCoacher_Document_AssignUsers_Old
+JProc_LearnCoacher_Document_CopyFolder_04_05_2020
+JProc_LearnCoacher_Document_CopyFolder_07_07_2020
+JProc_LearnCoacher_Document_CopyFolder_20_05_2020
+JProc_LearnCoacher_Document_CopyFolder_Final
+JProc_LearnCoacher_Document_CopyFolder_Final_07_08_2019
+JProc_LearnCoacher_Document_CopyFolder_New
+JProc_LearnCoacher_Document_CopyFolders
+JProc_LearnCoacher_Document_DeleteFolder
+JProc_LearnCoacher_Document_DeleteFolder_04_05_2020
+JProc_LearnCoacher_Document_DeleteFolder_Final
+JProc_LearnCoacher_Document_DeleteFolder_Final_07_08_2019
+JProc_LearnCoacher_Document_GetFolders
+JProc_LearnCoacher_Document_GetFoldersAndDocumentsForMainClientId
+JProc_LearnCoacher_Document_GetFoldersForMainClient
+JProc_LearnCoacher_Document_GetFoldersForMainClient_04_05_2020
+JProc_LearnCoacher_Document_GetFoldersForMainClient_1892018
+JProc_LearnCoacher_Document_GetFoldersForMainClient_Final
+JProc_LearnCoacher_Document_GetFoldersForMainClient_Final_07_08_2019
+JProc_LearnCoacher_Document_GetFoldersForMainClient_Sync
+JProc_LearnCoacher_Document_MoveFolders_04_05_2020
+JProc_LearnCoacher_Document_MoveFolders_1892018
+JProc_LearnCoacher_Document_MoveFolders_19_05_2020
+JProc_LearnCoacher_Document_MoveFolders_Final
+JProc_LearnCoacher_Document_MoveFolders_Final_07_08_2019
+JProc_LearnCoacher_Document_UpdateFolder
+JProc_LearnCoacher_Document_UpdateFolder_01_05_2020
+JProc_LearnCoacher_Document_UpdateFolder_1892018
+JProc_LearnCoacher_Document_UpdateFolder_Final
+JProc_LearnCoacher_Document_UpdateFolder_Final_07_08_2019
+***********************************************************/
+
+
+/********************Procs to Review**********************
+JProc_LearnCoacher_Document_AddFolder (No Change Required)
+JProc_LearnCoacher_Document_AssignUsers (No Change Required)
+
+JProc_LearnCoacher_Document_AddFolder_1892018 (Modified)
+JProc_LearnCoacher_Document_AddFolder_Final (Modified)
+JProc_LearnCoacher_Document_AddFolder_Final_07_08_2019 (Modified)
+JProc_LearnCoacher_Document_AssignUsers_Final (Modified - Review)
+JProc_LearnCoacher_Document_AssignUsers_Final_07_08_2019 (Modified)
+JProc_LearnCoacher_Document_AssignUsers_New (Modified - Review)
+JProc_LearnCoacher_Document_AssignUsers_Old (Modified)
+JProc_LearnCoacher_Document_CopyFolder_Final (Modified)
+JProc_LearnCoacher_Document_CopyFolder_Final_07_08_2019 (Modified)
+JProc_LearnCoacher_Document_CopyFolder_New (Modified)
+JProc_LearnCoacher_Document_CopyFolders (Modified)
+JProc_LearnCoacher_Document_MoveFolders_1892018 (Modified)
+JProc_LearnCoacher_Document_MoveFolders_Final (Modified)
+JProc_LearnCoacher_Document_MoveFolders_Final_07_08_2019 (Modified)
+
+JProc_LearnCoacher_Document_AddFolder_04_05_2020 (Not Modified)
+JProc_LearnCoacher_Document_CopyFolder_04_05_2020 (Not Modified)
+JProc_LearnCoacher_Document_CopyFolder_07_07_2020 (Not Modified)
+JProc_LearnCoacher_Document_CopyFolder_20_05_2020 (Not Modified)
+JProc_LearnCoacher_Document_MoveFolders_04_05_2020 (Not Modified)
+JProc_LearnCoacher_Document_MoveFolders_19_05_2020 (Not Modified)
+***********************************************************/
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Learncoacher_Document_User' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_Learncoacher_Document_User ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_Learncoacher_Document_User set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_LearnCoacher_Document_DeleteDocument_Final
+JProc_LearnCoacher_Document_DeleteFolder
+JProc_LearnCoacher_Document_DeleteFolder_04_05_2020
+JProc_LearnCoacher_Document_DeleteFolder_Final
+JProc_LearnCoacher_Document_DeleteFolder_Final_07_08_2019
+JProc_LearnCoacher_Document_UploadFiles
+JProc_LearnCoacher_Document_UploadFiles_1892018
+JProc_LearnCoacher_Document_View
+JProc_LearnCoacher_Document_View_Final
+JProc_LearnCoacher_Document_ViewStatus
+JProc_LearnCoacher_Document_ViewStatus_ForMainClient
+JProc_LearnCoacher_Document_ViewStatus_ForMainClient_Final
+***********************************************************/
+
+
+/********************Procs to Review**********************
+JProc_LearnCoacher_Document_UploadFiles (Modified)
+JProc_LearnCoacher_Document_UploadFiles_1892018 (Modified)
+***********************************************************/
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_Email' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_LearnCoacher_Email ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_Email set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+Proc_LearnCoacher_Email_GetAttachmentsByEmailId
+Proc_LearnCoacher_Email_GetEmailContentAndUpdateStatus
+Proc_LearnCoacher_Email_GetEmailFolderDetails
+Proc_LearnCoacher_Email_GetEmailsByFolderId
+Proc_LearnCoacher_Email_SaveEmailDetails
+Proc_LearnCoacher_Email_UpdateEmailContent
+***********************************************************/
+
+
+/********************Procs to Review**********************
+Proc_LearnCoacher_Email_SaveEmailDetails  (No Change Required)
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_Email_User' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_LearnCoacher_Email_User ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_Email_User set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+Proc_LearnCoacher_Email_DeleteAllMailsByFolderId
+Proc_LearnCoacher_Email_DeleteMail
+Proc_LearnCoacher_Email_GetAttachmentsByEmailId
+Proc_LearnCoacher_Email_GetEmailContentAndUpdateStatus
+Proc_LearnCoacher_Email_GetEmailFolderDetails
+Proc_LearnCoacher_Email_GetEmailsByFolderId
+Proc_LearnCoacher_Email_MoveEmailToTargetFolder
+Proc_LearnCoacher_Email_SaveEmailDetails
+***********************************************************/
+
+
+/********************Procs to Review**********************
+Proc_LearnCoacher_Email_SaveEmailDetails  (No Change Required)
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_Email_UserFolder' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_LearnCoacher_Email_UserFolder ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_Email_UserFolder set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+Proc_LearnCoacher_Email_CreateNewFolder
+Proc_LearnCoacher_Email_DeleteFolder
+Proc_LearnCoacher_Email_EditFolder
+Proc_LearnCoacher_Email_GetEmailFolderDetails
+Proc_LearnCoacher_Email_MoveEmailFolder
+***********************************************************/
+
+
+/********************Procs to Review**********************
+Proc_LearnCoacher_Email_CreateNewFolder (No Change Required)
+***********************************************************/
+
+
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_FileManagement_File' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_LearnCoacher_FileManagement_File ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_FileManagement_File set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_LearnCoacher_FileManagement_GetFileDetails
+Proc_LearnCoacher_FileManagement_CopyFiles
+Proc_LearnCoacher_FileManagement_CopyPaste
+Proc_LearnCoacher_FileManagement_DeleteFiles
+Proc_LearnCoacher_FileManagement_GetDeletedFileDetailsByFileId
+Proc_LearnCoacher_FileManagement_GetFileDetails
+Proc_LearnCoacher_FileManagement_GetFileDetailsByFolderId
+Proc_LearnCoacher_FileManagement_GetFilesForMultipleFolders
+Proc_LearnCoacher_FileManagement_GetPupilUploadedFileDetails
+Proc_LearnCoacher_FileManagement_GetRecentFilesUploaded
+Proc_LearnCoacher_FileManagement_MoveFilesToFolder
+Proc_LearnCoacher_FileManagement_SaveFilesToFolder
+***********************************************************/
+
+
+/********************Procs to Review**********************
+Proc_LearnCoacher_FileManagement_CopyFiles (No Change Required)
+Proc_LearnCoacher_FileManagement_CopyPaste (No Change Required)
+Proc_LearnCoacher_FileManagement_MoveFilesToFolder (No Change Required)
+Proc_LearnCoacher_FileManagement_SaveFilesToFolder (No Change Required)
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_FileManagement_File_User' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_LearnCoacher_FileManagement_File_User ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_FileManagement_File_User set uModifiedByUserId = uUserId  
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_LearnCoacher_FileManagement_GetUserDocumentReadStatus
+JProc_LearnCoacher_FileManagement_UpdateDocumentReadStatusForUserFile
+Proc_LearnCoacher_FileManagement_CopyFiles
+Proc_LearnCoacher_FileManagement_GetFileDetailsByFolderId
+Proc_LearnCoacher_FileManagement_GetPupilUploadedFileDetails
+Proc_LearnCoacher_FileManagement_GetRecentFilesUploaded
+Proc_LearnCoacher_FileManagement_GetUserDocumentReadStatus
+Proc_LearnCoacher_FileManagement_MoveFilesToFolder
+Proc_LearnCoacher_FileManagement_SaveFilesToFolder
+Proc_LearnCoacher_FileManagement_UpdateDocumentReadStatus
+Proc_LearnCoacher_FileManagement_UpdateDocumentReadStatusForUserFile
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+JProc_LearnCoacher_FileManagement_UpdateDocumentReadStatusForUserFile (No Change Required)
+Proc_LearnCoacher_FileManagement_CopyFiles (No Change Required)
+Proc_LearnCoacher_FileManagement_MoveFilesToFolder (No Change Required)
+Proc_LearnCoacher_FileManagement_SaveFilesToFolder (No Change Required)
+Proc_LearnCoacher_FileManagement_UpdateDocumentReadStatus (No Change Required)
+Proc_LearnCoacher_FileManagement_UpdateDocumentReadStatusForUserFile (No Change Required)
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_FileManagement_UserFolder' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_LearnCoacher_FileManagement_UserFolder ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_FileManagement_UserFolder set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_LearnCoacher_FileManagement_GetAllFoldersToDisplay
+JProc_LearnCoacher_FileManagement_GetFileDetails
+Proc_LearnCoacher_FileManagement_CopyPaste
+Proc_LearnCoacher_FileManagement_CreateNewFolder
+Proc_LearnCoacher_FileManagement_DeleteUserFolder
+Proc_LearnCoacher_FileManagement_EditFolder
+Proc_LearnCoacher_FileManagement_GetFileDetails
+Proc_LearnCoacher_FileManagement_GetFileDetailsByFolderId
+Proc_LearnCoacher_FileManagement_GetFileManagementFolderDetails
+Proc_LearnCoacher_FileManagement_GetRecentFilesUploaded
+Proc_LearnCoacher_FileManagement_MoveUserFolder
+Proc_LearnCoacher_ngFileManagement_GetAllFoldersToDisplay
+***********************************************************/
+
+
+/********************Procs to Review**********************
+Proc_LearnCoacher_FileManagement_CopyPaste (No Change Required)
+Proc_LearnCoacher_FileManagement_CreateNewFolder (No Change Required)
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_Forum_Topic' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+    ALTER TABLE t_LearnCoacher_Forum_Topic ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_Forum_Topic set uModifiedByUserId = uUserId  
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+Proc_LearnCoacher_Forum_DeleteForum
+Proc_LearnCoacher_Forum_DeleteForumTopic
+Proc_LearnCoacher_Forum_EditSaveForumTopicDetails
+Proc_LearnCoacher_Forum_GetAllForumsPosts
+Proc_LearnCoacher_Forum_GetAllForumTopicDetails
+Proc_LearnCoacher_Forum_GetAllForumTopics
+Proc_LearnCoacher_Forum_GetAllForumTopicsAndSubTopics
+Proc_LearnCoacher_Forum_GetAllTeacherForumDetails
+Proc_LearnCoacher_Forum_GetLatestPostsAndForumList
+Proc_LearnCoacher_Forum_ModifyForumTopicData
+Proc_LearnCoacher_Forum_RecentForumDataFromLastLogin
+Proc_LearnCoacher_Forum_SaveForumTopicDetails
+***********************************************************/
+
+
+/********************Procs to Review**********************
+Proc_LearnCoacher_Forum_EditSaveForumTopicDetails (No Change Required)
+Proc_LearnCoacher_Forum_SaveForumTopicDetails(No Change Required)
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_LearningJournal_TimeTable_ClassTime' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_LearnCoacher_LearningJournal_TimeTable_ClassTime ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_LearningJournal_TimeTable_ClassTime set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+Proc_LearnCoacher_LearningJournal_GetAllPupilRecentLearningJournalDetails
+Proc_LearnCoacher_LearningJournal_GetAllRecentLearningJournalDetails
+Proc_LearnCoacher_LearningJournal_GetTimetableData
+Proc_LearningJournal_GetTimeTableData
+Proc_PlanenClassTime_AddClassTime
+Proc_PlanenClassTime_DeleteClassTimes
+Proc_PlanenClassTime_GetClassTime
+***********************************************************/
+
+
+
+/********************Procs to Review**********************
+Proc_PlanenClassTime_AddClassTime (Modified)
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_LearningJournal_Topic_StrengthAssessmentOption' AND COLUMN_NAME = 'dtModifiedOn') 
+ BEGIN
+     ALTER TABLE t_LearnCoacher_LearningJournal_Topic_StrengthAssessmentOption ADD dtModifiedOn datetime  
+ END
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_LearningJournal_Topic_StrengthAssessmentOption  set dtModifiedOn = GETDATE()
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_LearnCoacher_LearningJournal_GetStrengthAssessment
+Proc_LearnCoacher_LearningJournal_GetStrengthAssessmentAndReviewCriteriaData
+***********************************************************/
+
+
+/********************Procs to Review**********************
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_LearningJournal_WorkApproach_ReviewCriteria' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+	ALTER TABLE t_LearnCoacher_LearningJournal_WorkApproach_ReviewCriteria ADD dtModifiedOn datetime  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_LearningJournal_WorkApproach_ReviewCriteria set dtModifiedOn = GETDATE()
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_LearnCoacher_LearningJournal_GetReviewCriteria
+Proc_LearnCoacher_LearningJournal_GetStrengthAssessmentAndReviewCriteriaData
+***********************************************************/
+
+
+
+/********************Procs to Review**********************
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_News' AND COLUMN_NAME = 'uModifiedByUserId') 
+  BEGIN
+      ALTER TABLE t_LearnCoacher_News ADD uModifiedByUserId uniqueidentifier  
+ END
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_News set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+
+/********************All Dependent Procs******************
+JProc_LearnCoacher_DeleteNews
+JProc_LearnCoacher_ForwardNews
+JProc_LearnCoacher_GetNews
+JProc_LearnCoacher_GetNewsForMainClient
+JProc_LearnCoacher_News_DeleteNews
+JProc_LearnCoacher_News_ForwardNews
+JProc_LearnCoacher_News_ForwardNews_20_02_2019
+JProc_LearnCoacher_News_ForwardNews_20_05_2020
+JProc_LearnCoacher_News_GetNews
+JProc_LearnCoacher_News_GetNewsAttachmentsToUploadToOneDrive
+JProc_LearnCoacher_News_GetNewsForMainClient
+JProc_LearnCoacher_News_GetNewsForMainClient_18_03_2019
+JProc_LearnCoacher_News_GetNewsForMainClient_25_03_2019
+JProc_LearnCoacher_News_GetNewsForMainClient_Sync
+JProc_LearnCoacher_News_GetSchoolNewsForViewedStatus
+JProc_LearnCoacher_News_SaveNews
+JProc_LearnCoacher_News_SaveNews_09_06_2020
+JProc_LearnCoacher_News_SaveNews_20_05_2020
+JProc_LearnCoacher_News_SaveNews_25_03_2019
+JProc_LearnCoacher_News_SaveNews_30_06_2020
+JProc_LearnCoacher_News_UpdateViewedStatus
+JProc_LearnCoacher_SaveNews
+JProc_LearnCoacher_SaveNewsAttachment
+JProc_LearnCoacher_UpdateSchoolNewsViewedStatus
+JProc_LearnCoacher_UpdateViewedStatus
+JProc_LearnCoacher_UpdateViewedStatus_20_05_2020
+Proc_TestDrive_MiscExport_GetNewsCount
+***********************************************************/
+
+
+
+/********************Procs to Review**********************
+JProc_LearnCoacher_ForwardNews (Modified)
+JProc_LearnCoacher_News_ForwardNews (Modified -review)
+JProc_LearnCoacher_News_ForwardNews_20_02_2019 (Modified)
+JProc_LearnCoacher_News_SaveNews (Modified)
+JProc_LearnCoacher_News_SaveNews_25_03_2019 (Modified)
+JProc_LearnCoacher_SaveNews (Modified)
+JProc_LearnCoacher_UpdateSchoolNewsViewedStatus (Modified)
+
+JProc_LearnCoacher_News_ForwardNews_20_05_2020 (Not Modified)
+JProc_LearnCoacher_News_SaveNews_09_06_2020 (Not Modified)
+JProc_LearnCoacher_News_SaveNews_20_05_2020 (Not Modified)
+JProc_LearnCoacher_News_SaveNews_30_06_2020 (Not Modified)
+***********************************************************/
+
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_NewsBoard_NewsItem' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_LearnCoacher_NewsBoard_NewsItem ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_NewsBoard_NewsItem set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+Proc_LearnCoacher_NewsBoard_DeleteTeacherNewsData
+Proc_LearnCoacher_NewsBoard_GetAllData
+Proc_LearnCoacher_NewsBoard_GetAllDataByClass
+Proc_LearnCoacher_NewsBoard_GetAllNewsDetailsSentFromPupil
+Proc_LearnCoacher_NewsBoard_GetAllNewsDetailsSentToTeacher
+Proc_LearnCoacher_NewsBoard_GetAllRecentNewsDetails
+Proc_LearnCoacher_NewsBoard_GetAllTeacherNewsDetails
+Proc_LearnCoacher_NewsBoard_GetPupilNewsDetails
+Proc_LearnCoacher_NewsBoard_GetRecentNewsFromPupil
+Proc_LearnCoacher_NewsBoard_ModifyNewsItemData
+Proc_LearnCoacher_NewsBoard_SaveNewsDataSentToTeacher
+Proc_LearnCoacher_NewsBoard_SaveTeacherNewsData
+Proc_LearnCoacher_NewsBoard_UpdateViewColumnForPupil
+Proc_LearnCoacher_NewsBoard_UpdateViewColumnForTeacher
+***********************************************************/
+
+
+
+/********************Procs to Review**********************
+Proc_LearnCoacher_NewsBoard_SaveNewsDataSentToTeacher (No Change Required)
+Proc_LearnCoacher_NewsBoard_SaveTeacherNewsData (No Change Required)
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_NewsBoard_NewsItem_User' AND COLUMN_NAME = 'uModifiedByUserId') 
+  BEGIN
+      ALTER TABLE t_LearnCoacher_NewsBoard_NewsItem_User ADD uModifiedByUserId uniqueidentifier  
+ END
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_NewsBoard_NewsItem_User set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+Proc_LearnCoacher_NewsBoard_DeleteAllNewsItemsToUser
+Proc_LearnCoacher_NewsBoard_GetAllData
+Proc_LearnCoacher_NewsBoard_GetAllDataByClass
+Proc_LearnCoacher_NewsBoard_GetAllNewsDetailsSentFromPupil
+Proc_LearnCoacher_NewsBoard_GetAllNewsDetailsSentToTeacher
+Proc_LearnCoacher_NewsBoard_GetAllRecentNewsDetails
+Proc_LearnCoacher_NewsBoard_GetAllTeacherNewsDetails
+Proc_LearnCoacher_NewsBoard_GetPupilNewsDetails
+Proc_LearnCoacher_NewsBoard_GetRecentNewsFromPupil
+Proc_LearnCoacher_NewsBoard_HideNewsItemForPupil
+Proc_LearnCoacher_NewsBoard_SaveNewsDataSentToTeacher
+Proc_LearnCoacher_NewsBoard_SaveTeacherNewsData
+Proc_LearnCoacher_NewsBoard_UpdateNewsItemUserViewedDetails
+Proc_LearnCoacher_NewsBoard_UpdateViewColumnForPupil
+Proc_LearnCoacher_NewsBoard_UpdateViewColumnForTeacher
+***********************************************************/
+
+
+
+/********************Procs to Review**********************
+Proc_LearnCoacher_NewsBoard_SaveNewsDataSentToTeacher (No Change Required)
+Proc_LearnCoacher_NewsBoard_SaveTeacherNewsData (No Change Required)
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_News_Group' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_LearnCoacher_News_Group ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_News_Group set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+
+/********************All Dependent Procs******************
+JProc_LearnCoacher_DeleteNewsGroup
+JProc_LearnCoacher_GetNewsGroup
+JProc_LearnCoacher_GetNewsGroupForMainClient
+JProc_LearnCoacher_News_UpdateViewedStatus
+JProc_LearnCoacher_SaveNewsGroup
+JProc_LearnCoacher_UpdateViewedStatus
+JProc_LearnCoacher_UpdateViewedStatus_20_05_2020
+***********************************************************/
+
+
+
+/********************Procs to Review**********************
+JProc_LearnCoacher_SaveNewsGroup (Modified)
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_News_Group_User' AND COLUMN_NAME = 'cIsDeleted') 
+BEGIN
+	ALTER TABLE t_LearnCoacher_News_Group_User ADD cIsDeleted char(1)  
+END
+	 
+	 
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_News_Group_User' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_LearnCoacher_News_Group_User ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_News_Group_User set uModifiedByUserId = uUserId  
+update t_LearnCoacher_News_Group_User set cIsDeleted = 'N' //check  
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_LearnCoacher_DeleteNewsGroup
+JProc_LearnCoacher_ForwardNews
+JProc_LearnCoacher_GetNewsGroup
+JProc_LearnCoacher_GetNewsGroupForMainClient
+JProc_LearnCoacher_News_ForwardNews
+JProc_LearnCoacher_News_ForwardNews_20_02_2019
+JProc_LearnCoacher_News_ForwardNews_20_05_2020
+JProc_LearnCoacher_News_SaveNews
+JProc_LearnCoacher_News_SaveNews_09_06_2020
+JProc_LearnCoacher_News_SaveNews_20_05_2020
+JProc_LearnCoacher_News_SaveNews_25_03_2019
+JProc_LearnCoacher_News_SaveNews_30_06_2020
+JProc_LearnCoacher_SaveNews
+JProc_LearnCoacher_SaveNewsGroup
+***********************************************************/
+
+
+
+
+/********************Procs to Review**********************
+JProc_LearnCoacher_ForwardNews (Modified)
+JProc_LearnCoacher_News_ForwardNews (Modified - Review)
+JProc_LearnCoacher_News_ForwardNews_20_02_2019 (Modified)
+JProc_LearnCoacher_News_SaveNews (Modified)
+JProc_LearnCoacher_News_SaveNews_25_03_2019 (Modified)
+JProc_LearnCoacher_SaveNews (Modified)
+JProc_LearnCoacher_SaveNewsGroup (Modified)
+
+JProc_LearnCoacher_News_SaveNews_09_06_2020 (Not Modified)
+JProc_LearnCoacher_News_SaveNews_20_05_2020 (Not Modified)
+JProc_LearnCoacher_News_SaveNews_30_06_2020 (Not Modified)
+JProc_LearnCoacher_News_ForwardNews_20_05_2020 (Not Modified)
+***********************************************************/
+
+
+/**********************************
+New Columns
+**********************************/
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_News_ToUser' AND COLUMN_NAME = 'uModifiedByUserId') 
+  BEGIN
+      ALTER TABLE t_LearnCoacher_News_ToUser ADD uModifiedByUserId uniqueidentifier  
+ END
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_News_ToUser set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************All Dependent Procs******************
+JProc_LearnCoacher_DeleteNews
+JProc_LearnCoacher_ForwardNews
+JProc_LearnCoacher_GetNews
+JProc_LearnCoacher_GetNewsForMainClient
+JProc_LearnCoacher_News_DeleteNews
+JProc_LearnCoacher_News_ForwardNews
+JProc_LearnCoacher_News_ForwardNews_20_02_2019
+JProc_LearnCoacher_News_ForwardNews_20_05_2020
+JProc_LearnCoacher_News_GetNews
+JProc_LearnCoacher_News_GetNewsForMainClient
+JProc_LearnCoacher_News_GetNewsForMainClient_18_03_2019
+JProc_LearnCoacher_News_GetNewsForMainClient_25_03_2019
+JProc_LearnCoacher_News_GetNewsForMainClient_Sync
+JProc_LearnCoacher_News_GetSchoolNewsForViewedStatus
+JProc_LearnCoacher_News_SaveNews
+JProc_LearnCoacher_News_SaveNews_09_06_2020
+JProc_LearnCoacher_News_SaveNews_20_05_2020
+JProc_LearnCoacher_News_SaveNews_25_03_2019
+JProc_LearnCoacher_News_SaveNews_30_06_2020
+JProc_LearnCoacher_News_UpdateViewedStatus
+JProc_LearnCoacher_SaveNews
+JProc_LearnCoacher_SaveNewsAttachment
+JProc_LearnCoacher_UpdateSchoolNewsViewedStatus
+JProc_LearnCoacher_UpdateViewedStatus
+JProc_LearnCoacher_UpdateViewedStatus_20_05_2020
+***********************************************************/
+
+
+
+/********************Procs to Review**********************
+JProc_LearnCoacher_ForwardNews (Modified)
+JProc_LearnCoacher_News_ForwardNews (Modified - Review)
+JProc_LearnCoacher_News_ForwardNews_20_02_2019 (Modified)
+JProc_LearnCoacher_News_SaveNews (Modified)
+JProc_LearnCoacher_News_SaveNews_25_03_2019 (Modified)
+JProc_LearnCoacher_News_UpdateViewedStatus
+JProc_LearnCoacher_SaveNews (Modified)
+
+JProc_LearnCoacher_News_SaveNews_09_06_2020 (Not Modified)
+JProc_LearnCoacher_News_SaveNews_20_05_2020 (Not Modified)
+JProc_LearnCoacher_News_SaveNews_30_06_2020 (Not Modified)
+JProc_LearnCoacher_News_ForwardNews_20_05_2020 (Not Modified)
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_Planner_Curriculum' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_LearnCoacher_Planner_Curriculum ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_Planner_Curriculum set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+Proc_LearnCoacher_Planner_SaveCurriculumDetails
+Proc_LearnCoacher_TeacherPlanner_GetAllCurriculumDataByClass
+***********************************************************/
+
+
+/********************Procs to Review**********************
+Proc_LearnCoacher_Planner_SaveCurriculumDetails (Modified - Review)
+***********************************************************/
+
+
+/**********************************
+New Columns
+**********************************/
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_Planner_TimeTable_ClassTime' AND COLUMN_NAME = 'uModifiedByUserId') 
+  BEGIN
+      ALTER TABLE t_LearnCoacher_Planner_TimeTable_ClassTime ADD uModifiedByUserId uniqueidentifier  
+ END
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_Planner_TimeTable_ClassTime set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_Testdrive_School_GetTimeTableSettings
+JProc_Testdrive_School_GetTimeTableSettingsForMainClientId
+JProc_Testdrive_School_GetTimeTableSettingsForMainClientId_New
+JProc_Testdrive_School_GetTimeTableSettingsForMainClientId_Sync
+JProc_Testdrive_School_SaveTimeTableSettings
+JProc_Testdrive_School_SaveTimeTableSettings_New
+***********************************************************/
+
+/********************Procs to Review**********************
+JProc_Testdrive_School_SaveTimeTableSettings (Modified)
+JProc_Testdrive_School_SaveTimeTableSettings_New (Modified)
+***********************************************************/
+
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_Planner_TimeTable_Day' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_LearnCoacher_Planner_TimeTable_Day ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_Planner_TimeTable_Day set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_LearnCocher_TimeTable_GetTimeTableDay
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+
+
+/**********************************
+New Columns
+**********************************/
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_SchoolYearPeriod' AND COLUMN_NAME = 'uModifiedByUserId') 
+  BEGIN
+      ALTER TABLE t_LearnCoacher_SchoolYearPeriod ADD uModifiedByUserId uniqueidentifier  
+ END
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_SchoolYearPeriod set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_LearnCocher_TimeTable_GetSchoolYearPeriod
+JProc_LearnCocher_TimeTable_GetSchoolYearPeriod_03_08_2020
+JProc_LearnCocher_TimeTable_GetSchoolYearPeriod_30_07_2019
+Proc_LearnCocher_TimeTable_GetSchoolYearPeriod
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+
+/**********************************
+New Columns
+**********************************/
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_Semester' AND COLUMN_NAME = 'uModifiedByUserId') 
+  BEGIN
+      ALTER TABLE t_LearnCoacher_Semester ADD uModifiedByUserId uniqueidentifier  
+ END
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_Semester set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_LearnCocher_GetSemester
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_TimeTable_Color' AND COLUMN_NAME = 'dtModifiedOn') 
+  BEGIN
+      ALTER TABLE t_LearnCoacher_TimeTable_Color ADD dtModifiedOn datetime  
+ END
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_TimeTable_Color set dtModifiedOn = GETDATE()
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_LearnCocher_TimeTable_GetColorForClient
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_PathFinder_JobField' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_PathFinder_JobField ADD uModifiedByUserId uniqueidentifier  
+END
+	  
+	  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_PathFinder_JobField' AND COLUMN_NAME = 'uUserId') 
+BEGIN
+	ALTER TABLE t_PathFinder_JobField ADD uUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+ 
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+Proc_PathFinder_CollaborationJobManagement_GetAllJobFields
+Proc_PathFinder_JobFields_GetAllJobFieldsByMainClientId
+Proc_PathFinder_JobFields_GetAllJobFieldsByStateId
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_PathFinder_JobField_JobLevel' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_PathFinder_JobField_JobLevel ADD uModifiedByUserId uniqueidentifier  
+END
+	  
+	  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_PathFinder_JobField_JobLevel' AND COLUMN_NAME = 'uUserId') 
+BEGIN
+	ALTER TABLE t_PathFinder_JobField_JobLevel ADD uUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+Proc_PathFinder_Job_GetJobsLevelsByJobField
+Proc_PathFinder_Job_GetJobsLevelsByJobFieldAndStateId
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_PathFinder_Jobs' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+	ALTER TABLE t_PathFinder_Jobs ADD dtModifiedOn datetime  
+END
+	  
+	  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_PathFinder_Jobs' AND COLUMN_NAME = 'dtCreatedOn') 
+BEGIN
+	ALTER TABLE t_PathFinder_Jobs ADD dtCreatedOn datetime  
+END
+			
+			
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_PathFinder_Jobs' AND COLUMN_NAME = 'cIsDeleted') 
+BEGIN
+	ALTER TABLE t_PathFinder_Jobs ADD cIsDeleted nchar(1)  
+END
+				  
+				  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_PathFinder_Jobs' AND COLUMN_NAME = 'uUserId') 
+BEGIN
+	ALTER TABLE t_PathFinder_Jobs ADD uUserId uniqueidentifier  
+END
+						
+						
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_PathFinder_Jobs' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_PathFinder_Jobs ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_PathFinder_Jobs set dtModifiedOn = GETDATE() 
+update t_PathFinder_Jobs set dtCreatedOn = GETDATE() //check
+update t_PathFinder_Jobs set cIsDeleted = 'N' //check  
+
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_PathFinder_DisplayAnchorJob_GetAllAnchorJobs
+JProc_PathFinder_GetAllJobs
+Proc_PathFinder_Anchor_Jobs_GetAllAnchorJobs
+Proc_PathFinder_JDisplayAnchorJob_GetAllAnchorJobs
+Proc_PathFinder_JDisplayAnchorJob_GetJobsForSchool
+Proc_PathFinder_JJobsSelection_GetAllAssignedCheckedNonJobSelection
+Proc_PathFinder_Job_GetAllJobs_JobSkills
+Proc_PathFinder_Job_GetAllSchoolJobs
+Proc_PathFinder_JobCertificateValueManagement_GetAllJobs
+Proc_TestDrive_Job_GetAllJobsForExternalSchool
+Proc_TestDrive_Job_GetAllJobsForExternalSchoolIdAsNVarchar
+t_TestDrive_Job_GetAllJobsForSchool
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_PathFinder_Jobs_SkillValue' AND COLUMN_NAME = 'dtCreatedOn') 
+BEGIN
+	ALTER TABLE t_PathFinder_Jobs_SkillValue ADD dtCreatedOn datetime  
+END
+	  
+	  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_PathFinder_Jobs_SkillValue' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_PathFinder_Jobs_SkillValue ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_PathFinder_Jobs_SkillValue set uModifiedByUserId = uUserId  
+
+update t_PathFinder_Jobs_SkillValue set dtCreatedOn = GETDATE() //check
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+GetPathFinderJobSkillValuesByMainClientId
+JProc_PathFinder_GetJobSkillValuesByMainClientId
+JProc_PathFinder_JobCertificateValueManagement_GetJobSkillValue
+Proc_PathFinder_Job_GetJobSkillValue_JobSkills
+Proc_PathFinder_JobCertificateValueManagement_GetJobSkillValue
+Proc_PathFinder_JobCertificateValueManagement_GetJobSkillValue111
+Proc_PathFinder_JobCertificateValueManagement_SaveJobSkillValue
+***********************************************************/
+
+
+/********************Procs to Review**********************
+Proc_PathFinder_JobCertificateValueManagement_SaveJobSkillValue (No Change Required)
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_PathFinder_Jobs_SubjectTemplate' AND COLUMN_NAME = 'dtCreatedOn') 
+BEGIN
+	ALTER TABLE t_PathFinder_Jobs_SubjectTemplate ADD dtCreatedOn datetime  
+END
+	  
+	  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_PathFinder_Jobs_SubjectTemplate' AND COLUMN_NAME = 'cIsDeleted') 
+BEGIN
+	ALTER TABLE t_PathFinder_Jobs_SubjectTemplate ADD cIsDeleted char(1)  
+END
+			
+			
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_PathFinder_Jobs_SubjectTemplate' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_PathFinder_Jobs_SubjectTemplate ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_PathFinder_Jobs_SubjectTemplate set uModifiedByUserId = uUserId,cIsDeleted = 'N',dtCreatedOn = dtModifiedOn  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs*****************
+Proc_PathFinder_Job_GetJobSubjectTemplate_New
+**********************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Audit_Table' AND COLUMN_NAME = 'uModifiedByUserId') 
+  BEGIN
+      ALTER TABLE t_TestDrive_Audit_Table ADD uModifiedByUserId uniqueidentifier  
+ END
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Audit_Table set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+FProc_TestDrive_Member_GetSyncFTP
+FProc_TestDrive_StellwerkZurich_DeleteAllExternalMappings
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Certificate' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_TestDrive_Certificate ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Certificate set uModifiedByUserId = uUserId
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+FProc_TestDrive_BaseObject_Certificate_AddData
+FProc_TestDrive_BaseObject_Certificate_DeleteData
+FProc_TestDrive_BaseObject_Certificate_EditData
+FProc_TestDrive_BaseObject_Certificate_GetData
+JProc_TestDrive_Certificate_GetCertificatesAssignedToCycle_Core2
+JProc_TestDrive_Certificate_GetCertificatesByMainClientId
+JProc_TestDrive_Certificate_GetCertificatesByMainClientId_New
+JProc_TestDrive_Certificate_GetResultPageCertificateInfoByCertificateId
+Proc_Testdrive_Certificate_AssignCertificateTemplateToCertificate
+Proc_TestDrive_Certificate_CopyCertificate
+Proc_TestDrive_Certificate_GetCertificatesByMainClientId
+Proc_TestDrive_Certificate_GetResultPageCertificateInfoByCertificateId
+Proc_Testdrive_CertificatTemplate_GetCertificateTemplatesByCertificateId
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Certificate_Privilege' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_TestDrive_Certificate_Privilege ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Certificate_Privilege set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+Proc_TestDrive_Certificate_CopyCertificate
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+
+/**********************************
+New Columns
+**********************************/
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Certificate_Template' AND COLUMN_NAME = 'uModifiedByUserId') 
+  BEGIN
+      ALTER TABLE t_TestDrive_Certificate_Template ADD uModifiedByUserId uniqueidentifier  
+ END
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Certificate_Template set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+FProc_TestDrive_BaseObject_Certificate_AddData
+FProc_TestDrive_BaseObject_Certificate_DeleteData
+FProc_TestDrive_BaseObject_Certificate_EditData
+FProc_TestDrive_BaseObject_Certificate_GetData
+JProc_TestDrive_Certificate_GetCertificatesByMainClientId_New
+JProc_Testdrive_CertificatTemplate_GetCertificateTemplates
+Proc_TestDrive_Certificate_CopyCertificate
+Proc_Testdrive_CertificatTemplate_DeleteCertificateTemplate
+Proc_Testdrive_CertificatTemplate_EditCertificateTemplate
+Proc_Testdrive_CertificatTemplate_GetCertificateTemplates
+Proc_Testdrive_CertificatTemplate_GetCertificateTemplatesByCertificateId
+Proc_Testdrive_CertificatTemplate_SaveCertificateTemplate
+Proc_Testdrive_CertificatTemplate_UpdateCertificateCommonCode
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Certificate_TextKeyword' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Certificate_TextKeyword ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Certificate_TextKeyword set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_TestDrive_JCertificateTextKeyword_GetAllTextKeywords
+Proc_TestDrive_Certificate_CopyCertificate
+Proc_TestDrive_JCertificateTextKeyword_GetAllTextKeywords
+Proc_TestDrive_JCertificateTextKeyword_GetAllTextKeywordsByStateId
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Certificate_TextSegment' AND COLUMN_NAME = 'uModifiedByUserId') 
+  BEGIN
+      ALTER TABLE t_TestDrive_Certificate_TextSegment ADD uModifiedByUserId uniqueidentifier  
+ END
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Certificate_TextSegment set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_TestDrive_JCertificateTextKeyword_GetAllTextKeywords
+Proc_TestDrive_Certificate_CopyCertificate
+Proc_TestDrive_JCertificateTextKeyword_GetAllTextKeywordsByStateId
+Proc_TestDrive_JCertificateTextKeyword_GetResultAttributesForKeyword
+Proc_TestDrive_JCertificateTextSegment_GetAllTextSegments
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Certificate_TextSegmentRule' AND COLUMN_NAME = 'uModifiedByUserId') 
+  BEGIN
+      ALTER TABLE t_TestDrive_Certificate_TextSegmentRule ADD uModifiedByUserId uniqueidentifier  
+ END
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Certificate_TextSegmentRule set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+Proc_TestDrive_Certificate_CopyCertificate
+Proc_TestDrive_JCertificateTextKeyword_GetResultAttributesForKeyword
+Proc_TestDrive_JCertificateTextSegment_GetAllTextSegments
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_ExtranetTest_Category' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_TestDrive_ExtranetTest_Category ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_ExtranetTest_Category set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+Proc_TestDrive_PageTeacherTest_DeleteTeacherTestCategories
+Proc_TestDrive_PageTeacherTest_GetAllTeacherTestCategories
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_LearningTest_PupilGroup' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+	ALTER TABLE t_TestDrive_LearningTest_PupilGroup ADD dtModifiedOn datetime  
+END
+	  
+	  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_LearningTest_PupilGroup' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_TestDrive_LearningTest_PupilGroup ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_LearningTest_PupilGroup set dtModifiedOn = GETDATE()
+update t_TestDrive_LearningTest_PupilGroup set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_TestDrive_LearningTest_PupilGroup_AddData
+JProc_TestDrive_LearningTest_PupilGroup_GetData
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Mapping' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_TestDrive_Mapping ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Mapping set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_TestDrive_JKeywordMapping_GetMappedKeyWords
+Proc_TestDrive_JKeywordMapping_GetMappedKeyWords
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Member_Class' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_TestDrive_Member_Class ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Member_Class set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+FProc_TestDrive_BaseObject_Class_AddData
+FProc_TestDrive_BaseObject_Class_DeleteData
+FProc_TestDrive_BaseObject_Class_EditData
+FProc_TestDrive_BaseObject_Class_GetData
+JEditorProc_TestDrive_StandardPupilProvider_GetPupilDetailsForTestApplication
+JProc_LearnCoacher_LearningJournal_GetPupilTopicsForMainClient
+JProc_LearnCoacher_LearningJournal_GetPupilTopicsForMainClient_New
+JProc_LearnCoacher_LearningJournal_GetPupilTopicsForMainClient_New_29_10_2018
+JProc_Testdrive_AutoLogin_GetPupilLoggedInInfo_06_08_2020
+JProc_Testdrive_LearncoacherPupilMembership_ValidateUser
+JProc_TestDrive_Member_GetClassData_Sync
+JProc_TestDrive_Member_RefreshCache
+JProc_TestDrive_Pupil_GetAllPupilDetails
+JProc_TestDrive_Pupil_GetPupilDetailsOfSameEmail
+JProc_Testdrive_SimplelLoginMembershipProvider_ValidateUser
+JProc_Testdrive_SimplelLoginMembershipProvider_ValidateUser_01_08_2019
+JProc_Testdrive_SimplelLoginMembershipProvider_ValidateUser_18_05_2018
+JProc_Testdrive_SimplelLoginMembershipProvider_ValidateUser_23_07_2019
+JProc_TestDrive_StandardClassProvider_EditOverrideCode
+JProc_TestDrive_StandardClassProvider_GetClassDetailsByClassId_New
+JProc_TestDrive_StandardPupilProvider_GetPupilDetailsForTestApplication
+JProc_TestDrive_Teacher_GetSubjectExpertTeacherDetails
+JProc_Testdrive_Teacher_SaveClassSchool
+JProc_Testdrive_TeacherMembership_ValidateUser
+JProc_Testdrive_TeacherMembership_ValidateUser_14_06_2018
+Proc_Framework_ClientUser_GetMemberDetails
+Proc_Testdrive_BRNWMembershipProvider_ValidateUser
+Proc_TestDrive_Class_CheckIfClassNameAlreadyExists
+Proc_TestDrive_Class_UndoClassDeletion
+Proc_TestDrive_Class_UpdateNameAndType
+Proc_TestDrive_Class_UpdateSchoolYear
+Proc_TestDrive_ClassManagement_GetClassDataForPreview
+Proc_TestDrive_Cycle_GetAllClassesByTeacherId
+Proc_TestDrive_Cycle_GetClassesPupilsAssignedToCycleTestForTeacher
+Proc_TestDrive_Cycle_GetClassTestsByCycleId
+Proc_TestDrive_Cycle_GetCycleClassByCycleId
+Proc_TestDrive_Demo_SaveDemoUserDetails
+Proc_Testdrive_EdupoolLearncoacherPupilMembership_ValidateUser
+Proc_TestDrive_JClass_AssignClassToTeacher
+Proc_TestDrive_JGroupTesting_CreateGroupAndPupils
+Proc_TestDrive_JGroupTesting_DeleteSelectedGroup
+Proc_Testdrive_LearncoacherPupilMembership_ValidateUser
+Proc_TestDrive_Member_GetMemberDetailsForDashboard
+Proc_TestDrive_PageBilling_GetSchoolDetails
+Proc_TestDrive_PageBilling_GetSchoolDetails_New
+Proc_TestDrive_PageResultTransfer_GetStateNumberByClassId
+Proc_TestDrive_PageResultTransfer_GetTeacherSchoolDetailsByClass
+Proc_Testdrive_PathfinderPupilMembership_ValidateUser_JobSkills
+Proc_Testdrive_ProfileLoginMembership_ValidateUser
+Proc_TestDrive_Pupil_CheckIfPupilPasswordAlreadyExists
+Proc_TestDrive_Pupil_GetAllPupilDetails
+Proc_TestDrive_Pupil_GetPupilDetails
+Proc_TestDrive_Pupil_GetPupilDetailsByStateId
+proc_TestDrive_Pupil_GetPupilDetailsOfSameEmail
+Proc_TestDrive_Pupil_SaveExternalClassData
+Proc_TestDrive_Pupil_SaveExternalPupil_Yousty
+Proc_TestDrive_Pupil_SaveExternalPupil_YoustyAsNVarchar
+Proc_TestDrive_Pupil_SaveExternalPupil_YoustyAsNVarchar_WithCheckToken
+Proc_TestDrive_Pupil_SaveExternalPupil_YoustyAsNVarchar_WithCheckToken_04_28_2020
+Proc_TestDrive_Pupil_SaveExternalPupil_YoustyAsNVarcharTest
+Proc_TestDrive_PupilManagement_GetGridData
+Proc_Testdrive_PupilMembership_ValidateUser
+Proc_TestDrive_RealTimeTestUsage_GetPupilDetails
+Proc_TestDrive_School_CreateClassForNoClassTeacher
+Proc_TestDrive_School_GetAllClassesBySchoolId
+Proc_TestDrive_School_GetAllClassesForSchool
+Proc_TestDrive_School_GetAllTeachersWithClassBySchoolId
+Proc_TestDrive_School_SavePackageActivation
+Proc_Testdrive_SimplelLoginMembershipProvider_ValidateUser
+Proc_Testdrive_SimplelLoginMembershipProvider_ValidateUser_Temp
+Proc_TestDrive_SinglePageTest_GetPupilDetails
+Proc_TestDrive_SinglePageTest_GetPupilsByProfileCode
+Proc_TestDrive_StandardClassProvider_EditOverrideCode
+Proc_TestDrive_StandardClassProvider_GetClassDetailsByClassId
+Proc_TestDrive_StandardClassProvider_GetClassDetailsByClassId_New
+Proc_TestDrive_StandardClassProvider_GetClassDetailsByClassId_New_2018
+Proc_TestDrive_StandardClassProvider_GetClassDetailsByClassId_New_2018_03_07_2019
+Proc_TestDrive_StandardPupilProvider_GetPupilByProfileCode
+Proc_TestDrive_StandardPupilProvider_GetPupilDetailsForTestApplication
+Proc_TestDrive_StandardPupilProvider_GetPupilDetailsForTestApplication_New
+Proc_TestDrive_StandardTeacherProvider_GetAllClassesByTeacherId
+Proc_TestDrive_StandardTeacherProvider_GetAllClassesByTeacherId_New
+Proc_TestDrive_StandardTeacherProvider_GetAllPupilsByTeacherId
+Proc_TestDrive_StandardTeacherProvider_GetAllPupilsByTeacherId_New
+Proc_TestDrive_State_GetClassDetailsByStateId
+Proc_TestDrive_State_GetClassDetailsByStateIdForTestSchools
+Proc_TestDrive_StellwerkPupilProvider_GetPupilDetailsByPupilId
+Proc_TestDrive_Teacher_GetMainTeachersForClass
+Proc_Testdrive_Teacher_GetSubjectExpertByTeacherId
+Proc_TestDrive_Teacher_GetSubjectExpertTeacherDetails
+Proc_TestDrive_Teacher_GetTeacherDetailsByClassId
+Proc_TestDrive_Teacher_GetTeacherDetailsByTeacherId
+Proc_TestDrive_Teacher_GetTeacherDetailsByTeacherId_2018
+Proc_Testdrive_TeacherMembership_ValidateUser
+Proc_TestDrive_Test_DeleteLinkedTests
+Proc_TestDrive_Test_GetTestAssignedForClassAndPupil
+Proc_TestDrive_Test_GetTestAssignedForOnlyPupil
+***********************************************************/
+
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Member_ClassType' AND COLUMN_NAME = 'dtModifiedOn') 
+  BEGIN
+      ALTER TABLE t_TestDrive_Member_ClassType ADD dtModifiedOn datetime  DEFAULT (getdate())
+ END
+
+/**********************************
+Default Values
+**********************************/
+
+update t_TestDrive_Member_ClassType set dtModifiedOn = getdate()
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+FProc_TestDrive_BaseObject_ClassType_AddData
+FProc_TestDrive_BaseObject_ClassType_DeleteData
+FProc_TestDrive_BaseObject_ClassType_EditData
+FProc_TestDrive_BaseObject_ClassType_GetData
+JProc_TestDrive_AssignClassTypeToPupil_SavePupilsClassType
+JProc_TestDrive_Pupil_GetPupilClassTypeDetailsForMainClient
+JProc_TestDrive_StandardClassProvider_GetClassDetailsByClassId_New
+JProc_TestDrive_States_GetAllClassTypesByStateId
+Proc_TestDrive_StandardClassProvider_GetClassDetailsByClassId
+Proc_TestDrive_StandardClassProvider_GetClassDetailsByClassId_New
+Proc_TestDrive_StandardClassProvider_GetClassDetailsByClassId_New_2018
+Proc_TestDrive_StandardClassProvider_GetClassDetailsByClassId_New_2018_03_07_2019
+Proc_TestDrive_StandardTeacherProvider_GetAllClassesByTeacherId
+Proc_TestDrive_StandardTeacherProvider_GetAllClassesByTeacherId_New
+Proc_TestDrive_State_SaveStateDependingTablesData
+Proc_TestDrive_States_GetAllClassTypesByStateId
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Member_Class_Group' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_TestDrive_Member_Class_Group ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Member_Class_Group set uModifiedByUserId = uUserId  
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+FProc_TestDrive_BaseObject_ClassGroup_AddData
+FProc_TestDrive_BaseObject_ClassGroup_DeleteData
+FProc_TestDrive_BaseObject_ClassGroup_EditData
+FProc_TestDrive_BaseObject_ClassGroup_GetData
+JProc_TestDrive_Member_Class_GetClassGroup
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Member_Class_License' AND COLUMN_NAME = 'uModifiedByUserId') 
+  BEGIN
+      ALTER TABLE t_TestDrive_Member_Class_License ADD uModifiedByUserId uniqueidentifier  
+ END
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Member_Class_License set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_TestDrive_Member_EditClassLicense
+JProc_TestDrive_Member_GetClassLicense
+JProc_TestDrive_Member_GetClassLicense_Sync
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Member_ExternalAssessor' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_TestDrive_Member_ExternalAssessor ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Member_ExternalAssessor set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_TestDrive_GetExternalAssessorDetailsForTestApplication
+Proc_TestDrive_Assessor_SaveAssessorPasswordForEmail
+Proc_TestDrive_GetExternalAssessorDetailsForTestApplication
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Member_FTPSync' AND COLUMN_NAME = 'vTransactionId') 
+BEGIN
+	ALTER TABLE t_TestDrive_Member_FTPSync ADD vTransactionId nvarchar(max)  
+END
+
+/**********************************
+Default Values
+**********************************/
+
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+FProc_TestDrive_Member_GetSyncFTP
+FProc_TestDrive_Member_SyncFTP
+FProc_TestDrive_StellwerkZurich_DeleteAllExternalMappings
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Member_LoggedinUserInformation' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_TestDrive_Member_LoggedinUserInformation ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Member_LoggedinUserInformation set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+Proc_Framework_ClientUser_GetLoginDetailsForUser
+Proc_Framework_ClientUser_RegisterLoggedInUserSystemInformation
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Testdrive_Member_MemberSurvey' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+	ALTER TABLE t_Testdrive_Member_MemberSurvey ADD dtModifiedOn datetime  
+END
+	  
+	  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Testdrive_Member_MemberSurvey' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_Testdrive_Member_MemberSurvey ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_Testdrive_Member_MemberSurvey set dtModifiedOn = dtAnsweredOn
+update t_Testdrive_Member_MemberSurvey set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_TestDrive_Survey_AddSurveyData
+JProc_TestDrive_Survey_GetSurveyData
+JProc_TestDrive_Survey_GetSurveyDataForExport
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Testdrive_Member_MemberSurvey_Question' AND COLUMN_NAME = 'uModifiedByUserId') 
+  BEGIN
+      ALTER TABLE t_Testdrive_Member_MemberSurvey_Question ADD uModifiedByUserId uniqueidentifier  
+ END
+
+/**********************************
+Default Values
+**********************************/
+update t_Testdrive_Member_MemberSurvey_Question set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_TestDrive_Survey_GetSurveyData
+JProc_TestDrive_Survey_GetSurveyDataForExport
+JProc_TestDrive_Survey_GetSurveyQuestionData
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Member_OpenApplicationCredential' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_TestDrive_Member_OpenApplicationCredential ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Member_OpenApplicationCredential set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_Framework_JLogin_GetAutoLoginCredentials
+JProc_Framework_JLogin_InsertAutoLoginCredentials
+JProc_Framework_JLogin_InsertAutoLoginCredentialsForUser
+JProc_Testdrive_Member_GetUserDetailsForAutoLogin
+JProc_Testdrive_Member_GetUserDetailsFromExternalSourceId
+Proc_Framework_JLogin_GetAutoLoginCredentials
+Proc_Framework_JLogin_InsertAutoLoginCredentials
+***********************************************************/
+
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Member_Pupil' AND COLUMN_NAME = 'uLoginGeneratedBy') 
+BEGIN
+	ALTER TABLE t_TestDrive_Member_Pupil ADD uLoginGeneratedBy uniqueidentifier  
+END
+ 
+ 
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Member_Pupil' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_TestDrive_Member_Pupil ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Member_Pupil set uModifiedByUserId = uUserId ,uLoginGeneratedBy = uUserId 
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+FProc_TestDrive_BaseObject_Pupil_AddData
+FProc_TestDrive_BaseObject_Pupil_DeleteData
+FProc_TestDrive_BaseObject_Pupil_EditData
+FProc_TestDrive_BaseObject_Pupil_GetData
+FProc_TestDrive_StellwerkZurich_DeleteAllExternalMappings
+JEditorProc_TestDrive_StandardPupilProvider_GetPupilDetailsForTestApplication
+JProc_Framework_JLogin_InsertAutoLoginCredentialsForUser
+JProc_Testdrive_AutoLogin_GetPupilLoggedInInfo_06_08_2020
+JProc_Testdrive_LearncoacherPupilMembership_ValidateUser
+JProc_Testdrive_LearningTestCount
+JProc_TestDrive_Member_GetClassData_Sync
+JProc_Testdrive_Member_GetExternalPupilsForMainClient
+JProc_TestDrive_Member_GetPupilData_Sync
+JProc_Testdrive_Member_GetUserDetailsForAutoLogin
+JProc_Testdrive_Member_GetUserDetailsFromExternalSourceId
+JProc_TestDrive_Member_RefreshCache
+JProc_Testdrive_Memeber_Pupil_GetPupilsForSchool
+JProc_Testdrive_Memeber_Pupil_GetSchoolPupilForMainClient
+JProc_Testdrive_Memeber_Pupil_GetSchoolPupilForMainClient_Sync
+JProc_TestDrive_Pupil_GetAllPupilDetails
+JProc_TestDrive_Pupil_GetPupilDetailsByPupilId
+JProc_TestDrive_Pupil_GetPupilDetailsOfSameEmail
+JProc_TestDrive_Pupil_SavePupilPasswordHashForEmail
+JProc_TestDrive_Pupil_SavePupilPasswordHashForEmail_04_06_2019
+JProc_TestDrive_Pupil_SavePupilPasswordHashForEmail_24_07_2019
+JProc_Testdrive_Pupil_SaveUserNameAndSchoolPupil
+JProc_TestDrive_Pupil_UpdateUserName
+JProc_Testdrive_SimplelLoginMembershipProvider_ValidateUser
+JProc_Testdrive_SimplelLoginMembershipProvider_ValidateUser_01_08_2019
+JProc_Testdrive_SimplelLoginMembershipProvider_ValidateUser_18_05_2018
+JProc_Testdrive_SimplelLoginMembershipProvider_ValidateUser_23_07_2019
+JProc_TestDrive_StandardPupilProvider_EditProfileCodeForMultiplePupil
+JProc_TestDrive_StandardPupilProvider_GetPupilDetailsForTestApplication
+JProc_TestDrive_StellwerkZurich_SavePupilExternalMapping
+JProc_TestDrive_Teacher_GetAllPupilByMainClientId
+Proc_Framework_ClientUser_GetMemberDetails
+Proc_Pupil_Create_LoadTest
+Proc_Testdrive_BRNWMembershipProvider_ValidateUser
+Proc_TestDrive_Dashboard_GetLearningJournal
+Proc_TestDrive_Demo_SaveDemoUserDetails
+Proc_Testdrive_EdupoolLearncoacherPupilMembership_ValidateUser
+Proc_TestDrive_ePrologPupilImportProvider_SavePupilFromExcel
+Proc_TestDrive_ExperienceGrade_GetExperienceGradeByClassId
+Proc_TestDrive_ExperienceGrade_GetExperienceGradeByPupilId
+Proc_TestDrive_ExperienceGrade_GetExperienceGradeDetails
+Proc_TestDrive_ExperienceGrade_GetExperienceGradeDetailsByClassId
+Proc_TestDrive_GetAllUsers
+Proc_TestDrive_GetAllUsersForAllMainClients
+Proc_TestDrive_JGroupTesting_CreateGroupAndPupils
+Proc_TestDrive_JProfilePupil_GetPupilProfileImageDetails
+Proc_TestDrive_JProfilePupil_SavePupilProfileImage
+Proc_Testdrive_LearncoacherPupilMembership_ValidateUser
+Proc_Testdrive_Member_GetAllCommunications
+Proc_TestDrive_Member_GetMemberDetailsForDashboard
+Proc_TestDrive_MiscExport_GetDocumentCount
+Proc_TestDrive_MiscExport_GetNewsCount
+Proc_TestDrive_NantysAdvancedStandardPupilProvider_EditProfileCodeForMultiplePupil
+Proc_TestDrive_NantysAdvancedStandardPupilProvider_EditProfileCodeForPupil
+Proc_TestDrive_PageResultTransfer_GetTeacherSchoolDetailsByClass
+Proc_Testdrive_PathfinderPupilMembership_ValidateUser_JobSkills
+Proc_Testdrive_ProfileLoginMembership_ValidateUser
+Proc_TestDrive_Pupil_CheckIfPupilPasswordAlreadyExists
+Proc_TestDrive_Pupil_CheckIfPupilPasswordAlreadyExistsForMainclient
+Proc_TestDrive_Pupil_GetAllPupilDetails
+Proc_TestDrive_Pupil_GetAllPupilsForUserNameOrEmail
+Proc_TestDrive_Pupil_GetAllPupilsForUserNameOrEmail_24_07_2019
+Proc_TestDrive_Pupil_GetPupilDetails
+Proc_TestDrive_Pupil_GetPupilDetails_Yousty
+Proc_TestDrive_Pupil_GetPupilDetailsByPupilId_Yousty
+Proc_TestDrive_Pupil_GetPupilDetailsByStateId
+proc_TestDrive_Pupil_GetPupilDetailsOfSameEmail
+Proc_TestDrive_Pupil_PermanentDelete
+Proc_TestDrive_Pupil_SaveClassPupilMappings
+Proc_TestDrive_Pupil_SaveExternalPupil_Yousty
+Proc_TestDrive_Pupil_SaveExternalPupil_YoustyAsNVarchar
+Proc_TestDrive_Pupil_SaveExternalPupil_YoustyAsNVarchar_WithCheckToken
+Proc_TestDrive_Pupil_SaveExternalPupil_YoustyAsNVarchar_WithCheckToken_04_28_2020
+Proc_TestDrive_Pupil_SaveExternalPupil_YoustyAsNVarcharTest
+Proc_TestDrive_Pupil_SaveProfileCodeForPupil_Core2
+Proc_TestDrive_Pupil_SavePupilPasswordForEmail
+Proc_TestDrive_Pupil_SavePupilPasswordHashForEmail
+Proc_TestDrive_Pupil_UpdatePupilInformation
+Proc_TestDrive_Pupil_UpdateUserName
+Proc_TestDrive_PupilManagement_GetGridData
+Proc_Testdrive_PupilMembership_ValidateUser
+Proc_TestDrive_RealTimeTestUsage_GetPupilDetails
+Proc_TestDrive_RomandsPupilImportProvider_SavePupilFromExcel
+Proc_Testdrive_SimplelLoginMembershipProvider_ValidateUser
+Proc_Testdrive_SimplelLoginMembershipProvider_ValidateUser_Temp
+Proc_TestDrive_SinglePageTest_GetPupilDetails
+Proc_TestDrive_SinglePageTest_GetPupilsByProfileCode
+Proc_TestDrive_StandardClassProvider_GetPupils
+Proc_TestDrive_StandardPupilProvider_EditProfileCodeForMultiplePupil
+Proc_TestDrive_StandardPupilProvider_EditProfileCodeForPupil
+Proc_TestDrive_StandardPupilProvider_GetPupilByProfileCode
+Proc_TestDrive_StandardPupilProvider_GetPupilDetailsForTestApplication
+Proc_TestDrive_StandardPupilProvider_GetPupilDetailsForTestApplication_New
+Proc_TestDrive_StandardTeacherProvider_GetAllClassesByTeacherId
+Proc_TestDrive_StandardTeacherProvider_GetAllClassesByTeacherId_New
+Proc_TestDrive_StandardTeacherProvider_GetAllPupilsByTeacherId
+Proc_TestDrive_StandardTeacherProvider_GetAllPupilsByTeacherId_New
+Proc_TestDrive_StellwerkLearncoacherPupilImportProvider_SavePupilFromExcel
+Proc_TestDrive_StellwerkPupilImportProvider_SavePupilFromExcel
+Proc_TestDrive_StellwerkPupilProvider_GetPupilDetailsByPupilId
+Proc_TestDrive_Teacher_GetPupilAssessorDetails
+Proc_Testdrive_UpdateHashedPassword
+***********************************************************/
+
+
+/********************Procs to Review**********************
+JProc_TestDrive_Pupil_SavePupilPasswordHashForEmail_24_07_2019
+JProc_Testdrive_Pupil_SaveUserNameAndSchoolPupil
+
+JProc_Framework_JLogin_InsertAutoLoginCredentialsForUser (No Change Required)
+Proc_TestDrive_Demo_SaveDemoUserDetails (No Change Required)
+Proc_TestDrive_ePrologPupilImportProvider_SavePupilFromExcel (No Change Required)
+Proc_TestDrive_JGroupTesting_CreateGroupAndPupils (No Change Required)
+Proc_TestDrive_Pupil_SaveClassPupilMappings (No Change Required)
+Proc_TestDrive_Pupil_SaveExternalPupil_Yousty (No Change Required)
+Proc_TestDrive_Pupil_SaveExternalPupil_YoustyAsNVarchar (No Change Required)
+Proc_TestDrive_Pupil_SaveExternalPupil_YoustyAsNVarchar_WithCheckToken (No Change Required)
+Proc_TestDrive_Pupil_SaveExternalPupil_YoustyAsNVarchar_WithCheckToken_04_28_2020 (No Change Required)
+Proc_TestDrive_Pupil_SaveExternalPupil_YoustyAsNVarcharTest (No Change Required)
+Proc_TestDrive_RomandsPupilImportProvider_SavePupilFromExcel (No Change Required)
+Proc_TestDrive_StellwerkLearncoacherPupilImportProvider_SavePupilFromExcel (No Change Required)
+Proc_TestDrive_StellwerkPupilImportProvider_SavePupilFromExcel (No Change Required)
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Member_Pupil_AssignedSubjectClassType' AND COLUMN_NAME = 'dtModifiedOn') 
+  BEGIN
+      ALTER TABLE t_TestDrive_Member_Pupil_AssignedSubjectClassType ADD dtModifiedOn datetime  
+ END
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Member_Pupil_AssignedSubjectClassType set dtModifiedOn = GETDATE()
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_TestDrive_AssignClassTypeToPupil_CheckIfPupilAssignedWithClassType
+JProc_TestDrive_AssignClassTypeToPupil_SavePupilsClassType
+JProc_TestDrive_AssignClassTypeToPupil_SavePupilsClassType_New
+JProc_TestDrive_Pupil_GetPupilClassTypeDetails
+JProc_TestDrive_Pupil_GetPupilClassTypeDetailsForMainClient
+JProc_TestDrive_Pupil_MovePupils
+JProc_TestDrive_Pupil_MovePupils_16_08_2019
+JProc_TestDrive_Pupil_MovePupils_26_08_2019
+Proc_TestDrive_AssignClassTypeToPupil_CheckIfPupilAssignedWithClassType
+Proc_TestDrive_AssignClassTypeToPupil_SavePupilsClassType
+Proc_TestDrive_Pupil_GetPupilClassTypeDetails
+Proc_TestDrive_Pupil_GetPupilClassTypeDetailsByClassTypeId
+Proc_TestDrive_School_UpdateClassTypeDetailsForSchool
+***********************************************************/
+
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Member_School' AND COLUMN_NAME = 'uModifiedByUserId') 
+  BEGIN
+      ALTER TABLE t_TestDrive_Member_School ADD uModifiedByUserId uniqueidentifier  
+ END
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Member_School set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+FProc_TestDrive_BaseObject_Class_AddData
+FProc_TestDrive_BaseObject_Class_DeleteData
+FProc_TestDrive_BaseObject_Class_EditData
+FProc_TestDrive_BaseObject_Class_GetData
+FProc_TestDrive_BaseObject_Pupil_AddData
+FProc_TestDrive_BaseObject_Pupil_DeleteData
+FProc_TestDrive_BaseObject_Pupil_EditData
+FProc_TestDrive_BaseObject_Pupil_GetData
+FProc_TestDrive_BaseObject_School_AddData
+FProc_TestDrive_BaseObject_School_DeleteData
+FProc_TestDrive_BaseObject_School_EditData
+FProc_TestDrive_BaseObject_School_GetData
+FProc_TestDrive_BaseObject_Teacher_AddData
+FProc_TestDrive_BaseObject_Teacher_DeleteData
+FProc_TestDrive_BaseObject_Teacher_EditData
+FProc_TestDrive_BaseObject_Teacher_GetData
+FProc_TestDrive_StellwerkZurich_DeleteAllExternalMappings
+JEditorProc_TestDrive_StandardPupilProvider_GetPupilDetailsForTestApplication
+JProc_Testdrive_AutoLogin_GetPupilLoggedInInfo_06_08_2020
+JProc_Testdrive_LearncoacherPupilMembership_ValidateUser
+JProc_TestDrive_LearningTest_GetStateIdBySchool
+JProc_Testdrive_LearningTestCount
+JProc_TestDrive_Member_GetClassLicense
+JProc_Testdrive_Member_GetExternalPupilsForMainClient
+JProc_TestDrive_Member_GetSchoolData_Sync
+JProc_Testdrive_Member_GetUserDetailsForAutoLogin
+JProc_Testdrive_Member_GetUserDetailsFromExternalSourceId
+JProc_TestDrive_Member_RefreshCache
+JProc_Testdrive_Memeber_Pupil_GetSchoolPupilForMainClient
+JProc_Testdrive_Memeber_Pupil_GetSchoolPupilForMainClient_Sync
+JProc_TestDrive_Pupil_GetAllPupilDetails
+JProc_TestDrive_Pupil_GetPupilDetailsOfSameEmail
+JProc_TestDrive_School_GetSchoolDetailsById
+JProc_Testdrive_School_GetTimeTableSettingsForMainClientId
+JProc_Testdrive_School_GetTimeTableSettingsForMainClientId_New
+JProc_Testdrive_School_GetTimeTableSettingsForMainClientId_Sync
+JProc_TestDrive_School_SaveSchoolPasswordHashForEmail
+JProc_Testdrive_School_SaveTimeTableSettings
+JProc_Testdrive_School_SaveTimeTableSettings_New
+JProc_Testdrive_SchoolMembership_ValidateUser
+JProc_Testdrive_SimplelLoginMembershipProvider_ValidateUser
+JProc_Testdrive_SimplelLoginMembershipProvider_ValidateUser_01_08_2019
+JProc_Testdrive_SimplelLoginMembershipProvider_ValidateUser_18_05_2018
+JProc_Testdrive_SimplelLoginMembershipProvider_ValidateUser_23_07_2019
+JProc_TestDrive_StandardClassProvider_GetClassDetailsByClassId_New
+JProc_TestDrive_StandardPupilProvider_GetPupilDetailsForTestApplication
+JProc_TestDrive_StellwerkZurich_SavePupilExternalMapping
+JProc_TestDrive_StellwerkZurich_SaveSchoolExternalMapping
+JProc_TestDrive_StellwerkZurich_SaveTeacherExternalMapping
+JProc_Testdrive_Teacher_GetSubjectExpertDetailsByMainClientId
+JProc_Testdrive_Teacher_GetSubjectExpertDetailsForMainClient
+JProc_TestDrive_Teacher_GetTeacherDetailsByTeacherIdForEmail
+JProc_Testdrive_Teacher_GetTeacherSchoolForMainClient
+JProc_Testdrive_TeacherMembership_ValidateUser
+JProc_Testdrive_TeacherMembership_ValidateUser_14_06_2018
+Proc_Framework_ClientUser_GetMemberDetails
+Proc_TestDrive_Class_CheckIfClassNameAlreadyExists
+Proc_TestDrive_ClassManagement_GetClassDataForPreview
+Proc_TestDrive_Cycle_GetAllSchoolsByStateId
+Proc_TestDrive_Cycle_GetClassTestsByCycleId
+Proc_TestDrive_Cycle_GetCycleClassByCycleId
+Proc_TestDrive_Cycle_GetSchoolTestsByCycleId
+Proc_TestDrive_Cycle_School_GetCycleSchoolsByCycleId
+Proc_TestDrive_Dashboard_GetDoubleLearningTestsCreated
+Proc_TestDrive_Dashboard_GetLearningJournal
+Proc_TestDrive_Demo_SaveDemoUserDetails
+Proc_Testdrive_EdupoolLearncoacherPupilMembership_ValidateUser
+Proc_TestDrive_GetAllUsers
+Proc_TestDrive_GetAllUsersForAllMainClients
+Proc_TestDrive_JFacebookProfileSchool_GetSchoolProfileImageDetails
+Proc_TestDrive_JFacebookSchoolProfile_SaveFacebookSchoolProfileImage
+Proc_Testdrive_LearncoacherPupilMembership_ValidateUser
+Proc_Testdrive_Member_GetAllCommunications
+Proc_TestDrive_Member_GetMemberDetailsForDashboard
+proc_TestDrive_Member_GetSchoolDetailsBySchoolId
+proc_TestDrive_Member_School_InitialForm_AddSchool
+Proc_TestDrive_MiscExport_GetDocumentCount
+Proc_TestDrive_MiscExport_GetNewsCount
+Proc_TestDrive_PageBilling_GetSchoolDetails
+Proc_TestDrive_PageBilling_GetSchoolDetails_New
+Proc_TestDrive_PageResultTransfer_GetStateNumberByClassId
+Proc_TestDrive_PageResultTransfer_GetTeacherSchoolDetailsByClass
+Proc_Testdrive_PathfinderPupilMembership_ValidateUser_JobSkills
+Proc_TestDrive_Pupil_GetAllPupilDetails
+Proc_TestDrive_Pupil_GetPupilDetails
+Proc_TestDrive_Pupil_GetPupilDetails_Yousty
+Proc_TestDrive_Pupil_GetPupilDetailsByPupilId_Yousty
+Proc_TestDrive_Pupil_GetPupilDetailsByStateId
+proc_TestDrive_Pupil_GetPupilDetailsOfSameEmail
+Proc_TestDrive_Pupil_SaveExternalPupil_Yousty
+Proc_TestDrive_Pupil_SaveExternalPupil_YoustyAsNVarchar
+Proc_TestDrive_Pupil_SaveExternalPupil_YoustyAsNVarchar_WithCheckToken
+Proc_TestDrive_Pupil_SaveExternalPupil_YoustyAsNVarchar_WithCheckToken_04_28_2020
+Proc_TestDrive_Pupil_SaveExternalPupil_YoustyAsNVarcharTest
+Proc_TestDrive_PupilManagement_GetGridData
+Proc_TestDrive_RealTimeTestUsage_GetPupilDetails
+Proc_TestDrive_School_CheckIfSchoolEmailExists
+Proc_TestDrive_School_CheckIfSchoolRegistered
+Proc_TestDrive_School_GetAllClassesBySchoolId
+Proc_TestDrive_School_GetAllClassesForSchool
+Proc_TestDrive_School_GetAllSchoolDetailsWhereEmailNotSent
+Proc_TestDrive_School_GetSchoolCountForStates
+Proc_TestDrive_School_GetSchoolDetailsById
+Proc_TestDrive_School_MoveSchoolToState
+Proc_TestDrive_School_SaveSchoolPasswordForEmail
+Proc_TestDrive_School_SaveSchoolPasswordHashForEmail
+Proc_TestDrive_School_UpdateEmailSentForSchool
+Proc_TestDrive_School_UpdateLearncoacherStatus
+Proc_Testdrive_SchoolMembership_ValidateUser
+Proc_TestDrive_SinglePageTest_GetPupilDetails
+Proc_TestDrive_StandardClassProvider_GetClassDetailsByClassId
+Proc_TestDrive_StandardClassProvider_GetClassDetailsByClassId_New
+Proc_TestDrive_StandardClassProvider_GetClassDetailsByClassId_New_2018
+Proc_TestDrive_StandardClassProvider_GetClassDetailsByClassId_New_2018_03_07_2019
+Proc_TestDrive_StandardPupilProvider_GetPupilDetailsForTestApplication
+Proc_TestDrive_StandardPupilProvider_GetPupilDetailsForTestApplication_New
+Proc_TestDrive_StandardTeacherProvider_GetAllClassesByTeacherId
+Proc_TestDrive_StandardTeacherProvider_GetAllClassesByTeacherId_New
+Proc_TestDrive_State_GetClassDetailsByStateId
+Proc_TestDrive_State_GetClassDetailsByStateIdForTestSchools
+Proc_TestDrive_State_SaveStateDependingTablesData
+Proc_TestDrive_State_UpdateLearnCoacherStatus
+Proc_TestDrive_States_GetAllSchoolDetailsByStateId
+Proc_TestDrive_StellwerkExternalDataSourceProvider_GetMemberDataFromActive
+Proc_TestDrive_StellwerkExternalDataSourceProvider_MapAndSaveMemberData
+Proc_TestDrive_Teacher_GetAllSchoolsByMainClientId
+Proc_TestDrive_Teacher_GetTeacherDetailsByTeacherId
+Proc_TestDrive_Teacher_GetTeacherDetailsByTeacherId_2018
+Proc_TestDrive_Teacher_GetTeacherDetailsByTeacherIdForEmail
+Proc_TestDrive_Teacher_GetTeacherWithExpertClass
+Proc_TestDrive_Teacher_SaveChangedTeacherIdForSchool
+Proc_Testdrive_TeacherMembership_ValidateUser
+Proc_Testdrive_UpdateHashedPassword
+***********************************************************/
+
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Member_State' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_TestDrive_Member_State ADD uModifiedByUserId uniqueidentifier  
+END  
+
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Member_State set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+
+
+
+alter PROCEDURE Proc_TestDrive_StellwerkExternalDataSourceProvider_MapAndSaveMemberData                                          
+(                                                
+    @MemberXml nvarchar(max),              
+ @vMemberType nvarchar(500),              
+ @uSchoolId uniqueidentifier,              
+ @imainclientId int,              
+ @ExtranetTeacherId nvarchar(max),              
+ @iStateId int              
+)                                                
+AS                                            
+ /********************************************************************************************                                                                        
+   Changed By: Sendil                                                                       
+   Changed Date: 08.03.2016              
+   Description: updates member information               
+ ********************************************************************************************/                                                                        
+Begin              
+ Declare @TempMemberId uniqueidentifier              
+ Declare @DocHandle int              
+              
+ --set @MemberXml = replace(@MemberXml,'&','&amp;')              
+              
+ EXECUTE sp_xml_preparedocument @DocHandle OUTPUT,@MemberXml              
+ if(@vMemberType = 'TEACHER')              
+ Begin              
+  if not exists(select * from t_TestDrive_Member_Teacher_ExternalSourceMapping where uTeacherExternalSourceId = @ExtranetTeacherId)              
+  Begin              
+   set @TempMemberId = newid()              
+              
+   insert into t_TestDrive_Member_Teacher(uTeacherId,uSchoolId,iTitleId,vFirstName,vName,vPhoneSchool,vPhonePrivate,vEmail,vPassword,dtCreatedOn,dtModifiedOn,vIPLastModifiedFrom ,              
+    dtWhenLoginEmailSent,               
+    cIsDeleted ,iMainClientId ,vStreet ,vTown ,iZip ,vFunction ,uLastVisitedClassId              
+    ,iProfilePictureFileSize ,iProfilePictureFileVersion ,vProfilePictureFileType              
+    ,cIsTeacherCreatedByTeacher,uUserId,uTeacherCreatedById,iLanguageId,vAdministrationIP              
+    ,vTestIP,vPasswordHash,vShortCut,cIsExternal)           
+   SELECT @TempMemberId ,@uSchoolId ,iTitleId              
+    ,vFirstName ,vName ,vPhoneSchool ,vPhonePrivate ,vEmail              
+    ,vPassword ,GEtDate(), GETDATe(),      
+    vIPLastModifiedFrom ,              
+    GETDATE(),               
+    cIsDeleted ,@imainclientId ,vStreet ,vTown ,iZip ,vFunction ,uLastVisitedClassId              
+    ,iProfilePictureFileSize ,iProfilePictureFileVersion ,vProfilePictureFileType              
+    ,cIsTeacherCreatedByTeacher,uUserId,uTeacherCreatedById,iLanguageId,vAdministrationIP              
+    ,vTestIP,vPasswordHash,'','Y'               
+   FROM OPENXML (@DocHandle, '/MemberData',1)              
+   WITH               
+   (              
+    uTeacherId uniqueidentifier 'uTeacherId'              
+    ,uSchoolId nvarchar(max) 'uSchoolId'              
+    ,iTitleId nvarchar(max) 'iTitleId'              
+    ,vFirstName nvarchar(max) 'vFirstName'              
+    ,vName nvarchar(max) 'vName'              
+    ,vPhoneSchool nvarchar(max) 'vPhoneSchool'              
+    ,vPhonePrivate nvarchar(max) 'vPhonePrivate'              
+    ,vEmail nvarchar(max) 'vEmail'              
+    ,vPassword nvarchar(max) 'vPassword'              
+    --,dtCreatedOn datetime 'dtCreatedOn'              
+    --,dtModifiedOn datetime 'dtModifiedOn'              
+    ,vIPLastModifiedFrom nvarchar(max) 'vIPLastModifiedFrom'              
+    --,dtWhenLoginEmailSent datetime 'dtWhenLoginEmailSent'              
+    ,cIsDeleted nvarchar(max) 'cIsDeleted'              
+    ,iMainClientId nvarchar(max) 'iMainClientId'              
+    ,vStreet nvarchar(max) 'vStreet'              
+    ,vTown nvarchar(max) 'vTown'              
+    ,iZip nvarchar(max) 'iZip'              
+    ,vFunction nvarchar(max) 'vFunction'              
+    ,uLastVisitedClassId nvarchar(max) 'uLastVisitedClassId'       
+    ,iProfilePictureFileSize nvarchar(max) 'iProfilePictureFileSize'              
+    ,iProfilePictureFileVersion nvarchar(max) 'iProfilePictureFileVersion'              
+    ,vProfilePictureFileType nvarchar(max) 'vProfilePictureFileType'              
+    ,cIsTeacherCreatedByTeacher nvarchar(max) 'cIsTeacherCreatedByTeacher'              
+    ,uUserId nvarchar(max) 'uUserId'              
+    ,uTeacherCreatedById uniqueidentifier 'uTeacherCreatedById'              
+    ,iLanguageId nvarchar(max) 'iLanguageId'              
+    ,vAdministrationIP nvarchar(max) 'vAdministrationIP'              
+    ,vTestIP nvarchar(max) 'vTestIP'              
+    ,vPasswordHash nvarchar(max) 'vPasswordHash'              
+   )              
+   if exists(select uTeacherId from t_TestDrive_Member_Teacher where uTeacherId = @TempMemberId)              
+   Begin              
+    insert into t_TestDrive_Member_Teacher_ExternalSourceMapping values (@TempMemberId,null,null,@imainclientId,@uSchoolId,null,@ExtranetTeacherId,@ExtranetTeacherId,getdate(),getdate(),NULL)              
+   end              
+  End              
+                
+  select @TempMemberId = uTeacherId from t_TestDrive_Member_Teacher_ExternalSourceMapping where uTeacherExternalSourceId = @ExtranetTeacherId              
+              
+              
+  select *, iStateId, vSchoolName, '00000000-0000-0000-0000-000000000000' uClassId,'00000000-0000-0000-0000-000000000000' 'MainTeacherId',              
+  'N' cIsTeacherCreatedByTeacher, tt.uTeacherId 'UserId'              
+   from t_testdrive_member_teacher tt               
+  join t_TestDrive_Member_Teacher_ExternalSourceMapping tm on tm.uTeacherId = tt.uTeacherId              
+  join t_testdrive_member_school ts on ts.uSchoolId = tt.uSchoolId               
+  where tt.uTeacherId = @TempMemberId              
+              
+  select * from t_TestDrive_Member_Teacher_ExternalSourceMapping where uTeacherId = @TempMemberId              
+  
+  if not exists(select * from t_TestDrive_Member_Teacher_School where uTeacherId = @TempMemberId and uSchoolId = @uSchoolId)   
+   Begin  
+       insert into t_TestDrive_Member_Teacher_School(uTeacherSchoolId,uSchoolId,uTeacherId,cIsAdmin,cIsDeleted) values  
+    (NEWID(),@uSchoolId,@TempMemberId,'N','N')  
+   End    
+  Else  
+   Begin  
+          update t_TestDrive_Member_Teacher_School set cIsDeleted = 'N' WHERE uTeacherId = @TempMemberId and uSchoolId = @uSchoolId  
+   End  
+               
+ End              
+ if(@vMemberType = 'SCHOOL')              
+ Begin              
+   if not exists(select * from t_TestDrive_Member_school_ExternalSourceMapping where uSchoolExternalSourceId = cast(@uSchoolId as nvarchar(36)))              
+   Begin              
+    set @TempMemberId = newid()              
+              
+    insert into t_TestDrive_Member_School(uSchoolId              
+      ,vSchoolName              
+      ,iStateId              
+      ,iTitleId              
+      ,vFirstName              
+      ,vName              
+      ,vStreet              
+      ,iZIPCode              
+      ,vTown              
+      ,vPhone              
+      ,vEmail              
+      ,vPassword              
+      ,dtCreatedOn            
+      ,dtModifiedOn    
+      ,vIPLastModifiedFrom              
+      ,dtWhenLoginlEmailSent               
+      ,cIsDeleted              
+      ,iMainClientId              
+      ,iLanguageId              
+      ,cIsTestSchool              
+      ,iSchoolTypeId              
+      ,cHasLearnCoacher              
+      ,iProfilePictureFileSize              
+      ,iProfilePictureFileVersion              
+      ,vProfilePictureFileType              
+      ,vPhonePrivate              
+      ,uUserId              
+      ,vAdministrationIP              
+      ,vTestIP              
+      ,vPasswordHash              
+      ,uLastVisitedTeacherId      
+   ,cIsExternal)             
+    SELECT @TempMemberId              
+      ,vSchoolName              
+      ,@iStateId              
+      ,iTitleId              
+      ,vFirstName              
+      ,vName              
+      ,vStreet              
+      ,iZIPCode              
+      ,vTown              
+      ,vPhone              
+      ,vEmail              
+      ,vPassword              
+      ,GetDAte() --CASE  WHEN dtCreatedOn= '' THEN null WHEN dtCreatedOn< > '' THEN convert(datetime,dtCreatedOn,104) END              
+      ,GetDAte() --CASE  WHEN dtModifiedOn= '' THEN null WHEN dtModifiedOn< > '' THEN convert(datetime,dtModifiedOn,104) END              
+      ,vIPLastModifiedFrom              
+      ,GetDAte() --CASE  WHEN dtWhenLoginlEmailSent= '' THEN null WHEN dtWhenLoginlEmailSent< > '' THEN convert(datetime,dtWhenLoginlEmailSent,104) END               
+      ,cIsDeleted              
+      ,@imainclientId              
+      ,iLanguageId              
+      ,cIsTestSchool            
+      ,iSchoolTypeId              
+      ,cHasLearnCoacher              
+      ,iProfilePictureFileSize              
+      ,iProfilePictureFileVersion              
+      ,vProfilePictureFileType              
+      ,vPhonePrivate              
+      ,uUserId              
+      ,vAdministrationIP              
+      ,vTestIP              
+      ,vPasswordHash              
+      ,uLastVisitedTeacherId      
+   ,'Y'             
+      FROM OPENXML (@DocHandle, '/MemberData',1)              
+    WITH               
+    (              
+       uSchoolId uniqueidentifier 'uSchoolId'              
+      ,vSchoolName nvarchar(max) 'vSchoolName'              
+      ,iStateId nvarchar(max) 'iStateId'              
+      ,iTitleId nvarchar(max) 'iTitleId'              
+      ,vFirstName nvarchar(max) 'vFirstName'              
+      ,vName nvarchar(max) 'vName'              
+      ,vStreet nvarchar(max) 'vStreet'              
+      ,iZIPCode nvarchar(max) 'iZIPCode'              
+      ,vTown nvarchar(max) 'vTown'              
+      ,vPhone nvarchar(max) 'vPhone'              
+      ,vEmail nvarchar(max) 'vEmail'              
+      ,vPassword nvarchar(max) 'vPassword'              
+      --,dtCreatedOn datetime 'dtCreatedOn'              
+      --,dtModifiedOn datetime 'dtModifiedOn'              
+      ,vIPLastModifiedFrom nvarchar(max) 'vIPLastModifiedFrom'              
+      --,dtWhenLoginlEmailSent nvarchar(max) 'dtWhenLoginlEmailSent'              
+      ,cIsDeleted nvarchar(max) 'cIsDeleted'              
+      ,iMainClientId nvarchar(max) 'iMainClientId'              
+      ,iLanguageId nvarchar(max) 'iLanguageId'              
+      ,cIsTestSchool nvarchar(max) 'cIsTestSchool'              
+      ,iSchoolTypeId nvarchar(max) 'iSchoolTypeId'              
+      ,cHasLearnCoacher nvarchar(max) 'cHasLearnCoacher'              
+      ,iProfilePictureFileSize nvarchar(max) 'iProfilePictureFileSize'              
+      ,iProfilePictureFileVersion nvarchar(max) 'iProfilePictureFileVersion'              
+      ,vProfilePictureFileType nvarchar(max) 'vProfilePictureFileType'              
+      ,vPhonePrivate nvarchar(max) 'vPhonePrivate'              
+      ,uUserId nvarchar(max) 'uSchoolId'              
+      ,vAdministrationIP nvarchar(max) 'vAdministrationIP'              
+      ,vTestIP nvarchar(max) 'vTestIP'              
+      ,vPasswordHash nvarchar(max) 'vPasswordHash'              
+      ,uLastVisitedTeacherId uniqueidentifier 'uLastVisitedTeacherId'              
+    )              
+    if exists(select uschoolid from t_TestDrive_Member_School where uSchoolId = @TempMemberId)              
+    begin              
+     insert into t_TestDrive_Member_school_ExternalSourceMapping values (@TempMemberId, @uSchoolId, @imainclientId,@uSchoolId,GETDATE(),getdate(),null)              
+    end              
+   End              
+   select @TempMemberId = uSchoolId from t_TestDrive_Member_school_ExternalSourceMapping where uSchoolExternalSourceId = cast(@uSchoolId as nvarchar(36))              
+              
+   select * from t_TestDrive_Member_School where uSchoolId = @TempMemberId              
+   select * from t_TestDrive_Member_school_ExternalSourceMapping where uSchoolId = @TempMemberId              
+ End              
+ if(@vMemberType = 'STATE')              
+ Begin              
+                
+  if not exists(select * from t_TestDrive_Member_State_ExternalSourceMapping where iStateExternalSourceId = @iStateId)              
+  Begin              
+   Declare @tempStateId int              
+                 
+              
+   insert into t_TestDrive_Member_State (iDisplayOrder,iMainClientId,iStateNumberForTestToken,cHasLearnCoacher,vLogoFileName,
+   iLogoSize,iLogoFileVersion,vLogoFileType,iTitleId,vFirstName,vName,vLongName,cIsUsedForDemoTestActivityRecording,cIsDeleted,dtModifiedOn,dtCreatedOn,uUserId)             
+   SELECT iDisplayOrder              
+     ,@imainclientId              
+     ,iStateNumberForTestToken              
+     ,cHasLearnCoacher              
+     ,vLogoFileName              
+     ,iLogoSize              
+     ,iLogoFileVersion              
+     ,vLogoFileType              
+     ,iTitleId              
+     ,vFirstName              
+     ,vName              
+     ,vLongName,cIsUsedForDemoTestActivityRecording,'N',GETDATE(),GETDATE(),null              
+    FROM OPENXML (@DocHandle, '/MemberData',1)              
+    WITH               
+    (              
+     iDisplayOrder nvarchar(max) 'iDisplayOrder'              
+     ,iMainClientId nvarchar(max) 'iMainClientId'              
+     ,iStateNumberForTestToken nvarchar(max) 'iStateNumberForTestToken'              
+     ,cHasLearnCoacher nvarchar(max) 'cHasLearnCoacher'              
+     ,vLogoFileName nvarchar(max) 'vLogoFileName'              
+     ,iLogoSize nvarchar(max) 'iLogoSize'              
+     ,iLogoFileVersion nvarchar(max) 'iLogoFileVersion'              
+     ,vLogoFileType nvarchar(max) 'vLogoFileType'              
+     ,iTitleId nvarchar(max) 'iTitleId'              
+     ,vFirstName nvarchar(max) 'vFirstName'              
+     ,vName nvarchar(max) 'vName'              
+     ,vLongName nvarchar(max) 'vLongName'              
+     ,cIsUsedForDemoTestActivityRecording nvarchar(max) 'cIsUsedForDemoTestActivityRecording'                   
+    )              
+   set @tempStateId = @@IDENTITY              
+              
+   if exists (select istateId from t_TestDrive_Member_State where iStateId = @tempStateId)              
+   Begin              
+    insert into t_TestDrive_Member_State_ExternalSourceMapping values (@tempStateId, @iStateId, @imainclientId)              
+              
+    insert into t_TestDrive_Member_State_Data              
+    select @tempStateId              
+       ,iLanguageId              
+       ,vShortStateName              
+       ,vStateName              
+       FROM OPENXML (@DocHandle, '/MemberData/',1)              
+     WITH               
+     (               
+       iStateId nvarchar(max) 'iStateId'              
+      ,iLanguageId nvarchar(max) 'iLanguageId'              
+      ,vShortStateName nvarchar(max) 'vShortStateName'              
+      ,vStateName nvarchar(max) 'vStateName'              
+     )              
+   end              
+  End              
+  select @tempStateId = iStateId from t_TestDrive_Member_State_ExternalSourceMapping where iStateExternalSourceId = @iStateId              
+              
+  select * from t_TestDrive_Member_State where iStateId = @tempStateId              
+  select * from t_TestDrive_Member_State_ExternalSourceMapping where iStateId = @tempStateId              
+ End              
+ EXEC sp_xml_removedocument @DocHandle              
+End 
+
+
+  
+ 
+  
+  
+  
+
+
+/********************All Dependent Procs******************
+FProc_TestDrive_BaseObject_State_AddData
+FProc_TestDrive_BaseObject_State_DeleteData
+FProc_TestDrive_BaseObject_State_EditData
+FProc_TestDrive_BaseObject_State_GetData
+JProc_TestDrive_Pupil_GetPupilDetailsOfSameEmail
+JProc_TestDrive_State_GetAllStates_New
+Proc_TestDrive_ClassManagement_GetClassDataForPreview
+Proc_TestDrive_Cycle_GetClassTestsByCycleId
+Proc_TestDrive_Cycle_GetCycleClassByCycleId
+Proc_TestDrive_Cycle_GetSchoolTestsByCycleId
+Proc_TestDrive_Cycle_GetStatesByCycleId
+Proc_TestDrive_Cycle_School_GetCycleSchoolsByCycleId
+Proc_TestDrive_Demo_SaveDemoUserDetails
+proc_TestDrive_Member_GetSchoolDetailsBySchoolId
+proc_TestDrive_Member_School_InitialForm_GetDropDownData
+Proc_TestDrive_MiscExport_GetDocumentCount
+Proc_TestDrive_MiscExport_GetNewsCount
+Proc_TestDrive_PageBilling_GetSchoolDetails
+Proc_TestDrive_PageBilling_GetSchoolDetails_New
+Proc_TestDrive_PageResultTransfer_GetStateNumberByClassId
+Proc_TestDrive_PageResultTransfer_GetTeacherSchoolDetailsByClass
+proc_TestDrive_Pupil_GetPupilDetailsOfSameEmail
+Proc_TestDrive_PupilManagement_GetGridData
+Proc_TestDrive_School_GetSchoolCountForStates
+Proc_TestDrive_School_GetSchoolDetailsById
+Proc_TestDrive_School_UpdateLearncoacherStatus
+Proc_TestDrive_State_GetAllStates
+Proc_TestDrive_State_GetAllStates_New
+Proc_TestDrive_State_GetStateDetailById
+Proc_TestDrive_State_GetStateDetailByStateAdministratorId
+Proc_TestDrive_State_SaveStateNumberForTestToken
+Proc_TestDrive_State_UpdateStateLogo
+Proc_Testdrive_StateMembership_ValidateUser
+Proc_TestDrive_StellwerkExternalDataSourceProvider_GetMemberDataFromActive
+Proc_TestDrive_StellwerkExternalDataSourceProvider_MapAndSaveMemberData
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Testdrive_Member_StateAdministrator' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+    ALTER TABLE t_Testdrive_Member_StateAdministrator ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_Testdrive_Member_StateAdministrator set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_Testdrive_StateMembership_ValidateUser
+Proc_TestDrive_JStateProfile_GetStateAdminProfileImageDetails
+Proc_TestDrive_JStateProfile_SaveStateAdminProfileImage
+Proc_TestDrive_Member_GetMemberDetailsForDashboard
+Proc_TestDrive_State_GetStateDetailByStateAdministratorId
+Proc_TestDrive_State_SaveStateAdminPassword
+Proc_TestDrive_State_SaveStateDependingTablesData
+Proc_Testdrive_StateMembership_ValidateUser
+***********************************************************/
+
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Member_Teacher' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Member_Teacher ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Member_Teacher set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+FProc_TestDrive_BaseObject_Class_GetData
+FProc_TestDrive_BaseObject_Teacher_AddData
+FProc_TestDrive_BaseObject_Teacher_DeleteData
+FProc_TestDrive_BaseObject_Teacher_EditData
+FProc_TestDrive_BaseObject_Teacher_GetData
+FProc_TestDrive_StellwerkZurich_DeleteAllExternalMappings
+JEditorProc_TestDrive_StandardPupilProvider_GetPupilDetailsForTestApplication
+JProc_LearnCoacher_LearningJournal_GetPupilTopicsForMainClient
+JProc_LearnCoacher_LearningJournal_GetPupilTopicsForMainClient_New
+JProc_LearnCoacher_LearningJournal_GetPupilTopicsForMainClient_New_29_10_2018
+JProc_Member_Teacher_GetDataToUpdate_Sync
+JProc_Testdrive_AutoLogin_GetPupilLoggedInInfo_06_08_2020
+JProc_Testdrive_LearncoacherPupilMembership_ValidateUser
+JProc_TestDrive_LearningTest_GetStateIdBySchool
+JProc_Testdrive_LearningTestCount
+JProc_Testdrive_Member_GetUserDetailsForAutoLogin
+JProc_Testdrive_Member_GetUserDetailsFromExternalSourceId
+JProc_TestDrive_Member_RefreshCache
+JProc_TestDrive_Pupil_GetAllPupilDetails
+JProc_TestDrive_Pupil_GetPupilDetailsOfSameEmail
+JProc_Testdrive_SimplelLoginMembershipProvider_ValidateUser
+JProc_Testdrive_SimplelLoginMembershipProvider_ValidateUser_01_08_2019
+JProc_Testdrive_SimplelLoginMembershipProvider_ValidateUser_18_05_2018
+JProc_Testdrive_SimplelLoginMembershipProvider_ValidateUser_23_07_2019
+JProc_TestDrive_StandardClassProvider_GetClassDetailsByClassId_New
+JProc_TestDrive_StandardPupilProvider_GetPupilDetailsForTestApplication
+JProc_TestDrive_StellwerkZurich_SaveTeacherExternalMapping
+JProc_TestDrive_Survey_GetSurveyDataForExport
+JProc_TestDrive_Teacher_GetAllPupilByMainClientId
+JProc_TestDrive_Teacher_GetAllTeachersByMainClientId
+JProc_TestDrive_Teacher_GetSubjectExpertTeacherDetails
+JProc_TestDrive_Teacher_GetTeacherDetailsByTeacherIdForEmail
+JProc_TestDrive_Teacher_SaveTeacherPasswordHashForEmail
+JProc_Testdrive_TeacherMembership_ValidateUser
+JProc_Testdrive_TeacherMembership_ValidateUser_14_06_2018
+Proc_Framework_ClientUser_GetMemberDetails
+Proc_Learncoacher_JSubjectExpertTeacher_SaveExpertTeacherDetails
+Proc_Learncoacher_JSubjectExpertTeacher_UpdateLoginEmailSent
+Proc_Testdrive_BRNWMembershipProvider_ValidateUser
+Proc_TestDrive_Class_CheckIfClassNameAlreadyExists
+Proc_TestDrive_ClassManagement_GetClassDataForPreview
+Proc_TestDrive_Cycle_GetClassTestsByCycleId
+Proc_TestDrive_Cycle_GetCycleClassByCycleId
+Proc_TestDrive_Demo_SaveDemoUserDetails
+Proc_Testdrive_EdupoolLearncoacherPupilMembership_ValidateUser
+Proc_TestDrive_ePrologTeacherImportProvider_SaveTeacherFromExcel
+Proc_TestDrive_GetAllUsers
+Proc_TestDrive_GetAllUsersForAllMainClients
+Proc_TestDrive_JClass_AssignClassToTeacher
+Proc_TestDrive_JProfileTeacher_GetProfileImageDetails
+Proc_TestDrive_JProfileTeacher_GetTeacherProfileImageDetails
+Proc_TestDrive_JProfileTeacher_SaveProfileImage
+Proc_TestDrive_JProfileTeacher_SaveTeacherProfileImage
+Proc_TestDrive_JTeacher_AssignAllClasses
+Proc_TestDrive_JTeacher_AssignMainManagerToComanager
+Proc_TestDrive_JTeacher_DeleteAllCoTeachers
+Proc_Testdrive_LearncoacherPupilMembership_ValidateUser
+Proc_Testdrive_Member_GetAllCommunications
+Proc_TestDrive_Member_GetMemberDetailsForDashboard
+Proc_TestDrive_Member_Teacher_GetById
+Proc_TestDrive_MiscExport_GetDocumentCount
+Proc_TestDrive_MiscExport_GetNewsCount
+Proc_TestDrive_PageBilling_GetSchoolDetails
+Proc_TestDrive_PageBilling_GetSchoolDetails_New
+Proc_TestDrive_PageResultTransfer_GetStateNumberByClassId
+Proc_TestDrive_PageResultTransfer_GetTeacherSchoolDetailsByClass
+Proc_Testdrive_PathfinderPupilMembership_ValidateUser_JobSkills
+Proc_Testdrive_ProfileLoginMembership_ValidateUser
+Proc_TestDrive_Pupil_CheckIfPupilPasswordAlreadyExists
+Proc_TestDrive_Pupil_GetAllPupilDetails
+Proc_TestDrive_Pupil_GetAllPupilsForUserNameOrEmail
+Proc_TestDrive_Pupil_GetAllPupilsForUserNameOrEmail_24_07_2019
+Proc_TestDrive_Pupil_GetPupilDetails
+Proc_TestDrive_Pupil_GetPupilDetails_Yousty
+Proc_TestDrive_Pupil_GetPupilDetailsByPupilId_Yousty
+Proc_TestDrive_Pupil_GetPupilDetailsByStateId
+proc_TestDrive_Pupil_GetPupilDetailsOfSameEmail
+Proc_TestDrive_Pupil_SaveExternalPupil_Yousty
+Proc_TestDrive_Pupil_SaveExternalPupil_YoustyAsNVarchar
+Proc_TestDrive_Pupil_SaveExternalPupil_YoustyAsNVarchar_WithCheckToken
+Proc_TestDrive_Pupil_SaveExternalPupil_YoustyAsNVarchar_WithCheckToken_04_28_2020
+Proc_TestDrive_Pupil_SaveExternalPupil_YoustyAsNVarcharTest
+Proc_TestDrive_PupilManagement_GetGridData
+Proc_Testdrive_PupilMembership_ValidateUser
+Proc_TestDrive_RealTimeTestUsage_GetPupilDetails
+Proc_TestDrive_RomandsTeacherImportProvider_SaveTeacherFromExcel
+Proc_TestDrive_School_CreateClassForNoClassTeacher
+Proc_TestDrive_School_GetAllClassesBySchoolId
+Proc_TestDrive_School_GetAllClassesForSchool
+Proc_TestDrive_School_GetAllTeachers
+Proc_TestDrive_School_GetAllTeachersWithClassBySchoolId
+Proc_Testdrive_SimplelLoginMembershipProvider_ValidateUser
+Proc_Testdrive_SimplelLoginMembershipProvider_ValidateUser_Temp
+Proc_TestDrive_SinglePageTest_GetPupilDetails
+Proc_TestDrive_SinglePageTest_GetPupilsByProfileCode
+Proc_TestDrive_StandardClassProvider_GetClassDetailsByClassId
+Proc_TestDrive_StandardClassProvider_GetClassDetailsByClassId_New
+Proc_TestDrive_StandardClassProvider_GetClassDetailsByClassId_New_2018
+Proc_TestDrive_StandardClassProvider_GetClassDetailsByClassId_New_2018_03_07_2019
+Proc_TestDrive_StandardPupilProvider_GetPupilByProfileCode
+Proc_TestDrive_StandardPupilProvider_GetPupilDetailsForTestApplication
+Proc_TestDrive_StandardPupilProvider_GetPupilDetailsForTestApplication_New
+Proc_TestDrive_StandardTeacherProvider_GetAllClassesByTeacherId
+Proc_TestDrive_StandardTeacherProvider_GetAllClassesByTeacherId_New
+Proc_TestDrive_StandardTeacherProvider_GetAllPupilsByTeacherId_New
+Proc_TestDrive_State_GetClassDetailsByStateId
+Proc_TestDrive_State_GetClassDetailsByStateIdForTestSchools
+Proc_TestDrive_StellwerkExternalDataSourceProvider_GetMemberDataFromActive
+Proc_TestDrive_StellwerkExternalDataSourceProvider_MapAndSaveMemberData
+Proc_TestDrive_StellwerkTeacherImportProvider_SaveTeacherFromExcel
+Proc_TestDrive_Teacher_ActivateDeletedTeachers
+Proc_TestDrive_Teacher_DeleteTeachers
+Proc_TestDrive_Teacher_GetAllTeachersByMainClientId
+Proc_TestDrive_Teacher_GetMainTeachersForClass
+Proc_TestDrive_Teacher_GetSubjectExpertTeacherDetails
+Proc_TestDrive_Teacher_GetTeacherDetailsByClassId
+Proc_TestDrive_Teacher_GetTeacherDetailsByTeacherId
+Proc_TestDrive_Teacher_GetTeacherDetailsByTeacherId_2018
+Proc_TestDrive_Teacher_GetTeacherDetailsByTeacherIdForEmail
+Proc_TestDrive_Teacher_GetTeacherWithExpertClass
+Proc_TestDrive_Teacher_SaveChangedClassIdForTeacher
+Proc_TestDrive_Teacher_SaveTeacherPasswordForEmail
+Proc_TestDrive_Teacher_SaveTeacherPasswordHashForEmail
+Proc_TestDrive_Teacher_UndoTeacherDeletion
+Proc_Testdrive_Teacher_UpdateMainTeacherIdAfterSave
+Proc_Testdrive_TeacherMembership_ValidateUser
+Proc_Testdrive_Test_GetAllTestsByCycleAndTeacher
+Proc_Testdrive_UpdateHashedPassword
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Note' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Note ADD uModifiedByUserId uniqueidentifier  
+END
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Note set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_TestDrive_Notes_GetNotesForMainClient
+JProc_TestDrive_Notes_GetNotesForMainClient_Sync
+JProc_TestDrive_Notes_GetNotesForUser
+JProc_TestDrive_Notes_SaveNotesForUser
+JProc_TestDrive_Notes_SaveNotesForUser_New
+JProc_TestDrive_Notes_SaveNotesForUser_NewProc
+JProc_TestDrive_Notes_SaveNotesForUser_Test
+Proc_TestDrive_Notes_GetNotesForUser
+Proc_TestDrive_Notes_SaveNotesForUser
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New Columns
+**********************************/
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Testdrive_Planner_Curriculum' AND COLUMN_NAME = 'uModifiedByUserId') 
+  BEGIN
+      ALTER TABLE t_Testdrive_Planner_Curriculum ADD uModifiedByUserId uniqueidentifier  
+ END
+
+/**********************************
+Default Values
+**********************************/
+update t_Testdrive_Planner_Curriculum set uModifiedByUserId = uUserId  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+Proc_Extranet_Planner_SaveCurriculumDetails
+Proc_Extranet_TeacherPlanner_GetAllCurriculumDataByClass
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+
+/**********************************
+New table		
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES   WHERE TABLE_NAME = N't_Framework_Country_MainClient')
+BEGIN
+CREATE TABLE [dbo].[t_LearnCoacher_Planner_TimeTable_Color]
+(
+	  [uColorId] UNIQUEIDENTIFIER NOT NULL
+	, [iMainClientId] INT NULL
+	, [vColorCode] VARCHAR(10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+)
+End
+
+
+
+/**********************************
+Default Values
+**********************************/
+
+
+/**********************************
+Angular proc modified
+**********************************/
+/**********************************
+New table		
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES   WHERE TABLE_NAME = N't_Framework_Country_MainClient')
+BEGIN
+CREATE TABLE [dbo].[t_LearnCoacher_Planner_TimeTable_Color_Data]
+(
+	  [uColorDataId] UNIQUEIDENTIFIER NOT NULL
+	, [uColorId] UNIQUEIDENTIFIER NULL
+	, [vColorName] VARCHAR(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [iLanguageId] INT NULL
+)
+End
+
+
+
+
+/**********************************
+Default Values
+**********************************/
+
+
+/**********************************
+Angular proc modified
+**********************************/
+/**********************************
+New table		
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES   WHERE TABLE_NAME = N't_Framework_Country_MainClient')
+BEGIN
+CREATE TABLE [dbo].[t_TestDrive_Test_MissingTestIds]
+(
+	  [uMissingTestId] UNIQUEIDENTIFIER NOT NULL
+	, [uTestId] UNIQUEIDENTIFIER NULL
+	, [vTableName] NVARCHAR(500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [uCycleId] UNIQUEIDENTIFIER NULL
+	, [iMainClientId] INT NULL
+	, [dtCreatedOn] DATETIME NULL DEFAULT(getdate())
+	, [dtModifiedOn] DATETIME NULL DEFAULT(getdate())
+	, CONSTRAINT [PK_t_TestDrive_Test_MissingTestIds] PRIMARY KEY ([uMissingTestId] ASC)
+)
+End
+
+
+/**********************************
+Default Values
+**********************************/
+
+
+/**********************************
+Angular proc modified
+**********************************/

@@ -1,0 +1,39 @@
+/**********************************
+New Columns
+**********************************/
+GO
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_EntityAccessLevel' AND COLUMN_NAME = 'dtCreatedOn') 
+BEGIN
+ALTER TABLE t_Framework_MainClient_EntityAccessLevel ADD dtCreatedOn datetime  
+END
+
+GO	
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_EntityAccessLevel' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_Framework_MainClient_EntityAccessLevel ADD dtModifiedOn datetime  
+END
+
+GO	
+
+/**********************************
+Default Values
+**********************************/
+Update t_Framework_MainClient_EntityAccessLevel 
+Set dtCreatedOn =GetDate(), dtModifiedOn =GetDate()
+GO
+
+/********************AllDependentProc********************
+JProc_Framework_UserRole_GetAccessDataForUserRole
+JProc_Framework_UserRole_GetAllEntityAccessLevels
+Proc_Framework_UserRole_GetAccessDataForUserRole
+Proc_Framework_UserRole_GetAllEntityAccessLevels
+Proc_Fusion_Framework_UserRole_GetAccessDataForUserRole
+Proc_Fusion_Framework_UserRole_GetAllEntityAccessLevels
+Proc_Fusion_Intranet_EntityAccessLevel_GetData
+****************************************************************/
+
+
+/********************Procs updated**********************
+****************************************************************/

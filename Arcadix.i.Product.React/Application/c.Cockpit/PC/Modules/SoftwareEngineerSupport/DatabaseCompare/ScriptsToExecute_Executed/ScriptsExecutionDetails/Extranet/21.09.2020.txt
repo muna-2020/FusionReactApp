@@ -1,0 +1,14 @@
+﻿ 
+  Following tables updated:
+
+
+1) t_LearnCoacher_Planner_TimeTable_ClassTime
+2) t_LearnCoacher_Planner_Curriculum
+3) t_LearnCoacher_LearningJournal_WorkApproach_ReviewCriteria
+4) t_LearnCoacher_LearningJournal_Topic_StrengthAssessmentOption
+5) t_LearnCoacher_Planner_TimeTable_Day
+
+
+procs Updated:
+
+Proc_LearnCoacher_Planner_SaveCurriculumDetails

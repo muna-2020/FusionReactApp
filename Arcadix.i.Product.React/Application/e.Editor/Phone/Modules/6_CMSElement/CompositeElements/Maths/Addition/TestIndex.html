@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <script>
+        var objArray = [];
+        function InitialLoad() {
+            var Arcadix = new Array();
+            Arcadix["InitialArcadix_RowCount"] = 2;
+            Arcadix["InitialArcadix_ColumnCount"] = 5;
+            Arcadix["InitialArcadix_Mode"] = 'Display';
+            Arcadix["InitialArcadix_Numbers"] = [12345, 44499];
+            Arcadix["ResultArcadix_CarryOver"] = '0000';
+            Arcadix["ResultArcadix_ResultValue"] = '';
+            var FrameContentWindow = document.getElementById("ifrTest").contentWindow;
+            FrameContentWindow.LoadInitialize(Arcadix);
+        }
+        function SolutionLoad() {
+            var Arcadix = new Array();
+            Arcadix["InitialArcadix_RowCount"] = 3;
+            Arcadix["InitialArcadix_ColumnCount"] = 4;
+            Arcadix["InitialArcadix_Mode"] = 'Display';
+            Arcadix["InitialArcadix_Numbers"] = [400, 500, 254];
+            Arcadix["ResultArcadix_CarryOver"] = '';
+            Arcadix["ResultArcadix_ResultValue"] = '';
+            var FrameContentWindow = document.getElementById("ifrTest").contentWindow;
+            FrameContentWindow.LoadSolution(Arcadix);
+        }
+        function GetResults() {
+            var FrameContentWindow = document.getElementById("ifrTest").contentWindow;
+            objArray = FrameContentWindow.GetData();            
+            FrameContentWindow.LoadInitialize(objArray);
+        }
+        function DeleteRow() {
+            var FrameContentWindow = document.getElementById("ifrTest").contentWindow;
+            objArray['InitialArcadix_RowCount'] = 2;
+            FrameContentWindow.LoadInitialize(objArray);
+        }
+    </script>
+</head>
+<body>
+    <table>
+        <tr>
+            <td>
+                <iframe id="ifrTest" src="index.html" style="height:500px;width:100%"></iframe>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button onclick="InitialLoad();">Initialize</button>
+                <button onclick="SolutionLoad();">LoadSolution</button>
+                <button onclick="GetResults();">GetResults</button>
+                <button onclick="DeleteRow();">DeleteRow()</button>
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>

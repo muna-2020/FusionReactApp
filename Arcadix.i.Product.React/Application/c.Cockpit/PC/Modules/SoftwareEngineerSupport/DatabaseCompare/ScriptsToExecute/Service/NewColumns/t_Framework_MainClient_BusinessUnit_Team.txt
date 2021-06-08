@@ -1,0 +1,35 @@
+/**********************************
+New Columns
+**********************************/
+GO
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_BusinessUnit_Team' AND COLUMN_NAME = 'cIsForProductManagement') 
+BEGIN
+ALTER TABLE t_Framework_MainClient_BusinessUnit_Team ADD cIsForProductManagement char(1)  
+END
+
+GO	 
+
+/**********************************
+Default Values
+**********************************/
+Update t_Framework_MainClient_BusinessUnit_Team Set cIsForProductManagement ='N'
+where cIsForProductManagement Is Null
+
+GO
+
+/********************AllDependentProc********************
+JProc_Framework_UserRole_GetUserForTeamAndBusinessUnit
+Proc_Framework_MainClientUser_GetAllAssignedTeams
+Proc_Framework_UserRole_GetUserForTeamAndBusinessUnit
+Proc_Fusion_Intranet_BusinessUnitTeam_AddData
+Proc_Fusion_Intranet_BusinessUnitTeam_DeleteData
+Proc_Fusion_Intranet_BusinessUnitTeam_EditData
+Proc_Fusion_Intranet_BusinessUnitTeam_GetData
+Proc_Fusion_Intranet_BusinessUnitTeam_GetData_New
+Proc_Fusion_Intranet_BusinessUnitTeam_GetData_Old
+****************************************************************/
+
+
+/********************Procs updated**********************
+****************************************************************/

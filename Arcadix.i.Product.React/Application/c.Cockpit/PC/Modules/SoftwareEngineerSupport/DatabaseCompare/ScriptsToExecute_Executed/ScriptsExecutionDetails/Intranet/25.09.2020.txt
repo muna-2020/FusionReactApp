@@ -1,0 +1,269 @@
+﻿ /**********************************
+  Following tables updated:
+
+	1) t_TestDrive_Task_TaskKeyword
+	2) t_TestDrive_Task_TaskUsage
+	3) t_TestDrive_Tasks_Type
+	4) t_TestDrive_Test_Algorithm
+	5) t_TestDrive_Test_CustomSequence
+**********************************/
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Task_TaskKeyword' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Task_TaskKeyword ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO		 
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Task_TaskKeyword set uModifiedByUserId= uUserId Where uModifiedByUserId is null
+
+GO
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Task_TaskUsage' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Task_TaskUsage ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Task_TaskUsage set uModifiedByUserId= uUserId Where uModifiedByUserId is null
+
+GO
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Tasks_Type' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Tasks_Type ADD uModifiedByUserId uniqueidentifier  
+END		 
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Tasks_Type set uModifiedByUserId= uUserId Where uModifiedByUserId is null
+
+GO
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_Algorithm' AND COLUMN_NAME = 'dtCreatedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_Test_Algorithm ADD dtCreatedOn datetime  DEFAULT (getdate())
+END
+
+GO	  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_Algorithm' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_Test_Algorithm ADD dtModifiedOn datetime  DEFAULT (getdate())
+END		 
+
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Test_Algorithm set dtModifiedOn= GetDate() Where dtModifiedOn is null
+
+GO
+update t_TestDrive_Test_Algorithm set dtCreatedOn=GetDate() Where dtCreatedOn is null
+
+GO
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_CustomSequence' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Test_CustomSequence ADD uModifiedByUserId uniqueidentifier  
+END
+	 
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Test_CustomSequence set uModifiedByUserId=uUserId Where uModifiedByUserId is null
+
+GO
+
+/**********************************
+Proc modified
+**********************************/
+
+Alter PROC [dbo].[Proc_CMS_AddEditTask_InsertNewKeyWords]                   
+                      
+(                            
+                          
+  @tKeyWordsXml ntext,                            
+  @iLanguageId int,                               
+  @iMainClientId int                  
+)                                                        
+AS                              
+BEGIN                              
+declare                            
+@g int ,   @vKeyWordName nvarchar(500)  , @iKeyWordId int  ,@iSubjectId int            
+                  
+/********************************************************************************************                              
+ Created By:       Vidhyut Kediya                        
+ Create Date:      9-Jul-2012                    
+ Description:      Called on Import excel to insert new keyword.                      
+                       
+********************************************************************************************/                            
+                 
+ if(Datalength(@tKeyWordsXml) > 0)                    
+ begin             
+EXECUTE sp_xml_preparedocument @g OUTPUT, @tKeyWordsXml        
+        
+DECLARE cursor_KeyWords CURSOR                              
+        FOR select  Name , SubjectId from  OPENXML(@g, 'KeyWords/KeyWordName') with (Name nvarchar(500) '.' ,SubjectId int '@SubjectId')                       
+        
+  open cursor_KeyWords         
+  Fetch Next From cursor_KeyWords into  @vKeyWordName,@iSubjectId        
+     while( @@FETCH_STATUS<>-1)        
+     begin        
+ insert into t_TestDrive_Task_TaskKeyword(iMainClientId, cIsDeleted, iSubjectId) values (@iMainClientId,'N',@iSubjectId)        
+ set @iKeyWordId = @@IDENTITY       
+     insert into t_TestDrive_Task_TaskKeyword_Data values (@iKeyWordId,@iLanguageId,@vKeyWordName)       
+  Fetch Next From cursor_KeyWords into  @vKeyWordName  ,@iSubjectId           
+  end        
+  close cursor_KeyWords                                      
+    Deallocate cursor_KeyWords                                      
+    EXEC sp_xml_removedocument @g                     
+end         
+        
+end
+
+GO 
+alter PROC [dbo].[Proc_TestDrive_ConditionalFlow_AddEditCustomSequence]   
+  
+(    
+  
+ @uCustomSequenceId UNIQUEIDENTIFIER,  
+ @uTestId UNIQUEIDENTIFIER,  
+ @uUserId UNIQUEIDENTIFIER,  
+ @iLanguageId INT,  
+ @vCustomSequenceName NVARCHAR(500),  
+ @vDescription NVARCHAR(MAX),  
+ @cIsDefault CHAR(1)  
+  
+)      
+AS     
+  
+BEGIN   
+  
+/********************************************************************************************     
+ Created By: Sricharan Kalavagunta     
+ Created Date: 03.02.2014        
+ Description:     
+  
+ Modified By:        
+ Modified Date:        
+ Description:   
+********************************************************************************************/   
+DECLARE @NewId UNIQUEIDENTIFIER    
+IF(@uCustomSequenceId='00000000-0000-0000-0000-000000000000')     
+ BEGIN  
+  SET @NewId = NEWID()  
+  INSERT INTO t_TestDrive_Test_CustomSequence  (uCustomSequenceId, uTestId, cIsDefault, cIsDeleted, uUserId, dtCreatedOn, dtModifiedOn)
+  VALUES (@NewId,@uTestId,@cIsDefault,'N',@uUserId,GETDATE(),GETDATE())  
+  INSERT INTO t_TestDrive_Test_CustomSequence_Data  
+  VALUES (NEWID(),@NewId,@iLanguageId,@vCustomSequenceName,@vDescription)  
+    
+  SELECT @NewId AS uCustomSequenceId, @vCustomSequenceName AS vName  
+ END   
+ELSE  
+ BEGIN  
+  UPDATE t_TestDrive_Test_CustomSequence_Data  
+  SET vName = @vCustomSequenceName, vDescription = @vDescription   
+  WHERE uCustomSequenceId = @uCustomSequenceId  
+    
+  UPDATE t_TestDrive_Test_CustomSequence  
+  SET dtModifiedOn = GETDATE(), cIsDefault = @cIsDefault  
+  WHERE uCustomSequenceId = @uCustomSequenceId  
+  
+  SELECT @uCustomSequenceId AS uCustomSequenceId, @vCustomSequenceName AS vName  
+ END  
+END
+
+GO
+
+  
+  
+ALTER PROC [dbo].[Proc_TestDrive_ConditionalFlow_AddEditCustomSequenceConditionData]   
+(    
+ @uCustomSequenceId UNIQUEIDENTIFIER,  
+ @uUserId UNIQUEIDENTIFIER,  
+ @iLanguageId INT,  
+ @xmlCustomSequence XML  
+)      
+AS     
+BEGIN   
+/********************************************************************************************     
+ Created By: Sricharan Kalavagunta                   
+ Created Date: 20.09.2013                      
+ Description:     
+ Modified By:                 
+ Modified Date:                
+ Description:   
+********************************************************************************************/   
+IF(@uCustomSequenceId = '00000000-0000-0000-0000-000000000000')      
+BEGIN     
+SET @uCustomSequenceId = NEWID()  
+INSERT INTO t_TestDrive_Test_CustomSequence  (uCustomSequenceId, uTestId, cIsDefault, cIsDeleted, uUserId, dtCreatedOn, dtModifiedOn)
+  VALUES (@uCustomSequenceId,(SELECT T.C.value('@TestId','UNIQUEIDENTIFIER') FROM @xmlCustomSequence.nodes('CustomSequenceData') T(C)) ,'Y','N',@uUserId,GETDATE(),GETDATE())  
+  INSERT INTO t_TestDrive_Test_CustomSequence_Data  
+  VALUES (NEWID(),@uCustomSequenceId,@iLanguageId,'Default','Default Custom Sequence')  
+END  
+DECLARE @CustomSequenceConditionId UNIQUEIDENTIFIER  
+SET @CustomSequenceConditionId = (SELECT T.C.value('@CustomSequenceConditionId', 'UNIQUEIDENTIFIER') AS uCustomSequenceConditionId FROM @xmlCustomSequence.nodes('CustomSequenceData') T(C))  
+IF(@CustomSequenceConditionId != '00000000-0000-0000-0000-000000000000')      
+BEGIN     
+DELETE FROM t_Testdrive_Test_CustomSequence_Condition_Data WHERE uCustomSequenceConditionId = @CustomSequenceConditionId  
+DELETE FROM t_Testdrive_Test_CustomSequence_Condition WHERE uCustomSequenceConditionId = @CustomSequenceConditionId  
+END  
+ELSE  
+BEGIN  
+SET @CustomSequenceConditionId = NEWID()  
+END  
+INSERT INTO t_Testdrive_Test_CustomSequence_Condition (uCustomSequenceConditionId,uTestId,iTaskId,vConditionType,iReturnTaskId,vConditionScript,uCustomSequenceId)  
+SELECT   
+  @CustomSequenceConditionId AS 'uCustomSequenceConditionId',  
+  T.C.value('@TestId','UNIQUEIDENTIFIER') AS 'uTestId',  
+  T.C.value('@TaskId','int') AS 'iTaskId',  
+  T.C.value('@ConditionType','NVARCHAR(100)') AS 'vConditionType',  
+  T.C.value('@ReturnTaskId','int') AS 'iReturnTaskId',  
+  T.C.value('@ConditionScript','NVARCHAR(MAX)') AS 'vConditionScript',  
+  @uCustomSequenceId AS 'uCustomSequenceId'  
+FROM @xmlCustomSequence.nodes('CustomSequenceData') T(C)  
+INSERT INTO t_Testdrive_Test_CustomSequence_Condition_Data(uCustomSequenceConditionDataId,uCustomSequenceConditionId,vConditionAttribute,vConditionAttributeOperator,iConditionAttributeType,vConditionAttributeValue,cIsResultTaskCondition)  
+SELECT   
+  NEWID() AS 'uCustomSequenceConditionDataId',  
+  @CustomSequenceConditionId AS 'uCustomSequenceConditionId',  
+  [Table].[Column].value('@ConditionAttribute', 'NVARCHAR(100)') AS vConditionAttribute,  
+  REPLACE(REPLACE(REPLACE(REPLACE([Table].[Column].value('@ConditionAttributeOperator','NVARCHAR(5)'),'{gt}','>'),'{lt}','<'),'{le}','>='),'{ge}','>=') AS vConditionAttributeOperator,  
+  --[Table].[Column].value('@ConditionAttributeOperator','NVARCHAR(5)') AS vConditionAttributeOperator,  
+  [Table].[Column].value('@ConditionAttributeType','INT') AS iConditionAttributeType,  
+  [Table].[Column].value('@ConditionAttributeValue','NVARCHAR(500)') AS vConditionAttributeValue,  
+  [Table].[Column].value('@ResultTaskCondition','CHAR(1)') AS cIsResultTaskCondition  
+FROM @xmlCustomSequence.nodes('CustomSequenceData/Conditions/Condition') [Table]([Column])  
+SELECT * FROM t_Testdrive_Test_CustomSequence_Condition C   
+LEFT JOIN t_Testdrive_Test_CustomSequence_Data CSD  
+ON C.uCustomSequenceId = CSD.uCustomSequenceId  
+WHERE uCustomSequenceConditionId = @CustomSequenceConditionId  
+SELECT * FROM t_Testdrive_Test_CustomSequence_Condition_Data where uCustomSequenceConditionId = @CustomSequenceConditionId  
+END

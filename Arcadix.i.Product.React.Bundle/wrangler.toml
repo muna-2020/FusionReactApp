@@ -1,0 +1,11 @@
+name = "fusionreact"
+type = "webpack"
+account_id = "e3019e57c80840fb515cde3d3bc8fa86"
+workers_dev = true
+route = "http://arcadix2.com/*"
+zone_id = "a65f292141b0d30f8004279e7acc623c"
+
+[site]
+bucket = "./"
+entry-point = "workers-site"
+exclude = ["Production/**","dist/**",".vscode/**"]

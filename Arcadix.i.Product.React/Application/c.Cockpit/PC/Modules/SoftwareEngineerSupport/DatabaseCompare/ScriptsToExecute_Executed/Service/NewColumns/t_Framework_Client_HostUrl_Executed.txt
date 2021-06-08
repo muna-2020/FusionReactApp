@@ -1,0 +1,60 @@
+/**********************************
+New column		
+**********************************/
+GO
+
+ EXEC sp_rename 't_Framework_Client_HostURL', 't_Framework_Client_HostUrl'
+
+ GO
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_Client_HostURL' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN 
+alter table t_Framework_Client_HostURL add dtModifiedOn	datetime
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_Client_HostURL' AND COLUMN_NAME = 'cIsForFusion') 
+BEGIN 
+alter table t_Framework_Client_HostURL add cIsForFusion char(1)
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_Framework_Client_HostURL set dtModifiedOn = getdate() Where dtModifiedOn is null
+
+GO
+update t_Framework_Client_HostURL set cIsForFusion='N' where cIsForFusion is null
+
+GO
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_Framework_FrameworkClient_GetClientConfiguration
+FProc_Framework_FrameworkClient_GetClientConfigurationByClientId
+JProc_Framework_FrameworkClient_GetActiveClientDetails
+JProc_Framework_FrameworkClient_GetAllClientsForMainClient
+JProc_Framework_FrameworkClient_GetClientConfiguration
+JProc_Framework_FrameworkClient_GetClientConfigurationByClientId
+Proc_Framework_ClientHostURL_GetClientHostURLData
+Proc_Framework_FrameworkClient_GetActiveClientDetails
+Proc_Framework_FrameworkClient_GetAllClientsForMainClient
+Proc_Framework_FrameworkClient_GetAllHostUrlDetailsByMainClient
+Proc_Framework_FrameworkClient_GetClientConfiguration
+Proc_Framework_FrameworkClient_GetClientConfiguration_JobSkills
+Proc_Framework_FrameworkClient_GetClientConfigurationByClientId
+Proc_TestDrive_ClientHostURL_SaveClientHostURLData
+Proc_TestDrive_ClientHostURL_SaveClientHostURLData_Beta
+Proc_TestDrive_ClientHostURL_SaveClientHostURLData_Old
+proc_TestDrive_Deployement_CreateMainClientConfiguration
+Proc_Testdrive_UpdateHostURL
+****************************************************************/
+
+/********************Procs need to Review**********************
+proc_TestDrive_Deployement_CreateMainClientConfiguration :Changed
+Proc_TestDrive_ClientHostURL_SaveClientHostURLData
+Proc_TestDrive_ClientHostURL_SaveClientHostURLData_Beta
+Proc_TestDrive_ClientHostURL_SaveClientHostURLData_Old
+Proc_Testdrive_UpdateHostURL
+****************************************************************/

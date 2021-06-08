@@ -1,0 +1,6 @@
+/**************************************************************************************************
+ the result database connection strings are updated to common for main and state specific databases.
+**************************************************************************************************/
+
+update t_TestDrive_ResultDatabase_individualstateversion set vDatabaseProvider='SqlServer'
+update t_TestDrive_ResultDatabase set 'vDatabaseProvider='SqlServer'

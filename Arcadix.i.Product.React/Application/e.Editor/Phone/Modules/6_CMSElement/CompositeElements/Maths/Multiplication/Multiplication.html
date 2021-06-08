@@ -1,0 +1,176 @@
+﻿
+<div class="mathSection">
+    <!--Solution Mode-->
+    <div class="mathBlock" *ngIf="Mode=='Solution'">
+        <table class="multiplyNumericTable">
+            <tr class="rowBorder">
+                <td *ngFor="let num of arrfirstnum">
+                    {{num.numval}}
+
+                </td>
+                <td>.</td>
+                <td *ngFor="let num of arrsecondnum">
+                    {{num.numval}}
+                </td>
+            </tr>
+            <tr *ngFor="let value of arrvalues;let i=index">
+                <td [ngClass]="{'operator':i!=0}"></td>
+                <td *ngFor="let val of value">
+                    <div *ngIf="val.isvisible">
+                        {{val.number}}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="operator"></td>
+                <td *ngFor="let carry of arrcarry" id="carry.carryid">
+                    {{carry.carryval}}
+                </td>
+            </tr>
+            <tr class="appendRowBorder">
+                <td [attr.colspan]="colcount+1"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td *ngFor="let result of arrresults">
+                    {{result.value}}
+                </td>
+            </tr>
+            <tr class="btmBorder">
+                <td [attr.colspan]="colcount+1"></td>
+            </tr>
+        </table>
+    </div>
+    <!--Display Mode-->
+    <div class="mathBlock" *ngIf="Mode=='Display'">
+        <!--carry over pop up-->
+        <div [hidden]="!showcarrypopup">
+            <div class="popUp" [ngStyle]="{'margin-left': marginleftsmall+'px','top':margintopsmall+'px'}">
+                <div class="carry popUpBlock">
+                    <div class="numberRow">
+                        <button *ngFor="let carry of arrfirstcarryover" id="{{carry.id}}" (click)="carryoverclick(carry.value)">
+                            {{carry.value}}
+                        </button>
+                    </div>
+                    <div class="numberRow">
+                        <button *ngFor="let carry of arrsecondcarryover" id="{{carry.id}}" (click)="carryoverclick(carry.value)">
+                            {{carry.value}}
+                        </button>
+                    </div>
+                    <div class="closeIcon" (click)="closecarryoverpopup()"></div>
+                </div>
+            </div>
+        </div>
+        <!--numbers select pop up-->
+        <div [hidden]="!showrnumberpopup">
+            <div class="popUp" [ngStyle]="{'margin-left': marginleft+'px','top':margintop+'px'}">
+                <div class="popUpBlock">
+                    <div class="numberRow" >
+                        <button *ngFor="let num of arrfirstnumbers" id="{{num.id}}" (click)="numberspopupclick(num.value)">{{num.value}}</button>
+                    </div>
+                    <div class="numberRow" >
+                        <button *ngFor="let num of arrsecondnumbers" id="{{num.id}}" (click)="numberspopupclick(num.value)">{{num.value}}</button>
+                    </div>
+                    <div class="closeIcon" (click)="closenumberpopup()"></div>
+                </div>
+            </div>
+        </div>
+        <!--intermediate numbers pop up-->
+        <div [hidden]="!showintermediatenumberpopup">
+            <div class="popUp" [ngStyle]="{'margin-left': marginleftinter+'px','top':margintopinter+'px'}">
+                <div class="popUpBlock">
+                    <div class="numberRow" >
+                        <button *ngFor="let num of arrfirstinternumbers" id="{{num.id}}" (click)="internumberspopupclick(num.value)">{{num.value}}</button>
+                    </div>
+                    <div class="numberRow" >
+                        <button *ngFor="let num of arrsecondinternumbers" id="{{num.id}}" (click)="internumberspopupclick(num.value)">{{num.value}}</button>
+                    </div>
+                    <div class="closeIcon" (click)="closeinternumberpopup()"></div>
+                </div>
+            </div>
+        </div>
+
+        <table class="multiplyNumericTable">
+            <tr class="rowBorder">
+                <td *ngFor="let num of arrfirstnum">
+                    {{num.numval}}
+
+                </td>
+                <td>.</td>
+                <td *ngFor="let num of arrsecondnum">
+                    {{num.numval}}
+                </td>
+            </tr>
+            <tr *ngFor="let value of arrvalues;let i=index">
+                <td [ngClass]="{'operator':i!=0}"></td>
+                <td *ngFor="let val of value">
+                    <div *ngIf="val.isvisible">
+                        <input id="txt_{{val.numid}}" type="text" name="digit" class="numberInput" readonly [(ngModel)]="val.number" (click)="showinternumbers(val.numid)" />
+                    </div>
+
+                </td>
+            </tr>
+            <tr>
+                <td class="operator"></td>
+                <td *ngFor="let carry of arrcarry" id="carry.carryid">
+                    <input type="text" name="digit" class="carry bottom numberInput" readonly [(ngModel)]="carry.carryval" (click)="showcarryover(carry.carryid)" />
+                </td>
+            </tr>
+            <tr class="appendRowBorder">
+                <td [attr.colspan]="colcount+1"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td *ngFor="let result of arrresults">
+                    <input type="text" name="digit" class="bottom numberInput" [(ngModel)]="result.value" readonly (click)="shownumbers(result.resultid)" />
+                </td>
+            </tr>
+            <tr class="btmBorder">
+                <td [attr.colspan]="colcount+1"></td>
+            </tr>
+        </table>
+    </div>
+    <!--Edit Mode-->
+    <div class="mathBlock" *ngIf="Mode=='Edit'">
+        <table class="multiplyNumericTable">
+            <tr class="rowBorder">
+                <td *ngFor="let num of arrfirstnum">
+                    <input id="txt_{{num.numid}}" (ngModelChange)="firstnumchange($event)" type="text" name="digit" class="numberInput" min="0" max="9" maxlength="1"
+                           (keydown)="checkfirstnum(num.numid,$event)" [(ngModel)]="num.numval" (blur)="validate(false)" />
+                </td>
+                <td>.</td>
+                <td *ngFor="let num of arrsecondnum">
+                    <input id="txt_{{num.numid}}" (ngModelChange)="secondnumchange($event)" type="text" name="digit" class="numberInput" min="0" max="9" maxlength="1"
+                           (keydown)="checksecondnum(num.numid,$event)" [(ngModel)]="num.numval" (blur)="validate(false)" />
+                </td>
+            </tr>
+            <tr *ngFor="let value of arrvalues;let i = index">
+                <td [ngClass]="{'operator': i!=0 }"></td>
+                <td *ngFor="let val of value">
+                    <div *ngIf="val.isvisible">
+                        {{val.number}}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="operator"></td>
+                <td *ngFor="let carry of arrcarry" id="carry.carryid">
+                    {{carry.carryval}}
+                </td>
+            </tr>
+            <tr class="appendRowBorder">
+                <td [attr.colspan]="colcount+1"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td *ngFor="let result of arrresults">
+                    {{result.value}}
+                </td>
+            </tr>
+            <tr class="btmBorder">
+                <td [attr.colspan]="colcount+1"></td>
+            </tr>
+        </table>
+    </div>
+</div>
+

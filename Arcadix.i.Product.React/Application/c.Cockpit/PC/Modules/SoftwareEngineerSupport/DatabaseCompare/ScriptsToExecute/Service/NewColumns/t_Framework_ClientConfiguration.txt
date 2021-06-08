@@ -1,0 +1,67 @@
+/**********************************
+New Columns
+**********************************/
+GO
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_ClientConfiguration' AND COLUMN_NAME = 'vIndexProvider') 
+BEGIN
+ALTER TABLE t_Framework_ClientConfiguration ADD vIndexProvider nvarchar(max)  
+END
+
+GO	
+
+/**********************************
+Default Values - To be added
+**********************************/
+Update t_Framework_ClientConfiguration 
+SET vIndexProvider = 'Arcadix.Intranet.Provider.IndexProvider,Arcadix.Intranet'
+Where vClientIdentifier = 'ReactIntranet'
+and cIsForFusion ='Y' and cIsDeleted ='N'
+
+Update t_Framework_ClientConfiguration 
+SET vIndexProvider = 'Arcadix.Extranet.School.IndexProvider,Arcadix.Extranet'
+Where vClientIdentifier = 'ExtranetTeacher'
+and cIsForFusion ='Y' and cIsDeleted ='N'
+
+Update t_Framework_ClientConfiguration 
+SET vIndexProvider = 'Arcadix.Extranet.School.IndexProvider,Arcadix.Extranet'
+Where vClientIdentifier = 'ExtranetSchool'
+and cIsForFusion ='Y' and cIsDeleted ='N'
+
+Update t_Framework_ClientConfiguration 
+SET vIndexProvider = 'Arcadix.Cockpit.Provider.IndexProvider,Arcadix.Cockpit'
+Where vClientIdentifier = 'ReactCockpit'
+and cIsForFusion ='Y' and cIsDeleted ='N'
+
+Update t_Framework_ClientConfiguration 
+SET vIndexProvider = 'Arcadix.ProductManagement.Provider.IndexProvider,Arcadix.ProductManagement'
+Where vClientIdentifier = 'ReactProductManagement'
+and cIsForFusion ='Y' and cIsDeleted ='N'
+
+/********************AllDependentProc********************
+FProc_Framework_FrameworkClient_GetClientConfiguration
+FProc_Framework_FrameworkClient_GetClientConfigurationByClientId
+JProc_Framework_FrameworkClient_GetAllClientsForMainClient
+JProc_Framework_FrameworkClient_GetClientConfiguration
+JProc_Framework_FrameworkClient_GetClientConfigurationByClientId
+JProc_Framework_FrameworkClient_GetClientConfigurationForMainClient
+Proc_Framework_FrameworkClient_GetAllClientsForMainClient
+Proc_Framework_FrameworkClient_GetClientConfiguration
+Proc_Framework_FrameworkClient_GetClientConfiguration_JobSkills
+Proc_Framework_FrameworkClient_GetClientConfigurationByClientId
+Proc_Framework_FrameworkClient_GetClientConfigurationForMainClient
+Proc_Fusion_Framework_ClientConfig_AddData
+Proc_Fusion_Framework_ClientConfig_DeleteData
+Proc_Fusion_Framework_ClientConfig_EditData
+Proc_Fusion_Framework_ClientConfig_GetData
+Proc_Fusion_Framework_ClientConfig_GetData_New
+Proc_Fusion_Framework_ClientConfig_GetData_Old
+Proc_Fusion_Framework_ClientUrls_GetData
+Proc_Fusion_Framework_FrameworkClient_GetClientConfiguration
+Proc_Fusion_Framework_FrameworkClient_GetClientConfigurationByClientId
+Proc_Fusion_Framework_FrameworkClient_GetClientConfigurationByTargetDeviceAndApplicationType
+****************************************************************/
+
+
+/********************Procs updated**********************
+****************************************************************/

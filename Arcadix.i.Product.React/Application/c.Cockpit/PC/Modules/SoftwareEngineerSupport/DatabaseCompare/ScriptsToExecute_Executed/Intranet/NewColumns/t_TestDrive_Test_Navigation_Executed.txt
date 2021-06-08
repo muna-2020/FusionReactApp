@@ -1,0 +1,30 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_Navigation' AND COLUMN_NAME = 'uModifiedByUserId')
+BEGIN
+ALTER TABLE t_TestDrive_Test_Navigation ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Test_Navigation set uModifiedByUserId= uUserId Where uModifiedByUserId is null
+
+GO
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_TestDrive_Test_GetTestDetailsById
+JEditorProc_TestDrive_Test_GetTestDetailsById
+Proc_CMS_TestNavigationToTest_GetNavigations
+Proc_CMS_TestNavigationToTest_SaveNavigations
+Proc_TestDrive_Test_GetTestDetailsById
+****************************************************************/
+
+/********************Procs need to Review**********************
+Proc_CMS_TestNavigationToTest_SaveNavigations
+****************************************************************/

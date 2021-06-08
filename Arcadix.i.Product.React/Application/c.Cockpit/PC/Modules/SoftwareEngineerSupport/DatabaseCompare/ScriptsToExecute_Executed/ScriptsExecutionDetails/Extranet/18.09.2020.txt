@@ -1,0 +1,14 @@
+﻿ 
+  Following tables updated:
+
+
+1) t_LearnCoacher_LearningJournal_TimeTable_ClassTime
+2) t_LearnCoacher_Forum_Topic
+3) t_LearnCoacher_FileManagement_UserFolder
+4) t_LearnCoacher_FileManagement_File_User
+5) t_LearnCoacher_FileManagement_File
+
+
+procs Updated:
+
+Proc_PlanenClassTime_AddClassTime

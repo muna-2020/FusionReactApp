@@ -1,0 +1,61 @@
+﻿<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: calibri;
+        }
+        .main-wrapper {
+            padding: 20px;
+        }
+        .progressbar-title {
+            font-size: 14px;
+            color: #848484;
+            text-transform: capitalize;
+            margin-bottom: 10px;
+        }
+        .progress {
+            overflow: visible;
+            background: #f0f0f0;
+            width: 500px;
+        }
+            .progress .progress-bar {
+                position: relative;
+                height: 30px;
+                animation: animate-positive 2s;
+                background: #795548;
+            }
+        .progress-value {
+            font-size: 13px;
+            color: #848484;
+            position: absolute;
+            top: 30px;
+            right: -15px;
+        }
+        @-webkit-keyframes animate-positive {
+            0% { width: 0%; }
+        }
+        @keyframes animate-positive {
+            0% { width: 0%; }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <section class="content-section">
+            <h3 class="progressbar-title">ProgressBar</h3>
+            <div class="progress">
+                <div class="progress-bar" style="width: 65%;">
+                    <div class="progress-value">65%</div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

@@ -1,0 +1,32 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF  EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS 
+WHERE TABLE_NAME = 'T_Framework_ElasticObjectUpdate' AND COLUMN_NAME = 'vAdditionalParameters') 
+BEGIN
+ALTER TABLE t_Framework_ElasticObjectUpdate alter column vAdditionalParameters nvarchar(max) DEFAULT NULL
+END
+GO
+
+
+CREATE NONCLUSTERED INDEX [IX_T_Framework_ElasticObjectUpdate_dtCreatedOn] ON [dbo].[T_Framework_ElasticObjectUpdate] ([dtCreatedOn])
+GO
+CREATE NONCLUSTERED INDEX [IX_T_Framework_ElasticObjectUpdate_dtPickedForUpdate] ON [dbo].[T_Framework_ElasticObjectUpdate] ([dtPickedForUpdate])
+GO
+CREATE NONCLUSTERED INDEX [IX_T_Framework_ElasticObjectUpdate_iMainClientId] ON [dbo].[T_Framework_ElasticObjectUpdate] ([iMainClientId])
+GO
+CREATE NONCLUSTERED INDEX [IX_T_Framework_ElasticObjectUpdate_uElasticObjectUpdateId] ON [dbo].[T_Framework_ElasticObjectUpdate] ([uElasticObjectUpdateId])
+GO
+
+GO
+
+/********************AllDependentProc********************
+Proc_Fusion_AddDataToElasticObjectGetData
+Proc_Fusion_AddDataToElasticObjectUpdate
+Proc_Fusion_UpdateStatus_Sync
+****************************************************************/
+
+
+/********************Procs updated**********************
+****************************************************************/

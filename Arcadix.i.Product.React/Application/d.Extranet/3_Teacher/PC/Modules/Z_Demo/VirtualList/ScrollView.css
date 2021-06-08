@@ -1,0 +1,14 @@
+﻿body {
+}
+
+.outerContainer {
+    border: 2px solid red;
+    text-align: center;
+    height: 400px;
+}
+
+.innerContainer {
+    overflow: scroll;
+    height: 400px;
+    margin: 0 auto
+}

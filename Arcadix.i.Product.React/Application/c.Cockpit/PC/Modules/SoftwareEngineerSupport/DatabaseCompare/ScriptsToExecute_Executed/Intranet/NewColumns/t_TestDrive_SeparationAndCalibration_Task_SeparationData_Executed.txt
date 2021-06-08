@@ -1,0 +1,43 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_SeparationAndCalibration_Task_SeparationData' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_SeparationAndCalibration_Task_SeparationData ADD dtModifiedOn datetime  
+END	  
+
+GO	  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_SeparationAndCalibration_Task_SeparationData' AND COLUMN_NAME = 'uUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_SeparationAndCalibration_Task_SeparationData ADD uUserId uniqueidentifier  
+END		
+
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_SeparationAndCalibration_Task_SeparationData set dtModifiedOn= GetDate() Where dtModifiedOn is NULL
+
+GO
+
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+Proc_CMS_CMSTestDrivePage_GetRecentlySeparatedTasks_Calibration
+Proc_CMS_CMSTestDrivePage_ResetTaskToBase_Calibration
+Proc_TestDrive_SeparationAndCalibration_GetSeparationDetailsForDisplay
+Proc_TestDrive_SeparationAndCalibration_GetUnSeparatedTaskAssigned
+Proc_TestDrive_SeparationAndCalibration_GetUnSeparatedTaskResults
+Proc_TestDrive_SeparationAndCalibration_InsertUnSeparatedTasks
+Proc_TestDrive_SeparationAndCalibration_UpdateInputStatusAndSeparationPoint
+*************************************************/
+
+/********************Procs need to Review**********************
+Proc_CMS_CMSTestDrivePage_ResetTaskToBase_Calibration
+Proc_TestDrive_SeparationAndCalibration_InsertUnSeparatedTasks
+Proc_TestDrive_SeparationAndCalibration_UpdateInputStatusAndSeparationPoint
+*************************************************/

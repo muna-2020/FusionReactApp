@@ -1,0 +1,135 @@
+﻿/***************************************************************************************************
+--t_Framework_Client
+--t_Framework_Client_HostUrl
+
+ The following script is to create client for each MainClient and host Url to them: 97,115,112,114,0
+ Run Following script if urls are not there (this is to be run only once)
+*****************************************************************************************************/
+Declare @iClientConfigurationId int,
+		@iMainClientId int=47,
+		@vMainClientIdentifier nvarchar(max)='voralberg',
+		@vClientName nvarchar(max),
+		@vApplicationName nvarchar(max),
+		@iApplicationTypeId int,
+		@iClientId int
+		
+		/***************************************************************************************************
+		To add Client and HostUrl for School
+		***************************************************************************************************/
+		set @vApplicationName='School'
+		set @vClientName= @vMainClientIdentifier+'FusionSchool'
+		set @iApplicationTypeId =6
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActive'+@vApplicationName
+		insert into t_Framework_Client (iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'SchuleFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'SchuleDevFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'SchuleTestFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		/***************************************************************************************************
+		To add Client and HostUrl for Teacher
+		***************************************************************************************************/
+		set @vApplicationName='Teacher'
+		set @vClientName= @vMainClientIdentifier+'FusionTeacher'
+		set @iApplicationTypeId =1
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActive'+@vApplicationName
+		insert into t_Framework_Client (iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'LehrpersonFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'LehrpersonDevFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'LehrpersonTestFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		/***************************************************************************************************
+		To add Client and HostUrl for Pupil
+		***************************************************************************************************/
+		set @vApplicationName='Pupil'
+		set @vClientName= @vMainClientIdentifier+'FusionPupil'
+		set @iApplicationTypeId =16
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActive'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'Fusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'DevFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'TestFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		
+		/***************************************************************************************************
+		To add Client and HostUrl for Intranet
+		***************************************************************************************************/
+		set @vApplicationName='Intranet'
+		set @vClientName= @vMainClientIdentifier+'FusionIntranet'
+		set @iApplicationTypeId =4
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActive'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'Fusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'DevFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'TestFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		
+		/***************************************************************************************************
+		To add Client and HostUrl for TestApplication
+		***************************************************************************************************/
+		set @vApplicationName='TestApplication'
+		set @vClientName= @vMainClientIdentifier+'FusionTestApplication'
+		set @iApplicationTypeId =2
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActive'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'Fusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'DevFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'TestFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+
+		/***************************************************************************************************
+		To add Country
+		***************************************************************************************************/
+		insert into t_Framework_Country_MainClient values(1,@iMainClientId,1,getdate(),getdate(),null,'N',null)
+		insert into t_Framework_Country_MainClient values(1,@iMainClientId,2,getdate(),getdate(),null,'N',null)
+		insert into t_Framework_Country_MainClient values(1,@iMainClientId,4,getdate(),getdate(),null,'N',null)
+		insert into t_Framework_Country_MainClient values(1,@iMainClientId,6,getdate(),getdate(),null,'N',null)
+		insert into t_Framework_Country_MainClient values(1,@iMainClientId,16,getdate(),getdate(),null,'N',null)
+
+		/***************************************************************************************************
+		To add Language
+		***************************************************************************************************/
+		insert into t_Framework_Language_MainClient values(3,@iMainClientId,1,getdate(),getdate(),null,'N',null)
+		insert into t_Framework_Language_MainClient values(3,@iMainClientId,2,getdate(),getdate(),null,'N',null)
+		insert into t_Framework_Language_MainClient values(3,@iMainClientId,4,getdate(),getdate(),null,'N',null)
+		insert into t_Framework_Language_MainClient values(3,@iMainClientId,6,getdate(),getdate(),null,'N',null)
+		insert into t_Framework_Language_MainClient values(3,@iMainClientId,16,getdate(),getdate(),null,'N',null)
+
+		/***************************************************************************************************
+		To add ApplicationType
+		***************************************************************************************************/
+		insert into t_Framework_MainClient_ApplicationType values(@iMainClientId,1,null,getdate(),'N',null,null)
+		insert into t_Framework_MainClient_ApplicationType values(@iMainClientId,2,null,getdate(),'N',null,null)
+		insert into t_Framework_MainClient_ApplicationType values(@iMainClientId,4,null,getdate(),'N',null,null)
+		insert into t_Framework_MainClient_ApplicationType values(@iMainClientId,6,null,getdate(),'N',null,null)
+		insert into t_Framework_MainClient_ApplicationType values(@iMainClientId,16,null,getdate(),'N',null,null)
+Go

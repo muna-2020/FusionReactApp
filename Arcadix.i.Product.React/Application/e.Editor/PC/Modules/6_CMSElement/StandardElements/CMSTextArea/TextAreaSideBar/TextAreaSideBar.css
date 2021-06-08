@@ -1,0 +1,67 @@
+﻿* {
+  padding: 0;
+  margin: 0;
+  font-family: calibri;
+  box-sizing: border-box;
+  list-style: none;
+}
+.textarea-header {
+  background: #ffe8bf;
+  position: relative;
+  padding: 10px;
+}
+
+.textarea-header .close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 6px;
+  cursor: pointer;
+}
+
+.textarea-header h3,
+.textarea-header h4 {
+  font-weight: 400;
+}
+
+.textarea-header-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 11px;
+  margin-top: 14px;
+}
+.ta-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  padding-bottom: 0;
+}
+
+.ta-flex input {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid gainsboro;
+}
+.ta-flex span {
+  flex: 0 0 37%;
+}
+
+.textarea-header-footer .btn {
+  border: solid 1px #fbaf2a;
+  color: #333;
+  cursor: pointer;
+  white-space: nowrap;
+  font: 13px "latoregular", Tahoma, Arial, Helvectica, sans-serif;
+  background: #ffe8bf;
+  padding: 5px 14px;
+  font-size: 11px;
+  margin-left: 8px;
+}
+.textarea-header-footer .btn:hover {
+  border: 1px solid #fbaf2a;
+  cursor: pointer;
+  background: #fbaf2a;
+  color: #fff;
+}

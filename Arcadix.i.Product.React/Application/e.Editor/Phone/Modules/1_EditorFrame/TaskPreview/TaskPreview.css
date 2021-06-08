@@ -1,0 +1,198 @@
+﻿.preview-area {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: #ffffff;
+    z-index: 4050; /*4050*/
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    font-family: calibri;
+    list-style-type: none;
+}
+
+.test-preview-wrapper {
+    width: 780px;
+    margin: 0 auto;
+}
+
+.test-preview-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 16px 0;
+    padding-top: 23px;
+}
+
+    .test-preview-header > div {
+    }
+
+.test-preview-content {
+    border-top: 3px solid #ff4a75;
+    border-bottom: 3px solid #ff4a75;
+    padding: 31px 0;
+    float: left;
+    width: 100%;
+}
+
+.test-preview-header .header-center img {
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 7px;
+}
+
+.test-preview-header .header-center span {
+    color: #e6e6e6;
+}
+
+.test-preview-content h3 {
+    font: 24px KarminaSans;
+    line-height: 1.4;
+    color: #ff4a75;
+    margin-bottom: 13px;
+}
+
+.test-preview-content p {
+    margin-bottom: 18px;
+}
+
+    .test-preview-content p img {
+        height: 15px;
+        position: relative;
+        top: 2px;
+    }
+
+.radio-button input {
+    display: none;
+}
+
+.radio-button {
+    width: 23px;
+    height: 23px;
+    border: 1.3px solid #000;
+    border-radius: 100%;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+}
+
+    .radio-button span.checkmark {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+        .radio-button span.checkmark::after {
+            content: "";
+            background: #000;
+            border-radius: 100%;
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+        }
+
+    .radio-button input:checked ~ span.checkmark::after {
+        visibility: visible;
+    }
+
+.radio-block-flex > span {
+    margin-left: 8px;
+}
+
+.radio-block-flex {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 16px;
+}
+
+.pink-button {
+    background: #ff4a75;
+    font-size: 16px;
+    color: #fff;
+    padding: 11px;
+    width: 180px;
+    border: 0;
+    border-radius: 6px;
+}
+
+    .pink-button:hover {
+        background: #ffcad7;
+        cursor: pointer;
+        color: #000000;
+    }
+
+.test-preview-footer {
+    padding: 27px 0;
+    text-align: right;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    float: left;
+    width: 100%;
+    position: relative;
+}
+
+.flex-center {
+    justify-content: center;
+}
+
+.checkbox-button input {
+    display: none;
+}
+
+.checkbox-button {
+    width: 23px;
+    height: 23px;
+    border: 1.3px solid #000;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+}
+
+    .checkbox-button span.checkmark {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+        .checkbox-button span.checkmark::after {
+            content: "";
+            background: #000;
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+        }
+
+    .checkbox-button input:checked ~ span.checkmark::after {
+        visibility: visible;
+    }
+
+.checkbox-block-flex > span {
+    margin-left: 8px;
+}
+
+.checkbox-block-flex {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 16px;
+}

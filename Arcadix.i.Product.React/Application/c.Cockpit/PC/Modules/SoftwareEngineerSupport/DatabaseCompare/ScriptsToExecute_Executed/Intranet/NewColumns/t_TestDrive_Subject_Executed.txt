@@ -1,0 +1,64 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Subject' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Subject ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO	 
+
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Subject set uModifiedByUserId= uUserId Where uModifiedByUserId is null
+
+GO
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_CMS_CMSPage_GetPageDetailsAndHtmlById
+FProc_TestDrive_BaseObject_Subject_AddData
+FProc_TestDrive_BaseObject_Subject_DeleteData
+FProc_TestDrive_BaseObject_Subject_EditData
+FProc_TestDrive_BaseObject_Subject_GetData
+FProc_TestDrive_Test_GetTestDetailsById
+JEditorProc_CMS_CMSPage_GetPageDetailsAndHtmlById
+JEditorProc_TestDrive_Test_GetTestDetailsById
+JProc_TestDrive_Member_GetSchoolSubject_Sync
+JProc_TestDrive_Tests_GetTestDetailsForCycles
+Proc_CMS_AddEditTask_InsertNewSubjects
+Proc_CMS_AddEditTask_InsertNewSubSubjects
+Proc_CMS_CMSPage_GetPageDetailsAndHtmlById
+Proc_CMS_CMSPage_GetSubjectDetailsBySubjectId
+Proc_CMS_GetAllSubjects
+proc_CopySubjectAndDependingData
+Proc_TestDrive_CMSPage_GetTaskSchoolYearDifficulty
+Proc_TestDrive_LearningTest_GetAllTasksDifficultyLevelsforMainClient
+Proc_Testdrive_Results_GetThresholdFeedback
+Proc_TestDrive_SeparationAndCalibration_GetUnSeparatedTaskAssigned
+Proc_Testdrive_StandardCycleProvider_GetAssignedTestForCycle_New
+Proc_Testdrive_Subject_GetSubjectsByParentId
+Proc_TestDrive_TaskSeparation_GetUnSeparatedTaskAssigned
+Proc_TestDrive_Test_AssignTaskToTestForImport
+Proc_TestDrive_Test_GetAllActivePublicTestsByMainClientId
+Proc_TestDrive_Test_GetAllTestsDetailsByTestXml
+Proc_TestDrive_Test_GetSubjectsDetails
+Proc_TestDrive_Test_GetTestDetailsById
+Proc_TestDrive_TestApplicationTaskProperty_GetTaskSurveryQuestions
+Proc_TestDrive_Tests_GetTestDetailsForCycles
+Proc_TestDrive_Tests_GetTestDetailsForCycles_Old
+*************************************************/
+
+/********************Procs need to Review**********************
+FProc_TestDrive_BaseObject_Subject_AddData
+FProc_TestDrive_BaseObject_Subject_EditData
+Proc_CMS_AddEditTask_InsertNewSubjects
+Proc_CMS_AddEditTask_InsertNewSubSubjects
+proc_CopySubjectAndDependingData
+Proc_TestDrive_Test_AssignTaskToTestForImport
+*************************************************/

@@ -1,0 +1,22 @@
+﻿/**********************************
+Rename Table
+**********************************/
+EXEC sp_rename 't_TestDrive_ResultDatabase_IndividualStateVersion_SchoolYearPeriod','t_TestDrive_ResultDatabase_StateVersion_SchoolYearPeriod'
+
+/**********************************
+Fusion procs
+**********************************/
+/********************ModifiedProc********************
+p_Object_ResultDatabase_GetData
+*************************************************/
+
+/**********************************
+Angular procs
+**********************************/
+/********************ModifiedProc********************
+JProc_Testdrive_ResultDatabase_GetResultDatabaseDetails_New_13_05_2019
+JProc_Testdrive_ResultDatabase_GetResultDatabaseDetails_New_13_05_2019_Backup
+JProc_Testdrive_ResultDatabase_GetResultDatabaseDetails_New_15_07_2019
+Proc_TestDrive_Cycle_GetResultDatabaseDetailsForSchoolYearPeriod
+Proc_TestDrive_Cycle_GetResultDatabaseDetailsForSchoolYearPeriod_07_08_2020
+*************************************************/

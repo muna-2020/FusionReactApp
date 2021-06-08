@@ -1,0 +1,116 @@
+﻿<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: calibri;
+        }
+        .main-wrapper{
+            padding: 20px;
+        }
+        .modal {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            visibility: hidden;
+        }
+        .modal-content {
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 1rem 1.5rem;
+            width: 24rem;
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+        .close-button {
+            position: absolute;
+            right: 0px;
+            top: 0px;
+            line-height: 30px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 30px;
+        }
+        .modal-content p{
+            margin:30px 0px;
+        }
+        .btn-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn-flex button {
+            width: 48%;
+            font-size: 18px;
+        }
+        .show-modal {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1.0);
+            transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+        }
+        .trigger, .btn-flex button {
+            font-size: 16px;
+            padding: 8px 15px;
+            background: #FF9800;
+            border: 0;
+            color: #fff;
+            outline: 0;
+        }
+        .btn-flex .continue-btn {
+            background: #2b3779;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">   	
+        <button class="trigger">Show Popup</button>
+        <div class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h2>Demo Popup</h2>
+                <p>Click on close icon or Go back button to hide this popup</p>
+                <div class="btn-flex">
+                    <button class="Back-btn">Go Back</button>
+                    <button class="continue-btn">Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var modal = document.querySelector(".modal");
+        var trigger = document.querySelector(".trigger");
+        var closeButton = document.querySelector(".close-button");
+        var backButton = document.querySelector(".back-btn");
+
+        function toggleModal() {
+            modal.classList.toggle("show-modal");
+        }
+
+        function windowOnClick(event) {
+            if (event.target === modal) {
+                toggleModal();
+            }
+        }
+
+        trigger.addEventListener("click", toggleModal);
+        closeButton.addEventListener("click", toggleModal);
+        backButton.addEventListener("click", toggleModal);
+        window.addEventListener("click", windowOnClick);
+    </script>
+</body>
+</html>

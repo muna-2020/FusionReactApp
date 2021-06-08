@@ -1,0 +1,33 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_testdrive_Category_Competency_CompetencyLevel' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_testdrive_Category_Competency_CompetencyLevel ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_testdrive_Category_Competency_CompetencyLevel set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_TestDrive_BaseObject_CompetencyLevel_AddData
+FProc_TestDrive_BaseObject_CompetencyLevel_DeleteData
+FProc_TestDrive_BaseObject_CompetencyLevel_EditData
+FProc_TestDrive_BaseObject_CompetencyLevel_GetData
+Proc_CMS_Category_Competency_GetCompetencyCanDoItems
+Proc_CMS_Category_Competency_GetCompetencyForCategory
+Proc_CMS_Category_Competency_GetCompetencyLevel
+Proc_CMS_Category_Competency_GetCompetencyLevelBySubjectId
+***********************************************************/
+
+/********************Procs need to Review**********************
+FProc_TestDrive_BaseObject_CompetencyLevel_AddData
+FProc_TestDrive_BaseObject_CompetencyLevel_EditData
+************************************************************/

@@ -1,0 +1,53 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_TestProgressDisplay' AND COLUMN_NAME = 'dtModifiedOn')  
+BEGIN
+ALTER TABLE t_TestDrive_Test_TestProgressDisplay ADD dtModifiedOn datetime  DEFAULT (getdate())
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_TestProgressDisplay' AND COLUMN_NAME = 'cIsForFusion') 
+BEGIN
+ALTER TABLE t_TestDrive_Test_TestProgressDisplay ADD cIsForFusion char(1)  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Test_TestProgressDisplay set dtModifiedOn= GetDate() Where dtModifiedOn is null
+
+GO
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_TestDrive_Test_GetTestDetailsById
+JEditorProc_TestDrive_Test_GetTestDetailsById
+Proc_CMS_Test_GetTestPropertiesInfo
+Proc_TestDrive_JTeacherTestTask_GetAllTasksByTestId
+Proc_TestDrive_StandardTestProvider_GetAllTasksAssignedWithTests
+Proc_TestDrive_StandardTestProvider_GetAllTasksByTestId_New
+Proc_TestDrive_StandardTestProvider_GetAllTasksByTestId_New_Calibration
+Proc_TestDrive_Test_GetAllUncaliberatedTasksByTestId
+Proc_TestDrive_Test_GetAllUncaliberatedTasksByTestId_Calibration
+Proc_TestDrive_Test_GetTestDetailsById
+Proc_TestDrive_Test_GetTestProgressDisplayDetails
+****************************************************************/
+
+/********************Procs need to Review**********************
+FProc_TestDrive_Test_GetTestDetailsById
+JEditorProc_TestDrive_Test_GetTestDetailsById
+Proc_CMS_Test_GetTestPropertiesInfo
+Proc_TestDrive_JTeacherTestTask_GetAllTasksByTestId
+Proc_TestDrive_StandardTestProvider_GetAllTasksAssignedWithTests
+Proc_TestDrive_StandardTestProvider_GetAllTasksByTestId_New
+Proc_TestDrive_StandardTestProvider_GetAllTasksByTestId_New_Calibration
+Proc_TestDrive_Test_GetAllUncaliberatedTasksByTestId
+Proc_TestDrive_Test_GetAllUncaliberatedTasksByTestId_Calibration
+Proc_TestDrive_Test_GetTestDetailsById
+Proc_TestDrive_Test_GetTestProgressDisplayDetails
+****************************************************************/

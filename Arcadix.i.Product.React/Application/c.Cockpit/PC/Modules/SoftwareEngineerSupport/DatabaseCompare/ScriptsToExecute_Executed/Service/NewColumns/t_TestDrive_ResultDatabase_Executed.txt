@@ -1,0 +1,53 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_ResultDatabase' AND COLUMN_NAME = 'vDatabaseProvider') 
+BEGIN
+ALTER TABLE t_TestDrive_ResultDatabase ADD vDatabaseProvider nvarchar(200)  DEFAULT (NULL)
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_ResultDatabase set vDatabaseProvider = 'SqlServer'
+
+GO
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+JProc_TestDrive_Cycle_GetDistinctStateDatabseDetails
+JProc_TestDrive_Cycle_GetDistinctStateDatabseDetails_15_05_2019
+JProc_TestDrive_Cycle_GetResultDatabaseDetailsByStateId
+JProc_TestDrive_Cycle_GetResultDatabaseDetailsByStateIdAndSchool
+JProc_Testdrive_ResultDatabase_GetResultDatabaseDetails
+JProc_Testdrive_ResultDatabase_GetResultDatabaseDetails_New
+JProc_Testdrive_ResultDatabase_GetResultDatabaseDetails_New_13_05_2019
+JProc_Testdrive_ResultDatabase_GetResultDatabaseDetails_New_13_05_2019_Backup
+JProc_Testdrive_ResultDatabase_GetResultDatabaseDetails_New_15_07_2019
+Proc_TestDrive_Cycle_GetDistinctStateDatabseDetails
+Proc_TestDrive_Cycle_GetResultDatabaseDetailsById
+Proc_TestDrive_Cycle_GetResultDataBaseDetailsByMainClientId
+Proc_TestDrive_Cycle_GetResultDatabaseDetailsByStateId
+Proc_TestDrive_Cycle_GetResultDatabaseDetailsByStateIdAndSchool
+Proc_TestDrive_Cycle_GetResultDatabaseDetailsByStateIdAndSchool_03_07_2019
+Proc_TestDrive_Cycle_GetResultDatabaseDetailsForSchoolYearPeriod
+Proc_TestDrive_Cycle_InsertSchoolResultDatabase
+Proc_TestDrive_Cycle_InsertSchoolResultDatabase_New
+Proc_TestDrive_GenericImportExport_Export_GetDatabaseDetails
+Proc_TestDrive_ResultDatabase_CheckIsResultDatabaseExists
+Proc_TestDrive_ResultDatabase_MarkAsArchiveOrUnArchive
+Proc_TestDrive_ResultDatabase_SaveIndividualStateVersionDetails
+Proc_TestDrive_ResultDatabase_SaveResultDatabaseDetails
+****************************************************************/
+
+/********************Procs need to Review**********************
+Proc_TestDrive_Cycle_InsertSchoolResultDatabase
+Proc_TestDrive_Cycle_InsertSchoolResultDatabase_New
+Proc_TestDrive_ResultDatabase_MarkAsArchiveOrUnArchive
+Proc_TestDrive_ResultDatabase_SaveIndividualStateVersionDetails
+Proc_TestDrive_ResultDatabase_SaveResultDatabaseDetails
+****************************************************************/

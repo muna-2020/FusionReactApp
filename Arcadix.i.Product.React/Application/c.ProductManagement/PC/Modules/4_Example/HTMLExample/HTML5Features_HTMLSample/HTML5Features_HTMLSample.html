@@ -1,0 +1,184 @@
+﻿<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: calibri;
+        }
+        .main-wrapper {
+            width: 1024px;
+            margin: 0px auto;
+            padding: 20px;
+            font-size: 18px;
+        }
+        .title {
+            text-align: center;
+            font-size: 24px;
+            padding: 10px;
+            border-bottom: 1px solid #f1f1f1;
+            font-weight: bold;
+        }
+        .sub-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .item-wrapper ul {
+            line-height: 2rem;
+            list-style-type: square;
+            list-style-position: inside;
+        }
+        .item-wrapper p {
+            margin: 10px 0px;
+        }
+        pre {
+            white-space: pre-line;
+            padding: 20px;
+            width: 100%;
+            padding-right: 100px;
+            margin: 10px 0px;
+            letter-spacing: 1px;
+            background: #282c34;
+            color: #b5b5b5;
+        }
+        .yellow-pre {
+            background: #fffcdd;
+            color: #222;
+            border-left: 5px solid #FFEB3B;
+        }
+        @media screen and (max-width: 1024px) {
+            .main-wrapper {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="title">
+            <span>HTML5 - Introduction and its new features</span>
+        </div>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span></span>
+            </div>
+            <div class="item-wrapper">
+                <p>
+                    HTML5 is the fifth revision and newest version of the HTML standard. It offers new features that provide not only rich media support but also enhance 
+                    support for creating web applications that can interact with users, their local data, and servers more easily and effectively than was previously possible.
+                </p>
+                <p>HTML5 features classified into several groups based on their function.</p>
+                <ul>
+                    <li>Semantics: allowing you to describe more precisely what your content is.</li>
+                    <li>Connectivity: allowing you to communicate with the server in new and innovative ways.</li>
+                    <li>Offline and storage: allowing webpages to store data on the client-side locally and operate offline more efficiently.</li>
+                    <li>Multimedia: making video and audio first-class citizens in the Open Web.</li>
+                    <li>2D/3D graphics and effects: allowing a much more diverse range of presentation options.</li>
+                    <li>Performance and integration: providing greater speed optimization and better usage of computer hardware.</li>
+                    <li>Device access: allowing for the usage of various input and output devices.</li>
+                    <li>Styling: letting authors write more sophisticated themes.</li>
+                </ul>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>What is New in HTML5?</span>
+            </div>
+            <div class="item-wrapper">
+                <p>Basic useful feature list:</p>
+                <ul>
+                    <li>The DOCTYPE declaration for HTML5 is simple</li>
+                    <li>The character encoding (charset) declaration is simple</li>
+                </ul>
+                <pre>
+                    &lt;!DOCTYPE html&gt;
+                </pre>
+                <pre>
+                    &lt;meta charset=&quot;UTF-8&quot;&gt;
+                </pre>
+                <div class="sub-title">
+                    <span>New HTML5 Elements</span>
+                </div>
+                <pre class="yellow-pre">
+                    - semantic elements like &lt;header&gt;, &lt;footer&gt;, &lt;article&gt;, and &lt;section&gt;
+                    - Form elements and Attributes like number, date, time, calendar, and range
+                    - graphic elements: &lt;svg&gt; and &lt;canvas&gt;
+                    - multimedia elements: &lt;audio&gt; and &lt;video&gt;
+                </pre>
+                <div class="sub-title">
+                    <span>HTML5 API's (Application Programming Interfaces)</span>
+                </div>
+                <p>Most interesting new HTML5 APIs are</p>
+                <ul>
+                    <li>HTML Geolocation</li>
+                    <li>Drag and Drop</li>
+                    <li>Local Storage</li>
+                    <li>Application Cache</li>
+                    <li>Web Workers</li>
+                    <li>SSE</li>
+                </ul>
+                <div class="sub-title">
+                    <span>HTML5 Browser Support</span>
+                </div>
+                <pre class="yellow-pre">HTML5 is supported in all modern browsers.</pre>
+                <div class="sub-title">
+                    <span>New Semantic Elements (listed few)</span>
+                </div>
+                <pre class="yellow-pre">
+                    &lt;header&gt;,&lt;footer&gt;,&lt;nav&gt;,&lt;section&gt;,&lt;figure&gt;,&lt;figcaption&gt;,&lt;aside&gt;, &lt;summary&gt;, &lt;progress&gt;, &lt;details&gt;
+                </pre>
+                <div class="sub-title">
+                    <span>New Form Elements</span>
+                </div>
+                <pre class="yellow-pre">
+                    &lt;datalist&gt;, &lt;keygen&gt;, &lt;output&gt;
+                </pre>
+                <div class="sub-title">
+                    <span>New Input Types (listed few)</span>
+                </div>
+                <pre class="yellow-pre">
+                    &lt;color&gt;, &lt;email&gt;, &lt;search&gt;, &lt;tel&gt;, &lt;date&gt;, &lt;datetime&gt;, &lt;number&gt;, &lt;url&gt;, &lt;range&gt;
+                </pre>
+                <div class="sub-title">
+                    <span>Graphics Elements</span>
+                </div>
+                <pre class="yellow-pre">
+                    &lt;canvas&gt;, &lt;svg&gt;
+                </pre>
+                <div class="sub-title">
+                    <span>Media Elements</span>
+                </div>
+                <pre class="yellow-pre">
+                    &lt;video&gt;, &lt;audio&gt;, &lt;source&gt;, &lt;track&gt;, &lt;embed&gt;
+                </pre>
+                <div class="sub-title">
+                    <span>Use of HTML5Shiv</span>
+                </div>
+                <p>HTML5Shiv is a JavaScript workaround to enable styling of HTML5 elements in versions of Internet Explorer prior to version 9.</p>
+                <p>Add the HTML5Shiv:</p>
+                <pre>
+                    &lt;!--[if lt IE 9]&gt;
+                    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js&quot;&gt;&lt;/script&gt;
+                    &lt;![endif]--&gt;
+                </pre>
+                <div class="sub-title">
+                    <span>Setting The Viewport</span>
+                </div>
+                <p>HTML5 introduced a method to control over the viewport, through the &lt;meta&gt; tag.</p>
+                <p>The viewport is the user's visible area of a web page. It varies with the device, and will be smaller on a mobile phone than on a computer screen.</p>
+                <p>You should include the following viewport element in all your web pages:</p>
+                <pre>
+                    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+                </pre>
+                <p>The width=device-width part sets the width of the page to follow the screen-width of the device (which will vary depending on the device).</p>
+                <p>The initial-scale=1.0 part sets the initial zoom level when the page is first loaded by the browser.</p>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

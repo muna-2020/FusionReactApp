@@ -1,0 +1,6 @@
+﻿import EditorBase_ModuleProcessor from '@shared/Framework/BaseClass/EditorBaseClass/EditorBase_ModuleProcessor';
+
+class CMSTextHighlight_TestApplication_ModuleProcessor extends EditorBase_ModuleProcessor {
+}
+
+export default CMSTextHighlight_TestApplication_ModuleProcessor;

@@ -1,0 +1,12 @@
+﻿/**********************************
+Rename Table
+**********************************/
+EXEC sp_rename 't_Fusion_Intranet_ResultPageCertificate_Data','t_Fusion_Certificate_Data'
+GO
+
+/**********************************
+Fusion procs
+**********************************/
+/********************ModifiedProc********************
+p_Intranet_Certificate_GetData  (deleted old proc p_Intranet_ResultCertificate_GetData)
+*************************************************/

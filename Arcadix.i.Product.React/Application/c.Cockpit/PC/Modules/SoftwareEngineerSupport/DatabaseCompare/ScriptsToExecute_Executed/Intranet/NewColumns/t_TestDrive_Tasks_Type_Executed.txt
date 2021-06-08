@@ -1,0 +1,28 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Tasks_Type' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Tasks_Type ADD uModifiedByUserId uniqueidentifier  
+END		 
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Tasks_Type set uModifiedByUserId= uUserId Where uModifiedByUserId is null
+
+GO
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_CMS_CMSTestDrivePage_GetTaskTypeDetails
+FProc_TestDrive_BaseObject_TaskType_GetData
+JEditorProc_CMS_CMSTestDrivePage_GetTaskTypeDetails
+JProc_CMS_CMSTestDrivePage_GetTaskTypeDetails
+Proc_CMS_CMSPage_GetTaskTypeDetails
+Proc_CMS_CMSTestDrivePage_GetTaskTypeDetails
+****************************************************************/
+		

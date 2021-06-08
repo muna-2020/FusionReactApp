@@ -1,0 +1,42 @@
+/**********************************
+New Columns
+**********************************/
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Certificate_Template' AND COLUMN_NAME = 'uModifiedByUserId') 
+  BEGIN
+      ALTER TABLE t_TestDrive_Certificate_Template ADD uModifiedByUserId uniqueidentifier  
+ END
+ Go
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Certificate_Template set uModifiedByUserId = uUserId  
+Go
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+FProc_TestDrive_BaseObject_Certificate_AddData
+FProc_TestDrive_BaseObject_Certificate_DeleteData
+FProc_TestDrive_BaseObject_Certificate_EditData
+FProc_TestDrive_BaseObject_Certificate_GetData
+JProc_TestDrive_Certificate_GetCertificatesByMainClientId_New
+JProc_Testdrive_CertificatTemplate_GetCertificateTemplates
+Proc_TestDrive_Certificate_CopyCertificate
+Proc_Testdrive_CertificatTemplate_DeleteCertificateTemplate
+Proc_Testdrive_CertificatTemplate_EditCertificateTemplate
+Proc_Testdrive_CertificatTemplate_GetCertificateTemplates
+Proc_Testdrive_CertificatTemplate_GetCertificateTemplatesByCertificateId
+Proc_Testdrive_CertificatTemplate_SaveCertificateTemplate
+Proc_Testdrive_CertificatTemplate_UpdateCertificateCommonCode
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/
+

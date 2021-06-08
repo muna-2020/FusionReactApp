@@ -1,0 +1,37 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_Element_Comment' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_CMS_Element_Comment ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_CMS_Element_Comment set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_CMS_CMSElement_GetCommentsByElementId
+FProc_CMS_CMSElement_SaveComment
+JEditorProc_CMS_CMSElement_GetCommentsByElementId
+JEditorProc_CMS_CMSElement_SaveComment
+Proc_CMS_CMSElement_GetCommentsByElementId
+Proc_CMS_CMSElement_SaveComment
+Proc_Fusion_Editor_CMS_CMSElement_GetCommentsByElementId
+Proc_Fusion_Editor_CMS_CMSElement_SaveComment
+***********************************************************/
+
+/********************Procs need to Review**********************
+FProc_CMS_CMSElement_SaveComment
+JEditorProc_CMS_CMSElement_SaveComment
+Proc_CMS_CMSElement_SaveComment
+Proc_Fusion_Editor_CMS_CMSElement_SaveComment
+******************************************************************/

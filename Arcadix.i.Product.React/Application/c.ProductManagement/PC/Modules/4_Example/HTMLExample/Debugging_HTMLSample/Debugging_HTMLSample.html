@@ -1,0 +1,203 @@
+﻿<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: calibri;
+        }
+        .main-wrapper {
+            width: 1024px;
+            margin: 0px auto;
+            padding: 20px;
+            font-size: 18px;
+        }
+        .title {
+            text-align: center;
+            font-size: 24px;
+            padding: 10px;
+            border-bottom: 1px solid #f1f1f1;
+            font-weight: bold;
+        }
+        .sub-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .item-wrapper ul {
+            line-height: 2rem;
+            list-style-type: square;
+            margin-left: 20px;
+        }
+        .item-wrapper ol {
+            line-height: 2rem;
+            margin-left: 20px;
+        }
+        .item-wrapper p {
+            margin: 10px 0px;
+        }
+        pre {
+            white-space: pre-line;
+            padding: 20px;
+            width: 100%;
+            padding-right: 100px;
+            margin: 10px 0px;
+            letter-spacing: 1px;
+            background: #282c34;
+            color: #b5b5b5;
+        }
+        .yellow-pre {
+            background: #fffcdd;
+            color: #222;
+            border-left: 5px solid #FFEB3B;
+        }
+        .light-text {
+            color: #999;
+            font-style: italic;
+        }
+        @media screen and (max-width: 1024px) {
+            .main-wrapper {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="title">
+            Documentation for Debugging
+        </div>
+        <section class="content-section">
+            <p>
+                Debugging is the process of finding and fixing errors within a script.
+                All modern browsers and most other environments support debugging tools –
+                a special UI in developer tools that makes debugging much easier.
+                It also allows to trace the code step by step to see what exactly is going on. <br/>
+            </p>
+        </section>
+        <section class="content-section">
+            <div class="sub-title">
+                <span>Open developer tool in chrome browser</span>
+            </div>
+            <div class="item-wrapper">
+                <p>To open DevTools, you can right-click anywhere on the page and select inspect 
+                    element or you can choose the “tools > developer tools” option from the top right menu. or you can use ctrl+shift+I shortcut key.
+                </p>
+            </div>  
+        </section>
+        <section class="content-section">
+            <div class="sub-title">
+                <span>Change DevTools Positions</span>
+            </div>
+            <div class="item-wrapper">
+                <p>Use ctrl+shift+D to change devtool position or you can use Dock options:</p>
+                <ol>
+                    <li>unlock into saperate window</li>
+                    <li>dock to left</li>
+                    <li>dock to right</li>
+                    <li>dock to bottom</li>
+                </ol>
+            </div>    
+        </section>
+        <section class="content-section">
+            <div class="sub-title">
+                <span>Simulate Mobile Devices with Device Mode</span>
+            </div>
+            <div class="item-wrapper">
+                <p>Use Device Mode to approximate how your page looks and performs on a mobile device.</p>
+                <p>Click Toggle Device Toolbar to open the UI that enables you to simolate a mobile viewport.</p>
+            </div>    
+        </section>
+        <section class="content-section">
+            <div class="sub-title">
+                <span>Open the Elements panel to inspect the DOM or CSS</span>
+            </div>
+            <div class="item-wrapper">
+                <p>When you want to inspect a DOM node's styles or attributes, right-click the element and select Inspect.</p>
+                <p>Or press Command+Option+C (Mac) or Control+Shift+C (Windows, Linux, Chrome OS).</p>
+            </div>    
+        </section>
+        <section class="centent-section">
+            <div class="sub-title">
+                <span>Quick-edit a HTML Element</span>
+            </div>
+            <div class="item-wrapper">
+                <ol> 
+                    <li>Select the “Elements” panel.</li>
+                    <li>Choose a DOM element within the Elements Panel editor.</li>
+                    <li>Right click on the selected tag and select edit as HTML option.</li>
+                </ol>
+                <p>Once you are finish editing click outside of editor.</p>
+            </div> 
+        </section>
+        <section class="content-section">
+            <div class="sub-title">
+                <span>View an element's CSS</span>
+            </div>
+            <div class="item-wrapper">
+                <ul>
+                    <li>
+                       Right-click on the element and select Inspect. The Elements panel of DevTools opens. 
+                            The Inspect Me! element is highlighted in the DOM Tree.
+                    </li>
+                    <li>
+                       The Styles tab on the Elements panel lists the CSS rules being applied to whatever element is currently selected in the DOM Tree
+                    </li>
+                </ul>
+            </div>    
+        </section>
+        <section class="content-section">
+            <div class="sub-title">
+                <span>Add a CSS class to an element</span>
+            </div>
+            <div class="item-wrapper">
+                <p>Use the Styles tab to see how an element looks when a CSS class is applied to or removed from an element.</p>
+                <ul>
+                    <li>
+                        Right-click on element and select Inspect.
+                    </li>
+                    <li>
+                       Click .cls DevTools reveals a text box where you can add classes to the selected element.
+                    </li>
+                    <li>
+                       Type class_name in the Add new class text box and then press Enter. A checkbox appears below the element, 
+                            where you can toggle the class on and off. If the element had any other classes applied to it, 
+                            you'd also be able to toggle them from here.
+                    </li>
+                </ul>
+            </div>    
+        </section>
+        <section class="content-section">
+            <div class="sub-title">
+                <span>Console Overview</span>
+            </div>
+            <div class="item-wrapper">
+                <strong>Viewing logged messages</strong><br/>
+                <p>Use the Styles tab to see how an element looks when a CSS class is applied to or removed from an element.</p>
+                <p>To log a message, you insert an expression like <strong>console.log('Hello, Console!')</strong> into your JavaScript. When the 
+                    browser executes your JavaScript and sees an expression like that, it knows that it's supposed to log the message to the Console.</p>
+            </div>    
+            <div class="item-wrapper">
+                <strong>Running JavaScript</strong><br/>
+                <p>You can run JavaScript in the Console to interact with the page that you're inspecting.</p>
+                <ul>
+                    <li>
+                       Open devtool > console tab
+                    </li>
+                    <li>
+                        Here you can see console message
+                    </li>
+                    <li>
+                       You can write and execute any javascript code in console
+                    </li>
+                </ul>
+            </div>   
+        </section>
+    </div>
+    <script>console.log('Hello, Console!')</script>
+</body>
+</html>

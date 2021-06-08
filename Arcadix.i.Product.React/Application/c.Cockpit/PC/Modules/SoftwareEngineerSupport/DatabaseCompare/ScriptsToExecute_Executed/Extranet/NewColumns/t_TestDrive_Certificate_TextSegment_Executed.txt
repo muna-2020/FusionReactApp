@@ -1,0 +1,33 @@
+/**********************************
+New Columns
+**********************************/
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Certificate_TextSegment' AND COLUMN_NAME = 'uModifiedByUserId') 
+  BEGIN
+      ALTER TABLE t_TestDrive_Certificate_TextSegment ADD uModifiedByUserId uniqueidentifier  
+ END
+ Go
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Certificate_TextSegment set uModifiedByUserId = uUserId  
+Go
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_TestDrive_JCertificateTextKeyword_GetAllTextKeywords
+Proc_TestDrive_Certificate_CopyCertificate
+Proc_TestDrive_JCertificateTextKeyword_GetAllTextKeywordsByStateId
+Proc_TestDrive_JCertificateTextKeyword_GetResultAttributesForKeyword
+Proc_TestDrive_JCertificateTextSegment_GetAllTextSegments
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/

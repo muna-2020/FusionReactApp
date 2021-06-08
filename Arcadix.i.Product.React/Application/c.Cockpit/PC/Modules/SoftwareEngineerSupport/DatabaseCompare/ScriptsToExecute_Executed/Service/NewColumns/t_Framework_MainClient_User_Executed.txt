@@ -1,0 +1,58 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_User' AND COLUMN_NAME = 'cIsTwoFactorAuthenticationRequired') 
+BEGIN
+ALTER TABLE t_Framework_MainClient_User ADD cIsTwoFactorAuthenticationRequired nvarchar(MAX)  
+END
+
+GO	 
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_User' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_Framework_MainClient_User ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+
+update t_Framework_MainClient_User set uModifiedByUserId = uUserId where uModifiedByUserId is null
+
+GO
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_Framework_IntranetMembership_ValidateUser
+FProc_TestDrive_BaseObject_MainClientUser_AddData
+FProc_TestDrive_BaseObject_MainClientUser_DeleteData
+FProc_TestDrive_BaseObject_MainClientUser_EditData
+FProc_TestDrive_BaseObject_MainClientUser_GetData
+JEditorProc_Testdrive_JAdministrator_GetAllAdministrators
+JProc_Framework_ClientUser_GetMemberDetails
+JProc_Framework_IntranetMembership_ValidateUser
+JProc_Framework_UserRole_GetUserForTeamAndBusinessUnit
+Proc_Framework_ClientUser_GetMemberDetails
+Proc_Framework_IntranetMembership_ValidateUser
+Proc_Framework_MainClientUser_SaveUserPassword
+Proc_Framework_PageUserPreference_GetUserLoginInformation
+Proc_Framework_PageUserPreference_UpdateUserLoginInformation
+Proc_Framework_UserRole_GetUserForTeamAndBusinessUnit
+Proc_Testdrive_JAdministrator_GetAllAdministrators
+Z_temp
+****************************************************************/
+
+
+/********************Procs need to Review**********************
+FProc_Framework_IntranetMembership_ValidateUser
+FProc_TestDrive_BaseObject_MainClientUser_AddData
+FProc_TestDrive_BaseObject_MainClientUser_DeleteData
+FProc_TestDrive_BaseObject_MainClientUser_EditData
+JProc_Framework_IntranetMembership_ValidateUser
+Proc_Framework_IntranetMembership_ValidateUser
+Proc_Framework_MainClientUser_SaveUserPassword
+Proc_Framework_PageUserPreference_UpdateUserLoginInformation
+Z_temp
+****************************************************************/

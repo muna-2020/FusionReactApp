@@ -1,0 +1,3504 @@
+update t_CMS_Page set cIsFusionVersion = 'N' 
+update t_CMS_Container set cIsFusionVersion = 'N'
+update t_CMS_Element set cIsFusionVersion = 'N'
+
+
+CREATE PROCEDURE Proc_Fusion_Editor_TaskConversion_NewToOld_CMSContainer_AddData      
+(          
+ @vAddData NVARCHAR(MAX),          
+ @iMainClientId INT,          
+ @uUserId UNIQUEIDENTIFIER          
+)          
+AS          
+/***********************************************          
+CREATED BY: KB          
+CREATION DATE: 25/08/2020          
+DESCRIOTION: SAVES THE CONTAINER          
+          
+Modified By: Amit Kumar          
+  Modified Date: 17.08.2020  
+  Description: Added new column "uModifiedByUserId"          
+***********************************************/          
+BEGIN          
+ DECLARE @iContainerId INT          
+ SELECT @iContainerId = iContainerId FROM OPENJSON(@vAddData) WITH (iContainerId INT)          
+ IF EXISTS(SELECT * FROM t_CMS_Container where iContainerId=@iContainerId)          
+ BEGIN          
+  UPDATE Container SET           
+   Container.iContainerTemplateId = ContainerJson.iContainerTemplateId,          
+   Container.vContainerBackgroundColor = ContainerJson.vContainerBackgroundColor,          
+   Container.cShowCalculator = ContainerJson.cShowCalculator,          
+   Container.cIsQuestionTitleEditable = ContainerJson.cIsQuestionTitleEditable,          
+   Container.cIsAnswerTitleEditable = ContainerJson.cIsAnswerTitleEditable,          
+   Container.vContainerHTML = ContainerJson.vContainerHTML,          
+   Container.cShowCalculatorOnLoad = ContainerJson.cShowCalculatorOnLoad          
+  FROM t_CMS_Container Container, OPENJSON(@vAddData)          
+  WITH          
+  (          
+   iContainerTemplateId INT,          
+   vContainerBackgroundColor NVARCHAR(100),          
+   cShowCalculator CHAR(1),          
+   cIsQuestionTitleEditable CHAR(1),          
+   cIsAnswerTitleEditable CHAR(1),          
+   vContainerHTML NVARCHAR(MAX),          
+   cShowCalculatorOnLoad CHAR(1)          
+  ) ContainerJson          
+  WHERE iContainerId = @iContainerId          
+ END          
+ ELSE          
+ BEGIN          
+  INSERT INTO t_CMS_Container          
+  (          
+   iContainerTemplateId,          
+   iMainClientId,          
+   iContainerFolderId,          
+   dtCreatedOn,          
+   dtModifiedOn,          
+   cIsDisplayedInContainerTree,          
+   cIsDeleted,          
+   vContainerBackgroundColor,          
+   uUserId,  
+   uModifiedByUserId,          
+   cShowCalculator,          
+   cIsQuestionTitleEditable,          
+   cIsAnswerTitleEditable,          
+   vContainerHTML,          
+   cShowCalculatorOnLoad          
+  )          
+  SELECT          
+   iContainerTemplateId,          
+   @iMainClientId,          
+   0,          
+   GETDATE(),          
+   GETDATE(),          
+   'N',          
+   'N',          
+   vContainerBackgroundColor,          
+   @uUserId,   
+   @uUserId,         
+   cShowCalculator,          
+   cShowCalculatorOnLoad,          
+   cIsQuestionTitleEditable,          
+   cIsAnswerTitleEditable,          
+   vContainerHTML          
+  FROM OPENJSON(@vAddData)          
+  WITH          
+  (          
+   iContainerTemplateId INT,          
+   vContainerBackgroundColor NVARCHAR(100),          
+   cShowCalculator CHAR(1),          
+   cShowCalculatorOnLoad CHAR(1),          
+   cIsQuestionTitleEditable CHAR(1),          
+   cIsAnswerTitleEditable CHAR(1),          
+   vContainerHTML NVARCHAR(MAX)          
+  )        
+  SELECT @iContainerId = (SELECT @@IDENTITY)        
+ END          
+          
+ /* Return */          
+ SELECT (          
+  SELECT          
+   iContainerId,          
+   iContainerTemplateId,          
+   iMainClientId,          
+   iContainerFolderId,          
+   dtCreatedOn,          
+   dtModifiedOn,          
+   cIsDisplayedInContainerTree,          
+   cIsDeleted,          
+   vContainerBackgroundColor,          
+   vContainerName,          
+   vContainerDescription,          
+   uUserId,   
+   uModifiedByUserId,         
+   cShowCalculator,          
+   cIsQuestionTitleEditable,          
+   cIsAnswerTitleEditable,          
+   cIsParentContainer,          
+   vContainerHTML,          
+   cShowCalculatorOnLoad          
+  FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER)          
+ AS JSONRESULT FROM t_CMS_Container WHERE iContainerId = @iContainerId          
+END 
+
+
+CREATE procedure Proc_Fusion_Editor_TaskConversion_NewToOld_CMSPageContent_GetContainersToBeDeleted  
+(    
+   @vContainerJson NVARCHAR(MAX),    
+   @iPageId INT,    
+   @iLanguageId INT    
+)            
+AS    
+ /********************************************************************************************                  
+  Created By:  KB                 
+  Create Date:  22.08.2020                  
+  Description:  Deletion of Containers    
+    
+  Modified By: Aviral  
+  Modified Date: 10/02/2020  
+  Description: Transerred this procedure from Editor to CMS. Changed the Name from Proc_Fusion_Editor_CMS_CMSPage_GetContainersToBeDeleted => Proc_Fusion_Editor_CMSPageContent_GetContainersToBeDeleted  
+ ********************************************************************************************/                
+BEGIN    
+ SELECT    
+ (    
+  SELECT    
+   C.dContainerPoints,      
+   C.iContainerId,      
+   C.iLanguageId,      
+   C.iOrder,      
+   C.iPageContainerId,      
+   C.iPageId      
+  FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER) as jsonresult    
+ FROM t_CMS_Page_Container C    
+ WHERE C.iPageId = @iPageId and C.iLanguageId = @iLanguageId AND C.iContainerId NOT IN (SELECT iContainerId FROM OPENJSON (@vContainerJson) WITH (iContainerId int))    
+END 
+
+
+CREATE proc Proc_Fusion_Editor_TaskConversion_NewToOld_CMSContainer_DeleteData      
+(      
+ @iContainerId int      
+)      
+As      
+/********************************************************************************************      
+  Created By: KB      
+  Created Date: 27/08/2020      
+  Description: Delete Container      
+  Tables: t_CMS_Container      
+      
+  Modified By:      
+  Modified Date:      
+  Description:      
+********************************************************************************************/      
+BEGIN      
+ DELETE FROM t_CMS_Container WHERE iContainerId = @iContainerId      
+  
+ SELECT  
+ (      
+  SELECT @iContainerId as iContainerId       
+  FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER      
+ ) AS 'JSONRESULT'  
+END 
+
+
+  
+ALTER procedure Proc_Fusion_Editor_TaskConversion_NewToOld_CMSElement_GetElementsToBeDeleted      
+(      
+   @iContainerId INT      
+)      
+AS      
+/********************************************************************************************      
+Created By: KB      
+Create Date: 27/08/2020      
+Description: Returns the elements linked to the given container id.      
+Tables Used: t_CMS_Container_Element      
+      
+Modified By:      
+Modification Date:      
+Description:      
+********************************************************************************************/      
+BEGIN      
+ SELECT      
+ (      
+  SELECT      
+   CE.iContainerElementId,      
+   CE.iContainerId,      
+   CE.iDocumentOrder,      
+   CE.iElementId AS iElementId,      
+   CE.iOrder      
+  FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER      
+ )      
+ AS 'JSONRESULT'      
+ FROM t_CMS_Container_Element CE      
+ WHERE CE.iContainerId = @iContainerId      
+END 
+
+
+ALTER procedure Proc_Fusion_Editor_TaskConversion_NewToOld_CMSDocument_AddData               
+(                      
+ @iMainClientId INT,                        
+ @uUserId UNIQUEIDENTIFIER,                        
+ @vAddData NVARCHAR(MAX)                       
+)                      
+AS                      
+/********************************************************************************                            
+ Created By: Prajwal                            
+ Creation Date: 12/08/2020                            
+ Description: Saves the Document data                          
+ Tables Used: t_CMS_Element, t_CMS_ElementType, t_CMS_Element_Document                      
+                            
+ Modified By:                            
+ Modifiaction Date:                            
+ Description:                            
+********************************************************************************/                        
+BEGIN                      
+ DECLARE @iElementId INT                      
+ SELECT @iElementId = iElementId FROM OPENJSON(@vAddData) WITH (iElementId INT)                      
+ IF NOT EXISTS (SELECT * FROM t_CMS_Element WHERE iElementId = @iElementId)                       
+ BEGIN                      
+  INSERT INTO t_CMS_Element(                      
+   iElementTypeId,                      
+   iMainClientId,                      
+   iFolderID,                      
+   cIsDeleted,                      
+   cIsDisplayedInElementTree,                      
+   dtCreatedOn,                      
+   dtModifiedOn,                      
+   cIsSecure,                      
+   uUserId,                      
+   vElementSkinName,                      
+   cIsQuestionPlaceholder,                      
+   cHasTextOnTop,                      
+   vHeaderText,                      
+   vElementJson,                      
+   cIsFusionVersion                      
+  )                      
+  SELECT                      
+   4,                      
+   @iMainClientId,                      
+   ISNULL(iFolderID, -1),                      
+   'N',                      
+   'Y',                      
+   GETDATE(),                      
+   GETDATE(),                      
+   'Y',                      
+   @uUserId,                      
+   NULL,                      
+   ISNULL(cIsDisplayedInElementTree, 'N'),                      
+   'N',                        
+   NULL,                      
+   vElementJson,                      
+   'N'                   
+  FROM OPENJSON(@vAddData)                      
+  WITH(                      
+    iFolderID INT,          
+    cIsDisplayedInElementTree CHAR(1),          
+    vElementJson NVARCHAR(MAX) AS JSON             
+  ) EJson               
+  SET @iElementId = @@IDENTITY                      
+  INSERT INTO t_CMS_Element_Document(                      
+    iElementId,                  
+    vElementDocumentName,                        
+    vElementDocumentDescription,                   
+    vDocumentType,                        
+    iDocumentFileVersion,                  
+    iDocumentSizeInBytes                     
+   )                      
+   SELECT @iElementId, *                      
+   FROM OPENJSON(@vAddData, '$.t_CMS_Element_Document[0]')                      
+   WITH(                      
+    vDocumentName NVARCHAR(300),                      
+    vElementDocumentDescription NVARCHAR(300),                      
+    vDocumentType NVARCHAR(10),                      
+    iDocumentFileVersion INT,                      
+    iDocumentSizeInBytes INT                  
+   )                      
+ END                      
+ ELSE                      
+ BEGIN                      
+  UPDATE CE SET                      
+   CE.uUserId = @uUserId,                    
+   CE.vElementSkinName = ISNULL(EJson.vElementSkinName, NULL),                      
+   CE.iFolderID = ISNULL(EJson.iFolderID, NULL),                      
+   CE.dtModifiedOn = GETDATE(),                                 
+   CE.cHasTextOnTop = ISNULL(EJson.cHasTextOnTop, NULL),                      
+  CE.vHeaderText = ISNULL(EJson.vHeaderText, NULL),                  
+   CE.vElementJson = ISNULL(EJson.vElementJson, NULL)                               
+  FROM t_CMS_Element AS CE, OPENJSON(@vAddData)                      
+  WITH(                      
+   iFolderID NVARCHAR(255),                      
+   cIsDeleted CHAR(1),                      
+   cIsDisplayedInElementTree INT ,                      
+   cIsSecure CHAR(1),                      
+   vElementSkinName NCHAR(3),                      
+   cIsQuestionPlaceHolder INT,                      
+   cHasTextOnTop CHAR(1),                      
+   vHeaderText NVARCHAR(MAX),                      
+   vElementJson NVARCHAR(MAX) AS JSON                  
+  ) EJson                      
+  WHERE CE.iElementId = @iElementId   
+  IF NOT EXISTS (SELECT * FROM t_CMS_Element_Document WHERE iElementId = @iElementId)                       
+ BEGIN  
+  INSERT INTO t_CMS_Element_Document(                      
+   iElementId,                  
+   vElementDocumentName,                        
+   vElementDocumentDescription,                   
+   vDocumentType,                        
+   iDocumentFileVersion,                  
+   iDocumentSizeInBytes                     
+  )                      
+  SELECT @iElementId, *                      
+  FROM OPENJSON(@vAddData, '$.t_CMS_Element_Document[0]')                      
+  WITH(                      
+   vDocumentName NVARCHAR(300),                      
+   vElementDocumentDescription NVARCHAR(300),                      
+   vDocumentType NVARCHAR(10),                      
+   iDocumentFileVersion INT,                      
+   iDocumentSizeInBytes INT                  
+  )     
+ END  
+  ELSE  
+  BEGIN  
+ UPDATE E SET                      
+  E.vElementDocumentName = EJson.vDocumentName,                      
+  E.vElementDocumentDescription = EJson.vElementDocumentDescription,                      
+  E.vDocumentType = EJson.vDocumentType,                      
+  E.iDocumentFileVersion = EJson.iDocumentFileVersion,                      
+  E.iDocumentSizeInBytes = EJson.iDocumentSizeInBytes                      
+ FROM t_CMS_Element_Document AS E ,OPENJSON(@vAddData, '$.t_CMS_Element_Document[0]')                      
+ WITH(                      
+   vDocumentName NVARCHAR(300),                      
+   vElementDocumentDescription NVARCHAR(300),                      
+   vDocumentType NVARCHAR(10),                      
+   iDocumentFileVersion INT,                      
+   iDocumentSizeInBytes INT                  
+ ) EJson                     
+ WHERE E.iElementId = @iElementId  
+  END                
+ END                      
+                      
+ /* RETURN */                                
+ SELECT                        
+ (                                  
+  SELECT                                   
+  E.iElementId,                                  
+  E.iElementTypeId,                                  
+  ET.vElementTypeName,                                
+  E.iMainClientId,                                  
+  E.iFolderID,                                  
+  E.cIsDeleted,                                  
+  E.cIsDisplayedInElementTree,                                  
+  E.dtCreatedOn,                                  
+  E.dtModifiedOn,                                  
+  E.cIsSecure,                                  
+  E.uUserId,                                  
+  E.vElementSkinName,                                  
+  E.cIsQuestionPlaceholder,                                  
+  E.cHasTextOnTop,                                  
+  E.vHeaderText,                                  
+  E.vElementJson,      
+  E.cIsFusionVersion,                      
+     ISNULL((                            
+    SELECT                            
+     ED.iElementDocumentId,                  
+     ED.iElementId,                  
+     ED.vElementDocumentName,                        
+     ED.vElementDocumentDescription,                        
+     ED.vDocumentType,                        
+  ED.iDocumentSizeInBytes,       
+     ED.iDocumentFileVersion                         
+    FROM t_CMS_Element_Document ED                      
+    WHERE ED.iElementId = @iElementId                          
+    FOR JSON PATH, INCLUDE_NULL_VALUES                            
+   ), '[]')[t_CMS_Element_Document]                            
+  FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER                                  
+ )                                  
+ AS JSONRESULT FROM t_CMS_Element E                                 
+ INNER JOIN t_CMS_ElementType ET ON ET.iElementTypeId = E.iElementTypeId                                
+ WHERE E.iElementId = @iElementId          
+END 
+
+ALTER PROCEDURE [dbo].[Proc_Fusion_Editor_TaskConversion_NewToOld_CMSHotspot_AddData]    
+(        
+  @iMainClientId INT,    
+ @uUserId UNIQUEIDENTIFIER,        
+ @vAddData NVARCHAR(MAX)               
+)        
+AS        
+/********************************************************************************              
+ Created By: Prajwal              
+ Creation Date: 08/06/2020              
+ Description: Saves the Hotspot data            
+ Tables Used: t_CMS_Element_Hotspot, t_CMS_Element_Hotspot_Value        
+              
+ Modified By:              
+ Modifiaction Date:              
+ Description:              
+********************************************************************************/          
+BEGIN        
+ DECLARE @iElementHotspotId INT    
+ DECLARE @iElementOrder INT    
+ DECLARE @iContainerId INT    
+ SELECT @iElementHotspotId = iElementId FROM OPENJSON(@vAddData) WITH (iElementId INT)        
+ SELECT @iElementOrder = iElementOrder FROM OPENJSON(@vAddData) WITH (iElementOrder INT)    
+ SELECT @iContainerId = iContainerId FROM OPENJSON(@vAddData) WITH (iContainerId INT)           
+ IF NOT EXISTS(SELECT * FROM t_CMS_Element_Hotspot WHERE iElementHotspotId = @iElementHotspotId)  
+  BEGIN    
+   DELETE FROM t_CMS_Element_Hotspot WHERE iElementOrder = @iElementOrder AND iContainerId = @iContainerId  
+   INSERT INTO t_CMS_Element_Hotspot(      
+    icontainerId,        
+    iMinimumNumberOfHotspotForTaskToBeCorrect,        
+    iElementOrder,        
+    dNotAnsweredPoint,        
+    iElementHotspotMarkerId        
+   )        
+   SELECT        
+    @iContainerId,        
+    ISNULL(EJson.iMinimumNumberOfHotspotForTaskToBeCorrect, 0),        
+    @iElementOrder,        
+    ISNULL(EJson.dNotAnsweredPoint, NULL),        
+    ISNULL(EJson.iElementHotspotMarkerId, NULL)        
+   FROM OPENJSON(@vAddData)        
+   WITH(        
+    iMinimumNumberOfHotspotForTaskToBeCorrect INT,        
+    dNotAnsweredPoint DECIMAL,        
+    iElementHotspotMarkerId INT       
+   ) EJson        
+   SET @iElementHotspotId = @@IDENTITY       
+   INSERT INTO t_CMS_Element_Hotspot_Value(      
+    iElementHotspotId,        
+    iDisplayOrder,        
+    cHotspotType,        
+    vXCoordinates,        
+    vYCoordinates,        
+    dCorrectPoint,        
+    dWrongPoint        
+   )                      
+   SELECT          
+    @iElementHotspotId,        
+    ISNULL(EJson.iDisplayOrder, ''),        
+    ISNULL(EJson.cHotspotType, ''),        
+    ISNULL(EJson.vXCoordinates, ''),        
+    ISNULL(EJson.vYCoordinates, ''),        
+    ISNULL(EJson.dCorrectPoint,''),        
+    ISNULL(EJson.dWrongPoint,'')        
+   FROM OPENJSON(@vAddData, '$.t_CMS_Element_Hotspot_Value')        
+   WITH (         
+    iDisplayOrder INT,        
+    cHotspotType NVARCHAR(50),        
+    vXCoordinates NVARCHAR(2000),        
+    vYCoordinates NVARCHAR(2000),        
+    dCorrectPoint NVARCHAR(20),        
+    dWrongPoint NVARCHAR(20)       
+   ) EJson         
+           
+  END         
+ ELSE        
+  BEGIN        
+   UPDATE E SET      
+   E.iMinimumNumberOfHotspotForTaskToBeCorrect = EJson.iMinimumNumberOfHotspotForTaskToBeCorrect,        
+   E.iElementHotspotMarkerId = EJson.iElementHotspotMarkerId        
+   FROM t_CMS_Element_Hotspot AS E, OPENJSON(@vAddData)        
+   WITH(        
+    iMinimumNumberOfHotspotForTaskToBeCorrect INT,        
+    iElementHotspotMarkerId INT        
+   ) EJson        
+   WHERE E.iElementHotspotId = @iElementHotspotId  
+   DELETE FROM t_CMS_Element_Hotspot_Value WHERE iElementHotspotId = @iElementHotspotId      
+   INSERT INTO t_CMS_Element_Hotspot_Value(      
+    iElementHotspotId,        
+    iDisplayOrder,        
+    cHotspotType,        
+    vXCoordinates,        
+    vYCoordinates,        
+    dCorrectPoint,        
+    dWrongPoint        
+   )                      
+   SELECT          
+    @iElementHotspotId,        
+    ISNULL(EJson.iDisplayOrder, ''),        
+    ISNULL(EJson.cHotspotType, ''),        
+    ISNULL(EJson.vXCoordinates, ''),        
+    ISNULL(EJson.vYCoordinates, ''),        
+    ISNULL(EJson.dCorrectPoint,''),        
+    ISNULL(EJson.dWrongPoint,'')        
+   FROM OPENJSON(@vAddData, '$.t_CMS_Element_Hotspot_Value')        
+   WITH (      
+    iDisplayOrder INT,        
+    cHotspotType NVARCHAR(50),        
+    vXCoordinates NVARCHAR(2000),        
+    vYCoordinates NVARCHAR(2000),        
+    dCorrectPoint NVARCHAR(20),        
+    dWrongPoint NVARCHAR(20)       
+   ) EJson        
+      
+ --  DECLARE @iElementHotspotValueId INT        
+ --  DECLARE @cHotspotType NVARCHAR(50)        
+ --  DECLARE @vXCoordinates NVARCHAR(2000)        
+ --  DECLARE @vYCoordinates NVARCHAR(2000)        
+ --  DECLARE @dCorrectPoint NVARCHAR(20)        
+ --  DECLARE @dWrongPoint NVARCHAR(20)        
+ --  DECLARE @iDisplayOrder INT        
+ --  DECLARE VALUE_CURSOR CURSOR FOR SELECT * FROM OPENJSON(@vAddData, '$.t_CMS_Element_Hotspot_Value')        
+ --  WITH(        
+ --   iElementHotspotValueId INT,        
+ --   cHotspotType NVARCHAR(50),        
+ --   vXCoordinates NVARCHAR(2000),        
+ --   vYCoordinates NVARCHAR(2000),        
+ --   dCorrectPoint NVARCHAR(20),        
+ --   dWrongPoint NVARCHAR(20),        
+ --   iDisplayOrder INT        
+ --  )           
+ --  OPEN VALUE_CURSOR        
+ --  FETCH NEXT FROM VALUE_CURSOR INTO @iElementHotspotValueId, @cHotspotType, @vXCoordinates, @vYCoordinates, @dCorrectPoint, @dWrongPoint, @iDisplayOrder        
+ --  WHILE(@@FETCH_STATUS<>-1)      
+ --BEGIN      
+ -- UPDATE t_CMS_Element_Hotspot_Value         
+ -- SET cHotspotType = @cHotspotType,        
+ -- vXCoordinates = @vXCoordinates,        
+ -- vYCoordinates = @vYCoordinates,        
+ -- dCorrectPoint = @dCorrectPoint,        
+ -- dWrongPoint = @dWrongPoint,        
+ -- iDisplayOrder = @iDisplayOrder        
+ -- WHERE iElementHotspotId = @iElementHotspotId AND iElementHotspotValueId = @iElementHotspotValueId        
+ -- FETCH NEXT FROM VALUE_CURSOR INTO @iElementHotspotValueId, @cHotspotType, @vXCoordinates, @vYCoordinates, @dCorrectPoint, @dWrongPoint, @iDisplayOrder        
+ --END      
+ --CLOSE VALUE_CURSOR;           
+ --DEALLOCATE VALUE_CURSOR;       
+ END         
+         
+ /* RETURN */        
+ SELECT      
+ (              
+  SELECT              
+   EH.iElementHotspotId,              
+   EH.iContainerId,              
+   EH.iMinimumNumberOfHotspotForTaskToBeCorrect,              
+   EH.iElementOrder,              
+   EH.dNotAnsweredPoint,              
+   ISNULL((              
+    SELECT              
+     EHM.iElementHotspotMarkerId,              
+     EHM.vMarkerDimension,              
+     EHM.vMarkerImageName              
+    FROM t_CMS_Element_Hotspot_Marker EHM              
+    INNER JOIN  t_CMS_Element_Hotspot EHT ON EHT.iElementHotspotMarkerId = EHM.iElementHotspotMarkerId              
+    WHERE EH.iElementHotspotMarkerId = EHM.iElementHotspotMarkerId              
+    FOR JSON PATH, INCLUDE_NULL_VALUES              
+   ), '[]')[t_CMS_Element_Hotspot_Marker],              
+   ISNULL((              
+    SELECT              
+     EHV.iElementHotspotValueId,              
+     EHV.cHotspotType,              
+     EHV.vXCoordinates,              
+     EHV.vYCoordinates,              
+     EHV.iDisplayOrder,              
+     EHV.iElementLinkId,              
+     EHV.vLinkedToType,              
+     EHV.vTarget,              
+     EHV.dCorrectPoint,              
+     EHV.dWrongPoint              
+    FROM t_CMS_Element_Hotspot_Value EHV              
+    INNER JOIN t_CMS_Element_Hotspot EHTemp ON EHTemp.iElementHotspotId = EHV.iElementHotspotId              
+    WHERE EHV.iElementHotspotId = Eh.iElementHotspotId              
+    ORDER BY EHV.iDisplayOrder ASC              
+    FOR JSON PATH, INCLUDE_NULL_VALUES              
+   ), '[]')[t_CMS_Element_Hotspot_Value]              
+  FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER              
+ )              
+ AS 'JSONRESULT'              
+ FROM t_CMS_Element_Hotspot EH               
+ WHERE EH.iContainerId = @iContainerId AND EH.iElementOrder = @iElementOrder  AND EH.iElementHotspotId = @iElementHotspotId           
+END 
+
+
+ALTER procedure Proc_Fusion_Editor_TaskConversion_NewToOld_CMSTextArea_AddData      
+(      
+ @iMainClientId INT,        
+ @uUserId UNIQUEIDENTIFIER,        
+ @vAddData NVARCHAR(MAX)       
+)      
+AS      
+/********************************************************************************            
+ Created By: Prajwal            
+ Creation Date: 11/08/2020            
+ Description: Saves the TextArea data          
+ Tables Used: t_CMS_Element, t_CMS_Element_TextArea      
+            
+ Modified By:            
+ Modifiaction Date:            
+ Description:            
+********************************************************************************/        
+BEGIN      
+ DECLARE @iElementId INT      
+ SELECT @iElementId = iElementId FROM OPENJSON(@vAddData) WITH (iElementId INT)      
+ IF NOT EXISTS (SELECT * FROM t_CMS_Element WHERE iElementId = @iElementId)       
+ BEGIN      
+  INSERT INTO t_CMS_Element(      
+   iElementTypeId,      
+   iMainClientId,      
+   iFolderID,      
+   cIsDeleted,      
+   cIsDisplayedInElementTree,      
+   dtCreatedOn,      
+   dtModifiedOn,      
+   cIsSecure,      
+   uUserId,      
+   vElementSkinName,      
+   cIsQuestionPlaceholder,      
+   cHasTextOnTop,      
+   vHeaderText,      
+   vElementJson,      
+   cIsFusionVersion      
+  )      
+  SELECT      
+   26,      
+   @iMainClientId,      
+   -1,      
+   'N',      
+   'N',      
+   GETDATE(),      
+   GETDATE(),      
+   'Y',      
+   @uUserId,      
+   NULL,      
+   'N',      
+   ISNULL(cHasTextOnTop, 'N'),        
+   vHeaderText,      
+   NULL,      
+   'N'      
+  FROM OPENJSON(@vAddData)      
+  WITH(      
+   cHasTextOnTop CHAR(1),        
+   vHeaderText NVARCHAR(MAX),
+   vElementJson NVARCHAR(MAX) AS JSON      
+  ) EJson      
+  SET @iElementId = @@IDENTITY      
+  INSERT INTO t_CMS_Element_TextArea(      
+   iElementId,      
+   iNumberOfRows,      
+   iWidthInPixel,      
+   cIsDictation,      
+   tDictationValue,      
+   cIsAutoEvaluation,      
+   cIsLSA,      
+   cISBlueAlgorithm,       
+   iPointType,      
+   iNgrams,      
+   iPointValue,      
+   iCorpusId,      
+   cIsMultiLine,      
+   cIsICR      
+  )      
+  SELECT       
+   @iElementId as iElementId, *      
+  FROM OPENJSON(@vAddData, '$.t_CMS_Element_TextArea')      
+  WITH(      
+   iNumberOfRows NVARCHAR(1000),      
+   iWidthInPixel INT,      
+   cIsDictation CHAR(1),      
+   tDictationValue NVARCHAR(MAX),      
+   cIsAutoEvaluation CHAR(1),      
+   cIsLSA CHAR(1),      
+   cISBlueAlgorithm CHAR(1),      
+   iPointType INT,      
+   iNgrams INT,      
+   iPointValue INT,      
+   iCorpusId INT,      
+   cIsMultiLine CHAR(1),      
+   cIsICR CHAR(1)      
+  )          
+ END      
+ ELSE      
+ BEGIN      
+  UPDATE CE SET 
+   CE.uUserId = @uUserId,        
+   CE.vElementSkinName = ISNULL(EJson.vElementSkinName, NULL),      
+   CE.iFolderID = ISNULL(EJson.iFolderID, NULL),      
+   CE.dtModifiedOn = GETDATE(),      
+   CE.cHasTextOnTop = ISNULL(EJson.cHasTextOnTop, NULL),      
+   CE.vHeaderText = ISNULL(EJson.vHeaderText, NULL),      
+   CE.vElementJson = ISNULL(EJson.vElementJson, NULL)        
+  FROM t_CMS_Element AS CE, OPENJSON(@vAddData)      
+  WITH(      
+   iFolderID NVARCHAR(255) '$.iFolderID',      
+   cIsDeleted CHAR(1) '$.cIsDeleted',      
+   cIsDisplayedInElementTree INT '$.cIsDisplayedInElementTree',         
+   vElementSkinName NCHAR(3) '$.vElementSkinName',      
+   cIsQuestionPlaceHolder INT '$.cIsQuestionPlaceHolder',      
+   cHasTextOnTop CHAR(1) '$.cHasTextOnTop',      
+   vHeaderText NVARCHAR(MAX) '$.vHeaderText',      
+   vElementJson NVARCHAR(MAX) '$.vElementJson' AS JSON     
+  ) EJson      
+  WHERE CE.iElementId = @iElementId
+  UPDATE E SET      
+   E.iNumberOfRows = EJson.iNumberOfRows,      
+   E.iWidthInPixel = EJson.iWidthInPixel,      
+   E.cIsDictation = EJson.cIsDictation,      
+   E.tDictationValue = EJson.tDictationValue,      
+   E.cIsAutoEvaluation = EJson.cIsAutoEvaluation,      
+   E.cIsLSA = EJson.cIsLSA,      
+   E.cISBlueAlgorithm = EJson.cISBlueAlgorithm,       
+   E.iPointType = EJson.iPointType,      
+   E.iNgrams = EJson.iNgrams,      
+   E.iPointValue = EJson.iPointValue,      
+   E.iCorpusId = EJson.iCorpusId,      
+   E.cIsMultiLine = EJson.cIsMultiLine,      
+   E.cIsICR = EJson.cIsICR      
+  FROM t_CMS_Element_TextArea AS E ,OPENJSON(@vAddData, '$.t_CMS_Element_TextArea')      
+  WITH(      
+   iNumberOfRows NVARCHAR(1000),      
+   iWidthInPixel INT,     cIsDictation CHAR(1),      
+   tDictationValue NVARCHAR(MAX),      
+   cIsAutoEvaluation CHAR(1),      
+   cIsLSA CHAR(1),      
+   cISBlueAlgorithm CHAR(1),      
+   iPointType INT,      
+   iNgrams INT,      
+   iPointValue INT,      
+   iCorpusId INT,      
+   cIsMultiLine CHAR(1),      
+   cIsICR CHAR(1)      
+  ) EJson      
+  WHERE E.iElementId = @iElementId      
+ END      
+      
+ /* RETURN */                
+ SELECT        
+ (                  
+  SELECT                   
+  E.iElementId,                  
+  E.iElementTypeId,                  
+  ET.vElementTypeName,                
+  E.iMainClientId,                  
+  E.iFolderID,                  
+  E.cIsDeleted,                  
+  E.cIsDisplayedInElementTree,                  
+  E.dtCreatedOn,                  
+  E.dtModifiedOn,                  
+  E.cIsSecure,                  
+  E.uUserId,                  
+  E.vElementSkinName,                  
+  E.cIsQuestionPlaceholder,                  
+  E.cHasTextOnTop,                  
+  E.vHeaderText,                  
+  E.vElementJson,      
+     ISNULL((            
+    SELECT *      
+    FROM t_CMS_Element_TextArea ET      
+    WHERE ET.iElementId = @iElementId          
+    FOR JSON PATH, INCLUDE_NULL_VALUES            
+   ), '[]')[t_CMS_Element_SubElement]            
+  FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER                  
+ )                  
+ AS JSONRESULT FROM t_CMS_Element E                 
+ INNER JOIN t_CMS_ElementType ET ON ET.iElementTypeId = E.iElementTypeId                
+ WHERE E.iElementId = @iElementId
+END
+
+
+CREATE procedure Proc_Fusion_Editor_TaskConversion_OldToNew_CMSPageContent_AdditionalInformation_AddData            
+(      
+ @vAddData NVARCHAR(MAX)      
+)                        
+AS                                            
+/**************************************************                        
+Create By: KB                        
+Create date: 16/10/19                       
+Description: Procedure to Save AdditionalInformation                  
+Tables: t_CMS_Page_Data, t_TestDrive_Task_AdditionalInformation        
+        
+Modified By:             
+Modification Date:             
+Modification Description:            
+****************************************************/                        
+BEGIN      
+ DECLARE @iPageId INT            
+ DECLARE @iLanguageId INT            
+ DECLARE @iElemenTextId INT                        
+ DECLARE @iPageDataId INT                        
+ DECLARE @cIsTaskHint CHAR(1)                        
+ SELECT @iPageId = iPageId, @iElemenTextId = iElemenTextId, @cIsTaskHint = cIsTaskHint, @iLanguageId = iLanguageId FROM OPENJSON(@vAddData) WITH (iPageId INT, iElemenTextId INT, cIsTaskHint CHAR(1), iLanguageId INT)              
+ SELECT @iPageDataId = iPageDataId FROM t_CMS_Page_Data WHERE iPageId = @iPageId AND iLanguageId = @iLanguageId  
+ IF NOT EXISTS(SELECT * FROM t_TestDrive_Task_AdditionalInformation WHERE iPageDataId = @iPageDataId AND cIsTaskHint = @cIsTaskHint)  
+ BEGIN  
+ INSERT INTO t_TestDrive_Task_AdditionalInformation ( iPageDataId, iAdditionInformationElementId, cIsTaskHint ) VALUES (@iPageDataId, @iElemenTextId, @cIsTaskHint)  
+ END  
+ ELSE  
+ BEGIN  
+ UPDATE t_TestDrive_Task_AdditionalInformation SET  
+ iAdditionInformationElementId = @iElemenTextId  
+ WHERE iPageDataId = @iPageDataId AND cIsTaskHint = @cIsTaskHint  
+ END  
+  
+  
+ --IF NOT EXISTS(SELECT * FROM t_TestDrive_Task_AdditionalInformation WHERE iPageDataId = @iPageDataId AND iAdditionInformationElementId = @iElemenTextId)  
+ --BEGIN  
+ --INSERT INTO t_TestDrive_Task_AdditionalInformation ( iPageDataId, iAdditionInformationElementId, cIsTaskHint ) VALUES (@iPageDataId, @iElemenTextId, @cIsTaskHint)  
+ --END  
+      
+ /*Return*/      
+ SELECT       
+ (      
+  SELECT                  
+   iPageDataId,                    
+   iAdditionInformationElementId,                    
+   cIsTaskHint                   
+  FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER      
+ )      
+ AS 'JSONRESULT '      
+ FROM t_TestDrive_Task_AdditionalInformation       
+ WHERE iPageDataId = @iPageDataId AND iAdditionInformationElementId = @iElemenTextId                    
+END 
+
+
+
+sp_helptext Proc_Fusion_Editor_TaskConversion_OldToNew_CMSFormula_GetData
+
+
+CREATE procedure Proc_Fusion_Editor_TaskConversion_OldToNew_CMSFormula_GetData    
+(    
+ @iMainClientId INT,    
+ @iElementId INT    
+)    
+AS    
+/********************************************************************************    
+Created By: Aviral    
+Creation Date: 11/02/2020    
+Description: Gets the formula data.    
+Tables Used: t_CMS_Element, t_CMS_ElementType, t_CMS_Element_Text_Formula    
+    
+Modified By:    
+Modifiaction Date:    
+Description:    
+********************************************************************************/    
+BEGIN    
+ SELECT    
+ (    
+  SELECT    
+   E.iElementId,    
+   E.iElementTypeId,    
+   ET.vElementTypeName,    
+   E.iMainClientId,    
+   E.iFolderID,    
+   E.cIsDeleted,    
+   E.cIsDisplayedInElementTree,    
+   E.dtCreatedOn,    
+   E.dtModifiedOn,    
+   E.cIsSecure,    
+   E.uUserId,    
+   E.vElementSkinName,    
+   E.cIsQuestionPlaceholder,    
+   E.cHasTextOnTop,    
+   E.vHeaderText,    
+   ISNULL((    
+    SELECT    
+     F.cIsImageGenerated,    
+     F.iElementId,    
+     F.iElementTextFormulaId,    
+     F.iFontSize,    
+     F.iFormulaFileVersion,    
+     F.iHeight,    
+     F.iWidth,    
+     F.vBaseFont,    
+     F.vFormulaImageName,    
+     F.vFormulaMathHTML,    
+     F.vFormulaMathML,    
+     F.vFormulaReferenceHTML,    
+     F.vZoomProperties    
+    FROM t_CMS_Element_Text_Formula F    
+    INNER JOIN t_CMS_Element CE ON CE.iElementId = F.iElementId    
+    WHERE E.iElementId = F.iElementId    
+    FOR JSON PATH, INCLUDE_NULL_VALUES    
+   ), '[]')[t_CMS_Element_Text_Formula]    
+  FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER    
+ )    
+ AS 'JSONRESULT'    
+ FROM t_CMS_Element E    
+ INNER JOIN t_CMS_ElementType ET ON ET.iElementTypeId = E.iElementTypeId    
+ WHERE E.iMainClientId = @iMainClientId AND E.iElementId = @iElementId    
+END
+
+
+
+CREATE procedure Proc_Fusion_Editor_TaskConversion_NewToOld_CMSPageContent_AdditionalInformation_DeleteData      
+(      
+@vDeleteData NVARCHAR(MAX)      
+)      
+/**************************************************      
+Create By: KB                       
+Create date: 16/10/19                       
+Description: Deletes the TaskHint/Additional Information detail for the Page. Also deletes the respective text Element from the t_CMS_Element      
+Tables: t_CMS_Page_Data, t_TestDrive_Task_AdditionalInformation, t_CMS_Element      
+        
+Modified By:             
+Modification Date:             
+Modification Description:            
+****************************************************/      
+AS      
+BEGIN      
+DECLARE @iPageId INT      
+DECLARE @iLanguageId INT      
+DECLARE @iElementTextId INT      
+DECLARE @cIsTaskHint CHAR(1)      
+DECLARE @iPageDataId INT      
+SELECT @iPageId = iPageId, @cIsTaskHint = cIsTaskHint, @iLanguageId = iLanguageId FROM OPENJSON(@vDeleteData) WITH (iPageId INT, cIsTaskHint CHAR(1), iLanguageId INT)      
+SELECT @iPageDataId = iPageDataId FROM t_CMS_Page_Data WHERE iPageId = @iPageId AND iLanguageId = @iLanguageId      
+IF @cIsTaskHint IS NULL OR @cIsTaskHint = 'N'      
+BEGIN      
+IF EXISTS (SELECT * FROM t_TestDrive_Task_AdditionalInformation WHERE iPageDataId = @iPageDataId AND cIsTaskHint IS NULL OR cIsTaskHint = 'N')      
+BEGIN      
+SELECT @iElementTextId = iAdditionInformationElementId FROM t_TestDrive_Task_AdditionalInformation WHERE iPageDataId = @iPageDataId AND cIsTaskHint IS NULL OR cIsTaskHint = 'N'      
+DELETE FROM t_TestDrive_Task_AdditionalInformation WHERE iPageDataId = @iPageDataId AND cIsTaskHint IS NULL OR cIsTaskHint = 'N'      
+DELETE FROM t_CMS_Element WHERE iElementId = @iElementTextId      
+END      
+END      
+ELSE      
+BEGIN      
+IF EXISTS (SELECT * FROM t_TestDrive_Task_AdditionalInformation WHERE iPageDataId = @iPageDataId AND cIsTaskHint = 'Y')      
+BEGIN      
+SELECT @iElementTextId = iAdditionInformationElementId FROM t_TestDrive_Task_AdditionalInformation WHERE iPageDataId = @iPageDataId AND cIsTaskHint = 'Y'      
+DELETE FROM t_TestDrive_Task_AdditionalInformation WHERE iPageDataId = @iPageDataId AND cIsTaskHint = 'Y'      
+DELETE FROM t_CMS_Element WHERE iElementId = @iElementTextId      
+END      
+END      
+      
+/* Return */      
+SELECT      
+(      
+SELECT      
+@iPageId      
+AS iPageId FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER      
+) AS JSONRESULT      
+END 
+
+ALTER procedure Proc_Fusion_Editor_TaskConversion_NewToOld_CMSElement_GetElementsToBeDeleted        
+(        
+   @iContainerId INT        
+)        
+AS        
+/********************************************************************************************        
+Created By: KB        
+Create Date: 27/08/2020        
+Description: Returns the elements linked to the given container id.        
+Tables Used: t_CMS_Container_Element        
+        
+Modified By:        
+Modification Date:        
+Description:        
+********************************************************************************************/        
+BEGIN        
+ SELECT        
+ (        
+  SELECT        
+   CE.iContainerElementId,        
+   CE.iContainerId,        
+   CE.iDocumentOrder,        
+   CE.iElementId,
+   ET.iElementTypeId,
+   ET.vElementTypeName,        
+   CE.iOrder        
+  FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER        
+ )        
+ AS 'JSONRESULT'        
+ FROM t_CMS_Container_Element CE
+ JOIN t_CMS_Element E ON E.iElementId = CE.iElementId
+ JOIN t_CMS_ElementType ET ON E.iElementTypeId = ET.iElementTypeId         
+ WHERE CE.iContainerId = @iContainerId        
+END 
+
+ALTER procedure Proc_Fusion_Editor_TaskConversion_NewToOld_CMSFormula_DeleteData            
+(            
+@iMainClientId INT,    
+@iElementId INT    
+)            
+AS            
+BEGIN    
+      
+/***************************************************    
+Created By: KB    
+Creation Date: 31/08/2020    
+****************************************************/      
+UPDATE t_CMS_Element SET    
+cIsDeleted = 'Y'    
+where iElementId = @iElementId AND iMainClientId = @iMainClientId    
+Delete from t_CMS_Element_Text_Formula where iElementId = @iElementId  
+      
+            
+/**Return**/    
+SELECT                        
+(                        
+SELECT                        
+@iElementId    
+) AS 'JSONRESULT'    
+END
+
+CREATE procedure Proc_Fusion_Editor_TaskConversion_NewToOld_CMSText_DeleteData            
+(            
+@iMainClientId INT,    
+@iElementId INT    
+)            
+AS            
+BEGIN    
+      
+/***************************************************    
+Created By: KB    
+Creation Date: 31/08/2020    
+****************************************************/    
+UPDATE t_CMS_Element SET    
+cIsDeleted = 'Y'    
+where iElementId = @iElementId AND iMainClientId = @iMainClientId    
+Delete from t_CMS_Element_Text where iElementId = @iElementId  
+      
+            
+/**Return**/    
+SELECT                        
+(                        
+SELECT                        
+@iElementId    
+) AS 'JSONRESULT'    
+END
+
+  
+CREATE procedure Proc_Fusion_Editor_TaskConversion_NewToOld_CMSAudio_DeleteData            
+(            
+@iMainClientId INT,    
+@iElementId INT    
+)            
+AS            
+BEGIN    
+      
+/***************************************************    
+Created By: KB    
+Creation Date: 31/08/2020    
+****************************************************/    
+UPDATE t_CMS_Element SET    
+cIsDeleted = 'Y'    
+where iElementId = @iElementId AND iMainClientId = @iMainClientId     
+      
+            
+/**Return**/    
+SELECT                        
+(                        
+SELECT                        
+@iElementId    
+) AS 'JSONRESULT'    
+END
+
+CREATE procedure Proc_Fusion_Editor_TaskConversion_OldToNew_CMSPunctuations_GetData        
+(        
+ @iMainClientId INT,        
+ @iElementId INT        
+)        
+AS        
+/********************************************************************************        
+Created By: Prajwal        
+Creation Date: 18/09/2020        
+Description: Gets the punctuation data        
+Tables Used: t_CMS_Element, t_CMS_ElementType, t_CMS_Element_punctuation, t_CMS_Element_Punctuation_AlternateSolution        
+        
+Modified By:        
+Modifiaction Date:        
+Description:        
+********************************************************************************/        
+BEGIN        
+ SELECT        
+ (        
+  SELECT        
+   E.iElementId,        
+   E.iElementTypeId,        
+   ET.vElementTypeName,        
+   E.iMainClientId,        
+   E.iFolderID,        
+   E.cIsDeleted,        
+   E.cIsDisplayedInElementTree,        
+   E.dtCreatedOn,        
+   E.dtModifiedOn,        
+   E.cIsSecure,        
+   E.uUserId,        
+   E.vElementSkinName,        
+   E.cIsQuestionPlaceholder,        
+   E.cHasTextOnTop,        
+   E.vHeaderText,        
+   ISNULL((        
+    SELECT *       
+    FROM t_cms_element_punctuation P      
+    WHERE P.iElementId = @iElementId        
+    FOR JSON PATH, INCLUDE_NULL_VALUES        
+   ), '[]')[t_cms_element_punctuation],  
+   ISNULL((        
+    SELECT   
+  PA.iElementPunctuationAlternateSolutionId,  
+  PA.iElementPunctuationId,  
+  PA.vElementPunctuationsAlternateSolution     
+    FROM t_CMS_Element_Punctuation_AlternateSolution PA       
+    INNER JOIN t_cms_element_punctuation P ON P.iElementPunctuationId = PA.iElementPunctuationId  
+ WHERE P.iElementId = @iElementId        
+    FOR JSON PATH, INCLUDE_NULL_VALUES        
+   ), '[]')[t_CMS_Element_Punctuation_AlternateSolution]         
+  FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER        
+ )        
+ AS 'JSONRESULT'        
+ FROM t_CMS_Element E        
+ INNER JOIN t_CMS_ElementType ET ON ET.iElementTypeId = E.iElementTypeId        
+ WHERE E.iMainClientId = @iMainClientId AND E.iElementId = @iElementId        
+END 
+
+
+CREATE procedure Proc_Fusion_Editor_TaskConversion_OldToNew_CMSColorFillInstance_GetData        
+(        
+ @iMainClientId INT,        
+ @iElementId INT        
+)        
+AS        
+/********************************************************************************        
+Created By: Prajwal        
+Creation Date: 17/09/2020        
+Description: Gets the color fill instance data.        
+Tables Used: t_CMS_Element, t_CMS_ElementType, t_CMS_Element_ColorFillInstance, t_CMS_Element_ColorFillInstance_Value  
+        
+ Modified By: Amit Kumar            
+  Modified Date: 17.08.2020    
+  Description: Added new column "uModifiedByUserId"        
+********************************************************************************/        
+BEGIN        
+ SELECT        
+ (        
+  SELECT        
+   E.iElementId,        
+   E.iElementTypeId,        
+   ET.vElementTypeName,        
+   E.iMainClientId,        
+   E.iFolderID,        
+   E.cIsDeleted,        
+   E.cIsDisplayedInElementTree,        
+   E.dtCreatedOn,        
+   E.dtModifiedOn,        
+   E.cIsSecure,        
+   E.uUserId,    
+   E.uModifiedByUserId,        
+   E.vElementSkinName,        
+   E.cIsQuestionPlaceholder,        
+   E.cHasTextOnTop,        
+   E.vHeaderText,     
+   ISNULL((        
+    SELECT *      
+    FROM t_CMS_Element_ColorFillInstance CI   
+    --INNER JOIN  t_CMS_Element CE ON CI.iElementId = CE.iElementId        
+    WHERE CI.iElementId = @iElementId  
+    FOR JSON PATH, INCLUDE_NULL_VALUES        
+   ), '[]')[t_CMS_Element_ColorFillInstance],    
+   ISNULL((        
+    SELECT   
+ CIV.iColorFillInstanceValueId,  
+ CIV.iColorFillInstanceId,  
+ CIV.vColorCode,  
+ CIV.vClientElementId  
+    FROM t_CMS_Element_ColorFillInstance_Value CIV        
+    INNER JOIN t_CMS_Element_ColorFillInstance CI ON CI.iColorFillInstanceId = CIV.iColorFillInstanceId        
+    WHERE CI.iElementId = @iElementId   
+    FOR JSON PATH, INCLUDE_NULL_VALUES        
+   ), '[]')[t_CMS_Element_ColorFillInstance_Value]        
+  FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER    
+ )        
+ AS 'JSONRESULT'        
+ FROM t_CMS_Element E        
+ INNER JOIN t_CMS_ElementType ET ON ET.iElementTypeId = E.iElementTypeId        
+ WHERE E.iMainClientId = @iMainClientId AND E.iElementId = @iElementId        
+END
+
+ALTER PROCEDURE [dbo].[Proc_Fusion_Editor_TaskConversion_NewToOld_CMSColorFillInstance_AddData]              
+(                  
+  @iMainClientId INT,              
+  @uUserId UNIQUEIDENTIFIER,                  
+  @vAddData NVARCHAR(MAX)                         
+)                  
+AS                  
+/********************************************************************************                        
+ Created By: Prajwal                        
+ Creation Date: 09/09/2020                        
+ Description: Saves the ColorFill data                      
+ Tables Used: t_CMS_Element, t_CMS_Element_ColorFillInstance, t_CMS_Element_ColorFillInstance_Values                  
+                        
+ Modified By:                        
+ Modifiaction Date:                        
+ Description:                        
+********************************************************************************/                    
+BEGIN          
+ DECLARE @iElementId INT          
+ DECLARE @iColorFillInstanceId INT                        
+ SELECT @iElementId = iElementId FROM OPENJSON(@vAddData) WITH (iElementId INT)                        
+ IF NOT EXISTS (SELECT * FROM t_CMS_Element WHERE iElementId = @iElementId)          
+  BEGIN              
+   INSERT INTO t_CMS_Element(          
+   iElementTypeId,                      
+   iMainClientId,                      
+   iFolderID,                      
+   cIsDeleted,                      
+   cIsDisplayedInElementTree,                      
+   dtCreatedOn,                      
+   dtModifiedOn,                      
+   cIsSecure,                      
+   uUserId,                  
+   uModifiedByUserId,                      
+   vElementSkinName,                      
+   cIsQuestionPlaceholder,                      
+   cHasTextOnTop,                      
+   vHeaderText,                      
+   vElementJson,                      
+   cIsFusionVersion                      
+  )                      
+  SELECT                      
+   43,                      
+   @iMainClientId,                      
+   ISNULL(iFolderID, -1),                      
+   'N',                      
+   ISNULL(cIsDisplayedInElementTree, 'N'),                      
+   GETDATE(),                      
+   GETDATE(),                      
+   'Y',                      
+   @uUserId,                  
+   @uUserId,                      
+   NULL,                      
+   'N',                      
+   ISNULL(cHasTextOnTop, 'N'),                        
+   vHeaderText,                      
+   NULL,                      
+   'N'                      
+  FROM OPENJSON(@vAddData)                      
+  WITH(                      
+   cHasTextOnTop CHAR(1),                        
+   vHeaderText NVARCHAR(MAX),                
+   cIsDisplayedInElementTree CHAR(1),              
+   iFolderID INT                    
+  ) EJson                      
+   SET @iElementId = @@IDENTITY                       
+   INSERT INTO t_CMS_Element_ColorFillInstance(          
+    iElementId,                  
+    iColorFillElementId,                  
+    vColorFillJson,                         
+    dCorrectPoint,                  
+    dWrongPoint,          
+    dNotAnsweredPoint                  
+   )                                
+   SELECT                    
+    @iElementId,                  
+    EJson.iColorFillElementId,          
+ EJson.vColorFillJson,          
+ EJson.dCorrectPoint,          
+ EJson.dWrongPoint,          
+ EJson.dNotAnsweredPoint            
+   FROM OPENJSON(@vAddData, '$.t_CMS_Element_ColorFillInstance')                  
+   WITH (                   
+    iColorFillElementId INT,          
+ vColorFillJson NVARCHAR(MAX),          
+ dCorrectPoint DECIMAL(5,2),          
+ dWrongPoint DECIMAL(5,2),          
+ dNotAnsweredPoint DECIMAL(5,2)               
+   ) EJson          
+   SET @iColorFillInstanceId = @@IDENTITY          
+   INSERT INTO t_CMS_Element_ColorFillInstance_Value(          
+    iColorFillInstanceId,                  
+ vColorCode,          
+ vClientElementId          
+   )                                
+   SELECT                   
+    @iColorFillInstanceId,                  
+    EJson.vColorCode,          
+ EJson.vClientElementId          
+   FROM OPENJSON(@vAddData, '$.t_CMS_Element_ColorFillInstance_Value')                 
+   WITH (                   
+    vColorCode NVARCHAR(50),          
+ vClientElementId NVARCHAR(50)            
+   ) EJson                       
+  END                   
+ ELSE                  
+  BEGIN          
+   SELECT @iColorFillInstanceId = iColorFillInstanceId FROM t_CMS_Element_ColorFillInstance where iElementId = @iElementId           
+   UPDATE CE SET          
+   CE.uUserId = @uUserId,                            
+   CE.dtModifiedOn = GETDATE(),                           
+   CE.cHasTextOnTop = ISNULL(EJson.cHasTextOnTop, NULL),                      
+   CE.vHeaderText = ISNULL(EJson.vHeaderText, NULL)          
+  FROM t_CMS_Element AS CE, OPENJSON(@vAddData)                      
+  WITH(                               
+   cIsDeleted CHAR(1),                          
+   cHasTextOnTop CHAR(1),                      
+   vHeaderText NVARCHAR(MAX)                    
+  ) EJson                      
+  WHERE CE.iElementId = @iElementId
+   UPDATE E SET          
+   E.vColorFillJson = EJson.vColorFillJson,                  
+   E.dCorrectPoint = EJson.dCorrectPoint,          
+   E.dWrongPoint = EJson.dWrongPoint,          
+   E.dNotAnsweredPoint = EJson.dNotAnsweredPoint                  
+   FROM t_CMS_Element_ColorFillInstance AS E, OPENJSON(@vAddData, '$.t_CMS_Element_ColorFillInstance')                  
+   WITH(                  
+    vColorFillJson NVARCHAR(MAX),          
+ dCorrectPoint DECIMAL(5,2),          
+ dWrongPoint DECIMAL(5,2),          
+ dNotAnsweredPoint DECIMAL(5,2)                   
+   ) EJson                  
+   WHERE E.iElementId = @iElementId            
+   DELETE FROM t_CMS_Element_ColorFillInstance_Value WHERE iColorFillInstanceId = @iColorFillInstanceId                
+   INSERT INTO t_CMS_Element_ColorFillInstance_Value(          
+     iColorFillInstanceId,                  
+  vColorCode,          
+  vClientElementId                 
+   )                                
+   SELECT                    
+    @iColorFillInstanceId,                  
+    EJson.vColorCode,          
+ EJson.vClientElementId                  
+   FROM OPENJSON(@vAddData, '$.t_CMS_Element_ColorFillInstance_Value')                  
+   WITH (                
+    vColorCode NVARCHAR(50),          
+ vClientElementId NVARCHAR(50)                 
+   ) EJson                         
+ END                   
+                   
+ /* RETURN */                  
+ SELECT                
+ (                        
+  SELECT                        
+    E.iElementId,                                  
+ E.iElementTypeId,                                  
+ ET.vElementTypeName,                                
+ E.iMainClientId,                                  
+ E.iFolderID,                                  
+ E.cIsDeleted,                                  
+ E.cIsDisplayedInElementTree,                                  
+ E.dtCreatedOn,                                  
+ E.dtModifiedOn,                                  
+ E.cIsSecure,                                  
+ E.uUserId,                  
+ E.uModifiedByUserId,                                  
+ E.vElementSkinName,                                  
+ E.cIsQuestionPlaceholder,                                  
+ E.cHasTextOnTop,                                  
+ E.vHeaderText,                                  
+ E.vElementJson,         
+   ISNULL((                
+    SELECT         
+ CI.*            
+    FROM t_CMS_Element_ColorFillInstance CF        
+ INNER JOIN t_CMS_Element_ColorFill  CI ON CI.iElementId = CF.iColorFillElementId           
+    WHERE CF.iElementId = @iElementId          
+    FOR JSON PATH, INCLUDE_NULL_VALUES                
+   ), '[]')[t_CMS_Element_ColorFill],                   
+   ISNULL((                  
+    SELECT *        
+    FROM t_CMS_Element_ColorFillInstance CI          
+    WHERE CI.iElementId = @iElementId            
+    FOR JSON PATH, INCLUDE_NULL_VALUES                  
+    ), '[]')[t_CMS_Element_ColorFillInstance],                         
+    ISNULL((                  
+    SELECT             
+  CIV.iColorFillInstanceValueId,            
+  CIV.iColorFillInstanceId,            
+  CIV.vColorCode,            
+  CIV.vClientElementId            
+    FROM t_CMS_Element_ColorFillInstance_Value CIV                  
+    INNER JOIN t_CMS_Element_ColorFillInstance CI ON CI.iColorFillInstanceId = CIV.iColorFillInstanceId                  
+    WHERE CI.iElementId = @iElementId                                     
+    FOR JSON PATH, INCLUDE_NULL_VALUES                        
+   ), '[]')[t_CMS_Element_ColorFillInstance_value]                        
+  FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER                        
+ )                        
+ AS JSONRESULT FROM t_CMS_Element E                                 
+ INNER JOIN t_CMS_ElementType ET ON ET.iElementTypeId = E.iElementTypeId                                
+ WHERE E.iElementId = @iElementId
+END
+
+ALTER PROCEDURE [dbo].[Proc_Fusion_Editor_TaskConversion_NewToOld_CMSPunctuations_AddData]            
+(                
+  @iMainClientId INT,            
+  @uUserId UNIQUEIDENTIFIER,                
+  @vAddData NVARCHAR(MAX)                       
+)                
+AS                
+/********************************************************************************                      
+ Created By: Prajwal                      
+ Creation Date: 20/09/2020                      
+ Description: Saves the punctuations data                    
+ Tables Used: t_CMS_Element, t_cms_element_punctuation, t_CMS_Element_Punctuation_AlternateSolution                
+                      
+ Modified By:                      
+ Modifiaction Date:                      
+ Description:                      
+********************************************************************************/                  
+BEGIN        
+ DECLARE @iElementId INT        
+ DECLARE @iElementPunctuationId INT                      
+ SELECT @iElementId = iElementId FROM OPENJSON(@vAddData) WITH (iElementId INT)                      
+ IF NOT EXISTS (SELECT * FROM t_CMS_Element WHERE iElementId = @iElementId)        
+  BEGIN            
+   INSERT INTO t_CMS_Element(      
+   iElementTypeId,                    
+   iMainClientId,                    
+   iFolderID,                    
+   cIsDeleted,                    
+   cIsDisplayedInElementTree,                    
+   dtCreatedOn,                    
+   dtModifiedOn,                    
+   cIsSecure,                    
+   uUserId,                
+   uModifiedByUserId,                    
+   vElementSkinName,                    
+   cIsQuestionPlaceholder,                    
+   cHasTextOnTop,                    
+   vHeaderText,                    
+   vElementJson,                    
+   cIsFusionVersion                    
+  )                    
+  SELECT              
+   36,                    
+   @iMainClientId,                    
+   -1,                    
+   'N',                    
+   'N',                    
+   GETDATE(),                    
+   GETDATE(),                    
+   'Y',                    
+   @uUserId,                
+   @uUserId,                    
+   NULL,                    
+   'N',                    
+   ISNULL(EJson.cHasTextOnTop, 'N'),                
+   EJson.vHeaderText,                     
+   NULL,                    
+   'N'    
+   FROM OPENJSON(@vAddData)              
+   WITH(              
+    cHasTextOnTop CHAR(1),                
+    vHeaderText NVARCHAR(MAX)      
+   ) EJson                  
+   SET @iElementId = @@IDENTITY                     
+   INSERT INTO t_cms_element_punctuation(      
+    iElementId,                
+    vSentence,                
+ cIsRandomDisplay,               
+    dCorrectPoint,                
+    dWrongPoint,      
+ dNotAnsweredPoint                
+   )                              
+   SELECT                  
+    @iElementId,                
+    EJson.vSentence,        
+ EJson.cIsRandomDisplay,        
+ EJson.dCorrectPoint,        
+ EJson.dWrongPoint,        
+ EJson.dNotAnsweredPoint          
+   FROM OPENJSON(@vAddData, '$.t_cms_element_punctuation')                
+   WITH (                 
+ vSentence NVARCHAR(MAX),      
+ cIsRandomDisplay CHAR(1),      
+ dCorrectPoint DECIMAL(5,2),        
+ dWrongPoint DECIMAL(5,2),        
+ dNotAnsweredPoint DECIMAL(5,2)             
+   ) EJson        
+   SET @iElementPunctuationId = @@IDENTITY        
+   INSERT INTO t_CMS_Element_Punctuation_AlternateSolution            
+   SELECT                  
+    @iElementPunctuationId,                
+    EJson.vElementPunctuationsAlternateSolution      
+   FROM OPENJSON(@vAddData, '$.t_CMS_Element_Punctuation_AlternateSolution')                
+   WITH (                 
+ vElementPunctuationsAlternateSolution NVARCHAR(MAX)          
+   ) EJson                 
+  END                 
+ ELSE                
+  BEGIN        
+   SELECT @iElementPunctuationId = iElementPunctuationId FROM t_cms_element_punctuation where iElementId = @iElementId         
+   UPDATE CE SET        
+   CE.uUserId = @uUserId,    
+   CE.cHasTextOnTop =  ISNULL(EJson.cHasTextOnTop, 'N'),    
+   CE.vHeaderText = ISNULL(EJson.vHeaderText, ''),                     
+   CE.dtModifiedOn = GETDATE()       
+  FROM t_CMS_Element AS CE, OPENJSON(@vAddData)                    
+  WITH(                             
+   cIsDeleted CHAR(1),    
+   cHasTextOnTop CHAR(1),                
+   vHeaderText NVARCHAR(MAX)             
+  ) EJson                    
+  WHERE CE.iElementId = @iElementId
+   UPDATE E SET        
+   E.vSentence = EJson.vSentence,        
+   E.cIsRandomDisplay = EJson.cIsRandomDisplay,             
+   E.dCorrectPoint = EJson.dCorrectPoint,        
+   E.dWrongPoint = EJson.dWrongPoint,        
+   E.dNotAnsweredPoint = EJson.dNotAnsweredPoint                
+   FROM t_cms_element_punctuation AS E, OPENJSON(@vAddData, '$.t_cms_element_punctuation')                
+   WITH(                
+    vSentence NVARCHAR(MAX),      
+ cIsRandomDisplay CHAR(1),        
+ dCorrectPoint DECIMAL(5,2),        
+ dWrongPoint DECIMAL(5,2),        
+ dNotAnsweredPoint DECIMAL(5,2)                 
+   ) EJson                
+   WHERE E.iElementId = @iElementId          
+   DELETE FROM t_CMS_Element_Punctuation_AlternateSolution WHERE iElementPunctuationId = @iElementPunctuationId              
+   INSERT INTO t_CMS_Element_Punctuation_AlternateSolution      
+   SELECT                  
+    @iElementPunctuationId,                
+    EJson.vElementPunctuationsAlternateSolution              
+   FROM OPENJSON(@vAddData, '$.t_CMS_Element_Punctuation_AlternateSolution')                
+   WITH (           
+ iElementPunctuationId INT,         
+    vElementPunctuationsAlternateSolution NVARCHAR(MAX)      
+   ) EJson                       
+ END                 
+                 
+ /* RETURN */                
+ SELECT              
+ (                      
+  SELECT                      
+    E.iElementId,                                
+ E.iElementTypeId,                                
+ ET.vElementTypeName,                              
+ E.iMainClientId,                                
+ E.iFolderID,                                
+ E.cIsDeleted,                                
+ E.cIsDisplayedInElementTree,                                
+ E.dtCreatedOn,                                
+ E.dtModifiedOn,                                
+ E.cIsSecure,                                
+ E.uUserId,                
+ E.uModifiedByUserId,                                
+ E.vElementSkinName,                                
+ E.cIsQuestionPlaceholder,                                
+ E.cHasTextOnTop,                                
+ E.vHeaderText,                                
+ E.vElementJson,                    
+   ISNULL((                
+    SELECT *              
+    FROM t_cms_element_punctuation CI        
+    WHERE CI.iElementId = @iElementId          
+    FOR JSON PATH, INCLUDE_NULL_VALUES                
+    ), '[]')[t_cms_element_punctuation],                       
+    ISNULL((                
+    SELECT           
+  PAS.iElementPunctuationId,      
+  PAS.iElementPunctuationAlternateSolutionId,      
+  PAS.vElementPunctuationsAlternateSolution          
+    FROM t_CMS_Element_Punctuation_AlternateSolution PAS              
+    INNER JOIN t_cms_element_punctuation PE ON PE.iElementPunctuationId = PAS.iElementPunctuationId      
+    WHERE PE.iElementId = @iElementId                                   
+    FOR JSON PATH, INCLUDE_NULL_VALUES                      
+   ), '[]')[t_CMS_Element_Punctuation_AlternateSolution]                      
+  FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER                      
+ )                      
+ AS JSONRESULT FROM t_CMS_Element E                               
+ INNER JOIN t_CMS_ElementType ET ON ET.iElementTypeId = E.iElementTypeId                              
+ WHERE E.iElementId = @iElementId
+END 
+
+CREATE procedure Proc_Fusion_Editor_MultiMediaOld_GetData                
+(             
+ @iElementTypeId INT,          
+ @iMainClientId INT          
+)                
+AS                
+/********************************************************************************                
+Created By: KB                
+Creation Date: 31/07/2020                
+Description: Get the multimedia detail list based on @iElementTypeId and @iMainClientId          
+Tables Used: t_CMS_Element, t_CMS_Element_Image, t_CMS_Element_Video,t_CMS_Element_Document                
+                
+Modified By:           
+Modifiaction Date:                
+Description:                
+********************************************************************************/                
+BEGIN                
+          
+ IF (@iElementTypeId = 2)          
+ BEGIN           
+  SELECT (SELECT           
+      E.iElementId,          
+      I.vElementImageName,          
+      I.vElementImageDescription,          
+      I.iElementImageWidth,          
+      I.iElementImageHeight,          
+      I.vElementImageTitle,          
+      I.cShowTitle,          
+      I.cShowDescription,          
+      I.vElementImageFileName,          
+      I.vImageType,          
+      I.iImageFileSize,          
+      I.iImageFileVersion,          
+      I.cIsHighResolution,          
+      I.iImageHighResolutionFileSize,      
+   E.cIsFusionVersion         
+     FOR JSON PATH, INCLUDE_NULL_VALUES,WITHOUT_ARRAY_WRAPPER             
+    )          
+    AS 'JSONRESULT'           
+  from t_CMS_Element E          
+  LEFT JOIN t_CMS_Element_Image I ON E.iElementId = I.iElementId          
+  Where      
+   E.iElementTypeId = @iElementTypeId           
+  AND E.cIsDisplayedInElementTree = 'Y'       
+  AND E.cIsDeleted = 'N'                      
+  AND E.iMainClientId = @iMainClientId                       
+ END          
+ ELSE IF(@iElementTypeId = 10)          
+ BEGIN           
+  SELECT (SELECT            
+      E.iElementId,          
+      A.vAudioName,          
+      A.vAudioDescription,          
+      A.iAudioTime,          
+      A.iAudioFileSize,          
+      A.iAudioFileVersion,          
+      A.vAudioFileName,          
+      A.vAudioType,          
+      A.cHasBeenRecorded,          
+      A.cIsTaskAudio,      
+   E.cIsFusionVersion           
+     FOR JSON PATH, INCLUDE_NULL_VALUES,WITHOUT_ARRAY_WRAPPER          
+    )          
+    AS 'JSONRESULT'           
+  from t_CMS_Element E          
+  LEFT JOIN t_CMS_Element_Audio A ON E.iElementId = A.iElementId          
+  Where      
+   E.iElementTypeId = @iElementTypeId          
+  AND E.cIsDisplayedInElementTree = 'Y'        
+  AND E.cIsDeleted = 'N'                        
+  AND E.iMainClientId = @iMainClientId                           
+ END                
+ ELSE IF(@iElementTypeId = 12)          
+ BEGIN           
+  SELECT (SELECT           
+      E.iElementId,          
+      V.vVideoName,          
+      V.vVideoDescription,          
+      V.iVideoFileSize,          
+      V.iVideoFileVersion,          
+      V.iVideoTime,          
+      V.vVideoFileName,          
+      V.vVideoType,          
+      V.cHasBeenRecorded,          
+      V.cIsTaskVideo,      
+   E.cIsFusionVersion            
+     FOR JSON PATH, INCLUDE_NULL_VALUES,WITHOUT_ARRAY_WRAPPER             
+    )          
+    AS 'JSONRESULT'           
+  from t_CMS_Element E          
+  LEFT JOIN t_CMS_Element_Video V ON E.iElementId = V.iElementId          
+  Where      
+   E.iElementTypeId = @iElementTypeId          
+  AND E.cIsDisplayedInElementTree = 'Y'      
+  AND E.cIsDeleted = 'N'                          
+  AND E.iMainClientId = @iMainClientId                           
+ END                
+ELSE IF(@iElementTypeId = 4)          
+ BEGIN           
+  SELECT (SELECT           
+      E.iElementId,          
+      D.vElementDocumentName,          
+      D.vElementDocumentDescription,          
+      D.iDocumentSizeInBytes,          
+      D.vDocumentType,          
+      D.iDocumentFileVersion,      
+   E.cIsFusionVersion            
+     FOR JSON PATH, INCLUDE_NULL_VALUES,WITHOUT_ARRAY_WRAPPER             
+    )          
+    AS 'JSONRESULT'           
+  from t_CMS_Element E          
+  LEFT JOIN t_CMS_Element_Document D ON E.iElementId = D.iElementId          
+  where      
+   E.iElementTypeId = @iElementTypeId          
+  AND E.cIsDisplayedInElementTree = 'Y'      
+  AND E.cIsDeleted = 'N'                          
+  AND E.iMainClientId = @iMainClientId                           
+ END  
+ ELSE IF(@iElementTypeId = 33)          
+ BEGIN           
+  SELECT (SELECT           
+      E.iElementId,  
+   c.vElementColorFillFileName,  
+   c.vElementColorFillName,  
+   c.vElementColorFillDescription,  
+   c.vColorFillType,  
+   c.iColorFillFileSize,  
+   c.iColorFillFileVersion,           
+   E.cIsFusionVersion            
+     FOR JSON PATH, INCLUDE_NULL_VALUES,WITHOUT_ARRAY_WRAPPER             
+    )          
+    AS 'JSONRESULT'           
+  from t_CMS_Element E          
+  LEFT JOIN t_CMS_Element_ColorFill C ON E.iElementId = c.iElementId          
+  where      
+   E.iElementTypeId = @iElementTypeId          
+  AND E.cIsDisplayedInElementTree = 'Y'      
+  AND E.cIsDeleted = 'N'                          
+  AND E.iMainClientId = @iMainClientId                           
+ END                     
+END 
+
+
+
+insert into t_CMS_ElementType(iElementTypeId, vElementTypeName,	vMainElementClass,	vEditorProvider,	vTestTaskToPDFProvider,	vTestProvider,	vWebsiteProvider,	vOfflineProvider,	dtCreatedOn,	dtModifiedOn,	vMainElementClass_Fusion ) values( 59, 'TextHighlight', NULL, NULL, NULL, NULL, NULL, NULL, GETDATE(), GETDATE(), NULL )
+
+insert into t_CMS_ElementType(iElementTypeId, vElementTypeName,	vMainElementClass,	vEditorProvider,	vTestTaskToPDFProvider,	vTestProvider,	vWebsiteProvider,	vOfflineProvider,	dtCreatedOn,	dtModifiedOn,	vMainElementClass_Fusion ) values( 58, 'LineAssign', NULL, NULL, NULL, NULL, NULL, NULL, GETDATE(), GETDATE(), NULL )
+
+insert into t_CMS_ElementType(iElementTypeId, vElementTypeName,	vMainElementClass,	vEditorProvider,	vTestTaskToPDFProvider,	vTestProvider,	vWebsiteProvider,	vOfflineProvider,	dtCreatedOn,	dtModifiedOn,	vMainElementClass_Fusion ) values( 60, 'CrossOutWord', NULL, NULL, NULL, NULL, NULL, NULL, GETDATE(), GETDATE(), NULL )
+
+
+ALTER procedure Proc_Fusion_Editor_TaskConversion_OldToNew_CMSHotspot_GetData      
+(  
+ @iContainerId INT,  
+ @iElementOrder INT  
+)      
+AS      
+/********************************************************************************      
+Created By: Aviral      
+Creation Date: 03/02/2020      
+Description: Gets the Hotspot data    
+Tables Used: t_CMS_Element, t_CMS_ElementType, t_CMS_Element_Hotspot, t_CMS_Element_Hotspot_Marker, t_CMS_Element_Hotspot_Value      
+      
+Modified By: Prajwal 
+Modification Date: 23/09/2020   
+Description: added iElementHotspotMarkerId    
+********************************************************************************/      
+BEGIN      
+ SELECT      
+ (      
+  SELECT      
+   EH.iElementHotspotId,      
+   EH.iContainerId,      
+   EH.iMinimumNumberOfHotspotForTaskToBeCorrect,      
+   EH.iElementOrder,      
+   EH.dNotAnsweredPoint,
+   EH.iElementHotspotMarkerId,   
+   ISNULL((      
+    SELECT      
+     EHM.iElementHotspotMarkerId,      
+     EHM.vMarkerDimension,      
+     EHM.vMarkerImageName      
+    FROM t_CMS_Element_Hotspot_Marker EHM      
+    INNER JOIN  t_CMS_Element_Hotspot EHT ON EHT.iElementHotspotMarkerId = EHM.iElementHotspotMarkerId      
+    WHERE EH.iElementHotspotMarkerId = EHM.iElementHotspotMarkerId      
+    FOR JSON PATH, INCLUDE_NULL_VALUES      
+   ), '[]')[t_CMS_Element_Hotspot_Marker],      
+   ISNULL((      
+    SELECT      
+     EHV.iElementHotspotValueId,      
+     EHV.cHotspotType,      
+     EHV.vXCoordinates,      
+     EHV.vYCoordinates,      
+     EHV.iDisplayOrder,      
+     EHV.iElementLinkId,      
+     EHV.vLinkedToType,      
+     EHV.vTarget,      
+     EHV.dCorrectPoint,      
+     EHV.dWrongPoint      
+    FROM t_CMS_Element_Hotspot_Value EHV      
+    INNER JOIN t_CMS_Element_Hotspot EHTemp ON EHTemp.iElementHotspotId = EHV.iElementHotspotId      
+    WHERE EHV.iElementHotspotId = Eh.iElementHotspotId      
+    ORDER BY EHV.iDisplayOrder ASC      
+    FOR JSON PATH, INCLUDE_NULL_VALUES      
+   ), '[]')[t_CMS_Element_Hotspot_Value]      
+  FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER      
+ )      
+ AS 'JSONRESULT'      
+ FROM t_CMS_Element_Hotspot EH       
+ WHERE EH.iContainerId = @iContainerId AND EH.iElementOrder = @iElementOrder  
+END 
+
+
+ALTER procedure Proc_Fusion_Editor_TaskConversion_OldToNew_CMSImage_GetData      
+(      
+ @iMainClientId INT,      
+ @iElementId INT      
+)      
+AS      
+/********************************************************************************      
+Created By: Aviral      
+Creation Date: 03/02/2020      
+Description: Gets the Image data      
+Tables Used: t_CMS_Element, t_CMS_ElementType, t_CMS_Element_Image      
+      
+Modified By:    
+Modifiaction Date:      
+Description:      
+********************************************************************************/      
+BEGIN      
+ SELECT      
+ (      
+  SELECT      
+   E.iElementId,      
+   E.iElementTypeId,      
+   ET.vElementTypeName,      
+   E.iMainClientId,      
+   E.iFolderID,      
+   E.cIsDeleted,      
+   E.cIsDisplayedInElementTree,      
+   E.dtCreatedOn,      
+   E.dtModifiedOn,      
+   E.cIsSecure,      
+   E.uUserId,      
+   E.vElementSkinName,      
+   E.cIsQuestionPlaceholder,      
+   E.cHasTextOnTop,      
+   E.vHeaderText,  
+   E.cIsFusionVersion,    
+   ISNULL((      
+    SELECT      
+     EI.iElementImageId,      
+     EI.vElementImageDescription,      
+     EI.vElementImageName,      
+     EI.vElementImageFileName,      
+     EI.vElementImageTitle,      
+     EI.vImageType,    
+     EI.cIsHighResolution,      
+     EI.cShowDescription,      
+     EI.cShowTitle,      
+     EI.iElementImageHeight,      
+     EI.iElementImageWidth,      
+     EI.iImageFileSize,      
+     EI.iImageFileVersion,      
+     EI.iImageHighResolutionFileSize      
+    FROM t_CMS_Element_Image EI      
+    INNER JOIN t_CMS_Element CE ON CE.iElementId = EI.iElementId      
+    WHERE EI.iElementId = E.iElementId      
+    FOR JSON PATH, INCLUDE_NULL_VALUES      
+   ), '[]')[t_CMS_Element_Image]      
+  FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER      
+ )      
+ AS 'JSONRESULT'      
+ FROM t_CMS_Element E      
+ INNER JOIN t_CMS_ElementType ET ON ET.iElementTypeId = E.iElementTypeId      
+ WHERE E.iMainClientId = @iMainClientId AND E.iElementId = @iElementId      
+END 
+
+ALTER procedure Proc_Fusion_Editor_TaskConversion_OldToNew_CMSVideo_GetData    
+(    
+ @iMainClientId INT,    
+ @iElementId INT    
+)    
+AS    
+/********************************************************************************    
+Created By: Aviral    
+Creation Date: 11/02/2020    
+Description: Gets the video data.    
+Tables Used: t_CMS_Element, t_CMS_ElementType, t_CMS_Element_Video    
+    
+ Modified By: Amit Kumar          
+  Modified Date: 17.08.2020  
+  Description: Added new column "uModifiedByUserId"      
+********************************************************************************/    
+BEGIN    
+ SELECT    
+ (    
+  SELECT    
+   E.iElementId,    
+   E.iElementTypeId,    
+   ET.vElementTypeName,    
+   E.iMainClientId,    
+   E.iFolderID,    
+   E.cIsDeleted,    
+   E.cIsDisplayedInElementTree,    
+   E.dtCreatedOn,    
+   E.dtModifiedOn,    
+   E.cIsSecure,    
+   E.uUserId,  
+   E.uModifiedByUserId,    
+   E.vElementSkinName,    
+   E.cIsQuestionPlaceholder,    
+   E.cHasTextOnTop,    
+   E.vHeaderText,
+   E.cIsFusionVersion,
+   ISNULL((    
+    SELECT    
+     EV.vVideoName,    
+     EV.vVideoDescription,    
+     EV.iVideoFileSize,    
+     EV.iVideoFileVersion,    
+     EV.iVideoTime,    
+     EV.vVideoFileName,    
+     EV.vVideoType,    
+     EV.cHasBeenRecorded,    
+     EV.cIsTaskVideo    
+    FROM t_CMS_Element_Video EV    
+    INNER JOIN t_CMS_Element CE ON CE.iElementId = EV.iElementId    
+    WHERE E.iElementId = EV.iElementId    
+    FOR JSON PATH, INCLUDE_NULL_VALUES    
+   ), '[]')[t_CMS_Element_Video]    
+  FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER    
+ )    
+ AS 'JSONRESULT'    
+ FROM t_CMS_Element E    
+ INNER JOIN t_CMS_ElementType ET ON ET.iElementTypeId = E.iElementTypeId    
+ WHERE E.iMainClientId = @iMainClientId AND E.iElementId = @iElementId    
+END
+
+ALTER procedure Proc_Fusion_Editor_TaskConversion_OldToNew_CMSAudio_GetData    
+(    
+ @iMainClientId INT,    
+ @iElementId INT    
+)    
+AS    
+/********************************************************************************    
+Created By: Aviral    
+Creation Date: 11/02/2020    
+Description: Gets the audio data.    
+Tables Used: t_CMS_Element, t_CMS_ElementType, t_CMS_Element_Audio    
+    
+  Modified By: Amit Kumar          
+  Modified Date: 17.08.2020  
+  Description: Added new column "uModifiedByUserId"      
+********************************************************************************/    
+BEGIN    
+ SELECT    
+ (    
+  SELECT    
+   E.iElementId,    
+   E.iElementTypeId,    
+   ET.vElementTypeName,    
+   E.iMainClientId,    
+   E.iFolderID,    
+   E.cIsDeleted,    
+   E.cIsDisplayedInElementTree,    
+   E.dtCreatedOn,    
+   E.dtModifiedOn,    
+   E.cIsSecure,    
+   E.uUserId,  
+   E.uModifiedByUserId,    
+   E.vElementSkinName,    
+   E.cIsQuestionPlaceholder,    
+   E.cHasTextOnTop,    
+   E.vHeaderText,    
+   E.cIsFusionVersion,
+   ISNULL((    
+    SELECT    
+     EA.vAudioName,    
+     EA.vAudioDescription,    
+     EA.iAudioTime,    
+     EA.iAudioFileSize,    
+     EA.iAudioFileVersion,    
+     EA.vAudioFileName,    
+     EA.vAudioType,    
+     EA.cHasBeenRecorded,    
+     EA.cIsTaskAudio    
+    FROM t_CMS_Element_Audio EA    
+    INNER JOIN t_CMS_Element CE ON CE.iElementId = EA.iElementId    
+    WHERE E.iElementId = EA.iElementId    
+    FOR JSON PATH, INCLUDE_NULL_VALUES    
+   ), '[]')[t_CMS_Element_Audio]    
+  FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER    
+ )    
+ AS 'JSONRESULT'    
+ FROM t_CMS_Element E    
+ INNER JOIN t_CMS_ElementType ET ON ET.iElementTypeId = E.iElementTypeId    
+ WHERE E.iMainClientId = @iMainClientId AND E.iElementId = @iElementId    
+END
+
+ALTER procedure Proc_Fusion_Editor_TaskConversion_NewToOld_CMSImage_AddData                              
+(                                      
+ @iMainClientId INT,                                        
+ @uUserId UNIQUEIDENTIFIER,                                        
+ @vAddData NVARCHAR(MAX)                                       
+)                                      
+AS                                      
+/********************************************************************************                                            
+ Created By: Prajwal                                            
+ Creation Date: 07/08/2020                                            
+ Description: Saves the Image data                                          
+ Tables Used: t_CMS_Element_Image                                      
+                                            
+  Modified By: Amit Kumar                                          
+  Modified Date: 17.08.2020                                  
+  Description: Added new column "uModifiedByUserId"                          
+                            
+  Modified By: Prajwal                                        
+  Modified Date: 24.09.2020                                
+  Description: Removed adding null to vElementJson column                          
+                                             
+********************************************************************************/                                        
+BEGIN                                      
+ DECLARE @iElementId INT                                      
+ SELECT @iElementId = iElementId FROM OPENJSON(@vAddData) WITH (iElementId INT)                                      
+                                      
+ IF NOT EXISTS (SELECT * FROM t_CMS_Element WHERE iElementId = @iElementId)                                       
+ BEGIN                                      
+  INSERT INTO t_CMS_Element(        
+   iElementTypeId,                                      
+   iMainClientId,                                      
+   iFolderID,                                      
+   cIsDeleted,                                      
+   cIsDisplayedInElementTree,                                      
+   dtCreatedOn,                                      
+   dtModifiedOn,                                      
+   cIsSecure,                                      
+   uUserId,                                  
+   uModifiedByUserId,                                      
+   vElementSkinName,                                      
+   cIsQuestionPlaceholder,                                      
+   cHasTextOnTop,                                      
+   vHeaderText,                                      
+   vElementJson,                                      
+   cIsFusionVersion                                      
+  )                                      
+  SELECT                                      
+   2,                                      
+   @iMainClientId,                                      
+   ISNULL(iFolderID, -1),                                      
+   'N',                                      
+   ISNULL(cIsDisplayedInElementTree, 'N'),                                      
+   GETDATE(),                                      
+   GETDATE(),                                      
+   'Y',                                      
+   @uUserId,                                  
+   @uUserId,                                      
+   NULL,                                      
+   'N',                                      
+   ISNULL(cHasTextOnTop, 'N'),                                        
+   vHeaderText,                                      
+   vElementJson,                                      
+   'N'                                      
+  FROM OPENJSON(@vAddData)                                      
+  WITH(                                      
+   cHasTextOnTop CHAR(1),                                        
+   vHeaderText NVARCHAR(MAX),                                
+   cIsDisplayedInElementTree CHAR(1),                              
+   iFolderID INT,                          
+   vElementJson NVARCHAR(MAX) AS JSON       
+  ) EJson                                      
+  SET @iElementId = @@IDENTITY                                      
+  INSERT INTO t_CMS_Element_Image(            
+    iElementId,                                      
+    vElementImageName,                                      
+    vElementImageDescription,                                
+    iElementImageWidth,                                      
+    iElementImageHeight,                                      
+    vElementImageFileName,                                      
+    vElementImageTitle,                                      
+    cShowTitle,                                      
+    cShowDescription,                                      
+    vImageType,                                      
+    iImageFileSize,                
+    iImageFileVersion                                                          
+   )                             
+   SELECT @iElementId, *                                      
+   FROM OPENJSON(@vAddData, '$.t_CMS_Element_Image[0]')                                      
+   WITH(                                      
+    vImageName NVARCHAR(255),                                      
+    vElementImageDescription NVARCHAR(255),                                      
+    iElementImageWidth INT,                                      
+    iElementImageHeight INT,                              
+    vElementImageFileName NVARCHAR(255),                                      
+    vElementImageTitle VARCHAR(50),                                      
+    cShowTitle CHAR(1),                                      
+    cShowDescription CHAR(1),                                      
+    vImageType NCHAR(4),                                      
+    iImageFileSize INT,                                      
+    iImageFileVersion INT                                    
+   )                                      
+ END                                      
+ ELSE                                      
+ BEGIN                                      
+  UPDATE CE SET                        
+   CE.uUserId = @uUserId,          
+   CE.uModifiedByUserId = @uUserId,                                                                                    
+   CE.dtModifiedOn = GETDATE(),                                                        
+   CE.cHasTextOnTop = ISNULL(EJson.cHasTextOnTop, NULL),                                      
+   CE.vHeaderText = ISNULL(EJson.vHeaderText, NULL),                                  
+   CE.vElementJson = ISNULL(EJson.vElementJson, NULL)                                                   
+  FROM t_CMS_Element AS CE, OPENJSON(@vAddData)                                   
+  WITH(                                    
+   cIsDeleted CHAR(1),                                                                                      
+   cHasTextOnTop CHAR(1),                                      
+   vHeaderText NVARCHAR(MAX),                                      
+   vElementJson NVARCHAR(MAX) AS JSON                                  
+  ) EJson                                      
+  WHERE CE.iElementId = @iElementId              
+  IF NOT EXISTS(SELECT * FROM t_CMS_Element_Image WHERE iElementId = @iElementId)                        
+ INSERT INTO t_CMS_Element_Image(        
+   iElementId,                                      
+   vElementImageName,                                      
+   vElementImageDescription,                                      
+   iElementImageWidth,                                      
+   iElementImageHeight,                                      
+   vElementImageFileName,                                      
+   vElementImageTitle,                                      
+   cShowTitle,                                      
+   cShowDescription,                                      
+   vImageType,                                      
+   iImageFileSize,    
+   iImageFileVersion                                                            
+  )                                      
+  SELECT @iElementId, *                                      
+  FROM OPENJSON(@vAddData, '$.t_CMS_Element_Image[0]')                             
+  WITH(                                      
+   vImageName NVARCHAR(255),                                      
+   vElementImageDescription NVARCHAR(255),                                      
+   iElementImageWidth INT,                                    
+   iElementImageHeight INT,                                      
+   vElementImageFileName NVARCHAR(255),                                      
+   vElementImageTitle VARCHAR(50),                                      
+   cShowTitle CHAR(1),                              
+   cShowDescription CHAR(1),                                      
+   vImageType NCHAR(4),                                      
+   iImageFileSize INT,                                      
+   iImageFileVersion INT                                                       
+)                             
+  ELSE                        
+  BEGIN                                  
+ UPDATE E SET                        
+   E.vElementImageName = EJson.vImageName,                                      
+   E.vElementImageDescription = EJson.vElementImageDescription,                                      
+   E.iElementImageWidth = EJson.iElementImageWidth,                                      
+   E.iElementImageHeight = EJson.iElementImageHeight,                                      
+   E.vElementImageFileName = EJson.vElementImageFileName,                                      
+   E.vElementImageTitle = EJson.vElementImageTitle,                                      
+   E.cShowTitle = EJson.cShowTitle,                                      
+   E.cShowDescription = EJson.cShowDescription,                                      
+   E.vImageType = EJson.vImageType,                                      
+   E.iImageFileSize = EJson.iImageFileSize,                                      
+   E.iImageFileVersion = EJson.iImageFileVersion                                                            
+  FROM t_CMS_Element_Image AS E ,OPENJSON(@vAddData, '$.t_CMS_Element_Image[0]')                                      
+  WITH(                                      
+   vImageName NVARCHAR(255),                                      
+   vElementImageDescription NVARCHAR(255),                           
+   iElementImageWidth INT,                                      
+   iElementImageHeight INT,                                      
+   vElementImageFileName NVARCHAR(255),                                      
+   vElementImageTitle VARCHAR(50),                                      
+   cShowTitle CHAR(1),                                      
+   cShowDescription CHAR(1),                                      
+   vImageType NCHAR(4),                                      
+   iImageFileSize INT,                                      
+   iImageFileVersion INT                                                           
+  ) EJson                                      
+  WHERE E.iElementId = @iElementId                        
+  END                              
+ END                                      
+                                      
+ /* RETURN */                                                
+ SELECT                        
+ (                                                  
+  SELECT                                                   
+  E.iElementId,                                                  
+  E.iElementTypeId,                                                  
+  ET.vElementTypeName,                                                
+  E.iMainClientId,                                                  
+  E.iFolderID,                                                  
+  E.cIsDeleted,                                                  
+  E.cIsDisplayedInElementTree,                                                  
+  E.dtCreatedOn,                                 
+  E.dtModifiedOn,                                                  
+  E.cIsSecure,                                                  
+  E.uUserId,                                  
+  E.uModifiedByUserId,                                                  
+  E.vElementSkinName,                                                  
+  E.cIsQuestionPlaceholder,                                                  
+  E.cHasTextOnTop,                                                  
+  E.vHeaderText,         
+  E.cIsFusionVersion,                                                 
+  E.vElementJson,                                      
+     ISNULL((                                            
+    SELECT                                     
+     EI.iElementImageId,                                            
+     EI.iElementId,                                            
+     EI.vElementImageName,                                            
+     EI.vElementImageDescription,                                            
+     EI.iElementImageWidth,                                            
+     EI.iElementImageHeight,                                    
+     EI.vElementImageTitle,                                            
+     EI.cShowTitle,                                            
+     EI.cShowDescription,                                            
+     EI.vElementImageFileName,                                      
+     RTRIM(EI.vImageType) AS vImageType,                                      
+     EI.iImageFileSize,                                      
+     EI.iImageFileVersion,                                      
+     EI.cIsHighResolution,                                      
+     EI.iImageHighResolutionFileSize                                            
+    FROM t_CMS_Element_Image EI                                      
+    WHERE EI.iElementId = @iElementId                   
+    FOR JSON PATH, INCLUDE_NULL_VALUES                                            
+   ), '[]')[t_CMS_Element_Image]                                            
+  FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER                                                  
+ )                                                  
+ AS JSONRESULT FROM t_CMS_Element E                                                 
+ INNER JOIN t_CMS_ElementType ET ON ET.iElementTypeId = E.iElementTypeId                                                
+ WHERE E.iElementId = @iElementId              
+END
+
+ALTER procedure Proc_Fusion_Editor_TaskConversion_NewToOld_CMSAudio_AddData                    
+(                          
+ @iMainClientId INT,                            
+ @uUserId UNIQUEIDENTIFIER,                            
+ @vAddData NVARCHAR(MAX)                           
+)                          
+AS                          
+/********************************************************************************                                
+ Created By: Prajwal                                
+ Creation Date: 07/08/2020                                
+ Description: Saves the Audio data                              
+ Tables Used: t_CMS_Element, t_CMS_Element_Audio                          
+                                
+  Modified By: Prajwal                                
+  Modified Date: 24.09.2020                        
+  Description: Removed adding null to vElementJson column                     
+                             
+********************************************************************************/                            
+BEGIN                          
+ DECLARE @iElementId INT                          
+ SELECT @iElementId = iElementId FROM OPENJSON(@vAddData) WITH (iElementId INT)                          
+ IF NOT EXISTS (SELECT * FROM t_CMS_Element WHERE iElementId = @iElementId)                           
+ BEGIN                          
+  INSERT INTO t_CMS_Element(                          
+   iElementTypeId,                          
+   iMainClientId,                          
+   iFolderID,                          
+   cIsDeleted,                          
+   cIsDisplayedInElementTree,                          
+   dtCreatedOn,                          
+   dtModifiedOn,                          
+   cIsSecure,                          
+   uUserId,                        
+   uModifiedByUserId,                          
+   vElementSkinName,                          
+   cIsQuestionPlaceholder,                          
+   cHasTextOnTop,                          
+   vHeaderText,                          
+   vElementJson,                          
+   cIsFusionVersion                          
+  )                          
+  SELECT                          
+   10,                          
+   @iMainClientId,                          
+   ISNULL(iFolderID ,-1),                          
+   'N',                          
+   ISNULL(cIsDisplayedInElementTree,'N'),                          
+   GETDATE(),                          
+   GETDATE(),                          
+   'Y',                          
+   @uUserId,                        
+   @uUserId,                          
+   NULL,                          
+   'N',                          
+   ISNULL(cHasTextOnTop, 'N'),                            
+   vHeaderText,                          
+   ISNULL(vElementJson, NULL),                          
+   'N'                          
+  FROM OPENJSON(@vAddData)                          
+  WITH(                          
+   cHasTextOnTop CHAR(1),                            
+   vHeaderText NVARCHAR(MAX),                      
+   cIsDisplayedInElementTree CHAR(1),                    
+   iFolderID INT,                  
+   vElementJson NVARCHAR(MAX) AS JSON                 
+  ) EJson                          
+  SET @iElementId = @@IDENTITY                          
+  INSERT INTO t_CMS_Element_Audio(                          
+   iElementId,                          
+   vAudioName,                          
+   vAudioDescription,                          
+   iAudioFileSize,                          
+   iAudioFileVersion,                          
+   iAudioTime,                          
+   vAudioFileName,                           
+   vAudioType,                          
+   cHasBeenRecorded,                           
+   cIsTaskAudio                          
+  )                          
+  SELECT @iElementId, *                          
+  FROM OPENJSON(@vAddData, '$.t_CMS_Element_Audio[0]')                          
+  WITH(                          
+   vAudioName NVARCHAR(255) '$.vAudioName',                     
+   vAudioDescription NVARCHAR(500) '$.vAudioDescription',                          
+   iAudioFileSize INT '$.iAudioFileSize',                          
+   iAudioFileVersion INT '$.iAudioFileVersion',                          
+   iAudioTime INT '$.iAudioTime',                          
+   vAudioFileName NVARCHAR(255) '$.vAudioFileName',                          
+   vAudioType NVARCHAR(20) '$.vAudioType',                          
+   cHasBeenRecorded CHAR(1) '$.cHasBeenRecorded',                                
+   cIsTaskAudio CHAR(1) '$.cIsTaskAudio'                          
+  )                              
+ END                          
+ ELSE                          
+ BEGIN                          
+  UPDATE CE SET                
+   CE.uUserId = @uUserId, 
+   CE.uModifiedByUserId = @uUserId,                                                              
+   CE.dtModifiedOn = GETDATE(),                                               
+   CE.cHasTextOnTop = ISNULL(EJson.cHasTextOnTop, NULL),                          
+   CE.vHeaderText = ISNULL(EJson.vHeaderText, NULL),                          
+   CE.vElementJson = ISNULL(EJson.vElementJson, NULL)                                        
+  FROM t_CMS_Element AS CE, OPENJSON(@vAddData)                          
+  WITH(                                                  
+   cIsDeleted CHAR(1),                                                   
+   cHasTextOnTop CHAR(1),                          
+   vHeaderText NVARCHAR(MAX),                          
+   vElementJson NVARCHAR(MAX) AS JSON                        
+  ) EJson                          
+  WHERE CE.iElementId = @iElementId    
+  IF NOT EXISTS (SELECT * FROM t_CMS_Element_Audio WHERE iElementId = @iElementId)                 
+  BEGIN                
+ INSERT INTO t_CMS_Element_Audio(                          
+  iElementId,                          
+  vAudioName,                          
+  vAudioDescription,                          
+  iAudioFileSize,                          
+  iAudioFileVersion,                          
+  iAudioTime,                          
+  vAudioFileName,                           
+  vAudioType,                          
+  cHasBeenRecorded,                           
+  cIsTaskAudio                          
+ )                          
+ SELECT @iElementId, *                          
+ FROM OPENJSON(@vAddData, '$.t_CMS_Element_Audio[0]')                          
+ WITH(                          
+  vAudioName NVARCHAR(255) '$.vAudioName',                          
+  vAudioDescription NVARCHAR(500) '$.vAudioDescription',                          
+  iAudioFileSize INT '$.iAudioFileSize',                          
+  iAudioFileVersion INT '$.iAudioFileVersion',                          
+  iAudioTime INT '$.iAudioTime',                          
+  vAudioFileName NVARCHAR(255) '$.vAudioFileName',                          
+  vAudioType NVARCHAR(20) '$.vAudioType',                          
+  cHasBeenRecorded CHAR(1) '$.cHasBeenRecorded',                                
+  cIsTaskAudio CHAR(1) '$.cIsTaskAudio'                          
+ )                     
+  END                
+  ELSE                
+  BEGIN                          
+ UPDATE E SET                
+   E.vAudioName = EJson.vAudioName,                                
+   E.vAudioDescription = EJson.vAudioDescription,                           
+   E.iAudioFileSize = EJson.iAudioFileSize,                          
+   E.iAudioFileVersion = EJson.iAudioFileVersion,                          
+   E.iAudioTime = EJson.iAudioTime,                               
+   E.vAudioFileName = EJson.vAudioFileName,                                 
+   E.vAudioType = EJson.vAudioType,                                
+   E.cHasBeenRecorded = ISNULL(EJson.cHasBeenRecorded, NULL),                                
+   E.cIsTaskAudio   = ISNULL(EJson.cIsTaskAudio , NULL)                  
+  FROM t_CMS_Element_Audio AS E ,OPENJSON(@vAddData, '$.t_CMS_Element_Audio[0]')                          
+  WITH(                          
+   vAudioName NVARCHAR(255) '$.vAudioName',                          
+   vAudioDescription NVARCHAR(500) '$.vAudioDescription',                          
+   iAudioFileSize INT '$.iAudioFileSize',                          
+   iAudioFileVersion INT '$.iAudioFileVersion',                          
+   iAudioTime INT '$.iAudioTime',                          
+   vAudioFileName NVARCHAR(255) '$.vAudioFileName',                          
+   vAudioType NVARCHAR(20) '$.vAudioType',                          
+   cHasBeenRecorded CHAR(1) '$.cHasBeenRecorded',                                
+   cIsTaskAudio CHAR(1) '$.cIsTaskAudio'                          
+  ) EJson                           
+  WHERE E.iElementId = @iElementId                            
+  END                
+ END                          
+                          
+ /* RETURN */                                    
+ SELECT                            
+ (                                      
+  SELECT                                       
+  E.iElementId,                        
+  E.iElementTypeId,                                      
+  ET.vElementTypeName,                                    
+  E.iMainClientId,                                      
+  E.iFolderID,                                      
+  E.cIsDeleted,                                      
+  E.cIsDisplayedInElementTree,                                      
+  E.dtCreatedOn,                                      
+  E.dtModifiedOn,                     
+  E.cIsSecure,                                      
+  E.uUserId,                         
+  E.uModifiedByUserId,                                     
+  E.vElementSkinName,                                      
+  E.cIsQuestionPlaceholder,                                      
+  E.cHasTextOnTop,                                      
+  E.vHeaderText,                                      
+  E.vElementJson,                          
+     ISNULL((                                
+    SELECT                                
+     EA.iElementAudioId,                                
+     EA.iElementId,                                
+     EA.vAudioName,                                
+     EA.vAudioDescription,                           
+     EA.iAudioFileSize,                          
+     EA.iAudioFileVersion,                          
+     EA.iAudioTime,                               
+     EA.vAudioFileName,                                      
+     EA.vAudioType,                                
+     EA.cHasBeenRecorded,                                
+     EA.cIsTaskAudio                              
+    FROM t_CMS_Element_Audio EA                          
+    WHERE EA.iElementId = @iElementId                              
+    FOR JSON PATH, INCLUDE_NULL_VALUES                                
+   ), '[]')[t_CMS_Element_Audio]                                
+  FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER                                      
+ )                                      
+ AS JSONRESULT FROM t_CMS_Element E                                     
+ INNER JOIN t_CMS_ElementType ET ON ET.iElementTypeId = E.iElementTypeId                                    
+ WHERE E.iElementId = @iElementId    
+END 
+
+ALTER procedure Proc_Fusion_Editor_TaskConversion_NewToOld_CMSVideo_AddData                  
+(                        
+ @iMainClientId INT,                          
+ @uUserId UNIQUEIDENTIFIER,                          
+ @vAddData NVARCHAR(MAX)                         
+)                        
+AS                        
+/********************************************************************************                              
+ Created By: Prajwal                              
+ Creation Date: 07/08/2020                              
+ Description: Saves the Video data                            
+ Tables Used: t_CMS_Element, t_CMS_Element_Video                        
+                              
+  Modified By: Amit Kumar                              
+  Modified Date: 17.08.2020                      
+  Description: Added new column "uModifiedByUserId"                  
+                  
+  Modified By: Prajwal                              
+  Modified Date: 24.09.2020                      
+  Description: Removed adding null to vElementJson column                
+                               
+********************************************************************************/                          
+BEGIN                        
+ DECLARE @iElementId INT                        
+ SELECT @iElementId = iElementId FROM OPENJSON(@vAddData) WITH (iElementId INT)                        
+ IF NOT EXISTS (SELECT * FROM t_CMS_Element WHERE iElementId = @iElementId)                         
+ BEGIN                        
+  INSERT INTO t_CMS_Element(                        
+   iElementTypeId,                        
+   iMainClientId,                        
+   iFolderID,                        
+   cIsDeleted,                        
+   cIsDisplayedInElementTree,                        
+   dtCreatedOn,                        
+   dtModifiedOn,                        
+   cIsSecure,                        
+   uUserId,                      
+   uModifiedByUserId,                        
+   vElementSkinName,                        
+   cIsQuestionPlaceholder,                        
+   cHasTextOnTop,                        
+   vHeaderText,                        
+   vElementJson,                        
+   cIsFusionVersion                        
+  )                        
+  SELECT                        
+   12,                        
+   @iMainClientId,                        
+   ISNULL(iFolderID, -1),                        
+   'N',                        
+   ISNULL(cIsDisplayedInElementTree, 'N'),                        
+   GETDATE(),                        
+   GETDATE(),                        
+   'Y',                        
+   @uUserId,                      
+   @uUserId,                        
+   NULL,                        
+   'N',                        
+   ISNULL(cHasTextOnTop, 'N'),                          
+   vHeaderText,                        
+   ISNULL(vElementJson, NULL),                        
+   'N'                        
+  FROM OPENJSON(@vAddData)                        
+  WITH(                        
+   cHasTextOnTop CHAR(1),                          
+   vHeaderText NVARCHAR(MAX),                    
+   cIsDisplayedInElementTree CHAR(1),                
+   vElementJson NVARCHAR(MAX) AS JSON,                 
+   iFolderID INT                  
+  ) EJson                        
+  SET @iElementId = @@IDENTITY                        
+  INSERT INTO t_CMS_Element_Video(                        
+   iElementId,                        
+   vVideoName,                        
+   vVideoDescription,                        
+   iVideoFileSize,                        
+   iVideoFileVersion,                        
+   iVideoTime,                        
+   vVideoFileName,                         
+   vVideoType,                        
+   cHasBeenRecorded,                         
+   cIsTaskVideo                        
+  )                        
+  SELECT @iElementId, *                        
+  FROM OPENJSON(@vAddData, '$.t_CMS_Element_Video[0]')                        
+  WITH(                        
+   vVideoName NVARCHAR(255) '$.vVideoName',                        
+   vVideoDescription NVARCHAR(500) '$.vVideoDescription',                        
+   iVideoFileSize INT '$.iVideoFileSize',                    
+   iVideoFileVersion INT '$.iVideoFileVersion',                        
+   iVideoTime INT '$.iVideoTime',                        
+   vVideoFileName NVARCHAR(255) '$.vVideoFileName',                        
+   vVideoType NVARCHAR(20) '$.vVideoType',                        
+   cHasBeenRecorded CHAR(1) '$.cHasBeenRecorded',                              
+   cIsTaskVideo CHAR(1) '$.cIsTaskVideo'                        
+  )                            
+ END                        
+ ELSE                        
+ BEGIN                        
+  UPDATE CE SET              
+   CE.uUserId = @uUserId,                             
+   CE.dtModifiedOn = GETDATE(),                       
+   CE.uModifiedByUserId = @uUserId,                          
+   CE.cHasTextOnTop = ISNULL(EJson.cHasTextOnTop, NULL),                        
+   CE.vHeaderText = ISNULL(EJson.vHeaderText, NULL),                    
+   CE.vElementJson = ISNULL(EJson.vElementJson, NULL)                               
+  FROM t_CMS_Element AS CE, OPENJSON(@vAddData)                        
+  WITH(                                             
+   cIsDeleted CHAR(1),                                               
+   cHasTextOnTop CHAR(1),                        
+   vHeaderText NVARCHAR(MAX),                        
+   vElementJson NVARCHAR(MAX) AS JSON                  
+  ) EJson                        
+  WHERE CE.iElementId = @iElementId  
+  IF NOT EXISTS (SELECT * FROM t_CMS_Element_Video WHERE iElementId = @iElementId)               
+  BEGIN              
+ INSERT INTO t_CMS_Element_Video(              
+  iElementId,                        
+  vVideoName,                        
+  vVideoDescription,                        
+  iVideoFileSize,                        
+  iVideoFileVersion,                        
+  iVideoTime,                        
+  vVideoFileName,                         
+  vVideoType,                        
+  cHasBeenRecorded,                         
+  cIsTaskVideo                        
+ )                        
+ SELECT @iElementId, *                        
+ FROM OPENJSON(@vAddData, '$.t_CMS_Element_Video[0]')                        
+ WITH(                        
+  vVideoName NVARCHAR(255) '$.vVideoName',                        
+  vVideoDescription NVARCHAR(500) '$.vVideoDescription',                        
+  iVideoFileSize INT '$.iVideoFileSize',                        
+  iVideoFileVersion INT '$.iVideoFileVersion',                        
+  iVideoTime INT '$.iVideoTime',                        
+  vVideoFileName NVARCHAR(255) '$.vVideoFileName',                        
+  vVideoType NVARCHAR(20) '$.vVideoType',                        
+  cHasBeenRecorded CHAR(1) '$.cHasBeenRecorded',                              
+  cIsTaskVideo CHAR(1) '$.cIsTaskVideo'                        
+ )                 
+  END              
+  ELSE              
+  BEGIN              
+ UPDATE E SET              
+   E.vVideoName = EJson.vVideoName,                              
+   E.vVideoDescription = EJson.vVideoDescription,                         
+   E.iVideoFileSize = EJson.iVideoFileSize,                        
+   E.iVideoFileVersion = EJson.iVideoFileVersion,                        
+   E.iVideoTime = EJson.iVideoTime,                             
+   E.vVideoFileName = EJson.vVideoFileName,                               
+   E.vVideoType = EJson.vVideoType,                              
+   E.cHasBeenRecorded = ISNULL(EJson.cHasBeenRecorded, NULL),                              
+   E.cIsTaskVideo   = ISNULL(EJson.cIsTaskVideo , NULL)                        
+  FROM t_CMS_Element_Video AS E ,OPENJSON(@vAddData, '$.t_CMS_Element_Video[0]')                        
+  WITH(                        
+   vVideoName NVARCHAR(255) '$.vVideoName',                        
+   vVideoDescription NVARCHAR(500) '$.vVideoDescription',                        
+   iVideoFileSize INT '$.iVideoFileSize',                        
+   iVideoFileVersion INT '$.iVideoFileVersion',                        
+   iVideoTime INT '$.iVideoTime',                        
+   vVideoFileName NVARCHAR(255) '$.vVideoFileName',                        
+   vVideoType NVArCHAR(20) '$.vVideoType',                        
+   cHasBeenRecorded CHAR(1) '$.cHasBeenRecorded',                              
+   cIsTaskVideo CHAR(1) '$.cIsTaskVideo'                        
+  ) EJson                        
+  WHERE E.iElementId = @iElementId               
+  END                  
+ END                        
+                        
+ /* RETURN */                                  
+ SELECT                          
+ (                                    
+  SELECT                                     
+  E.iElementId,                                 
+  E.iElementTypeId,                                    
+  ET.vElementTypeName,                                  
+  E.iMainClientId,                                    
+  E.iFolderID,                                    
+  E.cIsDeleted,                                    
+  E.cIsDisplayedInElementTree,                                    
+  E.dtCreatedOn,                                    
+  E.dtModifiedOn,                    
+  E.cIsSecure,                                    
+  E.uUserId,                       
+  E.uModifiedByUserId,                                   
+  E.vElementSkinName,                                    
+  E.cIsQuestionPlaceholder,                                    
+  E.cHasTextOnTop,                                    
+  E.vHeaderText,                                    
+  E.vElementJson,                        
+     ISNULL((                              
+    SELECT                              
+     EV.iElementVideoId,                              
+     EV.iElementId,                              
+     EV.vVideoName,                              
+     EV.vVideoDescription,                         
+     EV.iVideoFileSize,                        
+     EV.iVideoFileVersion,                        
+     Ev.iVideoTime,                             
+     EV.vVideoFileName,                                    
+     EV.vVideoType,                              
+     EV.cHasBeenRecorded,                              
+     EV.cIsTaskVideo                            
+    FROM t_CMS_Element_Video EV                        
+    WHERE EV.iElementId = @iElementId                            
+    FOR JSON PATH, INCLUDE_NULL_VALUES                              
+   ), '[]')[t_CMS_Element_Video]                              
+  FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER                                    
+ )                                    
+ AS JSONRESULT FROM t_CMS_Element E                                   
+ INNER JOIN t_CMS_ElementType ET ON ET.iElementTypeId = E.iElementTypeId                                  
+ WHERE E.iElementId = @iElementId  
+END
+
+ALTER PROCEDURE [dbo].[Proc_Fusion_Editor_TaskConversion_NewToOld_CMSPunctuations_AddData]            
+(                
+  @iMainClientId INT,            
+  @uUserId UNIQUEIDENTIFIER,                
+  @vAddData NVARCHAR(MAX)                       
+)                
+AS                
+/********************************************************************************                      
+ Created By: Prajwal                      
+ Creation Date: 20/09/2020                      
+ Description: Saves the punctuations data                    
+ Tables Used: t_CMS_Element, t_cms_element_punctuation, t_CMS_Element_Punctuation_AlternateSolution                
+                      
+ Modified By:                      
+ Modifiaction Date:                      
+ Description:                      
+********************************************************************************/                  
+BEGIN        
+ DECLARE @iElementId INT        
+ DECLARE @iElementPunctuationId INT                      
+ SELECT @iElementId = iElementId FROM OPENJSON(@vAddData) WITH (iElementId INT)                      
+ IF NOT EXISTS (SELECT * FROM t_CMS_Element WHERE iElementId = @iElementId)        
+  BEGIN            
+   INSERT INTO t_CMS_Element(      
+   iElementTypeId,                    
+   iMainClientId,                    
+   iFolderID,                    
+   cIsDeleted,                    
+   cIsDisplayedInElementTree,                    
+   dtCreatedOn,                    
+   dtModifiedOn,                    
+   cIsSecure,                    
+   uUserId,                
+   uModifiedByUserId,                    
+   vElementSkinName,                    
+   cIsQuestionPlaceholder,                    
+   cHasTextOnTop,                    
+   vHeaderText,                    
+   vElementJson,                    
+   cIsFusionVersion                    
+  )                    
+  SELECT              
+   36,                    
+   @iMainClientId,                    
+   -1,                    
+   'N',                    
+   'N',                    
+   GETDATE(),                    
+   GETDATE(),                    
+   'Y',                    
+   @uUserId,                
+   @uUserId,                    
+   NULL,                    
+   'N',                    
+   ISNULL(EJson.cHasTextOnTop, 'N'),                
+   EJson.vHeaderText,                     
+   NULL,                    
+   'N'    
+   FROM OPENJSON(@vAddData)              
+   WITH(              
+    cHasTextOnTop CHAR(1),                
+    vHeaderText NVARCHAR(MAX)      
+   ) EJson                  
+   SET @iElementId = @@IDENTITY                     
+   INSERT INTO t_cms_element_punctuation(      
+    iElementId,                
+    vSentence,                
+ cIsRandomDisplay,               
+    dCorrectPoint,                
+    dWrongPoint,      
+ dNotAnsweredPoint                
+   )                              
+   SELECT                  
+    @iElementId,                
+    EJson.vSentence,        
+ EJson.cIsRandomDisplay,        
+ EJson.dCorrectPoint,        
+ EJson.dWrongPoint,        
+ EJson.dNotAnsweredPoint          
+   FROM OPENJSON(@vAddData, '$.t_cms_element_punctuation')                
+   WITH (                 
+ vSentence NVARCHAR(MAX),      
+ cIsRandomDisplay CHAR(1),      
+ dCorrectPoint DECIMAL(5,2),        
+ dWrongPoint DECIMAL(5,2),        
+ dNotAnsweredPoint DECIMAL(5,2)             
+   ) EJson        
+   SET @iElementPunctuationId = @@IDENTITY        
+   INSERT INTO t_CMS_Element_Punctuation_AlternateSolution            
+   SELECT                  
+    @iElementPunctuationId,                
+    EJson.vElementPunctuationsAlternateSolution      
+   FROM OPENJSON(@vAddData, '$.t_CMS_Element_Punctuation_AlternateSolution')                
+   WITH (                 
+ vElementPunctuationsAlternateSolution NVARCHAR(MAX)          
+   ) EJson                 
+  END                 
+ ELSE                
+  BEGIN        
+   SELECT @iElementPunctuationId = iElementPunctuationId FROM t_cms_element_punctuation where iElementId = @iElementId         
+   UPDATE CE SET        
+   --CE.cIsDeleted = ISNULL(EJson.cIsDeleted, 'N'),    
+   CE.cHasTextOnTop =  ISNULL(EJson.cHasTextOnTop, 'N'),    
+   CE.vHeaderText = ISNULL(EJson.vHeaderText, ''),                     
+   CE.dtModifiedOn = GETDATE()       
+  FROM t_CMS_Element AS CE, OPENJSON(@vAddData)                    
+  WITH(                             
+   cIsDeleted CHAR(1),    
+   cHasTextOnTop CHAR(1),                
+   vHeaderText NVARCHAR(MAX)             
+  ) EJson                    
+  WHERE CE.iElementId = @iElementId AND CE.iElementTypeId = 36 AND CE.iMainClientId = @iMainClientId AND CE.uUserId = @uUserId              
+   UPDATE E SET        
+   E.vSentence = EJson.vSentence,        
+   E.cIsRandomDisplay = EJson.cIsRandomDisplay,             
+   E.dCorrectPoint = EJson.dCorrectPoint,        
+   E.dWrongPoint = EJson.dWrongPoint,        
+   E.dNotAnsweredPoint = EJson.dNotAnsweredPoint                
+   FROM t_cms_element_punctuation AS E, OPENJSON(@vAddData, '$.t_cms_element_punctuation')                
+   WITH(                
+    vSentence NVARCHAR(MAX),      
+ cIsRandomDisplay CHAR(1),        
+ dCorrectPoint DECIMAL(5,2),        
+ dWrongPoint DECIMAL(5,2),        
+ dNotAnsweredPoint DECIMAL(5,2)                 
+   ) EJson                
+   WHERE E.iElementId = @iElementId          
+   DELETE FROM t_CMS_Element_Punctuation_AlternateSolution WHERE iElementPunctuationId = @iElementPunctuationId              
+   INSERT INTO t_CMS_Element_Punctuation_AlternateSolution      
+   SELECT                  
+    @iElementPunctuationId,                
+    EJson.vElementPunctuationsAlternateSolution              
+   FROM OPENJSON(@vAddData, '$.t_CMS_Element_Punctuation_AlternateSolution')                
+   WITH (           
+ iElementPunctuationId INT,         
+    vElementPunctuationsAlternateSolution NVARCHAR(MAX)      
+   ) EJson                       
+ END                 
+                 
+ /* RETURN */                
+ SELECT              
+ (                      
+  SELECT                      
+    E.iElementId,                                
+ E.iElementTypeId,                                
+ ET.vElementTypeName,                              
+ E.iMainClientId,                                
+ E.iFolderID,                                
+ E.cIsDeleted,                                
+ E.cIsDisplayedInElementTree,                                
+ E.dtCreatedOn,                                
+ E.dtModifiedOn,                                
+ E.cIsSecure,                                
+ E.uUserId,                
+ E.uModifiedByUserId,                                
+ E.vElementSkinName,                                
+ E.cIsQuestionPlaceholder,                                
+ E.cHasTextOnTop,                                
+ E.vHeaderText,                                
+ E.vElementJson,                    
+   ISNULL((                
+    SELECT *              
+    FROM t_cms_element_punctuation CI        
+    WHERE CI.iElementId = @iElementId          
+    FOR JSON PATH, INCLUDE_NULL_VALUES                
+    ), '[]')[t_cms_element_punctuation],                       
+    ISNULL((                
+    SELECT           
+  PAS.iElementPunctuationId,      
+  PAS.iElementPunctuationAlternateSolutionId,      
+  PAS.vElementPunctuationsAlternateSolution          
+    FROM t_CMS_Element_Punctuation_AlternateSolution PAS              
+    INNER JOIN t_cms_element_punctuation PE ON PE.iElementPunctuationId = PAS.iElementPunctuationId      
+    WHERE PE.iElementId = @iElementId                                   
+    FOR JSON PATH, INCLUDE_NULL_VALUES                      
+   ), '[]')[t_CMS_Element_Punctuation_AlternateSolution]                      
+  FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER                      
+ )                      
+ AS JSONRESULT FROM t_CMS_Element E                               
+ INNER JOIN t_CMS_ElementType ET ON ET.iElementTypeId = E.iElementTypeId                              
+ WHERE E.iElementId = @iElementId AND E.iMainClientId = @iMainClientId AND E.uUserId = @uUserId     
+END 
+
+CREATE procedure Proc_Fusion_Editor_TaskConversion_OldToNew_CMSColorFillInstance_GetData        
+(        
+ @iMainClientId INT,        
+ @iElementId INT        
+)        
+AS        
+/********************************************************************************        
+Created By: Prajwal        
+Creation Date: 17/09/2020        
+Description: Gets the color fill instance data.        
+Tables Used: t_CMS_Element, t_CMS_ElementType, t_CMS_Element_ColorFillInstance, t_CMS_Element_ColorFillInstance_Value  
+        
+ Modified By: Amit Kumar            
+  Modified Date: 17.08.2020    
+  Description: Added new column "uModifiedByUserId"        
+********************************************************************************/        
+BEGIN        
+ SELECT        
+ (        
+  SELECT        
+   E.iElementId,        
+   E.iElementTypeId,        
+   ET.vElementTypeName,        
+   E.iMainClientId,        
+   E.iFolderID,        
+   E.cIsDeleted,        
+   E.cIsDisplayedInElementTree,        
+   E.dtCreatedOn,        
+   E.dtModifiedOn,        
+   E.cIsSecure,        
+   E.uUserId,    
+   E.uModifiedByUserId,        
+   E.vElementSkinName,        
+   E.cIsQuestionPlaceholder,        
+   E.cHasTextOnTop,        
+   E.vHeaderText,
+   ISNULL((        
+    SELECT 
+	CI.*    
+    FROM t_CMS_Element_ColorFillInstance CF
+	INNER JOIN t_CMS_Element_ColorFill  CI ON CI.iElementId = CF.iColorFillElementId   
+    WHERE CF.iElementId = @iElementId  
+    FOR JSON PATH, INCLUDE_NULL_VALUES        
+   ), '[]')[t_CMS_Element_ColorFill],     
+   ISNULL((        
+    SELECT *      
+    FROM t_CMS_Element_ColorFillInstance CI   
+    --INNER JOIN  t_CMS_Element CE ON CI.iElementId = CE.iElementId        
+    WHERE CI.iElementId = @iElementId  
+    FOR JSON PATH, INCLUDE_NULL_VALUES        
+   ), '[]')[t_CMS_Element_ColorFillInstance],    
+   ISNULL((        
+    SELECT   
+ CIV.iColorFillInstanceValueId,  
+ CIV.iColorFillInstanceId,  
+ CIV.vColorCode,  
+ CIV.vClientElementId  
+    FROM t_CMS_Element_ColorFillInstance_Value CIV        
+    INNER JOIN t_CMS_Element_ColorFillInstance CI ON CI.iColorFillInstanceId = CIV.iColorFillInstanceId        
+    WHERE CI.iElementId = @iElementId   
+    FOR JSON PATH, INCLUDE_NULL_VALUES        
+   ), '[]')[t_CMS_Element_ColorFillInstance_Value]        
+  FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER    
+ )        
+ AS 'JSONRESULT'        
+ FROM t_CMS_Element E        
+ INNER JOIN t_CMS_ElementType ET ON ET.iElementTypeId = E.iElementTypeId        
+ WHERE E.iMainClientId = @iMainClientId AND E.iElementId = @iElementId        
+END
+
+CREATE PROCEDURE [dbo].[Proc_Fusion_Editor_TaskConversion_NewToOld_CMSColorFillInstance_AddData]            
+(                
+  @iMainClientId INT,            
+  @uUserId UNIQUEIDENTIFIER,                
+  @vAddData NVARCHAR(MAX)                       
+)                
+AS                
+/********************************************************************************                      
+ Created By: Prajwal                      
+ Creation Date: 09/09/2020                      
+ Description: Saves the ColorFill data                    
+ Tables Used: t_CMS_Element, t_CMS_Element_ColorFillInstance, t_CMS_Element_ColorFillInstance_Values                
+                      
+ Modified By:                      
+ Modifiaction Date:                      
+ Description:                      
+********************************************************************************/                  
+BEGIN        
+ DECLARE @iElementId INT        
+ DECLARE @iColorFillInstanceId INT                      
+ SELECT @iElementId = iElementId FROM OPENJSON(@vAddData) WITH (iElementId INT)                      
+ IF NOT EXISTS (SELECT * FROM t_CMS_Element WHERE iElementId = @iElementId)        
+  BEGIN            
+   INSERT INTO t_CMS_Element(        
+   iElementTypeId,                    
+   iMainClientId,                    
+   iFolderID,                    
+   cIsDeleted,                    
+   cIsDisplayedInElementTree,                    
+   dtCreatedOn,                    
+   dtModifiedOn,                    
+   cIsSecure,                    
+   uUserId,                
+   uModifiedByUserId,                    
+   vElementSkinName,                    
+   cIsQuestionPlaceholder,                    
+   cHasTextOnTop,                    
+   vHeaderText,                    
+   vElementJson,                    
+   cIsFusionVersion                    
+  )                    
+  SELECT                    
+   43,                    
+   @iMainClientId,                    
+   ISNULL(iFolderID, -1),                    
+   'N',                    
+   ISNULL(cIsDisplayedInElementTree, 'N'),                    
+   GETDATE(),                    
+   GETDATE(),                    
+   'Y',                    
+   @uUserId,                
+   @uUserId,                    
+   NULL,                    
+   'N',                    
+   ISNULL(cHasTextOnTop, 'N'),                      
+   vHeaderText,                    
+   NULL,                    
+   'N'                    
+  FROM OPENJSON(@vAddData)                    
+  WITH(                    
+   cHasTextOnTop CHAR(1),                      
+   vHeaderText NVARCHAR(MAX),              
+   cIsDisplayedInElementTree CHAR(1),            
+   iFolderID INT                  
+  ) EJson                    
+   SET @iElementId = @@IDENTITY                     
+   INSERT INTO t_CMS_Element_ColorFillInstance(        
+    iElementId,                
+    iColorFillElementId,                
+    vColorFillJson,                       
+    dCorrectPoint,                
+    dWrongPoint,        
+ dNotAnsweredPoint                
+   )                              
+   SELECT                  
+    @iElementId,                
+    EJson.iColorFillElementId,        
+ EJson.vColorFillJson,        
+ EJson.dCorrectPoint,        
+ EJson.dWrongPoint,        
+ EJson.dNotAnsweredPoint          
+   FROM OPENJSON(@vAddData, '$.t_CMS_Element_ColorFillInstance')                
+   WITH (                 
+    iColorFillElementId INT,        
+ vColorFillJson NVARCHAR(MAX),        
+ dCorrectPoint DECIMAL(5,2),        
+ dWrongPoint DECIMAL(5,2),        
+ dNotAnsweredPoint DECIMAL(5,2)             
+   ) EJson        
+   SET @iColorFillInstanceId = @@IDENTITY        
+   INSERT INTO t_CMS_Element_ColorFillInstance_Value(        
+    iColorFillInstanceId,                
+ vColorCode,        
+ vClientElementId        
+   )                              
+   SELECT                  
+    @iColorFillInstanceId,                
+    EJson.vColorCode,        
+ EJson.vClientElementId        
+   FROM OPENJSON(@vAddData, '$.t_CMS_Element_ColorFillInstance_Value')               
+   WITH (                 
+    vColorCode NVARCHAR(50),        
+ vClientElementId NVARCHAR(50)          
+   ) EJson                     
+  END                 
+ ELSE                
+  BEGIN        
+   SELECT @iColorFillInstanceId = iColorFillInstanceId FROM t_CMS_Element_ColorFillInstance where iElementId = @iElementId         
+   UPDATE CE SET        
+   CE.cIsDeleted = EJson.cIsDeleted,                          
+   CE.dtModifiedOn = GETDATE(),                         
+   CE.cHasTextOnTop = ISNULL(EJson.cHasTextOnTop, NULL),                    
+   CE.vHeaderText = ISNULL(EJson.vHeaderText, NULL)        
+  FROM t_CMS_Element AS CE, OPENJSON(@vAddData)                    
+  WITH(                             
+   cIsDeleted CHAR(1),                        
+   cHasTextOnTop CHAR(1),                    
+   vHeaderText NVARCHAR(MAX)                  
+  ) EJson                    
+  WHERE CE.iElementId = @iElementId AND CE.iElementTypeId = 43 AND CE.iMainClientId = @iMainClientId AND CE.uUserId = @uUserId              
+   UPDATE E SET        
+   E.vColorFillJson = EJson.vColorFillJson,                
+   E.dCorrectPoint = EJson.dCorrectPoint,        
+   E.dWrongPoint = EJson.dWrongPoint,        
+   E.dNotAnsweredPoint = EJson.dNotAnsweredPoint                
+   FROM t_CMS_Element_ColorFillInstance AS E, OPENJSON(@vAddData, '$.t_CMS_Element_ColorFillInstance')                
+   WITH(                
+    vColorFillJson NVARCHAR(MAX),        
+ dCorrectPoint DECIMAL(5,2),        
+ dWrongPoint DECIMAL(5,2),        
+ dNotAnsweredPoint DECIMAL(5,2)                 
+   ) EJson                
+   WHERE E.iElementId = @iElementId          
+   DELETE FROM t_CMS_Element_ColorFillInstance_Value WHERE iColorFillInstanceId = @iColorFillInstanceId              
+   INSERT INTO t_CMS_Element_ColorFillInstance_Value(        
+     iColorFillInstanceId,                
+  vColorCode,        
+  vClientElementId               
+   )                              
+   SELECT                  
+    @iColorFillInstanceId,                
+    EJson.vColorCode,        
+ EJson.vClientElementId                
+   FROM OPENJSON(@vAddData, '$.t_CMS_Element_ColorFillInstance_Value')                
+   WITH (              
+    vColorCode NVARCHAR(50),        
+ vClientElementId NVARCHAR(50)               
+   ) EJson                       
+ END                 
+                 
+ /* RETURN */                
+ SELECT              
+ (                      
+  SELECT                      
+    E.iElementId,                                
+ E.iElementTypeId,                                
+ ET.vElementTypeName,                              
+ E.iMainClientId,                                
+ E.iFolderID,                                
+ E.cIsDeleted,                                
+ E.cIsDisplayedInElementTree,                                
+ E.dtCreatedOn,                                
+ E.dtModifiedOn,                                
+ E.cIsSecure,                                
+ E.uUserId,                
+ E.uModifiedByUserId,                                
+ E.vElementSkinName,                                
+ E.cIsQuestionPlaceholder,                                
+ E.cHasTextOnTop,                                
+ E.vHeaderText,                                
+ E.vElementJson,       
+   ISNULL((              
+    SELECT       
+ CI.*          
+    FROM t_CMS_Element_ColorFillInstance CF      
+ INNER JOIN t_CMS_Element_ColorFill  CI ON CI.iElementId = CF.iColorFillElementId         
+    WHERE CF.iElementId = @iElementId        
+    FOR JSON PATH, INCLUDE_NULL_VALUES              
+   ), '[]')[t_CMS_Element_ColorFill],                 
+   ISNULL((                
+    SELECT *              
+    FROM t_CMS_Element_ColorFillInstance CI        
+    WHERE CI.iElementId = @iElementId          
+    FOR JSON PATH, INCLUDE_NULL_VALUES                
+    ), '[]')[t_CMS_Element_ColorFillInstance],                       
+    ISNULL((                
+    SELECT           
+  CIV.iColorFillInstanceValueId,          
+  CIV.iColorFillInstanceId,          
+  CIV.vColorCode,          
+  CIV.vClientElementId          
+    FROM t_CMS_Element_ColorFillInstance_Value CIV                
+    INNER JOIN t_CMS_Element_ColorFillInstance CI ON CI.iColorFillInstanceId = CIV.iColorFillInstanceId                
+    WHERE CI.iElementId = @iElementId                                   
+    FOR JSON PATH, INCLUDE_NULL_VALUES                      
+   ), '[]')[t_CMS_Element_ColorFillInstance_value]                      
+  FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER                      
+ )                      
+ AS JSONRESULT FROM t_CMS_Element E                               
+ INNER JOIN t_CMS_ElementType ET ON ET.iElementTypeId = E.iElementTypeId                              
+ WHERE E.iElementId = @iElementId AND E.iMainClientId = @iMainClientId AND E.uUserId = @uUserId                   
+END
+
+ALTER procedure Proc_Fusion_Editor_TaskConversion_NewToOld_CMSColorFill_AddData                
+(                      
+ @iMainClientId INT,                        
+ @uUserId UNIQUEIDENTIFIER,                        
+ @vAddData NVARCHAR(MAX)                       
+)                      
+AS                      
+/********************************************************************************                            
+ Created By: Prajwal                            
+ Creation Date: 07/08/2020                            
+ Description: Saves the ColorFill data                          
+ Tables Used: t_CMS_Element, t_CMS_Element_ColorFill                     
+                             
+********************************************************************************/                        
+BEGIN                      
+ DECLARE @iElementId INT                      
+ SELECT @iElementId = iElementId FROM OPENJSON(@vAddData) WITH (iElementId INT)                      
+ IF NOT EXISTS (SELECT * FROM t_CMS_Element WHERE iElementId = @iElementId)                       
+ BEGIN                      
+  INSERT INTO t_CMS_Element(                      
+   iElementTypeId,                      
+   iMainClientId,                      
+   iFolderID,                      
+   cIsDeleted,                      
+   cIsDisplayedInElementTree,                      
+   dtCreatedOn,                      
+   dtModifiedOn,                      
+   cIsSecure,                      
+   uUserId,                    
+   uModifiedByUserId,                      
+   vElementSkinName,                      
+   cIsQuestionPlaceholder,                      
+   cHasTextOnTop,                      
+   vHeaderText,                      
+   vElementJson,                      
+   cIsFusionVersion                      
+  )                      
+  SELECT                      
+   12,                      
+   @iMainClientId,                      
+   ISNULL(iFolderID, -1),                      
+   'N',                      
+   ISNULL(cIsDisplayedInElementTree, 'N'),                      
+   GETDATE(),                      
+   GETDATE(),                      
+   'Y',                      
+   @uUserId,                    
+   @uUserId,                      
+   NULL,                      
+   'N',                      
+   ISNULL(cHasTextOnTop, 'N'),                        
+   vHeaderText,                      
+   ISNULL(vElementJson, NULL),                      
+   'N'                      
+  FROM OPENJSON(@vAddData)                      
+  WITH(                      
+   cHasTextOnTop CHAR(1),                        
+   vHeaderText NVARCHAR(MAX),                  
+   cIsDisplayedInElementTree CHAR(1),              
+   vElementJson NVARCHAR(MAX) AS JSON,               
+   iFolderID INT                
+  ) EJson                      
+  SET @iElementId = @@IDENTITY                      
+  INSERT INTO t_CMS_Element_ColorFill(                      
+   iElementId,                      
+   vElementColorFillName,            
+   vElementColorFillDescription,            
+   vElementColorFillFileName,            
+   vColorFillType,             
+   iColorFillFileVersion,             
+   iColorFillFileSize                     
+  )                      
+  SELECT @iElementId, *                      
+  FROM OPENJSON(@vAddData, '$.t_CMS_Element_ColorFill')                      
+  WITH(                      
+    vElementColorFillName NVARCHAR(255),            
+ vElementColorFillDescription NVARCHAR(MAX),            
+ vElementColorFillFileName NVARCHAR(255),            
+ vColorFillType NVARCHAR(5),             
+ iColorFillFileVersion INT,             
+ iColorFillFileSize INT                    
+  )                          
+ END                      
+ ELSE                      
+ BEGIN                      
+  UPDATE CE SET             
+   CE.uUserId = @uUserId,                                                          
+   CE.dtModifiedOn = GETDATE(),                     
+   CE.uModifiedByUserId = @uUserId,                                      
+   CE.cHasTextOnTop = ISNULL(EJson.cHasTextOnTop, NULL),                      
+   CE.vHeaderText = ISNULL(EJson.vHeaderText, NULL),                      
+   CE.vElementJson = ISNULL(EJson.vElementJson, NULL)                                      
+  FROM t_CMS_Element AS CE, OPENJSON(@vAddData)                      
+  WITH(                                          
+   cIsDeleted CHAR(1),                                                           
+   cHasTextOnTop CHAR(1),                      
+   vHeaderText NVARCHAR(MAX),                   
+   vElementJson NVARCHAR(MAX) AS JSON                   
+  ) EJson                      
+  WHERE CE.iElementId = @iElementId                     
+  IF NOT EXISTS (SELECT * FROM t_CMS_Element_ColorFill WHERE iElementId = @iElementId)             
+  BEGIN            
+ INSERT INTO t_CMS_Element_ColorFill(            
+  iElementId,                               
+     vElementColorFillName,            
+     vElementColorFillDescription,            
+     vElementColorFillFileName,            
+     vColorFillType,             
+     iColorFillFileVersion,             
+     iColorFillFileSize                       
+ )                      
+ SELECT @iElementId, *                      
+ FROM OPENJSON(@vAddData, '$.t_CMS_Element_ColorFill')                      
+ WITH(                      
+  vElementColorFillName NVARCHAR(255),            
+ vElementColorFillDescription NVARCHAR(MAX),            
+ vElementColorFillFileName NVARCHAR(255),            
+ vColorFillType NVARCHAR(5),             
+ iColorFillFileVersion INT,             
+ iColorFillFileSize INT                      
+ )               
+  END            
+  ELSE            
+  BEGIN            
+ UPDATE E SET            
+   E.iElementId = EJson.iElementId,                            
+   E.vElementColorFillName = EJson.vElementColorFillName,                       
+   E.vElementColorFillDescription = EJson.vElementColorFillDescription,                      
+   E.vElementColorFillFileName = EJson.vElementColorFillFileName,                      
+   E.vColorFillType = EJson.vColorFillType,                           
+   E.iColorFillFileVersion = EJson.iColorFillFileVersion,                             
+   E.iColorFillFileSize = EJson.iColorFillFileSize                      
+  FROM t_CMS_Element_ColorFill AS E ,OPENJSON(@vAddData, '$.t_CMS_Element_ColorFill[0]')                      
+  WITH(               
+  iElementId INT,                   
+   vElementColorFillName NVARCHAR(255),            
+ vElementColorFillDescription NVARCHAR(MAX),            
+ vElementColorFillFileName NVARCHAR(255),            
+ vColorFillType NVARCHAR(5),             
+ iColorFillFileVersion INT,             
+ iColorFillFileSize INT                      
+  ) EJson                      
+  WHERE E.iElementId = @iElementId             
+  END                
+ END                      
+                      
+ /* RETURN */                                
+ SELECT                        
+ (                                  
+  SELECT                                   
+  E.iElementId,                                  
+  E.iElementTypeId,                                  
+  ET.vElementTypeName,                                
+  E.iMainClientId,                                  
+  E.iFolderID,                                  
+  E.cIsDeleted,                                  
+  E.cIsDisplayedInElementTree,                                  
+  E.dtCreatedOn,                                  
+  E.dtModifiedOn,                                  
+  E.cIsSecure,                                  
+  E.uUserId,                     
+  E.uModifiedByUserId,                                 
+  E.vElementSkinName,                                  
+  E.cIsQuestionPlaceholder,                                  
+  E.cHasTextOnTop,                                  
+  E.vHeaderText,                                  
+  E.vElementJson,                      
+     ISNULL((                            
+    SELECT                            
+     EV.*                        
+    FROM t_CMS_Element_ColorFill EV                      
+    WHERE EV.iElementId = @iElementId                          
+    FOR JSON PATH, INCLUDE_NULL_VALUES                            
+   ), '[]')[t_CMS_Element_ColorFill]                            
+  FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER                                  
+ )                                  
+ AS JSONRESULT FROM t_CMS_Element E                                 
+ INNER JOIN t_CMS_ElementType ET ON ET.iElementTypeId = E.iElementTypeId                                
+ WHERE E.iElementId = @iElementId                     
+END
+
+DROP INDEX t_CMS_Element_Image._dta_index_t_CMS_Element_Image_7_366624349__K2_1_3_4_5_6_7_8_9_10_11_12_13;
+
+GO
+
+ALTER TABLE t_CMS_Element_Image ALTER COLUMN vImageType CHAR(4)
+
+GO
+
+CREATE NONCLUSTERED INDEX IX_t_CMS_Element_Image_iElementId ON t_CMS_Element_Image ( [iElementId] ASC )
+CREATE NONCLUSTERED INDEX IX_t_CMS_Element_Image_iElementImageWidth ON t_CMS_Element_Image ( [iElementImageWidth] ASC )
+CREATE NONCLUSTERED INDEX IX_t_CMS_Element_Image_iElementImageHeight ON t_CMS_Element_Image ( [iElementImageHeight] ASC )
+CREATE NONCLUSTERED INDEX IX_t_CMS_Element_Image_cShowTitle ON t_CMS_Element_Image ( [cShowTitle] ASC )
+CREATE NONCLUSTERED INDEX IX_t_CMS_Element_Image_cShowDescription ON t_CMS_Element_Image ( [cShowDescription] ASC )
+CREATE NONCLUSTERED INDEX IX_t_CMS_Element_Image_vImageType ON t_CMS_Element_Image ( [vImageType] ASC )
+CREATE NONCLUSTERED INDEX IX_t_CMS_Element_Image_iImageFileSize ON t_CMS_Element_Image ( [iImageFileSize] ASC )
+CREATE NONCLUSTERED INDEX IX_t_CMS_Element_Image_iImageFileVersion ON t_CMS_Element_Image ( [iImageFileVersion] ASC )
+CREATE NONCLUSTERED INDEX IX_t_CMS_Element_Image_cIsHighResolution ON t_CMS_Element_Image ( [cIsHighResolution] ASC )
+CREATE NONCLUSTERED INDEX IX_t_CMS_Element_Image_iImageHighResolutionFileSize ON t_CMS_Element_Image ( [iImageHighResolutionFileSize] ASC )
+
+
+CREATE PROCEDURE [dbo].[Proc_Fusion_Editor_GetLinkedElementPageDetails]                  
+(                      
+  @iMainClientId INT,                                      
+  @iElementId INT
+)                      
+AS                      
+/********************************************************************************                            
+ Created By: Prajwal                            
+ Creation Date: 09/09/2020                            
+ Description: Gets linked element page details                          
+ Tables Used: t_CMS_Page, t_CMS_Page_Container, t_CMS_Container_Element                      
+                            
+ Modified By:                            
+ Modifiaction Date:                            
+ Description:                            
+********************************************************************************/                        
+BEGIN
+ /* RETURN */                                      
+ SELECT              
+	(                                                   
+		SELECT P.*
+		FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER 
+	)
+	AS JSONRESULT  FROM t_CMS_Page P
+	INNER JOIN t_CMS_Page_Container PC ON P.iPageId = PC.iPageId
+	INNER JOIN t_CMS_Container_Element CE ON PC.iContainerId = CE.iContainerId
+	WHERE CE.iElementId = @iElementId and P.iMainClientId = @iMainClientId
+END
+
+--Addition animation changes
+update t_CMS_Element_Animation_Attribute set vAttributeName='InitialArcadix_Numbers' where iElementAnimationAttributeId=11448
+update t_CMS_Element_Animation_Attribute set vAttributeName='InitialArcadix_RowCount' where iElementAnimationAttributeId=11446
+update t_CMS_Element_Animation_Attribute set vAttributeName='InitialArcadix_ColumnCount' where iElementAnimationAttributeId=11447
+update t_CMS_Element_Animation_Attribute set vAttributeName='InitialArcadix_Mode' where iElementAnimationAttributeId=11449
+update t_CMS_Element_Animation_Attribute set vAttributeName='ResultArcadix_CarryOver' where iElementAnimationAttributeId=11450
+update t_CMS_Element_Animation_Attribute set vAttributeName='ResultArcadix_ResultValue' where iElementAnimationAttributeId=11451
+insert into t_CMS_Element_Animation_Attribute values(3517,'InitialArcadix_FrameWidth',7,null,null,null)
+
+--Subtraction animation changes
+update t_CMS_Element_Animation_Attribute set vAttributeName='InitialArcadix_RowCount' where iElementAnimationAttributeId=11676
+update t_CMS_Element_Animation_Attribute set vAttributeName='InitialArcadix_ColumnCount' where iElementAnimationAttributeId=11677
+update t_CMS_Element_Animation_Attribute set vAttributeName='InitialArcadix_Numbers' where iElementAnimationAttributeId=11678
+update t_CMS_Element_Animation_Attribute set vAttributeName='InitialArcadix_Mode' where iElementAnimationAttributeId=11679
+update t_CMS_Element_Animation_Attribute set vAttributeName='ResultArcadix_CarryOver' where iElementAnimationAttributeId=11680
+update t_CMS_Element_Animation_Attribute set vAttributeName='ResultArcadix_ResultValue' where iElementAnimationAttributeId=11681
+insert into t_CMS_Element_Animation_Attribute values(3533,'InitialArcadix_FrameWidth',7,null,null,null)
+
+--Multiplication animation changes
+update t_CMS_Element_Animation_Attribute set vAttributeName='InitialArcadix_Numbers' where iElementAnimationAttributeId=12023
+update t_CMS_Element_Animation_Attribute set vAttributeName='ResultArcadix_IntermediateValue' where iElementAnimationAttributeId=12024
+update t_CMS_Element_Animation_Attribute set vAttributeName='InitialArcadix_Mode' where iElementAnimationAttributeId=12022
+update t_CMS_Element_Animation_Attribute set vAttributeName='ResultArcadix_CarryOver' where iElementAnimationAttributeId=12025
+update t_CMS_Element_Animation_Attribute set vAttributeName='ResultArcadix_ResultValue' where iElementAnimationAttributeId=12026
+insert into t_CMS_Element_Animation_Attribute values(3547,'InitialArcadix_FrameWidth',7,null,null,null)
+
+--Division animation changes
+update t_CMS_Element_Animation_Attribute set vAttributeName='InitialArcadix_Numbers' where iElementAnimationAttributeId=12821
+update t_CMS_Element_Animation_Attribute set vAttributeName='ResultArcadix_IntermediateValue' where iElementAnimationAttributeId=12825
+update t_CMS_Element_Animation_Attribute set vAttributeName='InitialArcadix_Mode' where iElementAnimationAttributeId=12824
+update t_CMS_Element_Animation_Attribute set vAttributeName='ResultArcadix_Quotient' where iElementAnimationAttributeId=12823
+update t_CMS_Element_Animation_Attribute set vAttributeName='ResultArcadix_Remainder' where iElementAnimationAttributeId=12822
+insert into t_CMS_Element_Animation_Attribute values(3567,'InitialArcadix_FrameWidth',7,null,null,null)
+
+ALTER procedure Proc_Fusion_Editor_TaskConversion_OldToNew_CMSHotspot_GetData        
+(    
+ @iContainerId INT,    
+ @iElementOrder INT    
+)        
+AS        
+/********************************************************************************        
+Created By: Aviral        
+Creation Date: 03/02/2020        
+Description: Gets the Hotspot data      
+Tables Used: t_CMS_Element, t_CMS_ElementType, t_CMS_Element_Hotspot, t_CMS_Element_Hotspot_Marker, t_CMS_Element_Hotspot_Value        
+        
+Modified By: Prajwal   
+Modification Date: 23/09/2020     
+Description: added iElementHotspotMarkerId      
+********************************************************************************/        
+BEGIN        
+ DECLARE @iElementHotspotMarkerId INT
+ SELECT @iElementHotspotMarkerId = iElementHotspotMarkerId from t_CMS_Element_Hotspot where iContainerId = @iContainerId AND iElementOrder = @iElementOrder
+ SELECT        
+ (        
+  SELECT        
+   EH.iElementHotspotId,        
+   EH.iContainerId,        
+   EH.iMinimumNumberOfHotspotForTaskToBeCorrect,        
+   EH.iElementOrder,        
+   EH.dNotAnsweredPoint,  
+   EH.iElementHotspotMarkerId,     
+   ISNULL((        
+    SELECT        
+     EHM.iElementHotspotMarkerId,        
+     EHM.vMarkerDimension,        
+     EHM.vMarkerImageName        
+    FROM t_CMS_Element_Hotspot_Marker EHM    
+    WHERE EHM.iElementHotspotMarkerId = @iElementHotspotMarkerId      
+    FOR JSON PATH, INCLUDE_NULL_VALUES        
+   ), '[]')[t_CMS_Element_Hotspot_Marker],        
+   ISNULL((        
+    SELECT        
+     EHV.iElementHotspotValueId,        
+     EHV.cHotspotType,        
+     EHV.vXCoordinates,        
+     EHV.vYCoordinates,        
+     EHV.iDisplayOrder,        
+     EHV.iElementLinkId,        
+     EHV.vLinkedToType,        
+     EHV.vTarget,        
+     EHV.dCorrectPoint,        
+     EHV.dWrongPoint        
+    FROM t_CMS_Element_Hotspot_Value EHV        
+    INNER JOIN t_CMS_Element_Hotspot EHTemp ON EHTemp.iElementHotspotId = EHV.iElementHotspotId        
+    WHERE EHV.iElementHotspotId = Eh.iElementHotspotId        
+    ORDER BY EHV.iDisplayOrder ASC        
+    FOR JSON PATH, INCLUDE_NULL_VALUES        
+   ), '[]')[t_CMS_Element_Hotspot_Value]        
+  FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER        
+ )        
+ AS 'JSONRESULT'        
+ FROM t_CMS_Element_Hotspot EH         
+ WHERE EH.iContainerId = @iContainerId AND EH.iElementOrder = @iElementOrder    
+END 
+
+ALTER proc Proc_Fusion_Editor_CMSElement_SaveElementFolderDetails        
+(        
+ @iElementTypeId INT,                              
+ @iElementParentFolderId INT,                        
+ @iMainClientId INT,        
+ @vAddData VARCHAR(MAX),      
+ @uUserId UNIQUEIDENTIFIER       
+)        
+AS        
+BEGIN        
+        
+/********************************************************************************************                                                
+        
+Sample: exec Proc_Fusion_Editor_CMS_CMSElement_SaveElementFolderDetails 12,0,97, '{"iFolderId":29,"iElementTypeId":12,"iElementParentFolderId":0,"iMainClientId":1,"cIsDeleted":"Y","vElementFolderName":"Cybersystem","vElementFolderDescription":"Video"}', N
+ULL    }'                                           
+  
+Modified By: Amit Kumar          
+  Modified Date: 17.08.2020  
+  Description: Added new column "uModifiedByUserId"    
+                        
+*************************************************************************************************/            
+ DECLARE @iFolderId INT        
+ SELECT @iFolderId = iFolderId from OPENJSON (@vAddData) with (iFolderId int)        
+        
+ IF(@iFolderId IS NULL)        
+  BEGIN        
+  INSERT INTO t_CMS_FileSystem_ElementFolder                                
+  (                        
+   iElementTypeId,        
+   iElementParentFolderId,          
+   iMainClientId,            
+   dtCreatedOn,            
+   dtModifiedOn,            
+   cIsDeleted,        
+   vElementFolderName,        
+   vElementFolderDescription,        
+   uUserId,uModifiedByUserId                       
+  )                        
+  SELECT         
+   @iElementTypeId,                        
+   @iElementParentFolderId,         
+   @iMainClientId,                       
+   GETDATE(),                        
+   GETDATE(),                                        
+   cIsDeleted,                        
+   vElementFolderName,        
+   vElementFolderDescription,           
+   @uUserId,@uUserId                        
+   from OPENJSON(@vAddData)                          
+   with  (                         
+   iElementTypeId int,                        
+   iElementParentFolderId int,           
+   iMainClientId int,                     
+   dtCreatedOn datetime,                        
+   dtModifiedOn datetime,            
+   cIsDeleted char(1),                    
+   vElementFolderName nvarchar(500),                        
+   vElementFolderDescription nvarchar(800)                        
+  )        
+        
+  SET @iFolderId = @@IDENTITY        
+ END        
+ ELSE        
+  BEGIN        
+   UPDATE t_CMS_FileSystem_ElementFolder         
+   SET        
+    dtModifiedOn = GETDATE(),  
+ uModifiedByUserId =@uUserId,                                            
+    cIsDeleted = ISNULL(EFJSON.cIsDeleted, 'N' ),                        
+    vElementFolderName = ISNULL(EFJson.vElementFolderName, ''),        
+    vElementFolderDescription = ISNULL(EFJson.vElementFolderDescription, '')        
+   FROM OPENJSON(@vAddData)                          
+   with  (                                       
+    dtModifiedOn datetime,            
+    cIsDeleted char(1),                    
+    vElementFolderName nvarchar(500),                        
+    vElementFolderDescription nvarchar(800)         
+   ) EFJSON        
+   WHERE iFolderId = @iFolderId        
+  END        
+        
+/*Retun newly added data*/             
+  SELECT (                      
+   SELECT PF.iFolderId, PF.iElementTypeId, PF.iElementParentFolderId, PF.iMainClientId, PF.cIsDeleted, PF.vElementFolderName, PF.vElementFolderDescription, PF.dtCreatedOn, PF.dtModifiedOn,
+   (SELECT COUNT(*) FROM t_CMS_Element WHERE iFolderId = @iFolderId AND cIsDeleted = 'N') iElementCount,
+   (SELECT COUNT(*) FROM t_CMS_FileSystem_ElementFolder WHERE iElementParentFolderId = @iFolderId AND cIsDeleted = 'N' ) iSubNavigationCount           
+   FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER                      
+  ) AS jsonresult                      
+  FROM t_CMS_FileSystem_ElementFolder PF                     
+  WHERE PF.iFolderId= @iFolderId                       
+END

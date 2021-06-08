@@ -1,0 +1,38 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_ResultAttribute_ElementFormulaAttribute_Template' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Test_ResultAttribute_ElementFormulaAttribute_Template ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Test_ResultAttribute_ElementFormulaAttribute_Template set uModifiedByUserId= uUserId Where uModifiedByUserId is null
+
+GO
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_TestDrive_BaseObject_ElementAttributeTemplates_GetData
+FProc_TestDrive_Test_GetElementAttributeTemplates
+FProcOld_TestDrive_Test_GetElementAttributeTemplates
+JEditorProc_TestDrive_Test_GetElementAttributeTemplates
+JEditorProcOld_TestDrive_Test_GetElementAttributeTemplates
+JProc_TestDrive_Test_GetElementAttributeTemplates
+Proc_TestDrive_ElementFormulaAttributesAddEdit_GetElementFormulaAttributes
+Proc_TestDrive_ElementObjectRules_DeleteElementFormulaAttributeTemplate
+Proc_TestDrive_ElementObjectRules_SaveElementObjectRulesAndFormulaAttributes
+Proc_TestDrive_Test_ElementObjectRules_SaveAsCutomTemplate
+Proc_TestDrive_Test_GetElementAttributeTemplates
+****************************************************************/
+
+/********************Procs need to Review**********************
+Proc_TestDrive_ElementObjectRules_SaveElementObjectRulesAndFormulaAttributes
+Proc_TestDrive_Test_ElementObjectRules_SaveAsCutomTemplate
+****************************************************************/

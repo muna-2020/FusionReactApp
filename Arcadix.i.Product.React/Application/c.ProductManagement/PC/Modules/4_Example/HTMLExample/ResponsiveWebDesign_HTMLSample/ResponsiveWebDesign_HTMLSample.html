@@ -1,0 +1,281 @@
+﻿<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: calibri;
+        }
+
+        .main-wrapper {
+            width: 1024px;
+            margin: 0px auto;
+            padding: 20px;
+            font-size: 18px;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 24px;
+            padding: 10px;
+            border-bottom: 1px solid #f1f1f1;
+            font-weight: bold;
+        }
+
+        .sub-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .item-wrapper ul {
+            line-height: 2rem;
+            list-style-type: square;
+            list-style-position: inside;
+        }
+
+        .item-wrapper p {
+            margin: 10px 0px;
+        }
+
+        pre {
+            white-space: pre-line;
+            padding: 20px;
+            width: 100%;
+            padding-right: 100px;
+            margin: 10px 0px;
+            letter-spacing: 1px;
+            background: #282c34;
+            color: #b5b5b5;
+        }
+
+        .yellow-pre {
+            background: #fffcdd;
+            color: #222;
+            border-left: 5px solid #FFEB3B;
+        }
+
+        .light-text {
+            color: #999;
+            font-style: italic;
+            font-size: 14px;
+        }
+        .flex-container {
+            display: flex;
+            margin: 20px 0px;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            width: 500px;
+        }
+        .container section {
+            width: 69%;
+        }
+        .container aside {
+            width: 29%;
+        }
+        .container section, .container aside {
+            background: #4CAF50;
+            height: 100px;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .sub-title.color-blue {
+            color: #18688e;
+            font-size: 22px;
+            margin-top: 20px;
+        }
+        .output {
+            margin: 0px 20px;
+        }
+         @media screen and (max-width: 1024px) {
+            .main-wrapper {
+                width: 100%;
+            }
+         }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="title">
+            <span>Responsive Web Design</span>
+        </div>
+        <section class="content-wrapepr">
+            <div class="sub-title">
+                <span>Responsive Overview</span>
+            </div>
+            <div class="description">
+                <p>Responsive web design is the practice of building a website suitable to work on every
+                        device and every screen size, no matter how large or small, mobile or desktop.</p>
+                <p>Responsive web design is broken down into three main components, including flexible layouts, media queries, and flexible media. </p>
+            </div>
+        </section>
+        <section class="content-wrapepr">
+            <div class="sub-title">
+                <span>1. Flexible Layouts</span>
+            </div>
+            <div class="description">
+                <p>
+                    flexible layouts, is the practice of building the layout of a website with a flexible grid, 
+                    capable of dynamically resizing to any width. Flexible grids are built using relative length units, 
+                    most commonly percentages or em units. These relative lengths are then used to declare common grid 
+                    property values such as width, margin, or padding.
+                </p>
+            </div>
+            <div class="flex-container">
+                <div class="code-flex">
+                    <div class="code">
+                        <span class="light-text">HTML</span>
+                        <pre class="yellow-pre">
+                            &lt;div class="container"&gt;
+                                &lt;section&gt;Section&lt;/section&gt;
+                                &lt;aside&gt;Aside&lt;/aside&gt;
+                            &lt;/div&gt;
+                        </pre>
+                    </div>
+                    <div class="code">
+                        <span class="light-text">CSS</span>
+                        <pre>
+                            .container {
+                                display: flex;
+                                justify-content: space-between;
+                                width: 100%;
+                            }
+                            .container section {
+                                width: 69%;
+                            }
+                            .container aside {
+                                width: 29%;
+                            }
+                        </pre>
+                    </div>
+                </div>
+                <div class="output">
+                    <span class="light-text">100% Wide Container</span>
+                    <div class="container">
+                        <section>Section</section>
+                        <aside>Aside</aside>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content-wrapepr">
+            <div class="sub-title">
+                <span>2. Media Queries</span>
+            </div>
+            <div class="description">
+                <p>
+                    Media queries provide the ability to specify different styles for individual browser and device circumstances.
+                </p>
+                <p>Each media query may include a media type followed by one or more expressions. Common media types include all, screen, print, tv, and braille. </p>
+            </div>
+            <div class="sub-title color-blue">
+                <span>Initializing Media Queries</span>
+            </div>
+            <span class="light-text">HTML</span>
+            <pre class="yellow-pre">
+                &lt;!-- Separate CSS File --&gt;
+                &lt;link href="styles.css" rel="stylesheet" media="all and (max-width: 1024px)"&gt;
+            </pre>
+            <span class="light-text">CSS</span>
+            <pre class="yellow-pre">
+                /* @media Rule */
+                @media all and (max-width: 1024px) {...}
+
+                /* @import Rule */
+                @import url(styles.css) all and (max-width: 1024px) {...}
+            </pre>
+            <div class="sub-title color-blue">
+                <span>Logical Operators in Media Queries</span>
+            </div>
+            <div class="description">
+                <p>Using the and logical operator within a media query allows an extra condition to be added</p>
+            </div>
+            <pre class="yellow-pre">
+                @media all and (min-width: 800px) and (max-width: 1024px) {...}
+            </pre>
+            <div class="description">
+                <p>The not logical operator negates the query, specifying any query but the one identified.</p>
+            </div>
+            <pre class="yellow-pre">
+                @media not screen and (color) {...}
+            </pre>
+            <div class="description">
+                <p>The only logical operator is a new operator and is not recognized by user agents using the HTML4 algorithm, 
+                    thus hiding the styles from devices or browsers that don’t support media queries.</p>
+            </div>
+            <pre class="yellow-pre">
+                @media only screen and (orientation: portrait) {...}
+            </pre>
+            <div class="sub-title color-blue">
+                <span>Media Features in Media Queries</span>
+            </div>
+            <pre class="yellow-pre">
+                <span>/* Height & Width Media Features */</span>
+                @media all and (min-width: 320px) and (max-width: 780px) {...}
+
+                <span>/* Orientation Media Feature */</span>
+                @media all and (orientation: landscape) {...}
+
+                <span>/* Aspect Ratio Media Features */</span>
+                @media all and (min-device-aspect-ratio: 16/9) {...}
+
+                <span>/* Resolution Media Feature */</span>
+                @media print and (min-resolution: 300dpi) {...}
+            </pre>
+            <div class="sub-title color-blue">
+                <span>Media Queries for above example of flexible layout</span>
+            </div>
+            <pre>
+                @media all and (max-width: 420px) {
+                    section, aside {
+                        width: auto;
+                    }
+                    }                              
+            </pre>
+        </section>
+        <section class="content-wrapepr">
+            <div class="sub-title">
+                <span>3. Viewport</span>
+            </div>
+            <div class="description">
+                <p>Since the viewport meta tag revolves so heavily around setting the styles of how a website should be rendered it 
+                    has been recommend to move the viewport from a meta tag with HTML to an @ rule within CSS. 
+                    This helps keep the style separated from content, providing a more semantic approach.</p>
+            </div>
+            <pre>
+                @viewport {
+                    width: device-width;
+                    zoom: 1;
+                    }                          
+            </pre>
+        </section>
+        <section class="content-wrapepr">
+            <div class="sub-title">
+                <span>4. Flexible Media</span>
+            </div>
+            <div class="description">
+                <p>
+                    Images, videos, and other media types need to be scalable, changing their size as the size of the viewport changes.
+                </p>
+                <p>
+                    One quick way to make media scalable is by using the max-width property with a value of 100%. 
+                    Doing so ensures that as the viewport gets smaller any media will scale down according to its containers width.
+                </p>
+            </div>
+            <pre>
+                img, video, canvas {
+                    max-width: 100%;
+                    }                          
+            </pre>
+        </section>
+    </div>
+</body>
+</html>

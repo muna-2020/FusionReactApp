@@ -1,0 +1,93 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_InputStatus' AND COLUMN_NAME = 'dtCreatedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_InputStatus ADD dtCreatedOn datetime  
+END	  
+
+GO	  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_InputStatus' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_InputStatus ADD dtModifiedOn datetime  
+END		
+
+GO			
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_InputStatus' AND COLUMN_NAME = 'uUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_InputStatus ADD uUserId uniqueidentifier  
+END
+
+GO				  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_InputStatus' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_InputStatus ADD uModifiedByUserId uniqueidentifier  
+END		 
+
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_InputStatus set dtCreatedOn= GetDate() where dtCreatedOn is null
+
+GO
+update t_TestDrive_InputStatus set dtModifiedOn= GetDate() where dtModifiedOn is null
+
+GO
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_CMS_CMSPage_GetTaskDetailsByFolderId
+FProc_CMS_CMSPage_GetTaskDetailsById
+JEditorProc_CMS_CMSPage_GetTaskDetailsByFolderId
+JEditorProc_CMS_CMSPage_GetTaskDetailsById
+Proc_CMS_CMSPage_CopyPasteTask
+Proc_CMS_CMSPage_CopyPasteTaskShortcut
+Proc_CMS_CMSPage_GetInputStatusDetailsByMainClient
+Proc_CMS_CMSPage_GetRecentlyCalibratedTasks
+Proc_CMS_CMSPage_GetRecentlyOpenedTasksByMainClient
+Proc_CMS_CMSPage_GetRecentlyRevisionSeparatedTasks
+Proc_CMS_CMSPage_GetRecentlySeparatedTasks
+Proc_CMS_CMSPage_GetTaskDetailsByFolderId
+Proc_CMS_CMSPage_GetTaskDetailsById
+Proc_CMS_CMSPAGE_JAddEditTaskProperties
+Proc_CMS_CMSPAGE_JAddEditTaskProperties_AutoName
+Proc_CMS_CMSPAGE_JAddEditTaskProperties_Back
+Proc_CMS_CMSPage_MoveTask
+Proc_CMS_CMSTestDrivePage_GetAllTasksBySubjectAnCompetencyDetails
+Proc_CMS_CMSTestDrivePage_GetAllTasksBySubjectAndSchoolYearDifficult_Testing
+Proc_CMS_CMSTestDrivePage_GetAllTasksBySubjectId
+Proc_CMS_CMSTestDrivePage_GetAllTasksBySubjectId_New
+Proc_CMS_CMSTestDrivePage_GetAllTasksBySubjectId_Test
+Proc_CMS_CMSTestDrivePage_GetRecentActiveAdaptiveTasks
+Proc_CMS_CMSTestDrivePage_GetRecentActiveAdaptiveTasks_Calibration
+Proc_CMS_CMSTestDrivePage_GetRecentlyCalibratedTasks
+Proc_CMS_CMSTestDrivePage_GetRecentlyCalibratedTasks_Calibration
+Proc_CMS_CMSTestDrivePage_GetRecentlyChangedTasks
+Proc_CMS_CMSTestDrivePage_GetRecentlyChangedTasks_Calibration
+Proc_CMS_CMSTestDrivePage_GetRecentlySeparatedTasks
+Proc_CMS_CMSTestDrivePage_GetRecentlySeparatedTasks_Calibration
+Proc_CMS_CMSTestDrivePage_GetTasksForMultipleTaskUsages
+Proc_TestDrive_JTeacherTestTask_GetAllTasksByTestId
+Proc_TestDrive_StandardTestProvider_GetAllTasksAssignedWithTests
+Proc_TestDrive_StandardTestProvider_GetAllTasksByTestId
+Proc_TestDrive_StandardTestProvider_GetAllTasksByTestId_New
+Proc_TestDrive_StandardTestProvider_GetAllTasksByTestId_New_Calibration
+Proc_TestDrive_Test_GetAllTaskDetailsByTestId
+Proc_TestDrive_Test_GetAllTestTaskDetailsByTestId
+Proc_TestDrive_Test_GetAllUncaliberatedTasksByTestId
+Proc_TestDrive_Test_GetAllUncaliberatedTasksByTestId_Calibration
+*************************************************/
+
+/********************Procs need to Review**********************
+Proc_CMS_CMSPage_CopyPasteTask
+Proc_CMS_CMSPage_CopyPasteTaskShortcut
+Proc_CMS_CMSPAGE_JAddEditTaskProperties
+Proc_CMS_CMSPAGE_JAddEditTaskProperties_AutoName
+Proc_CMS_CMSPAGE_JAddEditTaskProperties_Back
+Proc_CMS_CMSPage_MoveTask
+*************************************************/

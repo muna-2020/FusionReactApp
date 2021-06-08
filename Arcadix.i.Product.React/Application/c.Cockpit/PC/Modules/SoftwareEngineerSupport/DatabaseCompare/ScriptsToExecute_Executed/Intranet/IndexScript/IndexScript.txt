@@ -1,0 +1,119 @@
+﻿/**********************************
+Index for t_TestDrive_Test table
+**********************************/
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_uModifiedByUserId] ON [dbo].[t_TestDrive_Test] ([uModifiedByUserId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_uResultPageCertificateId] ON [dbo].[t_TestDrive_Test] ([uResultPageCertificateId])
+GO
+
+/**********************************
+Index for t_TestDrive_Test_AdaptiveAlgorithmConfiguration table
+**********************************/
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_AdaptiveAlgorithmConfiguration_uAdaptiveAlgorithmConfigurationId] ON [dbo].[t_TestDrive_Test_AdaptiveAlgorithmConfiguration] ([uAdaptiveAlgorithmConfigurationId])
+GO
+
+/**********************************
+Index for t_TestDrive_Test_AdaptiveTaskSubSubjectSequence table
+**********************************/
+
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_AdaptiveTaskSubSubjectSequence_iDisplayOrder] ON [dbo].[t_TestDrive_Test_AdaptiveTaskSubSubjectSequence] ([iDisplayOrder])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_AdaptiveTaskSubSubjectSequence_iRound] ON [dbo].[t_TestDrive_Test_AdaptiveTaskSubSubjectSequence] ([iRound])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_AdaptiveTaskSubSubjectSequence_iSubSubjectId] ON [dbo].[t_TestDrive_Test_AdaptiveTaskSubSubjectSequence] ([iSubSubjectId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_AdaptiveTaskSubSubjectSequence_uTestId] ON [dbo].[t_TestDrive_Test_AdaptiveTaskSubSubjectSequence] ([uTestId])
+GO
+
+/**********************************
+Index for t_TestDrive_Test_Category table
+**********************************/
+DROP INDEX t_TestDrive_Test_Category.t_TestDrive_Test_Category_iCategoryId
+GO
+
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Category_iCategoryId] ON [dbo].[t_TestDrive_Test_Category] ([iCategoryId])
+GO
+
+DROP INDEX t_TestDrive_Test_Category.t_TestDrive_Test_Category_uTestId
+GO
+
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Category_uTestId] ON [dbo].[t_TestDrive_Test_Category] ([uTestId])
+GO
+
+/**********************************
+Index for t_TestDrive_Test_Competency table
+**********************************/
+DROP INDEX t_TestDrive_Test_Competency.t_TestDrive_Test_Competency_iCategoryCompetencyId
+GO
+
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Competency_uTestCategoryCompetencyId] ON [dbo].[t_TestDrive_Test_Competency] ([uTestCategoryCompetencyId])
+GO
+
+/**********************************
+Index for t_TestDrive_Test_ResultPageText_Data table //CHECK
+**********************************/
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultPageText_Data_iLanguageId] ON [dbo].[t_TestDrive_Test_ResultPageText_Data] ([iLanguageId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultPageText_Data_uTestResultPageTextId] ON [dbo].[t_TestDrive_Test_ResultPageText_Data] ([uTestResultPageTextId])
+GO
+
+
+drop index _dta_index_t_CMS_Element_Image_7_366624349__K2_1_3_4_5_6_7_8_9_10_11_12_13 ON t_CMS_Element_Image 
+go
+CREATE NONCLUSTERED INDEX [IX_t_CMS_Element_Image_cIsHighResolution] ON [dbo].[t_CMS_Element_Image] ([cIsHighResolution])
+CREATE NONCLUSTERED INDEX [IX_t_CMS_Element_Image_cShowDescription] ON [dbo].[t_CMS_Element_Image] ([cShowDescription])
+CREATE NONCLUSTERED INDEX [IX_t_CMS_Element_Image_cShowTitle] ON [dbo].[t_CMS_Element_Image] ([cShowTitle])
+CREATE NONCLUSTERED INDEX [IX_t_CMS_Element_Image_iElementId] ON [dbo].[t_CMS_Element_Image] ([iElementId])
+CREATE NONCLUSTERED INDEX [IX_t_CMS_Element_Image_iElementImageHeight] ON [dbo].[t_CMS_Element_Image] ([iElementImageHeight])
+CREATE NONCLUSTERED INDEX [IX_t_CMS_Element_Image_iElementImageWidth] ON [dbo].[t_CMS_Element_Image] ([iElementImageWidth])
+CREATE NONCLUSTERED INDEX [IX_t_CMS_Element_Image_iImageFileSize] ON [dbo].[t_CMS_Element_Image] ([iImageFileSize])
+CREATE NONCLUSTERED INDEX [IX_t_CMS_Element_Image_iImageFileVersion] ON [dbo].[t_CMS_Element_Image] ([iImageFileVersion])
+CREATE NONCLUSTERED INDEX [IX_t_CMS_Element_Image_iImageHighResolutionFileSize] ON [dbo].[t_CMS_Element_Image] ([iImageHighResolutionFileSize])
+CREATE NONCLUSTERED INDEX [IX_t_CMS_Element_Image_vImageType] ON [dbo].[t_CMS_Element_Image] ([vImageType])
+
+go
+
+CREATE NONCLUSTERED INDEX [IX_t_Cms_Page_AssignedWorkflowStatus_cIsLatest] ON [dbo].[t_Cms_Page_AssignedWorkflowStatus] ([cIsLatest])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_Cms_Page_AssignedWorkflowStatus_dtCreatedOn] ON [dbo].[t_Cms_Page_AssignedWorkflowStatus] ([dtCreatedOn])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_Cms_Page_AssignedWorkflowStatus_iPageDataId] ON [dbo].[t_Cms_Page_AssignedWorkflowStatus] ([iPageDataId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_Cms_Page_AssignedWorkflowStatus_uModifiedByUserId] ON [dbo].[t_Cms_Page_AssignedWorkflowStatus] ([uModifiedByUserId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_Cms_Page_AssignedWorkflowStatus_uTaskWorkflowStatusId] ON [dbo].[t_Cms_Page_AssignedWorkflowStatus] ([uTaskWorkflowStatusId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_Cms_Page_AssignedWorkflowStatus_uUserId] ON [dbo].[t_Cms_Page_AssignedWorkflowStatus] ([uUserId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_Cms_Page_AssignedWorkflowStatus_uWorkflowStatusId] ON [dbo].[t_Cms_Page_AssignedWorkflowStatus] ([uWorkflowStatusId])
+GO
+
+
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_uModifiedByUserId] ON [dbo].[t_TestDrive_Test] ([uModifiedByUserId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_uResultPageCertificateId] ON [dbo].[t_TestDrive_Test] ([uResultPageCertificateId])
+GO
+
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_AdaptiveAlgorithmConfiguration_uAdaptiveAlgorithmConfigurationId] ON [dbo].[t_TestDrive_Test_AdaptiveAlgorithmConfiguration] ([uAdaptiveAlgorithmConfigurationId])
+GO
+
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_AdaptiveTaskSubSubjectSequence_iDisplayOrder] ON [dbo].[t_TestDrive_Test_AdaptiveTaskSubSubjectSequence] ([iDisplayOrder])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_AdaptiveTaskSubSubjectSequence_iRound] ON [dbo].[t_TestDrive_Test_AdaptiveTaskSubSubjectSequence] ([iRound])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_AdaptiveTaskSubSubjectSequence_iSubSubjectId] ON [dbo].[t_TestDrive_Test_AdaptiveTaskSubSubjectSequence] ([iSubSubjectId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_AdaptiveTaskSubSubjectSequence_uTestId] ON [dbo].[t_TestDrive_Test_AdaptiveTaskSubSubjectSequence] ([uTestId])
+GO
+
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultPageText_dResultValueFrom] ON [dbo].[t_TestDrive_Test_ResultPageText] ([dResultValueFrom])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultPageText_dResultValueTo] ON [dbo].[t_TestDrive_Test_ResultPageText] ([dResultValueTo])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultPageText_uTestId] ON [dbo].[t_TestDrive_Test_ResultPageText] ([uTestId])
+GO
+
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultPageText_Data_iLanguageId] ON [dbo].[t_TestDrive_Test_ResultPageText_Data] ([iLanguageId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultPageText_Data_uTestResultPageTextId] ON [dbo].[t_TestDrive_Test_ResultPageText_Data] ([uTestResultPageTextId])
+GO

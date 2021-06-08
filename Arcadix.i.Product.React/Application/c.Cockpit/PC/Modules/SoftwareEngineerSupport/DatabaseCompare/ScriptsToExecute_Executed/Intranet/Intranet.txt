@@ -1,0 +1,933 @@
+/**********************************************************
+
+The below script updates the default values for dtModifiedOn and cIsDeleted 
+
+***********************************************************/
+
+CREATE Table #Temp(TABLE_NAME nvarchar(max))
+Insert into #Temp (TABLE_NAME)
+select (T.TABLE_NAME)
+from information_schema.tables T where  T.TABLE_NAME <> 'sysdiagrams'   order by T.TABLE_NAME 
+
+DECLARE @vTableName nvarchar(max)
+DECLARE vCursor CURSOR FOR SELECT TABLE_NAME FROM #Temp
+DECLARE @vSQL nvarchar(max)
+OPEN vCursor
+
+FETCH NEXT FROM vCursor INTO @vTableName
+WHILE @@FETCH_STATUS = 0 BEGIN
+    IF EXISTS(SELECT *
+          FROM   INFORMATION_SCHEMA.COLUMNS
+          WHERE  TABLE_NAME = @vTableName
+                 AND COLUMN_NAME = 'dtModifiedOn')
+                           BEGIN 
+                            SET @vSQL = 'UPDATE '+ @vTableName+ ' SET dtModifiedOn = GETDATE() WHERE dtModifiedOn IS NULL'
+                           BEGIN TRY 
+                             EXEC(@vSQL)
+                           END TRY 
+                            BEGIN CATCH 
+                            print 'While updating dtModifiedOn into ' + @vTableName
+                             print ERROR_MESSAGE()
+                           END CATCH 
+                            
+                            END
+       IF EXISTS(SELECT * FROM   INFORMATION_SCHEMA.COLUMNS WHERE  TABLE_NAME = @vTableName AND COLUMN_NAME = 'cIsDeleted')
+              BEGIN
+              SET @vSQL = 'UPDATE '+ @vTableName+ ' SET cIsDeleted = ''N'' WHERE cIsDeleted IS NULL'
+              BEGIN TRY 
+                             EXEC(@vSQL)
+                           END TRY 
+                            BEGIN CATCH 
+                            print 'While updating cIsDeleted into ' +  @vTableName
+                             print ERROR_MESSAGE()
+                           END CATCH 
+              END
+
+    FETCH NEXT FROM vCursor INTO @vTableName
+END
+
+CLOSE vCursor    
+DEALLOCATE vCursor
+
+drop table #Temp
+
+GO
+
+/***************************************************************************************************
+
+Script to add data to t_Fusion_Intranet_ResultPageCertificate and 
+t_Fusion_Intranet_ResultPageCertificate_Data tables (These are Sample Data added during Table creation)
+
+****************************************************************************************************/
+--main table
+if NOT Exists(select * from t_Fusion_Intranet_ResultPageCertificate where uResultPageCertificateId = '50C6C0AC-3566-46E9-BB8C-63F7B7F6F8AA') 
+BEGIN
+insert into t_Fusion_Intranet_ResultPageCertificate select '50C6C0AC-3566-46E9-BB8C-63F7B7F6F8AA','StandardCertificate','97','N','Y','E4205C35-2A37-458A-BA0D-52660FD6ECE2','Jun 23 2020 12:00AM','Jun 23 2020 12:00AM',NULL
+END
+
+ --data table
+if NOT Exists(select * from t_Fusion_Intranet_ResultPageCertificate_Data where uResultPageCertificateDataId = 'DCAF7171-E46D-4A96-BE86-58A7CAFB3ECD' and iLanguageId = 3 )
+BEGIN
+insert into t_Fusion_Intranet_ResultPageCertificate_Data select 'DCAF7171-E46D-4A96-BE86-58A7CAFB3ECD','50C6C0AC-3566-46E9-BB8C-63F7B7F6F8AA','3','StandardResultCertificate'
+where uResultPageCertificateId in (select uResultPageCertificateId from t_Fusion_Intranet_ResultPageCertificate where cIsForFusion ='Y')
+END
+
+GO
+
+/***************************************************************************************************
+
+Script to add cIsForFusion='Y' to t_TestDrive_Test_TestProgressDisplay and data to
+t_Fusion_Intranet_ResultPageCertificate_Data tables 
+
+****************************************************************************************************/
+--main table
+Update t_TestDrive_Test_TestProgressDisplay
+Set cIsForFusion = 'Y' 
+
+GO
+
+/***************************************************************************************************
+
+Script to add data to t_TestDrive_Test_ResultAttribute and 
+t_TestDrive_Test_ResultAttribute_Data tables (These are Sample Data added during Table creation)
+
+****************************************************************************************************/
+--main table
+if NOT Exists(select * from t_TestDrive_Test_ResultAttribute where uResultAttributeId = 'BEA2CD8D-3459-4FC8-9419-F14628FD40F9' )
+ BEGIN 
+ insert into t_TestDrive_Test_ResultAttribute select 'BEA2CD8D-3459-4FC8-9419-F14628FD40F9','1','TestPoint','N','May 19 2020 9:04PM','May 19 2020 9:04PM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','N',NULL,'Y','Y','2','N','97','Y',NULL 
+ END
+if NOT Exists(select * from t_TestDrive_Test_ResultAttribute where uResultAttributeId = '0BF1F95C-4371-48DC-BE48-3FD1AE8C5038' )
+ BEGIN 
+ insert into t_TestDrive_Test_ResultAttribute select '0BF1F95C-4371-48DC-BE48-3FD1AE8C5038','1','TestPercentage','N','May 19 2020 9:04PM','May 19 2020 9:04PM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','N',NULL,'Y','Y','2','N','97','Y',NULL 
+ END
+
+ --data table
+if NOT Exists(select * from t_TestDrive_Test_ResultAttribute_Data where uResultAttributeDataId = '72240C65-A70F-407B-9DF4-7B1CB9D0A1EC'and iLanguageId = '1' )
+ BEGIN 
+ insert into t_TestDrive_Test_ResultAttribute_Data select '72240C65-A70F-407B-9DF4-7B1CB9D0A1EC','BEA2CD8D-3459-4FC8-9419-F14628FD40F9','1','TestPoint',NULL
+  END
+if NOT Exists(select * from t_TestDrive_Test_ResultAttribute_Data where uResultAttributeDataId = 'CF718D01-0348-4D83-96A7-2C3E2F2B1131'and iLanguageId = '3' ) 
+BEGIN 
+insert into t_TestDrive_Test_ResultAttribute_Data select 'CF718D01-0348-4D83-96A7-2C3E2F2B1131','BEA2CD8D-3459-4FC8-9419-F14628FD40F9','3','TestPoint',NULL 
+END
+if NOT Exists(select * from t_TestDrive_Test_ResultAttribute_Data where uResultAttributeDataId = '4E0544C6-7BA0-4096-B073-EEF79757A0E7'and iLanguageId = '2' )
+ BEGIN
+  insert into t_TestDrive_Test_ResultAttribute_Data select '4E0544C6-7BA0-4096-B073-EEF79757A0E7','BEA2CD8D-3459-4FC8-9419-F14628FD40F9','2','TestPoint',NULL 
+  END
+if NOT Exists(select * from t_TestDrive_Test_ResultAttribute_Data where uResultAttributeDataId = '239DC1EB-B1B1-419A-AFBC-A0CBA131AD31'and iLanguageId = '1' ) 
+BEGIN 
+insert into t_TestDrive_Test_ResultAttribute_Data select '239DC1EB-B1B1-419A-AFBC-A0CBA131AD31','0BF1F95C-4371-48DC-BE48-3FD1AE8C5038','1','TestPercentage',NULL 
+END
+if NOT Exists(select * from t_TestDrive_Test_ResultAttribute_Data where uResultAttributeDataId = 'BE1B1CAF-D278-499C-BF2E-32F2D4E3AE45'and iLanguageId = '3' ) 
+BEGIN 
+insert into t_TestDrive_Test_ResultAttribute_Data select 'BE1B1CAF-D278-499C-BF2E-32F2D4E3AE45','0BF1F95C-4371-48DC-BE48-3FD1AE8C5038','3','TestPercentage',NULL 
+END
+if NOT Exists(select * from t_TestDrive_Test_ResultAttribute_Data where uResultAttributeDataId = '7FCFB018-428A-4C9F-90E4-E85CBF515319'and iLanguageId = '2' ) 
+BEGIN 
+insert into t_TestDrive_Test_ResultAttribute_Data select '7FCFB018-428A-4C9F-90E4-E85CBF515319','0BF1F95C-4371-48DC-BE48-3FD1AE8C5038','2','TestPercentage',NULL 
+END
+
+GO
+
+
+/********************************************************************************************/
+To Disable the Trigger in tables related to Task (Old triggers to add Audit data)
+/*******************************************************************************************/
+DISABLE TRIGGER ALL ON t_CMS_Page
+
+GO
+DISABLE TRIGGER ALL ON t_CMS_Page_Data
+
+GO
+DISABLE TRIGGER ALL ON t_CMS_Page_AssignedWorkflowStatus
+
+GO
+DISABLE TRIGGER ALL ON t_CMS_PageProperty_TestDrive
+
+GO
+DISABLE TRIGGER ALL ON t_CMS_Page_Language
+
+GO
+DISABLE TRIGGER ALL ON t_TestDrive_Task_AssignedAdditionalTaskProperty
+
+GO
+DISABLE TRIGGER ALL ON t_TestDrive_Task_AssignedTaskDifficultyLevel
+
+GO
+
+/********************************************************************************************/
+To rename the column names of the table t_CMS_FileSystem_PageFolder
+/*******************************************************************************************/
+sp_rename 't_CMS_FileSystem_PageFolder.iPageFolderID','iPageFolderId','COLUMN'
+sp_rename 't_CMS_FileSystem_PageFolder.iPageParentFolderID','iPageParentFolderId','COLUMN'
+
+GO
+
+/********************************************************************************************/
+TO alter the datatype of the column tSubjectDescription in table t_TestDrive_Subject_Data
+/*******************************************************************************************/
+alter table t_TestDrive_Subject_Data
+alter column tSubjectDescription nvarchar(max)
+
+/********************************************************************************************/
+To add the data for GateKeeper urls for Fusion 
+/*******************************************************************************************/
+
+GO
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '982C2A08-9508-4CFD-A7D1-30FE9AE3933F')
+BEGIN 
+insert into t_Framework_ApplicationServers select '982C2A08-9508-4CFD-A7D1-30FE9AE3933F','97','testdevfusionlernlupe.arcadixdevelopment.com',
+'ax-mgmtserver3','2','3','Y','1','39','Y','Test',NULL,'Test','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 28 2020  7:24PM',
+'Aug 28 2020  7:24PM',NULL,'E842AEDD-0859-4703-B639-E262F0E90DD8','DEV','3',NULL,NULL,'Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = 'F4CE7E6B-594A-402B-A831-DC23F5FC619A')
+BEGIN
+ insert into t_Framework_ApplicationServers select 'F4CE7E6B-594A-402B-A831-DC23F5FC619A','97','schuleactivefusionlernlupe.arcadixdevelopment.com',
+ 'ax-mgmtserver1','2','2','Y','1','17','Y','School',NULL,'Schule','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 28 2020  7:30PM',
+ 'Aug 28 2020  7:30PM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182C','ACTIVE','3',NULL,NULL,'Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '3893DA9A-495B-4B6C-AA02-E0CF948D8B24')
+BEGIN
+ insert into t_Framework_ApplicationServers select '3893DA9A-495B-4B6C-AA02-E0CF948D8B24','97','pupilactivefusionlernlupe.arcadixdevelopment.com',
+ 'ax-mgmtserver1','2','2','Y','1','17','Y','Pupil',NULL,'Pupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 28 2020  7:30PM','Aug 28 2020  7:30PM',
+ NULL,'CAABA7C6-D44B-4495-8F28-08D45475182B','ACTIVE','3',NULL,NULL,'Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '701938EE-DAF3-470D-8316-2058D8DC48C7')
+BEGIN 
+insert into t_Framework_ApplicationServers select '701938EE-DAF3-470D-8316-2058D8DC48C7','97','lehrpersonactivefusionlernlupe.arcadixdevelopment.com',
+'ax-mgmtserver1','2','3','Y','1','17','Y','Teacher',NULL,'Lehrperson','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 28 2020  7:30PM',
+'Aug 28 2020  7:30PM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182D','ACTIVE','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '157B3105-28A4-432C-A53B-F7C164F3D454')
+BEGIN 
+insert into t_Framework_ApplicationServers select '157B3105-28A4-432C-A53B-F7C164F3D454','97','testactivefusionlernlupe.arcadixdevelopment.com',
+'ax-mgmtserver1','2','3','Y','1','111','Y','Test',NULL,'Test','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 28 2020  7:33PM','Aug 28 2020  7:33PM',
+NULL,'E842AEDD-0859-4703-B639-E262F0E90DD8','ACTIVE','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = 'C94822BE-1342-4868-9A0C-FDF619B5D21B')
+BEGIN
+ insert into t_Framework_ApplicationServers select 'C94822BE-1342-4868-9A0C-FDF619B5D21B','97','schuledevfusionlernlupe.arcadixdevelopment.com',
+ 'ax-mgmtserver3','2','2','Y','1','17','Y','School',NULL,'Schule','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 28 2020  7:36PM','Aug 28 2020  7:36PM',
+ NULL,'CAABA7C6-D44B-4495-8F28-08D45475182C','DEV','3',NULL,NULL,'Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '104CACD6-1149-4FC5-BD12-273E5AA256DA')
+BEGIN 
+insert into t_Framework_ApplicationServers select '104CACD6-1149-4FC5-BD12-273E5AA256DA','97','pupildevfusionlernlupe.arcadixdevelopment.com',
+'ax-mgmtserver3','2','2','Y','1','17','Y','Pupil',NULL,'Pupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 28 2020  7:36PM','Aug 28 2020  7:36PM',
+NULL,'CAABA7C6-D44B-4495-8F28-08D45475182B','DEV','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = 'BE7B98DD-480F-494C-A6A9-184AEC2FA8CA')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'BE7B98DD-480F-494C-A6A9-184AEC2FA8CA','97','lehrpersondevfusionlernlupe.arcadixdevelopment.com',
+'ax-mgmtserver3','2','3','Y','1','17','Y','Teacher',NULL,'Lehrperson','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 28 2020  7:36PM','Aug 28 2020  7:36PM',
+NULL,'CAABA7C6-D44B-4495-8F28-08D45475182D','DEV','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '6B33FD79-5601-4371-B8A9-7B65DE985CB9')
+BEGIN 
+insert into t_Framework_ApplicationServers select '6B33FD79-5601-4371-B8A9-7B65DE985CB9','97','schuletestfusionlernlupe.arcadixdevelopment.com',
+'ax-mgmtserver1','2','2','Y','1','17','Y','School',NULL,'Schule','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 28 2020  7:39PM','Aug 28 2020  7:39PM',
+NULL,'CAABA7C6-D44B-4495-8F28-08D45475182C','TEST','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '92E3315D-C9B4-4BF5-B0DE-F3CE9B2379B5')
+BEGIN 
+insert into t_Framework_ApplicationServers select '92E3315D-C9B4-4BF5-B0DE-F3CE9B2379B5','97','pupiltestfusionlernlupe.arcadixdevelopment.com',
+'ax-mgmtserver1','2','2','Y','1','17','Y','Pupil',NULL,'Pupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 28 2020  7:39PM','Aug 28 2020  7:39PM',
+NULL,'CAABA7C6-D44B-4495-8F28-08D45475182B','TEST','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '72FF4085-0E96-44D8-B043-6D2C05497771')
+BEGIN 
+insert into t_Framework_ApplicationServers select '72FF4085-0E96-44D8-B043-6D2C05497771','97','lehrpersontestfusionlernlupe.arcadixdevelopment.com',
+'ax-mgmtserver1','2','3','Y','1','17','Y','Teacher',NULL,'Lehrperson','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 28 2020  7:39PM','Aug 28 2020  7:39PM',
+NULL,'CAABA7C6-D44B-4495-8F28-08D45475182D','TEST','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = 'B3460AAB-A98B-4BD0-9FB7-6715CBC12E4F')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'B3460AAB-A98B-4BD0-9FB7-6715CBC12E4F','97','testtestfusionlernlupe.arcadixdevelopment.com',
+'ax-mgmtserver1','2','3','Y','2','26','Y','Test',NULL,'Test','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 28 2020  7:39PM','Aug 28 2020  7:39PM',
+NULL,'E842AEDD-0859-4703-B639-E262F0E90DD8','TEST','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '3494B78E-9556-4BDD-B37A-B993CD350CC1')
+BEGIN 
+insert into t_Framework_ApplicationServers select '3494B78E-9556-4BDD-B37A-B993CD350CC1','124','schuleactivefusionimpetus.arcadixdevelopment.com',
+'ax-mgmtserver1','2','2','Y','2','16','Y','School',NULL,'Schule','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:17AM','Aug 31 2020 10:17AM',
+NULL,'CAABA7C6-D44B-4495-8F28-08D45475182C','ACTIVE','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = 'FA42AA4C-BEDF-4D79-BE0A-F555190725AE')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'FA42AA4C-BEDF-4D79-BE0A-F555190725AE','124','pupilactivefusionimpetus.arcadixdevelopment.com',
+'ax-mgmtserver1','2','2','Y','2','16','Y','Pupil',NULL,'Pupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:17AM','Aug 31 2020 10:17AM',
+NULL,'CAABA7C6-D44B-4495-8F28-08D45475182B','ACTIVE','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '5CE3FF21-1DD8-4DE0-A780-B85E319DDE7B')
+BEGIN
+ insert into t_Framework_ApplicationServers select '5CE3FF21-1DD8-4DE0-A780-B85E319DDE7B','124','lehrpersonactivefusionimpetus.arcadixdevelopment.com',
+ 'ax-mgmtserver1','2','3','Y','2','16','Y','Teacher',NULL,'Lehrperson','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:17AM','Aug 31 2020 10:17AM',
+ NULL,'CAABA7C6-D44B-4495-8F28-08D45475182D','ACTIVE','3',NULL,NULL,'Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '957BB9B7-DDDF-4BC6-987E-0856F900E8D9')
+BEGIN
+ insert into t_Framework_ApplicationServers select '957BB9B7-DDDF-4BC6-987E-0856F900E8D9','124','testactivefusionimpetus.arcadixdevelopment.com',
+ 'ax-mgmtserver1','2','3','Y','1','21','Y','Test',NULL,'Test','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:17AM','Aug 31 2020 10:17AM',
+ NULL,'E842AEDD-0859-4703-B639-E262F0E90DD8','ACTIVE','3',NULL,NULL,'Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = 'E58AA1C0-68F1-4C53-A214-6C2EECCDC166')
+BEGIN
+ insert into t_Framework_ApplicationServers select 'E58AA1C0-68F1-4C53-A214-6C2EECCDC166','124','schuledevfusionimpetus.arcadixdevelopment.com',
+ 'ax-mgmtserver3','2','2','Y','2','16','Y','School',NULL,'Schule','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:17AM','Aug 31 2020 10:17AM',
+ NULL,'CAABA7C6-D44B-4495-8F28-08D45475182C','DEV','3',NULL,NULL,'Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '2465703B-A9E4-4C62-B6DF-FEE4AB606DD0')
+BEGIN 
+insert into t_Framework_ApplicationServers select '2465703B-A9E4-4C62-B6DF-FEE4AB606DD0','124','pupildevfusionimpetus.arcadixdevelopment.com',
+'ax-mgmtserver3','2','2','Y','2','16','Y','Pupil',NULL,'Pupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:17AM','Aug 31 2020 10:17AM',
+NULL,'CAABA7C6-D44B-4495-8F28-08D45475182B','DEV','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '8272EB5B-C146-4883-9347-5BF1D6DD1AC4')
+BEGIN 
+insert into t_Framework_ApplicationServers select '8272EB5B-C146-4883-9347-5BF1D6DD1AC4','124','lehrpersondevfusionimpetus.arcadixdevelopment.com',
+'ax-mgmtserver3','2','3','Y','2','16','Y','Teacher',NULL,'Lehrperson','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:17AM',
+'Aug 31 2020 10:17AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182D','DEV','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '9B80831A-2D9E-4F1D-9FFC-80B35B05FA88')
+BEGIN 
+insert into t_Framework_ApplicationServers select '9B80831A-2D9E-4F1D-9FFC-80B35B05FA88','124','testdevfusionimpetus.arcadixdevelopment.com',
+'ax-mgmtserver1','2','3','Y','1','19','Y','Test',NULL,'Test','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:17AM','Aug 31 2020 10:17AM',
+NULL,'E842AEDD-0859-4703-B639-E262F0E90DD8','DEV','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = 'CDAA4150-DA43-4491-B187-42B191E09A52')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'CDAA4150-DA43-4491-B187-42B191E09A52','124','schuletestfusionimpetus.arcadixdevelopment.com',
+'ax-mgmtserver1','2','2','Y','2','16','Y','School',NULL,'Schule','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:17AM','Aug 31 2020 10:17AM',
+NULL,'CAABA7C6-D44B-4495-8F28-08D45475182C','TEST','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '7F5E45D0-1481-48B2-8158-4E8B8FFDC290')
+BEGIN 
+insert into t_Framework_ApplicationServers select '7F5E45D0-1481-48B2-8158-4E8B8FFDC290','124','pupiltestfusionimpetus.arcadixdevelopment.com',
+'ax-mgmtserver1','2','2','Y','2','16','Y','Pupil',NULL,'Pupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:17AM','Aug 31 2020 10:17AM',NULL,
+'CAABA7C6-D44B-4495-8F28-08D45475182B','TEST','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = 'EB144363-B278-4762-A121-8155CF067E02')
+BEGIN
+ insert into t_Framework_ApplicationServers select 'EB144363-B278-4762-A121-8155CF067E02','124','lehrpersontestfusionimpetus.arcadixdevelopment.com',
+ 'ax-mgmtserver1','2','3','Y','2','16','Y','Teacher',NULL,'Lehrperson','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:17AM',
+ 'Aug 31 2020 10:17AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182D','TEST','3',NULL,NULL,'Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = 'F2898003-3D35-4422-9A00-1191B9212B81')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'F2898003-3D35-4422-9A00-1191B9212B81','124','testtestfusionimpetus.arcadixdevelopment.com',
+'ax-mgmtserver1','2','3','Y','2','16','Y','Test',NULL,'Test','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:17AM','Aug 31 2020 10:17AM',
+NULL,'E842AEDD-0859-4703-B639-E262F0E90DD8','TEST','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = 'AF9E271D-0FEE-403C-8DFD-2757DA638AD2')
+BEGIN
+ insert into t_Framework_ApplicationServers select 'AF9E271D-0FEE-403C-8DFD-2757DA638AD2','112','schuleactivefusionchecktools.arcadixdevelopment.com',
+ 'ax-mgmtserver1','2','2','Y','1','17','Y','School',NULL,'Schule','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:18AM','Aug 31 2020 10:18AM',
+ NULL,'CAABA7C6-D44B-4495-8F28-08D45475182C','ACTIVE','3',NULL,NULL,'Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = 'B3E19C8A-4089-4E53-A495-8FEBFBE54B15')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'B3E19C8A-4089-4E53-A495-8FEBFBE54B15','115','schuleactivefusionlernpassplus.arcadixdevelopment.com',
+'ax-mgmtserver1','2','2','Y','1','17','Y','School',NULL,'Schule','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:21AM',
+'Sep  1 2020 10:21AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182C','ACTIVE','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = 'C0AB5C1B-540D-4268-97A5-F6C0B14BAE91')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'C0AB5C1B-540D-4268-97A5-F6C0B14BAE91','115','pupilactivefusionlernpassplus.arcadixdevelopment.com',
+'ax-mgmtserver1','2','2','Y','1','17','Y','Pupil',NULL,'Pupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:21AM',
+'Sep  1 2020 10:21AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182B','ACTIVE','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '3B04FDAA-7891-4EA9-B9B4-670C477AE8CF')
+BEGIN 
+insert into t_Framework_ApplicationServers select '3B04FDAA-7891-4EA9-B9B4-670C477AE8CF','115','lehrpersonactivefusionlernpassplus.arcadixdevelopment.com',
+'ax-mgmtserver1','2','3','Y','1','17','Y','Teacher',NULL,'Lehrperson','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:21AM',
+'Sep  1 2020 10:21AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182D','ACTIVE','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '951762B5-953D-4D94-8A4E-A546A963A2D0')
+BEGIN 
+insert into t_Framework_ApplicationServers select '951762B5-953D-4D94-8A4E-A546A963A2D0','115','testactivefusionlernpassplus.arcadixdevelopment.com',
+'ax-mgmtserver1','2','3','Y','1','17','Y','Test',NULL,'Test','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:21AM','Sep  1 2020 10:21AM',
+NULL,'E842AEDD-0859-4703-B639-E262F0E90DD8','ACTIVE','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = 'E1D03B88-BE98-4DD4-8F05-99CA7698616B')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'E1D03B88-BE98-4DD4-8F05-99CA7698616B','115','schuledevfusionlernpassplus.arcadixdevelopment.com',
+'ax-mgmtserver3','2','2','Y','1','17','Y','School',NULL,'Schule','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:21AM',
+'Sep  1 2020 10:21AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182C','DEV','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = 'D14A09A7-4A33-4C19-A367-6325AA5E18A1')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'D14A09A7-4A33-4C19-A367-6325AA5E18A1','115','pupildevfusionlernpassplus.arcadixdevelopment.com',
+'ax-mgmtserver3','2','2','Y','1','17','Y','Pupil',NULL,'Pupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:21AM','Sep  1 2020 10:21AM',NULL,
+'CAABA7C6-D44B-4495-8F28-08D45475182B','DEV','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '95860C4F-1DAB-456A-AB61-F163A6E066A9')
+BEGIN 
+insert into t_Framework_ApplicationServers select '95860C4F-1DAB-456A-AB61-F163A6E066A9','115','lehrpersondevfusionlernpassplus.arcadixdevelopment.com',
+'ax-mgmtserver3','2','3','Y','1','17','Y','Teacher',NULL,'Lehrperson','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:21AM',
+'Sep  1 2020 10:21AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182D','DEV','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '76C76522-DF45-45C1-83C4-2512C657F1B7')
+BEGIN 
+insert into t_Framework_ApplicationServers select '76C76522-DF45-45C1-83C4-2512C657F1B7','115','testdevfusionlernpassplus.arcadixdevelopment.com',
+'ax-mgmtserver1','2','3','Y','1','17','Y','Test',NULL,'Test','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:21AM','Sep  1 2020 10:21AM',NULL,
+'E842AEDD-0859-4703-B639-E262F0E90DD8','DEV','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '48F4570F-657D-4DA9-B3FD-03E627BECC12')
+BEGIN 
+insert into t_Framework_ApplicationServers select '48F4570F-657D-4DA9-B3FD-03E627BECC12','115','schuletestfusionlernpassplus.arcadixdevelopment.com',
+'ax-mgmtserver1','2','2','Y','1','17','Y','School',NULL,'Schule','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:21AM','Sep  1 2020 10:21AM',
+NULL,'CAABA7C6-D44B-4495-8F28-08D45475182C','TEST','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '3D37FF48-0D10-4215-B0DB-539BC7AE91F4')
+BEGIN 
+insert into t_Framework_ApplicationServers select '3D37FF48-0D10-4215-B0DB-539BC7AE91F4','115','pupiltestfusionlernpassplus.arcadixdevelopment.com',
+'ax-mgmtserver1','2','2','Y','1','17','Y','Pupil',NULL,'Pupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:21AM','Sep  1 2020 10:21AM',
+NULL,'CAABA7C6-D44B-4495-8F28-08D45475182B','TEST','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = 'C7340A4B-0C38-4DAA-BF5B-42CDB43076CF')
+BEGIN
+ insert into t_Framework_ApplicationServers select 'C7340A4B-0C38-4DAA-BF5B-42CDB43076CF','115','lehrpersontestfusionlernpassplus.arcadixdevelopment.com',
+ 'ax-mgmtserver1','2','3','Y','1','17','Y','Teacher',NULL,'Lehrperson','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:21AM','Sep  1 2020 10:21AM',
+ NULL,'CAABA7C6-D44B-4495-8F28-08D45475182D','TEST','3',NULL,NULL,'Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = 'BE49B342-FCE0-44E8-9CB8-88C9648C5004')
+BEGIN
+ insert into t_Framework_ApplicationServers select 'BE49B342-FCE0-44E8-9CB8-88C9648C5004','115','testtestfusionlernpassplus.arcadixdevelopment.com',
+ 'ax-mgmtserver1','2','3','Y','1','17','Y','Test',NULL,'Test','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:21AM','Sep  1 2020 10:21AM',
+ NULL,'E842AEDD-0859-4703-B639-E262F0E90DD8','TEST','3',NULL,NULL,'Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '6EDC1A82-6506-4E55-ACFA-393BD129B4C7')
+BEGIN 
+insert into t_Framework_ApplicationServers select '6EDC1A82-6506-4E55-ACFA-393BD129B4C7','97',' https://intranetdevfusionlernlupe.arcadixdevelopment.com',
+'Test_ARUN',NULL,NULL,NULL,NULL,NULL,NULL,'Intranet',NULL,NULL,'N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  2 2020  8:50AM','Sep  2 2020  8:49AM',
+'AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','EB6CA735-E834-4A7C-8953-D67530F62CCB','FOR_TESTING','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = 'EFC77F56-8368-496D-92CE-0BB600BEB11C')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'EFC77F56-8368-496D-92CE-0BB600BEB11C','97','https://intranetdevfusionlernlupe.arcadixdevelopment.com',
+'ax-mgmtserver-3','2','3',NULL,NULL,NULL,'Y','Intranet','sample','Intranet','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:48AM','Aug 31 2020 10:08AM',
+'AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','EB6CA735-E834-4A7C-8953-D67530F62CCB','DEV','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = 'D454D871-FB1B-4D99-B8C9-F1C16A6C324C')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'D454D871-FB1B-4D99-B8C9-F1C16A6C324C','97','https://intranetactivefusionlernlupe.arcadixdevelopment.com',
+'ax-mgmtserver-3','1','2',NULL,NULL,NULL,'Y','Intranet',NULL,'Intranet','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:49AM',
+'Aug 31 2020 10:49AM',NULL,'EB6CA735-E834-4A7C-8953-D67530F62CCB','ACTIVE','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '369BB503-79EC-4728-A455-42C87691C09D')
+BEGIN 
+insert into t_Framework_ApplicationServers select '369BB503-79EC-4728-A455-42C87691C09D','97','https://intranettestfusionlernlupe.arcadixdevelopment.com',
+'ax-mgmtserver-3','1','3',NULL,NULL,NULL,'Y','Intranet',NULL,'Intranet','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:50AM',
+'Aug 31 2020 10:50AM',NULL,'EB6CA735-E834-4A7C-8953-D67530F62CCB','TEST','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = 'F1BECFC4-E87B-4A55-8A09-33C40E75F023')
+BEGIN
+ insert into t_Framework_ApplicationServers select 'F1BECFC4-E87B-4A55-8A09-33C40E75F023','97','https://cockpitdevfusion.arcadixdevelopment.com/',
+ 'ax-mgmtserver-3','1','2',NULL,NULL,NULL,'Y','Cockpit',NULL,'Cockpit','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:51AM',
+ 'Aug 31 2020 10:51AM',NULL,'FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F','DEV','3',NULL,NULL,'Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = 'BD3E50B9-3CD8-4C1B-9461-FE593657D5EB')
+BEGIN
+ insert into t_Framework_ApplicationServers select 'BD3E50B9-3CD8-4C1B-9461-FE593657D5EB','97','https://cockpitactivefusion.arcadixdevelopment.com/',
+ 'ax-mgmtserver-3','1','2',NULL,NULL,NULL,'Y','Cockpit',NULL,'Cockpit','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:52AM',
+ 'Aug 31 2020 10:52AM',NULL,'FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F','ACTIVE','3',NULL,NULL,'Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '57B4E576-0874-43AE-8DCE-80B872764814')
+BEGIN
+ insert into t_Framework_ApplicationServers select '57B4E576-0874-43AE-8DCE-80B872764814','97','https://cockpittestfusion.arcadixdevelopment.com/',
+ 'ax-mgmtserver-3','1','1',NULL,NULL,NULL,'Y','Cockpit',NULL,'Cockpit','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:52AM',
+ 'Aug 31 2020 10:52AM',NULL,'FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F','TEST','3',NULL,NULL,'Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '63FD777F-668F-4B1E-AFA7-76F130692E21')
+BEGIN 
+insert into t_Framework_ApplicationServers select '63FD777F-668F-4B1E-AFA7-76F130692E21','97','s','s','1','1',NULL,NULL,NULL,'Y',
+'Intranet','s','s','Y','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 28 2020  5:16PM','Aug 28 2020  5:16PM',NULL,
+'EB6CA735-E834-4A7C-8953-D67530F62CCB','s','2',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '1A8C8790-0C43-4FDB-8F2D-6C7650DEACF9')
+BEGIN
+ insert into t_Framework_ApplicationServers select '1A8C8790-0C43-4FDB-8F2D-6C7650DEACF9','97','s','s','1','1',NULL,NULL,NULL,'Y',
+ 'Intranet','s1','s','Y','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 28 2020  5:17PM','Aug 28 2020  5:17PM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6',
+ 'EB6CA735-E834-4A7C-8953-D67530F62CCB','s','2',NULL,NULL,'Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = 'E11FB8B0-F69A-4918-8BDD-92C9701C23A7')
+BEGIN
+ insert into t_Framework_ApplicationServers select 'E11FB8B0-F69A-4918-8BDD-92C9701C23A7','112','pupilactivefusionchecktools.arcadixdevelopment.com',
+ 'ax-mgmtserver1','2','2','Y','2','16','Y','Pupil',NULL,'Pupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:18AM',
+ 'Aug 31 2020 10:18AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182B','ACTIVE','3',NULL,NULL,'Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = 'DA309508-56B6-43FC-AFD8-38DA87BA4EB4')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'DA309508-56B6-43FC-AFD8-38DA87BA4EB4','112','lehrpersonactivefusionchecktools.arcadixdevelopment.com',
+'ax-mgmtserver1','2','3','Y','1','17','Y','Teacher',NULL,'Lehrperson','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:18AM',
+'Aug 31 2020 10:18AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182D','ACTIVE','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '479FCC37-D4AF-48E7-9DBA-C7A3493B4BCD')
+BEGIN 
+insert into t_Framework_ApplicationServers select '479FCC37-D4AF-48E7-9DBA-C7A3493B4BCD','112','testactivefusionchecktools.arcadixdevelopment.com',
+'ax-mgmtserver1','2','3','Y','2','36','Y','Test',NULL,'Test','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:18AM','Aug 31 2020 10:18AM',NULL,
+'E842AEDD-0859-4703-B639-E262F0E90DD8','ACTIVE','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = 'E5D65A15-21CF-4F44-BF9B-0B2E63FD01B9')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'E5D65A15-21CF-4F44-BF9B-0B2E63FD01B9','112','schuledevfusionchecktools.arcadixdevelopment.com',
+'ax-mgmtserver3','2','2','Y','1','17','Y','School',NULL,'Schule','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:18AM','Aug 31 2020 10:18AM',
+NULL,'CAABA7C6-D44B-4495-8F28-08D45475182C','DEV','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '98571B19-690C-4C9A-9FAF-AE996BC02236')
+BEGIN
+ insert into t_Framework_ApplicationServers select '98571B19-690C-4C9A-9FAF-AE996BC02236','112','pupildevfusionchecktools.arcadixdevelopment.com',
+ 'ax-mgmtserver3','2','2','Y','2','16','Y','Pupil',NULL,'Pupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:18AM','Aug 31 2020 10:18AM',
+ NULL,'CAABA7C6-D44B-4495-8F28-08D45475182B','DEV','3',NULL,NULL,'Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '6BB851B5-E7DA-4E22-8550-70806B5437E9')
+BEGIN 
+insert into t_Framework_ApplicationServers select '6BB851B5-E7DA-4E22-8550-70806B5437E9','112','lehrpersondevfusionchecktools.arcadixdevelopment.com',
+'ax-mgmtserver3','2','3','Y','1','17','Y','Teacher',NULL,'Lehrperson','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:18AM','Aug 31 2020 10:18AM',
+NULL,'CAABA7C6-D44B-4495-8F28-08D45475182D','DEV','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = 'E6947A9B-B99B-4BED-B65B-DA92FBCD4501')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'E6947A9B-B99B-4BED-B65B-DA92FBCD4501','112','testdevfusionchecktools.arcadixdevelopment.com',
+'ax-mgmtserver1','2','3','Y','2','18','Y','Test',NULL,'Test','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:18AM','Aug 31 2020 10:18AM',
+NULL,'E842AEDD-0859-4703-B639-E262F0E90DD8','DEV','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '2F214434-78C1-43B7-A662-D44E6078B235')
+BEGIN
+ insert into t_Framework_ApplicationServers select '2F214434-78C1-43B7-A662-D44E6078B235','112','schuletestfusionchecktools.arcadixdevelopment.com',
+ 'ax-mgmtserver1','2','2','Y','1','17','Y','School',NULL,'Schule','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:18AM','Aug 31 2020 10:18AM',
+ NULL,'CAABA7C6-D44B-4495-8F28-08D45475182C','TEST','3',NULL,NULL,'Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '0220059C-2F1D-44FE-A76E-B34BFCACE126')
+BEGIN
+ insert into t_Framework_ApplicationServers select '0220059C-2F1D-44FE-A76E-B34BFCACE126','112','pupiltestfusionchecktools.arcadixdevelopment.com',
+ 'ax-mgmtserver1','2','2','Y','1','17','Y','Pupil',NULL,'Pupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:18AM','Aug 31 2020 10:18AM',
+ NULL,'CAABA7C6-D44B-4495-8F28-08D45475182B','TEST','3',NULL,NULL,'Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '3928A2B4-E38F-4DE3-A654-A49D4D6D82CF')
+BEGIN
+ insert into t_Framework_ApplicationServers select '3928A2B4-E38F-4DE3-A654-A49D4D6D82CF','112','lehrpersontestfusionchecktools.arcadixdevelopment.com',
+ 'ax-mgmtserver1','2','3','Y','1','17','Y','Teacher',NULL,'Lehrperson','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:18AM','Aug 31 2020 10:18AM',
+ NULL,'CAABA7C6-D44B-4495-8F28-08D45475182D','TEST','3',NULL,NULL,'Y'END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '20A30D8D-6F16-4602-9DC7-0F593C672DE0')
+BEGIN 
+insert into t_Framework_ApplicationServers select '20A30D8D-6F16-4602-9DC7-0F593C672DE0','112','testtestfusionchecktools.arcadixdevelopment.com',
+'ax-mgmtserver1','2','3','Y','1','17','Y','Test',NULL,'Test','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:18AM','Aug 31 2020 10:18AM',
+NULL,'E842AEDD-0859-4703-B639-E262F0E90DD8','TEST','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = 'AB0FB6BC-C57F-4147-81D9-E90CF06FB1A6')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'AB0FB6BC-C57F-4147-81D9-E90CF06FB1A6','114','schuleactivefusioncodoc.arcadixdevelopment.com',
+'ax-mgmtserver1','2','2','Y','1','17','Y','School',NULL,'Schule','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:17AM','Sep  1 2020 10:17AM',
+NULL,'CAABA7C6-D44B-4495-8F28-08D45475182C','ACTIVE','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '6ED244A7-C1CA-4577-88B4-DFCB3900AC9F')
+BEGIN 
+insert into t_Framework_ApplicationServers select '6ED244A7-C1CA-4577-88B4-DFCB3900AC9F','114','pupilactivefusioncodoc.arcadixdevelopment.com',
+'ax-mgmtserver1','2','2','Y','1','17','Y','Pupil',NULL,'Pupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:17AM','Sep  1 2020 10:17AM',
+NULL,'CAABA7C6-D44B-4495-8F28-08D45475182B','ACTIVE','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '21CF1C64-6967-4D80-B5DF-42C1BB65AE1B')
+BEGIN 
+insert into t_Framework_ApplicationServers select '21CF1C64-6967-4D80-B5DF-42C1BB65AE1B','114','lehrpersonactivefusioncodoc.arcadixdevelopment.com',
+'ax-mgmtserver1','2','3','Y','1','17','Y','Teacher',NULL,'Lehrperson','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:17AM',
+'Sep  1 2020 10:17AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182D','ACTIVE','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '64B472F2-AC3F-4512-8021-BCEB0CD00F3F')
+BEGIN
+ insert into t_Framework_ApplicationServers select '64B472F2-AC3F-4512-8021-BCEB0CD00F3F','114','testactivefusioncodoc.arcadixdevelopment.com',
+ 'ax-mgmtserver1','2','3','Y','1','17','Y','Test',NULL,'Test','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:17AM','Sep  1 2020 10:17AM',
+ NULL,'E842AEDD-0859-4703-B639-E262F0E90DD8','ACTIVE','3',NULL,NULL,'Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '0A5D216C-391B-458A-A1C8-F5D336096D05')
+BEGIN 
+insert into t_Framework_ApplicationServers select '0A5D216C-391B-458A-A1C8-F5D336096D05','114','schuledevfusioncodoc.arcadixdevelopment.com',
+'ax-mgmtserver3','2','2','Y','2','18','Y','School',NULL,'Schule','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:17AM','Sep  1 2020 10:17AM',
+NULL,'CAABA7C6-D44B-4495-8F28-08D45475182C','DEV','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '17E7056E-1CFA-4518-8300-2461FCCABA1B')
+BEGIN 
+insert into t_Framework_ApplicationServers select '17E7056E-1CFA-4518-8300-2461FCCABA1B','114','pupildevfusioncodoc.arcadixdevelopment.com',
+'ax-mgmtserver3','2','2','Y','1','17','Y','Pupil',NULL,'Pupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:17AM','Sep  1 2020 10:17AM',
+NULL,'CAABA7C6-D44B-4495-8F28-08D45475182B','DEV','3',NULL,NULL,'Y'END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = 'BA29D182-B5B2-4BE6-A22B-2BE240A2D176')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'BA29D182-B5B2-4BE6-A22B-2BE240A2D176','114','lehrpersondevfusioncodoc.arcadixdevelopment.com',
+'ax-mgmtserver3','2','3','Y','2','18','Y','Teacher',NULL,'Lehrperson','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:17AM','Sep  1 2020 10:17AM',
+NULL,'CAABA7C6-D44B-4495-8F28-08D45475182D','DEV','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = 'E18F4AD8-B835-477B-974B-62977DC95FC2')
+BEGIN
+ insert into t_Framework_ApplicationServers select 'E18F4AD8-B835-477B-974B-62977DC95FC2','114','testdevfusioncodoc.arcadixdevelopment.com',
+ 'ax-mgmtserver1','2','3','Y','1','17','Y','Test',NULL,'Test','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:17AM',
+ 'Sep  1 2020 10:17AM',NULL,'E842AEDD-0859-4703-B639-E262F0E90DD8','DEV','3',NULL,NULL,'Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '185C4EEE-1019-4874-8F6F-DCA66CDCA86E')
+BEGIN
+ insert into t_Framework_ApplicationServers select '185C4EEE-1019-4874-8F6F-DCA66CDCA86E','114','schuletestfusioncodoc.arcadixdevelopment.com',
+ 'ax-mgmtserver1','2','2','Y','1','19','Y','School',NULL,'Schule','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:17AM','Sep  1 2020 10:17AM',
+ NULL,'CAABA7C6-D44B-4495-8F28-08D45475182C','TEST','3',NULL,NULL,'Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '70D7E948-AC18-41A0-BAF8-CB4178BDDE88')
+BEGIN
+ insert into t_Framework_ApplicationServers select '70D7E948-AC18-41A0-BAF8-CB4178BDDE88','114','pupiltestfusioncodoc.arcadixdevelopment.com',
+ 'ax-mgmtserver1','2','2','Y','1','17','Y','Pupil',NULL,'Pupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:17AM','Sep  1 2020 10:17AM',
+ NULL,'CAABA7C6-D44B-4495-8F28-08D45475182B','TEST','3',NULL,NULL,'Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = 'DEF61379-2DD1-4C49-AF16-7BBDD01292E9')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'DEF61379-2DD1-4C49-AF16-7BBDD01292E9','114','lehrpersontestfusioncodoc.arcadixdevelopment.com',
+'ax-mgmtserver1','2','3','Y','1','17','Y','Teacher',NULL,'Lehrperson','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:17AM','Sep  1 2020 10:17AM',
+NULL,'CAABA7C6-D44B-4495-8F28-08D45475182D','TEST','3',NULL,NULL,'Y'
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uObjectConfigurationColumnId = '2F000B87-AFA8-4EF3-B059-6C41F95AA526')
+BEGIN 
+insert into t_Framework_ApplicationServers select '2F000B87-AFA8-4EF3-B059-6C41F95AA526','114','testtestfusioncodoc.arcadixdevelopment.com',
+'ax-mgmtserver1','2','3','Y','1','17','Y','Test',NULL,'Test','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:17AM','Sep  1 2020 10:17AM',
+NULL,'E842AEDD-0859-4703-B639-E262F0E90DD8','TEST','3',NULL,NULL,'Y'
+END
+GO
+
+
+/**********************************************************
+
+The below script will insert updated data into ApplicationServer table
+Script Date:19-10-2020
+
+***********************************************************/
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '982C2A08-9508-4CFD-A7D1-30FE9AE3933F')
+BEGIN
+ insert into t_Framework_ApplicationServers select '982C2A08-9508-4CFD-A7D1-30FE9AE3933F','97','testdevfusionlernlupe.arcadixdevelopment.com','ax-mgmtserver7','2','3','Y','2','192','Y','FusionTestApplication',NULL,'FusionTestApplication','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 14 2020  8:07PM','Aug 28 2020  7:24PM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','E842AEDD-0859-4703-B639-E262F0E90DD8','DEV','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'F4CE7E6B-594A-402B-A831-DC23F5FC619A')
+BEGIN
+ insert into t_Framework_ApplicationServers select 'F4CE7E6B-594A-402B-A831-DC23F5FC619A','97','schulefusionlernlupe.arcadixdevelopment.com','10.247.143.174','2','2',NULL,'1','17','Y','FusionSchool',NULL,'FusionSchool','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 14 2020  8:26PM','Aug 28 2020  7:30PM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','CAABA7C6-D44B-4495-8F28-08D45475182C','ACTIVE','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '3893DA9A-495B-4B6C-AA02-E0CF948D8B24')
+BEGIN 
+insert into t_Framework_ApplicationServers select '3893DA9A-495B-4B6C-AA02-E0CF948D8B24','97','pupilfusionlernlupe.arcadixdevelopment.com','10.247.143.174','2','2',NULL,'1','17','Y','FusionPupil',NULL,'FusionPupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 14 2020  8:29PM','Aug 28 2020  7:30PM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','CAABA7C6-D44B-4495-8F28-08D45475182B','ACTIVE','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '701938EE-DAF3-470D-8316-2058D8DC48C7')
+BEGIN
+ insert into t_Framework_ApplicationServers select '701938EE-DAF3-470D-8316-2058D8DC48C7','97','lehrpersonfusionlernlupe.arcadixdevelopment.com','10.247.143.174','2','3',NULL,'1','17','Y','FusionTeacher',NULL,'FusionTeacher','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 14 2020  8:30PM','Aug 28 2020  7:30PM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','CAABA7C6-D44B-4495-8F28-08D45475182D','ACTIVE','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+  END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '157B3105-28A4-432C-A53B-F7C164F3D454')
+BEGIN 
+insert into t_Framework_ApplicationServers select '157B3105-28A4-432C-A53B-F7C164F3D454','97','testfusionlernlupe.arcadixdevelopment.com','10.247.143.174','2','3',NULL,'1','111','Y','FusionTestApplication',NULL,'FusionTestApplication','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 14 2020  8:30PM','Aug 28 2020  7:33PM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','E842AEDD-0859-4703-B639-E262F0E90DD8','ACTIVE','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'C94822BE-1342-4868-9A0C-FDF619B5D21B')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'C94822BE-1342-4868-9A0C-FDF619B5D21B','97','schuledevfusionlernlupe.arcadixdevelopment.com','ax-mgmtserver7','2','2','Y','2','32','Y','FusionSchool',NULL,'FusionSchool','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 14 2020  8:05PM','Aug 28 2020  7:36PM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','CAABA7C6-D44B-4495-8F28-08D45475182C','DEV','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '104CACD6-1149-4FC5-BD12-273E5AA256DA')
+BEGIN 
+insert into t_Framework_ApplicationServers select '104CACD6-1149-4FC5-BD12-273E5AA256DA','97','pupildevfusionlernlupe.arcadixdevelopment.com','ax-mgmtserver7','2','2','Y','2','22','Y','FusionPupil',NULL,'FusionPupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 14 2020  8:06PM','Aug 28 2020  7:36PM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','CAABA7C6-D44B-4495-8F28-08D45475182B','DEV','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'BE7B98DD-480F-494C-A6A9-184AEC2FA8CA')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'BE7B98DD-480F-494C-A6A9-184AEC2FA8CA','97','lehrpersondevfusionlernlupe.arcadixdevelopment.com','ax-mgmtserver7','2','3','Y','1','35','Y','FusionTeacher',NULL,'FusionTeacher','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 14 2020  8:06PM','Aug 28 2020  7:36PM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','CAABA7C6-D44B-4495-8F28-08D45475182D','DEV','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '6B33FD79-5601-4371-B8A9-7B65DE985CB9')
+BEGIN 
+insert into t_Framework_ApplicationServers select '6B33FD79-5601-4371-B8A9-7B65DE985CB9','97','schuletestfusionlernlupe.arcadixdevelopment.com','ax-mgmtserver1','2','2',NULL,'2','20','Y','FusionSchool',NULL,'FusionSchool','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 14 2020  8:26PM','Aug 28 2020  7:39PM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','CAABA7C6-D44B-4495-8F28-08D45475182C','TEST','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '92E3315D-C9B4-4BF5-B0DE-F3CE9B2379B5')
+BEGIN 
+insert into t_Framework_ApplicationServers select '92E3315D-C9B4-4BF5-B0DE-F3CE9B2379B5','97','pupiltestfusionlernlupe.arcadixdevelopment.com','ax-mgmtserver1','2','2',NULL,'2','18','Y','FusionPupil',NULL,'FusionPupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 14 2020  8:29PM','Aug 28 2020  7:39PM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','CAABA7C6-D44B-4495-8F28-08D45475182B','TEST','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '72FF4085-0E96-44D8-B043-6D2C05497771')
+BEGIN
+ insert into t_Framework_ApplicationServers select '72FF4085-0E96-44D8-B043-6D2C05497771','97','lehrpersontestfusionlernlupe.arcadixdevelopment.com','ax-mgmtserver1','1','3',NULL,'2','22','Y','FusionTeacher',NULL,'FusionTeacher','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 15 2020  8:17PM','Aug 28 2020  7:39PM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','CAABA7C6-D44B-4495-8F28-08D45475182D','TEST','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'B3460AAB-A98B-4BD0-9FB7-6715CBC12E4F')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'B3460AAB-A98B-4BD0-9FB7-6715CBC12E4F','97','testtestfusionlernlupe.arcadixdevelopment.com','ax-mgmtserver1','2','3',NULL,'1','149','Y','FusionTestApplication',NULL,'FusionTestApplication','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 14 2020  8:30PM','Aug 28 2020  7:39PM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','E842AEDD-0859-4703-B639-E262F0E90DD8','TEST','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '3494B78E-9556-4BDD-B37A-B993CD350CC1')
+BEGIN
+ insert into t_Framework_ApplicationServers select '3494B78E-9556-4BDD-B37A-B993CD350CC1','124','schulefusionimpetus.arcadixdevelopment.com','10.247.143.174','2','2','Y','2','16','Y','FusionSchool',NULL,'FusionSchool','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:17AM','Aug 31 2020 10:17AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182C','ACTIVE','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+  END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'FA42AA4C-BEDF-4D79-BE0A-F555190725AE')
+BEGIN
+ insert into t_Framework_ApplicationServers select 'FA42AA4C-BEDF-4D79-BE0A-F555190725AE','124','pupilfusionimpetus.arcadixdevelopment.com','10.247.143.174','2','2','Y','2','16','Y','FusionPupil',NULL,'FusionPupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:17AM','Aug 31 2020 10:17AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182B','ACTIVE','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '5CE3FF21-1DD8-4DE0-A780-B85E319DDE7B')
+BEGIN
+ insert into t_Framework_ApplicationServers select '5CE3FF21-1DD8-4DE0-A780-B85E319DDE7B','124','lehrpersonfusionimpetus.arcadixdevelopment.com','10.247.143.174','2','3','Y','2','16','Y','FusionTeacher',NULL,'FusionTeacher','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:17AM','Aug 31 2020 10:17AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182D','ACTIVE','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '957BB9B7-DDDF-4BC6-987E-0856F900E8D9')
+BEGIN
+ insert into t_Framework_ApplicationServers select '957BB9B7-DDDF-4BC6-987E-0856F900E8D9','124','testfusionimpetus.arcadixdevelopment.com','10.247.143.174','2','3','Y','1','21','Y','FusionTestApplication',NULL,'FusionTestApplication','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:17AM','Aug 31 2020 10:17AM',NULL,'E842AEDD-0859-4703-B639-E262F0E90DD8','ACTIVE','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'E58AA1C0-68F1-4C53-A214-6C2EECCDC166')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'E58AA1C0-68F1-4C53-A214-6C2EECCDC166','124','schuledevfusionimpetus.arcadixdevelopment.com','ax-mgmtserver7','2','2','Y','2','18','Y','FusionSchool',NULL,'FusionSchool','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:17AM','Aug 31 2020 10:17AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182C','DEV','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '2465703B-A9E4-4C62-B6DF-FEE4AB606DD0')
+BEGIN 
+insert into t_Framework_ApplicationServers select '2465703B-A9E4-4C62-B6DF-FEE4AB606DD0','124','pupildevfusionimpetus.arcadixdevelopment.com','ax-mgmtserver7','2','2','Y','2','16','Y','FusionPupil',NULL,'FusionPupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:17AM','Aug 31 2020 10:17AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182B','DEV','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '8272EB5B-C146-4883-9347-5BF1D6DD1AC4')
+BEGIN
+ insert into t_Framework_ApplicationServers select '8272EB5B-C146-4883-9347-5BF1D6DD1AC4','124','lehrpersondevfusionimpetus.arcadixdevelopment.com','ax-mgmtserver7','2','3','Y','2','16','Y','FusionTeacher',NULL,'FusionTeacher','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:17AM','Aug 31 2020 10:17AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182D','DEV','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+ 
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '9B80831A-2D9E-4F1D-9FFC-80B35B05FA88')
+BEGIN 
+insert into t_Framework_ApplicationServers select '9B80831A-2D9E-4F1D-9FFC-80B35B05FA88','124','testdevfusionimpetus.arcadixdevelopment.com','ax-mgmtserver7','2','3','Y','1','19','Y','FusionTestApplication',NULL,'FusionTestApplication','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:17AM','Aug 31 2020 10:17AM',NULL,'E842AEDD-0859-4703-B639-E262F0E90DD8','DEV','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'CDAA4150-DA43-4491-B187-42B191E09A52')
+BEGIN
+ insert into t_Framework_ApplicationServers select 'CDAA4150-DA43-4491-B187-42B191E09A52','124','schuletestfusionimpetus.arcadixdevelopment.com','ax-mgmtserver1','2','2','Y','2','16','Y','FusionSchool',NULL,'FusionSchool','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:17AM','Aug 31 2020 10:17AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182C','TEST','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '7F5E45D0-1481-48B2-8158-4E8B8FFDC290')
+BEGIN 
+insert into t_Framework_ApplicationServers select '7F5E45D0-1481-48B2-8158-4E8B8FFDC290','124','pupiltestfusionimpetus.arcadixdevelopment.com','ax-mgmtserver1','2','2','Y','2','16','Y','FusionPupil',NULL,'FusionPupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:17AM','Aug 31 2020 10:17AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182B','TEST','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'EB144363-B278-4762-A121-8155CF067E02')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'EB144363-B278-4762-A121-8155CF067E02','124','lehrpersontestfusionimpetus.arcadixdevelopment.com','ax-mgmtserver1','2','3','Y','2','16','Y','FusionTeacher',NULL,'FusionTeacher','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:17AM','Aug 31 2020 10:17AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182D','TEST','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'F2898003-3D35-4422-9A00-1191B9212B81')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'F2898003-3D35-4422-9A00-1191B9212B81','124','testtestfusionimpetus.arcadixdevelopment.com','ax-mgmtserver1','2','3','Y','2','16','Y','FusionTestApplication',NULL,'FusionTestApplication','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:17AM','Aug 31 2020 10:17AM',NULL,'E842AEDD-0859-4703-B639-E262F0E90DD8','TEST','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'AF9E271D-0FEE-403C-8DFD-2757DA638AD2')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'AF9E271D-0FEE-403C-8DFD-2757DA638AD2','112','schulefusionchecktools.arcadixdevelopment.com','10.247.143.174','2','2','Y','1','17','Y','FusionSchool',NULL,'FusionSchool','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:18AM','Aug 31 2020 10:18AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182C','ACTIVE','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'B3E19C8A-4089-4E53-A495-8FEBFBE54B15')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'B3E19C8A-4089-4E53-A495-8FEBFBE54B15','115','schulefusionlernlupe.arcadixdevelopment.com','10.247.143.174','2','2','Y','1','17','Y','FusionSchool',NULL,'FusionSchool','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 16 2020  3:30PM','Sep  1 2020 10:21AM','CE29B94F-ABEA-4EBE-A3C4-EF42E9B16A7F','CAABA7C6-D44B-4495-8F28-08D45475182C','ACTIVE','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'C0AB5C1B-540D-4268-97A5-F6C0B14BAE91')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'C0AB5C1B-540D-4268-97A5-F6C0B14BAE91','115','pupilfusionlernpassplus.arcadixdevelopment.com','10.247.143.174','2','2','Y','1','17','Y','FusionPupil',NULL,'FusionPupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 16 2020  3:54PM','Sep  1 2020 10:21AM','CE29B94F-ABEA-4EBE-A3C4-EF42E9B16A7F','CAABA7C6-D44B-4495-8F28-08D45475182B','ACTIVE','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '3B04FDAA-7891-4EA9-B9B4-670C477AE8CF')
+BEGIN 
+insert into t_Framework_ApplicationServers select '3B04FDAA-7891-4EA9-B9B4-670C477AE8CF','115','lehrpersonfusionlernpassplus.arcadixdevelopment.com','10.247.143.174','2','3','Y','1','17','Y','FusionTeacher',NULL,'FusionTeacher','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 16 2020  3:56PM','Sep  1 2020 10:21AM','CE29B94F-ABEA-4EBE-A3C4-EF42E9B16A7F','CAABA7C6-D44B-4495-8F28-08D45475182D','ACTIVE','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '951762B5-953D-4D94-8A4E-A546A963A2D0')
+BEGIN 
+insert into t_Framework_ApplicationServers select '951762B5-953D-4D94-8A4E-A546A963A2D0','115','testfusionlernpassplus.arcadixdevelopment.com','10.247.143.174','2','3','Y','1','17','Y','FusionTestApplication',NULL,'FusionTestApplication','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 16 2020  3:56PM','Sep  1 2020 10:21AM','CE29B94F-ABEA-4EBE-A3C4-EF42E9B16A7F','E842AEDD-0859-4703-B639-E262F0E90DD8','ACTIVE','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'E1D03B88-BE98-4DD4-8F05-99CA7698616B')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'E1D03B88-BE98-4DD4-8F05-99CA7698616B','115','schuledevfusionlernpassplus.arcadixdevelopment.com','ax-mgmtserver7','2','2','Y','1','21','Y','FusionSchool',NULL,'FusionSchool','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 16 2020  3:31PM','Sep  1 2020 10:21AM','CE29B94F-ABEA-4EBE-A3C4-EF42E9B16A7F','CAABA7C6-D44B-4495-8F28-08D45475182C','DEV','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'D14A09A7-4A33-4C19-A367-6325AA5E18A1')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'D14A09A7-4A33-4C19-A367-6325AA5E18A1','115','pupildevfusionlernpassplus.arcadixdevelopment.com','ax-mgmtserver7','2','2','Y','2','24','Y','FusionPupil',NULL,'FusionPupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 16 2020  3:55PM','Sep  1 2020 10:21AM','CE29B94F-ABEA-4EBE-A3C4-EF42E9B16A7F','CAABA7C6-D44B-4495-8F28-08D45475182B','DEV','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '95860C4F-1DAB-456A-AB61-F163A6E066A9')
+BEGIN 
+insert into t_Framework_ApplicationServers select '95860C4F-1DAB-456A-AB61-F163A6E066A9','115','lehrpersondevfusionlernpassplus.arcadixdevelopment.com','ax-mgmtserver7','2','3','Y','1','19','Y','FusionTeacher',NULL,'FusionTeacher','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 16 2020  3:55PM','Sep  1 2020 10:21AM','CE29B94F-ABEA-4EBE-A3C4-EF42E9B16A7F','CAABA7C6-D44B-4495-8F28-08D45475182D','DEV','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '76C76522-DF45-45C1-83C4-2512C657F1B7')
+BEGIN 
+insert into t_Framework_ApplicationServers select '76C76522-DF45-45C1-83C4-2512C657F1B7','115','testdevfusionlernpassplus.arcadixdevelopment.com','ax-mgmtserver7','2','3','Y','2','38','Y','FusionTestApplication',NULL,'FusionTestApplication','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 16 2020  3:57PM','Sep  1 2020 10:21AM','CE29B94F-ABEA-4EBE-A3C4-EF42E9B16A7F','E842AEDD-0859-4703-B639-E262F0E90DD8','DEV','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '48F4570F-657D-4DA9-B3FD-03E627BECC12')
+BEGIN 
+insert into t_Framework_ApplicationServers select '48F4570F-657D-4DA9-B3FD-03E627BECC12','115','schuletestfusionlernlupe.arcadixdevelopment.com','ax-mgmtserver1','2','2','Y','1','17','Y','FusionSchool',NULL,'FusionSchool','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 16 2020  3:45PM','Sep  1 2020 10:21AM','CE29B94F-ABEA-4EBE-A3C4-EF42E9B16A7F','CAABA7C6-D44B-4495-8F28-08D45475182C','TEST','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '3D37FF48-0D10-4215-B0DB-539BC7AE91F4')
+BEGIN 
+insert into t_Framework_ApplicationServers select '3D37FF48-0D10-4215-B0DB-539BC7AE91F4','115','pupiltestfusionlernpassplus.arcadixdevelopment.com','ax-mgmtserver1','2','2','Y','2','18','Y','FusionPupil',NULL,'FusionPupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:21AM','Sep  1 2020 10:21AM','CE29B94F-ABEA-4EBE-A3C4-EF42E9B16A7F','CAABA7C6-D44B-4495-8F28-08D45475182B','TEST','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'C7340A4B-0C38-4DAA-BF5B-42CDB43076CF')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'C7340A4B-0C38-4DAA-BF5B-42CDB43076CF','115','lehrpersontestfusionlernpassplus.arcadixdevelopment.com','ax-mgmtserver1','2','3','Y','1','17','Y','FusionTeacher',NULL,'FusionTeacher','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:21AM','Sep  1 2020 10:21AM','CE29B94F-ABEA-4EBE-A3C4-EF42E9B16A7F','CAABA7C6-D44B-4495-8F28-08D45475182D','TEST','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'BE49B342-FCE0-44E8-9CB8-88C9648C5004')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'BE49B342-FCE0-44E8-9CB8-88C9648C5004','115','testtestfusionlernpassplus.arcadixdevelopment.com','ax-mgmtserver1','2','3','Y','1','47','Y','FusionTestApplication',NULL,'FusionTestApplication','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:21AM','Sep  1 2020 10:21AM','CE29B94F-ABEA-4EBE-A3C4-EF42E9B16A7F','E842AEDD-0859-4703-B639-E262F0E90DD8','TEST','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '390B5212-48EA-4127-A116-7C120DD7A2D6')
+BEGIN 
+insert into t_Framework_ApplicationServers select '390B5212-48EA-4127-A116-7C120DD7A2D6','115','cockpitdevfusion.arcadixdevelopment.com','ax-mgmtserver7','1','2',NULL,NULL,NULL,'Y','FusionCockpit',NULL,'FusionCockpit','N','CE29B94F-ABEA-4EBE-A3C4-EF42E9B16A7F','Oct 16 2020  3:46PM','Oct 16 2020  3:46PM','CE29B94F-ABEA-4EBE-A3C4-EF42E9B16A7F','FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F','DEV','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'C0EA0592-BC59-4890-8AAD-CEDA2B4D6607')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'C0EA0592-BC59-4890-8AAD-CEDA2B4D6607','115','cockpitfusion.arcadixdevelopment.com','10.247.143.174','1','2',NULL,NULL,NULL,'Y','FusionCockpit',NULL,'FusionCockpit','N','CE29B94F-ABEA-4EBE-A3C4-EF42E9B16A7F','Oct 16 2020  3:47PM','Oct 16 2020  3:47PM','CE29B94F-ABEA-4EBE-A3C4-EF42E9B16A7F','FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F','ACTIVE','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'A131D109-BF94-4F32-B3B9-10046FE3068B')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'A131D109-BF94-4F32-B3B9-10046FE3068B','112','cockpitdevfusion.arcadixdevelopment.com','ax-mgmtserver7','1','2',NULL,NULL,NULL,'Y','FusionCockpit',NULL,'FusionCockpit','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 16 2020  5:12PM','Oct 16 2020  5:12PM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F','DEV','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '723D66CA-A0E8-4353-8BEB-8734B96EEADD')
+BEGIN 
+insert into t_Framework_ApplicationServers select '723D66CA-A0E8-4353-8BEB-8734B96EEADD','114','cockpitdevfusion.arcadixdevelopment.com','ax-mgmtserver7','1','2',NULL,NULL,NULL,'Y','FusionCockpit',NULL,'FusionCockpit','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 16 2020  5:12PM','Oct 16 2020  5:12PM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F','DEV','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '313E9CF9-48F2-4EA7-848C-4D2857ACC63E')
+BEGIN 
+insert into t_Framework_ApplicationServers select '313E9CF9-48F2-4EA7-848C-4D2857ACC63E','124','cockpitdevfusion.arcadixdevelopment.com','ax-mgmtserver7','1','2',NULL,NULL,NULL,'Y','FusionCockpit',NULL,'FusionCockpit','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 16 2020  5:13PM','Oct 16 2020  5:13PM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F','DEV','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'E0DFC84D-145E-495A-BBF7-D45E65FE32FE')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'E0DFC84D-145E-495A-BBF7-D45E65FE32FE','124','cockpitfusion.arcadixdevelopment.com','10.247.143.174','1','2',NULL,NULL,NULL,'Y','FusionCockpit',NULL,'FusionCockpit','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 16 2020  5:15PM','Oct 16 2020  5:15PM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F','ACTIVE','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'FF277F1C-0CC3-45CA-9329-C1D591D800B8')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'FF277F1C-0CC3-45CA-9329-C1D591D800B8','114','cockpitfusion.arcadixdevelopment.com','10.247.143.174','1','2',NULL,NULL,NULL,'Y','FusionCockpit',NULL,'FusionCockpit','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 16 2020  5:16PM','Oct 16 2020  5:16PM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F','ACTIVE','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '29E13514-4765-4935-82E8-83980692F213')
+BEGIN 
+insert into t_Framework_ApplicationServers select '29E13514-4765-4935-82E8-83980692F213','112','cockpitfusion.arcadixdevelopment.com','10.247.143.174','1','2',NULL,NULL,NULL,'Y','FusionCockpit',NULL,'FusionCockpit','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 16 2020  5:16PM','Oct 16 2020  5:16PM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F','ACTIVE','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '0AD82090-EDEC-43C2-AC6B-BA129A2AB078')
+BEGIN 
+insert into t_Framework_ApplicationServers select '0AD82090-EDEC-43C2-AC6B-BA129A2AB078','112','cockpittestfusion.arcadixdevelopment.com','ax-mgmtserver1','1','2',NULL,NULL,NULL,'Y','FusionCockpit',NULL,'FusionCockpit','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 16 2020  5:17PM','Oct 16 2020  5:17PM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F','TEST','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'DE8EA1C7-301A-4210-B589-1851FA322BE7')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'DE8EA1C7-301A-4210-B589-1851FA322BE7','114','cockpittestfusion.arcadixdevelopment.com','ax-mgmtserver1','1','2',NULL,NULL,NULL,'Y','FusionCockpit',NULL,'FusionCockpit','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 16 2020  5:17PM','Oct 16 2020  5:17PM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F','TEST','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '96843BD5-B85D-4593-BCAA-406815137997')
+BEGIN 
+insert into t_Framework_ApplicationServers select '96843BD5-B85D-4593-BCAA-406815137997','124','cockpittestfusion.arcadixdevelopment.com','ax-mgmtserver1','1','2',NULL,NULL,NULL,'Y','FusionCockpit',NULL,'FusionCockpit','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 16 2020  5:17PM','Oct 16 2020  5:17PM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F','TEST','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'F1BECFC4-E87B-4A55-8A09-33C40E75F023')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'F1BECFC4-E87B-4A55-8A09-33C40E75F023','97','cockpitdevfusion.arcadixdevelopment.com','ax-mgmtserver7','1','2',NULL,NULL,NULL,'Y','FusionCockpit',NULL,'FusionCockpit','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 16 2020  3:47PM','Aug 31 2020 10:51AM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F','DEV','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'BD3E50B9-3CD8-4C1B-9461-FE593657D5EB')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'BD3E50B9-3CD8-4C1B-9461-FE593657D5EB','97','cockpitfusion.arcadixdevelopment.com','10.247.143.174','1','2',NULL,NULL,NULL,'Y','FusionCockpit',NULL,'FusionCockpit','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 16 2020  3:47PM','Aug 31 2020 10:52AM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F','ACTIVE','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '57B4E576-0874-43AE-8DCE-80B872764814')
+BEGIN 
+insert into t_Framework_ApplicationServers select '57B4E576-0874-43AE-8DCE-80B872764814','97','cockpittestfusion.arcadixdevelopment.com','ax-mgmtserver1','1','1',NULL,NULL,NULL,'Y','FusionCockpit',NULL,'FusionCockpit','Y','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Oct 16 2020  3:49PM','Aug 31 2020 10:52AM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F','TEST','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'E11FB8B0-F69A-4918-8BDD-92C9701C23A7')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'E11FB8B0-F69A-4918-8BDD-92C9701C23A7','112','pupilfusionchecktools.arcadixdevelopment.com','10.247.143.174','2','2','Y','2','16','Y','FusionPupil',NULL,'FusionPupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:18AM','Aug 31 2020 10:18AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182B','ACTIVE','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'DA309508-56B6-43FC-AFD8-38DA87BA4EB4')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'DA309508-56B6-43FC-AFD8-38DA87BA4EB4','112','lehrpersonfusionchecktools.arcadixdevelopment.com','10.247.143.174','2','3','Y','1','17','Y','FusionTeacher',NULL,'FusionTeacher','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:18AM','Aug 31 2020 10:18AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182D','ACTIVE','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '479FCC37-D4AF-48E7-9DBA-C7A3493B4BCD')
+BEGIN 
+insert into t_Framework_ApplicationServers select '479FCC37-D4AF-48E7-9DBA-C7A3493B4BCD','112','testfusionchecktools.arcadixdevelopment.com','10.247.143.174','2','3','Y','2','36','Y','FusionTestApplication',NULL,'FusionTestApplication','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:18AM','Aug 31 2020 10:18AM',NULL,'E842AEDD-0859-4703-B639-E262F0E90DD8','ACTIVE','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'E5D65A15-21CF-4F44-BF9B-0B2E63FD01B9')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'E5D65A15-21CF-4F44-BF9B-0B2E63FD01B9','112','schuledevfusionchecktools.arcadixdevelopment.com','ax-mgmtserver7','2','2','Y','1','17','Y','FusionSchool',NULL,'FusionSchool','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:18AM','Aug 31 2020 10:18AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182C','DEV','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '98571B19-690C-4C9A-9FAF-AE996BC02236')
+BEGIN 
+insert into t_Framework_ApplicationServers select '98571B19-690C-4C9A-9FAF-AE996BC02236','112','pupildevfusionchecktools.arcadixdevelopment.com','ax-mgmtserver7','2','2','Y','2','16','Y','FusionPupil',NULL,'FusionPupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:18AM','Aug 31 2020 10:18AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182B','DEV','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '6BB851B5-E7DA-4E22-8550-70806B5437E9')
+BEGIN 
+insert into t_Framework_ApplicationServers select '6BB851B5-E7DA-4E22-8550-70806B5437E9','112','lehrpersondevfusionchecktools.arcadixdevelopment.com','ax-mgmtserver7','2','3','Y','1','17','Y','FusionTeacher',NULL,'FusionTeacher','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:18AM','Aug 31 2020 10:18AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182D','DEV','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'E6947A9B-B99B-4BED-B65B-DA92FBCD4501')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'E6947A9B-B99B-4BED-B65B-DA92FBCD4501','112','testdevfusionchecktools.arcadixdevelopment.com','ax-mgmtserver7','2','3','Y','2','18','Y','FusionTestApplication',NULL,'FusionTestApplication','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:18AM','Aug 31 2020 10:18AM',NULL,'E842AEDD-0859-4703-B639-E262F0E90DD8','DEV','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '2F214434-78C1-43B7-A662-D44E6078B235')
+BEGIN 
+insert into t_Framework_ApplicationServers select '2F214434-78C1-43B7-A662-D44E6078B235','112','schuletestfusionchecktools.arcadixdevelopment.com','ax-mgmtserver1','2','2','Y','1','17','Y','FusionSchool',NULL,'FusionSchool','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:18AM','Aug 31 2020 10:18AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182C','TEST','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '0220059C-2F1D-44FE-A76E-B34BFCACE126')
+BEGIN 
+insert into t_Framework_ApplicationServers select '0220059C-2F1D-44FE-A76E-B34BFCACE126','112','pupiltestfusionchecktools.arcadixdevelopment.com','ax-mgmtserver1','2','2','Y','1','17','Y','FusionPupil',NULL,'FusionPupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:18AM','Aug 31 2020 10:18AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182B','TEST','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '3928A2B4-E38F-4DE3-A654-A49D4D6D82CF')
+BEGIN 
+insert into t_Framework_ApplicationServers select '3928A2B4-E38F-4DE3-A654-A49D4D6D82CF','112','lehrpersontestfusionchecktools.arcadixdevelopment.com','ax-mgmtserver1','2','3','Y','1','17','Y','FusionTeacher',NULL,'FusionTeacher','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:18AM','Aug 31 2020 10:18AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182D','TEST','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '20A30D8D-6F16-4602-9DC7-0F593C672DE0')
+BEGIN
+ insert into t_Framework_ApplicationServers select '20A30D8D-6F16-4602-9DC7-0F593C672DE0','112','testtestfusionchecktools.arcadixdevelopment.com','ax-mgmtserver1','2','3','Y','1','37','Y','FusionTestApplication',NULL,'FusionTestApplication','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Aug 31 2020 10:18AM','Aug 31 2020 10:18AM',NULL,'E842AEDD-0859-4703-B639-E262F0E90DD8','TEST','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'AB0FB6BC-C57F-4147-81D9-E90CF06FB1A6')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'AB0FB6BC-C57F-4147-81D9-E90CF06FB1A6','114','schuleafusioncodoc.arcadixdevelopment.com','10.247.143.174','2','2','Y','1','17','Y','FusionSchool',NULL,'FusionSchool','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:17AM','Sep  1 2020 10:17AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182C','ACTIVE','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '6ED244A7-C1CA-4577-88B4-DFCB3900AC9F')
+BEGIN 
+insert into t_Framework_ApplicationServers select '6ED244A7-C1CA-4577-88B4-DFCB3900AC9F','114','pupilfusioncodoc.arcadixdevelopment.com','10.247.143.174','2','2','Y','1','17','Y','FusionPupil',NULL,'FusionPupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:17AM','Sep  1 2020 10:17AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182B','ACTIVE','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '21CF1C64-6967-4D80-B5DF-42C1BB65AE1B')
+BEGIN 
+insert into t_Framework_ApplicationServers select '21CF1C64-6967-4D80-B5DF-42C1BB65AE1B','114','lehrpersonfusioncodoc.arcadixdevelopment.com','10.247.143.174','2','3','Y','1','17','Y','FusionTeacher',NULL,'FusionTeacher','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:17AM','Sep  1 2020 10:17AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182D','ACTIVE','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '64B472F2-AC3F-4512-8021-BCEB0CD00F3F')
+BEGIN 
+insert into t_Framework_ApplicationServers select '64B472F2-AC3F-4512-8021-BCEB0CD00F3F','114','testfusioncodoc.arcadixdevelopment.com','10.247.143.174','2','3','Y','1','17','Y','FusionTestApplication',NULL,'FusionTestApplication','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:17AM','Sep  1 2020 10:17AM',NULL,'E842AEDD-0859-4703-B639-E262F0E90DD8','ACTIVE','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '0A5D216C-391B-458A-A1C8-F5D336096D05')
+BEGIN 
+insert into t_Framework_ApplicationServers select '0A5D216C-391B-458A-A1C8-F5D336096D05','114','schuledevfusioncodoc.arcadixdevelopment.com','ax-mgmtserver7','2','2','Y','2','18','Y','FusionSchool',NULL,'FusionSchool','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:17AM','Sep  1 2020 10:17AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182C','DEV','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '17E7056E-1CFA-4518-8300-2461FCCABA1B')
+BEGIN 
+insert into t_Framework_ApplicationServers select '17E7056E-1CFA-4518-8300-2461FCCABA1B','114','pupildevfusioncodoc.arcadixdevelopment.com','ax-mgmtserver7','2','2','Y','2','26','Y','FusionPupil',NULL,'FusionPupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:17AM','Sep  1 2020 10:17AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182B','DEV','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'BA29D182-B5B2-4BE6-A22B-2BE240A2D176')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'BA29D182-B5B2-4BE6-A22B-2BE240A2D176','114','lehrpersondevfusioncodoc.arcadixdevelopment.com','ax-mgmtserver7','2','3','Y','1','21','Y','FusionTeacher',NULL,'FusionTeacher','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:17AM','Sep  1 2020 10:17AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182D','DEV','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'E18F4AD8-B835-477B-974B-62977DC95FC2')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'E18F4AD8-B835-477B-974B-62977DC95FC2','114','testdevfusioncodoc.arcadixdevelopment.com','ax-mgmtserver7','2','3','Y','1','17','Y','FusionTestApplication',NULL,'FusionTestApplication','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:17AM','Sep  1 2020 10:17AM',NULL,'E842AEDD-0859-4703-B639-E262F0E90DD8','DEV','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '185C4EEE-1019-4874-8F6F-DCA66CDCA86E')
+BEGIN 
+insert into t_Framework_ApplicationServers select '185C4EEE-1019-4874-8F6F-DCA66CDCA86E','114','schuletestfusioncodoc.arcadixdevelopment.com','ax-mgmtserver1','2','2','Y','1','19','Y','FusionSchool',NULL,'FusionSchool','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:17AM','Sep  1 2020 10:17AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182C','TEST','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '70D7E948-AC18-41A0-BAF8-CB4178BDDE88')
+BEGIN 
+insert into t_Framework_ApplicationServers select '70D7E948-AC18-41A0-BAF8-CB4178BDDE88','114','pupiltestfusioncodoc.arcadixdevelopment.com','ax-mgmtserver1','2','2','Y','1','17','Y','FusionPupil',NULL,'FusionPupil','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:17AM','Sep  1 2020 10:17AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182B','TEST','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'DEF61379-2DD1-4C49-AF16-7BBDD01292E9')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'DEF61379-2DD1-4C49-AF16-7BBDD01292E9','114','lehrpersontestfusioncodoc.arcadixdevelopment.com','ax-mgmtserver1','2','3','Y','1','17','Y','FusionTeacher',NULL,'FusionTeacher','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:17AM','Sep  1 2020 10:17AM',NULL,'CAABA7C6-D44B-4495-8F28-08D45475182D','TEST','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = '2F000B87-AFA8-4EF3-B059-6C41F95AA526')
+BEGIN 
+insert into t_Framework_ApplicationServers select '2F000B87-AFA8-4EF3-B059-6C41F95AA526','114','testtestfusioncodoc.arcadixdevelopment.com','ax-mgmtserver1','2','3','Y','1','17','Y','FusionTestApplication',NULL,'FusionTestApplication','N','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','Sep  1 2020 10:17AM','Sep  1 2020 10:17AM',NULL,'E842AEDD-0859-4703-B639-E262F0E90DD8','TEST','3','bangaloreadmin','P@ssw0rd@arcadix','Y' 
+END
+if NOT Exists(select * from t_Framework_ApplicationServers where uApplicationServerId = 'C4646675-E4EC-45E5-AA7D-7D1AB3B57D57')
+BEGIN 
+insert into t_Framework_ApplicationServers select 'C4646675-E4EC-45E5-AA7D-7D1AB3B57D57','115','cockpittestfusion.arcadixdevelopment.com','ax-mgmtserver1','1','1',NULL,NULL,NULL,'Y','FusionCockpit',NULL,'FusionCockpit','N','CE29B94F-ABEA-4EBE-A3C4-EF42E9B16A7F','Oct 16 2020  3:48PM','Oct 16 2020  3:48PM','CE29B94F-ABEA-4EBE-A3C4-EF42E9B16A7F','FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F','TEST','3','bangaloreadmin','P@ssw0rd@arcadix','Y'
+ END
+
+
+ /**********************************************************
+
+The below script will insert updated data into DatabaseServer table
+Script Date:19-10-2020
+
+***********************************************************/
+
+
+ if NOT Exists(select * from t_Framework_Gatekeeper_TargetType where uTargetTypeId = 'E842AEDD-0859-4703-B639-E262F0E90DD8')
+BEGIN
+ insert into t_Framework_Gatekeeper_TargetType select 'E842AEDD-0859-4703-B639-E262F0E90DD8','FusionTestApplication','N','E4205C35-2A37-458A-BA0D-52660FD6ECE2','Jul 21 2020  6:35PM','Jul 21 2020  6:35PM','E4205C35-2A37-458A-BA0D-52660FD6ECE2','E842AEDD-0859-4703-B639-E262F0E90DD8' 
+ END
+if NOT Exists(select * from t_Framework_Gatekeeper_TargetType where uTargetTypeId = 'CAABA7C6-D44B-4495-8F28-08D45475182B')
+BEGIN 
+insert into t_Framework_Gatekeeper_TargetType select 'CAABA7C6-D44B-4495-8F28-08D45475182B','FusionPupil','N','E4205C35-2A37-458A-BA0D-52660FD6ECE2','May  8 2020 12:00AM','May  8 2020 12:00AM','E4205C35-2A37-458A-BA0D-52660FD6ECE2','CAABA7C6-D44B-4495-8F28-08D45475182B' 
+END
+if NOT Exists(select * from t_Framework_Gatekeeper_TargetType where uTargetTypeId = 'CAABA7C6-D44B-4495-8F28-08D45475182C')
+BEGIN 
+insert into t_Framework_Gatekeeper_TargetType select 'CAABA7C6-D44B-4495-8F28-08D45475182C','FusionSchool','N','E4205C35-2A37-458A-BA0D-52660FD6ECE2','May  8 2020 12:01AM','May  8 2020 12:01AM','E4205C35-2A37-458A-BA0D-52660FD6ECE2','CAABA7C6-D44B-4495-8F28-08D45475182C'
+ END
+if NOT Exists(select * from t_Framework_Gatekeeper_TargetType where uTargetTypeId = 'CAABA7C6-D44B-4495-8F28-08D45475182D')
+BEGIN 
+insert into t_Framework_Gatekeeper_TargetType select 'CAABA7C6-D44B-4495-8F28-08D45475182D','FusionTeacher','N','E4205C35-2A37-458A-BA0D-52660FD6ECE2','May  8 2020 12:01AM','May  8 2020 12:01AM','E4205C35-2A37-458A-BA0D-52660FD6ECE2','CAABA7C6-D44B-4495-8F28-08D45475182D'
+ END
+if NOT Exists(select * from t_Framework_Gatekeeper_TargetType where uTargetTypeId = 'EB6CA735-E834-4A7C-8953-D67530F62CCB')
+BEGIN 
+insert into t_Framework_Gatekeeper_TargetType select 'EB6CA735-E834-4A7C-8953-D67530F62CCB','FusionIntranet','N','E4205C35-2A37-458A-BA0D-52660FD6ECE2','Jun 17 2020 11:30AM','Jun 17 2020 11:30AM','E4205C35-2A37-458A-BA0D-52660FD6ECE2','EB6CA735-E834-4A7C-8953-D67530F62CCB'
+ END
+if NOT Exists(select * from t_Framework_Gatekeeper_TargetType where uTargetTypeId = 'FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F')
+BEGIN 
+insert into t_Framework_Gatekeeper_TargetType select 'FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F','FusionCockpit','N','E4205C35-2A37-458A-BA0D-52660FD6ECE2','Jun 18 2020 11:21AM','Jun 18 2020 11:21AM','E4205C35-2A37-458A-BA0D-52660FD6ECE2','FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F'
+ END

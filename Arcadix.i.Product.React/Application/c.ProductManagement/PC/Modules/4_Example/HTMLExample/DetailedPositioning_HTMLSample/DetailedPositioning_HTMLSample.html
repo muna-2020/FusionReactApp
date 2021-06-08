@@ -1,0 +1,413 @@
+﻿<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: calibri;
+        }
+
+        .main-wrapper {
+            width: 1024px;
+            margin: 0px auto;
+            padding: 20px;
+            font-size: 18px;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 24px;
+            padding: 10px;
+            border-bottom: 1px solid #f1f1f1;
+            font-weight: bold;
+        }
+
+        .sub-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .item-wrapper ul {
+            line-height: 2rem;
+            list-style-type: square;
+            list-style-position: inside;
+        }
+
+        .item-wrapper p {
+            margin: 10px 0px;
+        }
+
+        pre {
+            white-space: pre-line;
+            padding: 20px;
+            width: 100%;
+            padding-right: 100px;
+            margin: 10px 0px;
+            letter-spacing: 1px;
+            background: #282c34;
+            color: #b5b5b5;
+        }
+
+        .yellow-pre {
+            background: #fffcdd;
+            color: #222;
+            border-left: 5px solid #FFEB3B;
+        }
+
+        .light-text {
+            color: #999;
+            font-style: italic;
+        }
+
+        .output {
+            margin: 10px 0px;
+        }
+
+        .float-example {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 150px;
+        }
+
+            .float-example div {
+                height: 100px;
+                width: 100px;
+                border: 1px solid #ccc;
+                margin: 0px 10px;
+                text-align: center;
+                line-height: 100px;
+            }
+
+        .left {
+            float: left;
+            background: pink;
+        }
+
+        .right {
+            float: right;
+            background: cyan;
+        }
+
+        ol {
+            margin-left: 30px;
+        }
+
+        .static-div {
+            height: 100px;
+            border: 1px solid #607D8B;
+            padding: 10px;
+        }
+
+        .relative {
+            position: relative;
+            left: 30px;
+            border: 1px solid #607D8B;
+            width: 300px;
+        }
+
+        .relative-div {
+            position: relative;
+            height: 150px;
+            border: 1px solid #607D8B;
+        }
+
+        .absolute {
+            position: absolute;
+            top: 40px;
+            right: 0;
+            width: 165px;
+            height: 70px;
+            border: 1px solid #607D8B;
+            padding: 10px;
+            background: #cae8ca;
+        }
+
+        .sticky {
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            padding: 5px;
+            background-color: #cae8ca;
+            border: 1px solid #607D8B;
+        }
+
+        .dashed-box {
+            position: relative;
+            z-index: 1;
+            border: dashed;
+            height: 8em;
+            margin-bottom: 1em;
+            margin-top: 2em;
+        }
+
+        .gold-box {
+            position: absolute;
+            z-index: 3; /* put .gold-box above .green-box and .dashed-box */
+            background: gold;
+            width: 80%;
+            left: 60px;
+            top: 3em;
+        }
+
+        .green-box {
+            position: absolute;
+            z-index: 2; /* put .green-box above .dashed-box */
+            background: lightgreen;
+            width: 20%;
+            left: 65%;
+            top: -25px;
+            height: 7em;
+            opacity: 0.9;
+        }
+
+        em {
+            padding: 0px 7px;
+            background: #f7f5f5;
+        }
+
+        @media screen and (max-width: 1024px) {
+            .main-wrapper {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="title">
+            <span>Detailed Positioning</span>
+        </div>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>CSS floats property</span>
+            </div>
+            <div class="text-wrapper">
+                <p>The float CSS property places an element on the left or right side of its container, allowing text and inline elements to wrap around it.</p>
+                <p>The float property is specified as a single keyword, chosen from the list of values below.</p>
+                <pre class="yellow-pre">float: left | right | none | inline-start | inline-end</pre>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>How floated elements are positioned</span>
+            </div>
+            <div class="text-wrapper">
+                <p>
+                    In this example, there are three colored squares. Two are floated left, and one is floated right.
+                    Note that the second "left" square is placed to the right of the first. Additional squares would continue to stack to the right,
+                    until they filled the containing box, after which they would wrap to the next line.
+                </p>
+                <div class="output">
+                    <div class="float-example">
+                        <div class="left">1</div>
+                        <div class="left">2</div>
+                        <div class="right">3</div>
+                    </div>
+                </div>
+                <pre class="yellow-pre">
+                    &lt;section&gt;
+                    &lt;div class=&quot;left&quot;&gt;1&lt;/div&gt;
+                    &lt;div class=&quot;left&quot;&gt;2&lt;/div&gt;
+                    &lt;div class=&quot;right&quot;&gt;3&lt;/div&gt;
+                    &lt;/section&gt;
+                </pre>
+                <pre>
+                    .left {
+                        float: left;
+                        background: pink;
+                      }
+                      
+                    .right {
+                        float: right;
+                        background: cyan;
+                    }
+                </pre>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>clearfix</span>
+            </div>
+            <p>
+                If an element contains only floated elements, its height collapses to nothing. If you want it to always be able to resize,
+                so that it contains floating elements inside it, you need to self-clear its children. This is called clearfix,
+                and one way to do it is <em>clear</em> a replaced <em>::after</em> pseudo-element on it.
+            </p>
+            <pre class="yellow-pre">
+                #container::after { 
+                    content: "";
+                    display: block; 
+                    clear: both;
+                }
+            </pre>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Position Property</span>
+            </div>
+            <p>
+                CSS position property sets how an element is positioned in a document. The top, right, bottom, and left properties
+                determine the final location of positioned elements.
+            </p><br />
+            <p>There are five different position values:</p>
+            <ol>
+                <li>static</li>
+                <li>relative</li>
+                <li>fixed</li>
+                <li>absolute</li>
+                <li>sticky</li>
+            </ol>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>position: static;</span>
+            </div>
+            <p>
+                The element is positioned according to the normal flow of the document.
+                The top, right, bottom, left, and z-index properties have no effect. This is the default value.
+            </p>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>position: relative;</span>
+            </div>
+            <p>
+                The element is positioned according to the normal flow of the document,
+                and then offset relative to itself based on the values of top, right, bottom, and left.
+                The offset does not affect the position of any other elements;
+                thus, the space given for the element in the page layout is the same as if position were static.
+            </p>
+            <pre class="yellow-pre">
+                .relative-div {
+                    position: relative;
+                    left: 30px;
+                }
+            </pre>
+            <div class="output">
+                <div class="static-div">
+                    <div class="relative">
+                        This div element has position: relative;
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>position: fixed;</span>
+            </div>
+            <p>
+                The element is removed from the normal document flow, and no space is created for the element in the page layout.
+                It is positioned relative to the initial containing block established by the viewport,
+                except when one of its ancestors has a transform, perspective, or filter property set to something other than none,
+                in which case that ancestor behaves as the containing block. Its final position is determined by the values of top, right, bottom, and left.
+            </p>
+            <pre class="yellow-pre">
+                .fixed-div {
+                    position: fixed;
+                }
+            </pre>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>position: absolute;</span>
+            </div>
+            <p>
+                The element is removed from the normal document flow, and no space is created for the element in the page layout.
+                It is positioned relative to its closest positioned ancestor, if any; otherwise, it is placed relative to the initial containing block.
+                Its final position is determined by the values of top, right, bottom, and left.
+            </p>
+            <pre class="yellow-pre">
+                .relative-div {
+                    position: relative;
+                } 
+                
+                .absolute-div {
+                    position: absolute;
+                    top: 80px;
+                    right: 0;
+                }
+            </pre>
+            <div class="output">
+                <div class="relative-div">
+                    This div element has position: relative;
+                    <div class="absolute">This div element has position: absolute;</div>
+                </div>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>position: sticky;</span>
+            </div>
+            <p>
+                The element is positioned according to the normal flow of the document, and then offset relative to its nearest scrolling ancestor and containing block
+                (nearest block-level ancestor), including table-related elements, based on the values of top, right, bottom, and left.
+                The offset does not affect the position of any other elements.
+            </p>
+            <pre class="yellow-pre">
+                .sticky-div {
+                    position: -webkit-sticky;
+                    position: sticky;
+                    top: 0;
+                }
+            </pre>
+            <div class="output">
+                <div class="relative-div" style="overflow-y: auto;">
+                    This div element has position: relative;
+                    <div class="sticky">I am sticky!</div>
+                    <div style="padding-bottom:400px">
+                        <p>In this example, the sticky element sticks to the top of the div (top: 0), when you reach its scroll position.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>z-index property</span>
+            </div>
+            <p>
+                The z-index CSS property sets the z-order of a positioned element and its descendants or flex items.
+                Overlapping elements with a larger z-index cover those with a smaller one.
+            </p><br />
+            <p>For a positioned box (that is, one with any position other than static), the z-index property specifies:</p>
+            <ol>
+                <li>
+                    <p>The stack level of the box in the current stacking context.</p>
+                </li>
+                <li>
+                    <p>Whether the box establishes a local stacking context.</p>
+                </li>
+            </ol>
+            <pre>
+                .dashed-box { 
+                    position: relative;
+                    z-index: 1;
+                    border: dashed;
+                }
+                .gold-box { 
+                    position: absolute;
+                    z-index: 3; /* put .gold-box above .green-box and .dashed-box */
+                    background: gold;
+                }
+                .green-box { 
+                    position: absolute;
+                    z-index: 2; /* put .green-box above .dashed-box */
+                    background: lightgreen;
+                    opacity: 0.9;
+                }
+            </pre>
+            <div class="output">
+                <div class="dashed-box">
+                    Dashed box
+                    <span class="gold-box">Gold box</span>
+                    <span class="green-box">Green box</span>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

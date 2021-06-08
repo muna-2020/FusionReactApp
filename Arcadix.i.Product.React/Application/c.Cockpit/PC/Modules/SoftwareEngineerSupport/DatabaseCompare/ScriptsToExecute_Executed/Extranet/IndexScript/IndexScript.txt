@@ -1,0 +1,200 @@
+
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_Document_Folder_User_cIsPupil] ON [dbo].[t_LearnCoacher_Document_Folder_User] ([cIsPupil])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_Document_Folder_User_cIsSchool] ON [dbo].[t_LearnCoacher_Document_Folder_User] ([cIsSchool])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_Document_Folder_User_cIsTeacher] ON [dbo].[t_LearnCoacher_Document_Folder_User] ([cIsTeacher])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_Document_Folder_User_uDocumentFolderId] ON [dbo].[t_LearnCoacher_Document_Folder_User] ([uDocumentFolderId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_Document_Folder_User_uDocumentFolderUserId] ON [dbo].[t_LearnCoacher_Document_Folder_User] ([uDocumentFolderUserId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_Document_Folder_User_uModifiedByUserId] ON [dbo].[t_LearnCoacher_Document_Folder_User] ([uModifiedByUserId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_Document_Folder_User_uUserId] ON [dbo].[t_LearnCoacher_Document_Folder_User] ([uUserId])
+GO
+
+
+CREATE NONCLUSTERED INDEX [IX_t_Learncoacher_Document_User_cHasViewed] ON [dbo].[t_Learncoacher_Document_User] ([cHasViewed])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_Learncoacher_Document_User_cIsPupil] ON [dbo].[t_Learncoacher_Document_User] ([cIsPupil])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_Learncoacher_Document_User_cIsSchool] ON [dbo].[t_Learncoacher_Document_User] ([cIsSchool])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_Learncoacher_Document_User_cIsTeacher] ON [dbo].[t_Learncoacher_Document_User] ([cIsTeacher])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_Learncoacher_Document_User_uClassId] ON [dbo].[t_Learncoacher_Document_User] ([uClassId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_Learncoacher_Document_User_uDocumentId] ON [dbo].[t_Learncoacher_Document_User] ([uDocumentId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_Learncoacher_Document_User_uDocumentUserId] ON [dbo].[t_Learncoacher_Document_User] ([uDocumentUserId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_Learncoacher_Document_User_uModifiedByUserId] ON [dbo].[t_Learncoacher_Document_User] ([uModifiedByUserId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_Learncoacher_Document_User_uUserId] ON [dbo].[t_Learncoacher_Document_User] ([uUserId])
+GO
+
+
+
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_cIsPupil] ON [dbo].[t_LearnCoacher_News] ([cIsPupil])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_cIsSchool] ON [dbo].[t_LearnCoacher_News] ([cIsSchool])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_cIsTeacher] ON [dbo].[t_LearnCoacher_News] ([cIsTeacher])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_dtCreatedOn] ON [dbo].[t_LearnCoacher_News] ([dtCreatedOn])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_dtModifiedOn] ON [dbo].[t_LearnCoacher_News] ([dtModifiedOn])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_iMainClientId] ON [dbo].[t_LearnCoacher_News] ([iMainClientId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_uClassId] ON [dbo].[t_LearnCoacher_News] ([uClassId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_uModifiedByUserId] ON [dbo].[t_LearnCoacher_News] ([uModifiedByUserId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_uNewsId] ON [dbo].[t_LearnCoacher_News] ([uNewsId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_uOriginalNewsItemId] ON [dbo].[t_LearnCoacher_News] ([uOriginalNewsItemId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_uParentNewsItemId] ON [dbo].[t_LearnCoacher_News] ([uParentNewsItemId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_uUserId] ON [dbo].[t_LearnCoacher_News] ([uUserId])
+GO
+
+
+
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_Attachment_cIsFromOldOneDrive] ON [dbo].[t_LearnCoacher_News_Attachment] ([cIsFromOldOneDrive])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_Attachment_cIsUploadedToOneDrive] ON [dbo].[t_LearnCoacher_News_Attachment] ([cIsUploadedToOneDrive])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_Attachment_iDisplayOrder] ON [dbo].[t_LearnCoacher_News_Attachment] ([iDisplayOrder])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_Attachment_iFileSizeInBytes] ON [dbo].[t_LearnCoacher_News_Attachment] ([iFileSizeInBytes])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_Attachment_iNumberOfAttempts] ON [dbo].[t_LearnCoacher_News_Attachment] ([iNumberOfAttempts])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_Attachment_uNewsAttachmentId] ON [dbo].[t_LearnCoacher_News_Attachment] ([uNewsAttachmentId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_Attachment_uNewsId] ON [dbo].[t_LearnCoacher_News_Attachment] ([uNewsId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_Attachment_vAttachmentFileName] ON [dbo].[t_LearnCoacher_News_Attachment] ([vAttachmentFileName])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_Attachment_vFileId] ON [dbo].[t_LearnCoacher_News_Attachment] ([vFileId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_Attachment_vFileType] ON [dbo].[t_LearnCoacher_News_Attachment] ([vFileType])
+GO
+
+
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_Group_cIsPupil] ON [dbo].[t_LearnCoacher_News_Group] ([cIsPupil])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_Group_cIsTeacher] ON [dbo].[t_LearnCoacher_News_Group] ([cIsTeacher])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_Group_dtCreatedOn] ON [dbo].[t_LearnCoacher_News_Group] ([dtCreatedOn])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_Group_dtModifiedOn] ON [dbo].[t_LearnCoacher_News_Group] ([dtModifiedOn])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_Group_iMainClientId] ON [dbo].[t_LearnCoacher_News_Group] ([iMainClientId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_Group_uClassId] ON [dbo].[t_LearnCoacher_News_Group] ([uClassId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_Group_uModifiedByUserId] ON [dbo].[t_LearnCoacher_News_Group] ([uModifiedByUserId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_Group_uNewsGroupId] ON [dbo].[t_LearnCoacher_News_Group] ([uNewsGroupId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_Group_uUserId] ON [dbo].[t_LearnCoacher_News_Group] ([uUserId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_Group_vGroupName] ON [dbo].[t_LearnCoacher_News_Group] ([vGroupName])
+GO
+
+
+
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_Group_User_cIsPupil] ON [dbo].[t_LearnCoacher_News_Group_User] ([cIsPupil])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_Group_User_cIsTeacher] ON [dbo].[t_LearnCoacher_News_Group_User] ([cIsTeacher])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_Group_uModifiedByUserId] ON [dbo].[t_LearnCoacher_News_Group_User] ([uModifiedByUserId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_Group_User_uNewGroupUserId] ON [dbo].[t_LearnCoacher_News_Group_User] ([uNewGroupUserId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_Group_User_uNewsGroupId] ON [dbo].[t_LearnCoacher_News_Group_User] ([uNewsGroupId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_Group_User_uUserId] ON [dbo].[t_LearnCoacher_News_Group_User] ([uUserId])
+GO
+
+
+
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_ToUser_cHasBeenViewed] ON [dbo].[t_LearnCoacher_News_ToUser] ([cHasBeenViewed])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_ToUser_cIsForGroup] ON [dbo].[t_LearnCoacher_News_ToUser] ([cIsForGroup])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_ToUser_cIsPupil] ON [dbo].[t_LearnCoacher_News_ToUser] ([cIsPupil])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_ToUser_cIsTeacher] ON [dbo].[t_LearnCoacher_News_ToUser] ([cIsTeacher])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_ToUser_uGroupId] ON [dbo].[t_LearnCoacher_News_ToUser] ([uGroupId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_ToUser_uModifiedByUserId] ON [dbo].[t_LearnCoacher_News_ToUser] ([uModifiedByUserId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_ToUser_uNewsId] ON [dbo].[t_LearnCoacher_News_ToUser] ([uNewsId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_ToUser_uNewsToUserId] ON [dbo].[t_LearnCoacher_News_ToUser] ([uNewsToUserId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_LearnCoacher_News_ToUser_uUserId] ON [dbo].[t_LearnCoacher_News_ToUser] ([uUserId])
+GO
+
+
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Cycle_Class_dtTestAssigned] ON [dbo].[t_TestDrive_Cycle_Class] ([dtTestAssigned])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Cycle_Class_uClassId] ON [dbo].[t_TestDrive_Cycle_Class] ([uClassId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Cycle_Class_uCycleId] ON [dbo].[t_TestDrive_Cycle_Class] ([uCycleId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Cycle_Class_uTestId] ON [dbo].[t_TestDrive_Cycle_Class] ([uTestId])
+GO
+
+
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Cycle_School_uCycleId] ON [dbo].[t_TestDrive_Cycle_School] ([uCycleId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Cycle_School_uSchoolId] ON [dbo].[t_TestDrive_Cycle_School] ([uSchoolId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Cycle_School_uTestId] ON [dbo].[t_TestDrive_Cycle_School] ([uTestId])
+GO
+
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Cycle_State_iStateId] ON [dbo].[t_TestDrive_Cycle_State] ([iStateId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Cycle_State_uCycleId] ON [dbo].[t_TestDrive_Cycle_State] ([uCycleId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Cycle_State_uTestId] ON [dbo].[t_TestDrive_Cycle_State] ([uTestId])
+GO
+
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Member_Pupil_Password_dtFirstLoggedInDate] ON [dbo].[t_TestDrive_Member_Pupil_Password] ([dtFirstLoggedInDate])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Member_Pupil_Password_dtModifiedOn] ON [dbo].[t_TestDrive_Member_Pupil_Password] ([dtModifiedOn])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Member_Pupil_Password_dtPasswordCreatedOn] ON [dbo].[t_TestDrive_Member_Pupil_Password] ([dtPasswordCreatedOn])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Member_Pupil_Password_uPupilId] ON [dbo].[t_TestDrive_Member_Pupil_Password] ([uPupilId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Member_Pupil_Password_uSchoolYearPeriodId] ON [dbo].[t_TestDrive_Member_Pupil_Password] ([uSchoolYearPeriodId])
+GO
+
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Member_School_uUserId] ON [dbo].[t_TestDrive_Member_School] ([uUserId])
+GO
+
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Member_Pupil_ExternalSourceMapping_uPupilId] ON [dbo].[t_TestDrive_Member_Pupil_ExternalSourceMapping] ([uPupilId])
+GO
+
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Member_School_Pupil_uSchoolPupilId] ON [dbo].[t_TestDrive_Member_School_Pupil] ([uSchoolPupilId])
+GO
+
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Member_Teacher_School_cIsAdmin] ON [dbo].[t_TestDrive_Member_Teacher_School] ([cIsAdmin])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Member_Teacher_School_cIsDeleted] ON [dbo].[t_TestDrive_Member_Teacher_School] ([cIsDeleted])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Member_Teacher_School_uSchoolId] ON [dbo].[t_TestDrive_Member_Teacher_School] ([uSchoolId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Member_Teacher_School_uTeacherId] ON [dbo].[t_TestDrive_Member_Teacher_School] ([uTeacherId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Member_Teacher_School_uTeacherSchoolId] ON [dbo].[t_TestDrive_Member_Teacher_School] ([uTeacherSchoolId])
+GO
+

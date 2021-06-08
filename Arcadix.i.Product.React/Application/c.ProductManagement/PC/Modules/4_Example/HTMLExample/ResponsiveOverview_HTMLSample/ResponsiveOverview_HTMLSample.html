@@ -1,0 +1,129 @@
+﻿<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: calibri;
+        }
+
+        .main-wrapper {
+            width: 1024px;
+            margin: 0px auto;
+            padding: 20px;
+            font-size: 18px;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 24px;
+            padding: 10px;
+            border-bottom: 1px solid #f1f1f1;
+            font-weight: bold;
+        }
+
+        .sub-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+
+        .item-wrapper ul {
+            line-height: 2rem;
+            list-style-type: square;
+            list-style-position: inside;
+        }
+
+        .item-wrapper p {
+            margin: 10px 0px;
+        }
+
+        pre {
+            white-space: pre-line;
+            padding: 15px;
+            width: 100%;
+            padding-right: 100px;
+            margin: 10px 0px;
+            letter-spacing: 1px;
+            background: #282c34;
+            color: #b5b5b5;
+        }
+
+        .yellow-pre {
+            background: #fffcdd;
+            color: #222;
+            border-left: 5px solid #FFEB3B;
+        }
+
+        .light-text {
+            color: #999;
+            font-style: italic;
+        }
+
+        @media screen and (max-width: 1024px) {
+            .main-wrapper {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="title">
+            <span>Responsive Overview</span>
+        </div>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Setting The Viewport</span>
+            </div>
+            <p>Add this meta tag inside head tag of all HTML pages. This will set the viewport of your page, which will 
+                give the browser instructions on how to control the page's dimensions and scaling.</p>
+            <pre>
+                &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" &gt;
+            </pre>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Responsive Images</span>
+            </div>
+            <p>Using the width or max-width Property</p>
+            <pre>
+                &lt;img src="img.jpg" style="max-width:100%;height:auto;"&gt;
+            </pre>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Responsive Text Size</span>
+            </div>
+           <p> The text size can be set with a "vw" unit, which means the "viewport width".</p>
+            <p>That way the text size will follow the size of the browser window:</p>
+            <pre class="yellow-pre">
+                font-size: 2vw;
+            </pre>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Media Queries</span>
+            </div>
+            <p>use CSS media query to make webpage responsvie for all devices</p>
+            <pre class="yellow-pre">
+                @media screen and (min-width: 360px) and (max-width: 728px) {
+                    .article{
+                        width:100%;
+                    }
+                }
+                @media screen and (min-width: 728px){
+                    .article{
+                        width:70%;
+                    }
+                }
+            </pre>
+        </section>
+    </div>
+</body>
+</html>

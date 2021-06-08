@@ -1,0 +1,39 @@
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_LearningTest_PupilGroup' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+	ALTER TABLE t_TestDrive_LearningTest_PupilGroup ADD dtModifiedOn datetime  
+END
+Go
+	  
+	  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_LearningTest_PupilGroup' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_TestDrive_LearningTest_PupilGroup ADD uModifiedByUserId uniqueidentifier  
+END
+Go
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_LearningTest_PupilGroup set dtModifiedOn = GETDATE() where dtModifiedOn is null
+Go
+update t_TestDrive_LearningTest_PupilGroup set uModifiedByUserId = uUserId  
+Go
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_TestDrive_LearningTest_PupilGroup_AddData
+JProc_TestDrive_LearningTest_PupilGroup_GetData
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/

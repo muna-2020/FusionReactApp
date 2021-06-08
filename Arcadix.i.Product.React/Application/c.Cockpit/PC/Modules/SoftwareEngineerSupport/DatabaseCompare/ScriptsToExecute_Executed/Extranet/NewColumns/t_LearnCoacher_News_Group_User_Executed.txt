@@ -1,0 +1,66 @@
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_News_Group_User' AND COLUMN_NAME = 'cIsDeleted') 
+BEGIN
+	ALTER TABLE t_LearnCoacher_News_Group_User ADD cIsDeleted char(1)  
+END
+
+Go
+	 
+	 
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_News_Group_User' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_LearnCoacher_News_Group_User ADD uModifiedByUserId uniqueidentifier  
+END
+
+Go
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_News_Group_User set uModifiedByUserId = uUserId  
+Go
+update t_LearnCoacher_News_Group_User set cIsDeleted = 'N' where cIsDeleted is null //check  
+Go
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_LearnCoacher_DeleteNewsGroup
+JProc_LearnCoacher_ForwardNews
+JProc_LearnCoacher_GetNewsGroup
+JProc_LearnCoacher_GetNewsGroupForMainClient
+JProc_LearnCoacher_News_ForwardNews
+JProc_LearnCoacher_News_ForwardNews_20_02_2019
+JProc_LearnCoacher_News_ForwardNews_20_05_2020
+JProc_LearnCoacher_News_SaveNews
+JProc_LearnCoacher_News_SaveNews_09_06_2020
+JProc_LearnCoacher_News_SaveNews_20_05_2020
+JProc_LearnCoacher_News_SaveNews_25_03_2019
+JProc_LearnCoacher_News_SaveNews_30_06_2020
+JProc_LearnCoacher_SaveNews
+JProc_LearnCoacher_SaveNewsGroup
+***********************************************************/
+
+
+
+
+/********************Procs to Review**********************
+JProc_LearnCoacher_ForwardNews (Modified)
+JProc_LearnCoacher_News_ForwardNews (Modified - Review)
+JProc_LearnCoacher_News_ForwardNews_20_02_2019 (Modified)
+JProc_LearnCoacher_News_SaveNews (Modified)
+JProc_LearnCoacher_News_SaveNews_25_03_2019 (Modified)
+JProc_LearnCoacher_SaveNews (Modified)
+JProc_LearnCoacher_SaveNewsGroup (Modified)
+
+JProc_LearnCoacher_News_SaveNews_09_06_2020 (Not Modified)
+JProc_LearnCoacher_News_SaveNews_20_05_2020 (Not Modified)
+JProc_LearnCoacher_News_SaveNews_30_06_2020 (Not Modified)
+JProc_LearnCoacher_News_ForwardNews_20_05_2020 (Not Modified)
+***********************************************************/
+

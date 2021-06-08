@@ -1,0 +1,34 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_testdrive_Category_Competency_CompetencyRange' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_testdrive_Category_Competency_CompetencyRange ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO			 
+
+
+/**********************************
+Default Values
+**********************************/
+update t_testdrive_Category_Competency_CompetencyRange set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_TestDrive_BaseObject_CompetencyRange_AddData
+FProc_TestDrive_BaseObject_CompetencyRange_DeleteData
+FProc_TestDrive_BaseObject_CompetencyRange_EditData
+FProc_TestDrive_BaseObject_CompetencyRange_GetData
+Proc_CMS_Category_Competency_GetCompetencyCanDoItems
+Proc_CMS_Category_Competency_GetCompetencyRange
+************************************************************/
+
+/********************Procs need to Review**********************
+FProc_TestDrive_BaseObject_CompetencyRange_AddData
+FProc_TestDrive_BaseObject_CompetencyRange_EditData
+************************************************************/

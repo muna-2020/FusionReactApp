@@ -1,0 +1,39 @@
+/**********************************
+New table		
+**********************************/
+GO
+CREATE TABLE [dbo].[t_TestDrive_Workflow_Assignment]
+(
+[uWorkflowAssignmentId] [uniqueidentifier] NOT NULL,
+[uWorkflowTypeId] [uniqueidentifier] NULL,
+[vObjectId] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[uWorkflowStatusId] [uniqueidentifier] NULL,
+[vComment] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[cIsLatest] [char] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[uUserId] [uniqueidentifier] NULL,
+[dtCreatedOn] [datetime] NULL,
+[dtModifiedOn] [datetime] NULL
+)
+GO
+-- Constraints and Indexes
+
+ALTER TABLE [dbo].[t_TestDrive_Workflow_Assignment] ADD CONSTRAINT [PK__t_TestDr__AF6700EFAAFE79BA] PRIMARY KEY CLUSTERED  ([uWorkflowAssignmentId])
+GO
+
+/**********************************
+Non cluster index 
+**********************************/
+
+
+/**********************************
+Default Values
+**********************************/
+
+/**********************************
+Procs
+**********************************/
+
+/********************AllDependentProc********************
+Proc_Fusion_Framework_Workflow_WorkflowAssignment_AddData
+Proc_Fusion_Framework_Workflow_WorkflowAssignment_GetData
+****************************************************************/

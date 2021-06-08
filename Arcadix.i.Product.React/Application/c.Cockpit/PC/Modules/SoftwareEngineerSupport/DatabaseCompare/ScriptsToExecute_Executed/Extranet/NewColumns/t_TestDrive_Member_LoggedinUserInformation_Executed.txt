@@ -1,0 +1,29 @@
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Member_LoggedinUserInformation' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_TestDrive_Member_LoggedinUserInformation ADD uModifiedByUserId uniqueidentifier  
+END
+Go
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Member_LoggedinUserInformation set uModifiedByUserId = uUserId  
+Go
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+Proc_Framework_ClientUser_GetLoginDetailsForUser
+Proc_Framework_ClientUser_RegisterLoggedInUserSystemInformation
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/

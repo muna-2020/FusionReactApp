@@ -1,0 +1,208 @@
+﻿<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: calibri;
+        }
+
+        .main-wrapper {
+            width: 1024px;
+            margin: 0px auto;
+            padding: 20px;
+            font-size: 18px;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 24px;
+            padding: 10px;
+            border-bottom: 1px solid #f1f1f1;
+            font-weight: bold;
+        }
+
+        .sub-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .main-wrapper ul {
+            line-height: 2rem;
+            list-style-type: square;
+            margin-left: 20px;
+        }
+
+        .main-wrapper ol {
+            line-height: 2rem;
+            margin-left: 20px;
+        }
+
+        .main-wrapper p {
+            margin: 10px 0px;
+        }
+
+        pre {
+            white-space: pre-line;
+            padding: 20px;
+            width: 100%;
+            padding-right: 100px;
+            margin: 10px 0px;
+            letter-spacing: 1px;
+            background: #282c34;
+            color: #b5b5b5;
+        }
+
+        .yellow-pre {
+            background: #fffcdd;
+            color: #222;
+            border-left: 5px solid #FFEB3B;
+        }
+
+        .light-text {
+            color: #999;
+            font-style: italic;
+        }
+
+        em {
+            padding: 0px 7px;
+            background: #f7f5f5;
+        }
+
+        .output {
+            padding: 10px 20px;
+            margin: 10px 0px;
+        }
+
+        .highlight {
+            background-color: yellow;
+        }
+
+        #warning {
+            color: orange;
+        }
+
+        #danger {
+            color: red;
+        }
+        .notebox {
+            box-shadow: 2px 1px 4px #e6e6e6;
+            padding: 5px 10px;
+            width: 300px;
+            margin: 10px 0px;
+        }
+
+        @media screen and (max-width: 1024px) {
+            .main-wrapper {
+                width: 100%;
+            }
+        }
+    </style>
+    <title>Document</title>
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="title">
+            <span>Common CSS Selectors</span>
+        </div>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Type selectors</span>
+            </div>
+            <div class="text-wrapper">
+                <p>A type selector is sometimes referred to as a tag name selector or element selector, because it selects an HTML tag/element in your document.</p>
+                <p>In the below example we have used <em>em</em> and <em>strong</em> selectors. All instances of <em>&lt;em&gt;</em> and <em>&lt;strong&gt;</em> elements are therefore styled.</p>
+                <pre>
+                    strong {
+                        color: purple;
+                    }
+                    em {
+                        color: red;
+                    }
+                </pre>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Class selectors</span>
+            </div>
+            <div class="text-wrapper">
+                <p>
+                    The class selector starts with a full stop <em>(.)</em> character and will select everything in the document with that class applied to it.
+                    In the example below we have created a class called .highlight, and have applied it to several places in my document.
+                    All of the elements that have the class applied are highlighted.
+                </p>
+                <div class="output">
+                    <p>This is <span class="highlight">first highlighted text</span> line</p><br />
+                    <p>This is <span class="highlight">second highlighted text</span> line</p>
+                </div>
+                <pre>
+                    .highlight {
+                        background-color: yellow;
+                    }
+                </pre>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>ID Selectors</span>
+            </div>
+            <div class="text-wrapper">
+                <p>
+                    An ID selector begins with a <em>#</em> rather than a full stop character, but is basically used in the same way as a class selector.
+                    An ID however can be used only once per document. It can select an element that has the id set on it, and you can precede the ID
+                    with a type selector to only target the element if both the element and ID match. You can see both of these uses in the following example:
+                </p>
+                <div class="output">
+                    <div class="notebox" id="warning">
+                        This note shows a warning.
+                    </div>
+
+                    <div class="notebox" id="danger">
+                        This note shows danger!
+                    </div>
+                </div>
+                <pre class="yellow-pre">
+                    div#warning {
+                        border: 1px solid orange;
+                    }
+
+                    #danger {
+                        border: 1px solid red;
+                    }
+                </pre>
+                <pre>
+                    &lt;div id=&quot;warning&quot;&gt;
+                        This note shows a warning.
+                    &lt;/div&gt;
+                                        
+                    &lt;div id=&quot;danger&quot;&gt;
+                        This note shows danger!
+                    &lt;/div&gt;
+                </pre>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>The universal selector</span>
+            </div>
+            <div class="text-wrapper">
+                <p>
+                    The universal selector is indicated by an asterisk (*) and selects everything in the document (or inside the parent element
+                    if it is being chained together with another element and a descendant combinator, for example). In the following example
+                    we have used the universal selector to remove the margins on all elements.
+                </p>
+                <pre>
+                    * {
+                        margin: 0;
+                    }
+                </pre>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

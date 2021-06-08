@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "allowSyntheticDefaultImports": false,
+    "baseUrl": "./",
+    "paths": {
+      "@root/*": [ "G://Arcadix/Product.Fusion/Arcadix.i.Product.React/*" ],
+      "@shared/*": [ "G://Arcadix/Product.Fusion/Arcadix.h.Product.BusinessLogic/*" ]
+    }
+  },
+  "exclude": [ "**/node_modules", "dist" ]
+}

@@ -1,0 +1,34 @@
+/**********************************
+New Columns
+**********************************/
+GO
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_Configuration_TargetGroup' AND COLUMN_NAME = 'dtModifiedOn') 
+  BEGIN 
+   ALTER TABLE t_Framework_MainClient_Configuration_TargetGroup ADD dtModifiedOn datetime  DEFAULT (getdate())
+ END
+
+ GO
+
+/**********************************
+Default Values
+**********************************/
+update t_Framework_MainClient_Configuration_TargetGroup set dtModifiedOn =getdate()  where dtModifiedOn is null
+
+GO
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_Framework_FrameworkClient_GetClientConfiguration
+FProc_Framework_FrameworkClient_GetClientConfigurationByClientId
+FProc_TestDrive_BaseObject_TargetGroup_GetData
+JProc_Framework_FrameworkClient_GetClientConfiguration
+JProc_Framework_FrameworkClient_GetClientConfigurationByClientId
+JProc_Framework_FrameworkMainClient_GetAllTargetTypes
+JProc_Framework_FrameworkMainClient_GetMainClientConfiguration
+Proc_Framework_FrameworkClient_GetClientConfiguration
+Proc_Framework_FrameworkClient_GetClientConfigurationByClientId
+Proc_Framework_FrameworkMainClient_GetAllTargetTypes
+Proc_Framework_FrameworkMainClient_GetMainClientConfiguration
+****************************************************************/

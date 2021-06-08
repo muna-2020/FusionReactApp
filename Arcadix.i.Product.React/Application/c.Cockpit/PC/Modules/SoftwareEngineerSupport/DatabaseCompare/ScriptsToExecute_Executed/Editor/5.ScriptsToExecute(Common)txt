@@ -1,0 +1,776 @@
+
+
+/******************************************************************
+  The following script is to add new columns required for fusion
+  Table Name: 
+			- t_Framework_MainClient_Configuration
+			- t_Framework_MainClient_ThemeConfiguration
+			- t_Framework_MainClient
+			- t_Framework_ClientConfiguration
+			- t_Framework_ApplicationType
+			- t_Framework_Mainclient_ApplicationType
+			- t_Framework_Client_HostUrl
+
+ After the columns are added , dtModifiedOn and cIsDeleted is to be updated, 
+ These two columns must have values for data to be loaded in fusion
+ New column cIsFusion is added, so that previous values are not disturbed
+
+***************************************************************************************/
+
+ALTER TABLE t_Framework_MainClient_Configuration ADD vFileHandlerProvider nvarchar(max)	
+ALTER TABLE t_Framework_MainClient_Configuration ADD vTemplateResourcePath nvarchar(max)	
+ALTER TABLE t_Framework_MainClient_Configuration ADD dtModifiedOn nvarchar(max)
+ALTER TABLE t_Framework_MainClient_Configuration ADD dtModifiedByUserId datetime
+ALTER TABLE t_Framework_MainClient_Configuration ADD cIsDeleted	char(1)
+ALTER TABLE t_Framework_MainClient_Configuration ADD vEditorDatabaseName nvarchar(max)
+ALTER TABLE t_Framework_MainClient_Configuration ADD vEditorConnectionString	nvarchar(max)
+ALTER TABLE t_Framework_MainClient_Configuration ADD vProductManagementConnectionString	nvarchar(max)
+ALTER TABLE t_Framework_MainClient_Configuration ADD vProductManagementDatabaseName	nvarchar(max)
+ALTER TABLE t_Framework_MainClient_Configuration ADD cIsForFusion char(1)
+ALTER TABLE t_Framework_MainClient_Configuration ADD vAuditDataBaseName nvarchar(max)
+ALTER TABLE t_Framework_MainClient_Configuration ADD vAuditConnectionString	nvarchar(max)
+ALTER TABLE t_Framework_MainClient_Configuration ADD vLogConnectionString nvarchar(max)
+ALTER TABLE t_Framework_MainClient_Configuration ADD vLogDataBaseName nvarchar(max)
+
+update t_framework_mainclient set cisforfusion='Y',cIsDeleted='N',cIsActive='Y', dtModifiedOn = getdate() where imainclientId in(97,112,115,124,114,0)
+
+ALTER TABLE t_Framework_MainClient_ThemeConfiguration ADD cIsDeleted char(1)
+ALTER TABLE t_Framework_MainClient_ThemeConfiguration ADD dtModifiedOn datetime
+ALTER TABLE t_Framework_MainClient_ThemeConfiguration ADD vThemeConfigurationName nvarchar(max)
+ALTER TABLE t_Framework_MainClient_ThemeConfiguration ADD cIsForFusion char(1)
+
+
+alter table t_Framework_MainClient add dtModifiedOn	datetime
+alter table t_Framework_MainClient add cIsDeleted char(1)	
+alter table t_Framework_MainClient add cIsActive char(1)	
+alter table t_Framework_MainClient add cIsForFusion char(1)
+
+update t_Framework_MainClient set cIsDeleted ='N', dtModifiedOn=GETDATE()
+update t_Framework_MainClient set cIsDeleted ='N', dtModifiedOn=GETDATE()
+
+-- The MainClientIdentifier is used to get resource and navigation path
+update t_Framework_MainClient set vMainClientIdentifier ='Lernpassplus' where iMainClientId = 115
+update t_Framework_MainClient set vMainClientIdentifier ='Bscberatung' where iMainClientId = 112
+
+
+alter table t_Framework_ClientConfiguration add vSecretKeyForToken	nvarchar(max)
+alter table t_Framework_ClientConfiguration add vSecretKeyForEncryption	nvarchar(max) 
+alter table t_Framework_ClientConfiguration add cIsDeleted	char(1)
+alter table t_Framework_ClientConfiguration add dtModifiedOn datetime
+alter table t_Framework_ClientConfiguration add cIsForFusion char(1)
+
+alter table t_Framework_Client add dtModifiedOn datetime
+alter table t_Framework_Client add cIsDeleted	char(1)
+alter table t_Framework_Client add cIsForFusion char(1)
+
+alter table t_Framework_ApplicationType add dtModifiedOn	datetime
+alter table t_Framework_ApplicationType add cIsDeleted char(1)	
+alter table t_Framework_ApplicationType add cIsForFusion char(1)
+
+update t_Framework_ApplicationType set dtModifiedOn=getdate(),cIsDeleted ='N', cIsForFusion ='Y' where iApplicationTypeid in(1,2,4,6,7,12,16)
+
+alter table t_Framework_Mainclient_ApplicationType add dtModifiedOn	datetime
+alter table t_Framework_Mainclient_ApplicationType add cIsDeleted char(1)	
+alter table t_Framework_Mainclient_ApplicationType add uUserId uniqueidentifier
+alter table t_Framework_Mainclient_ApplicationType add uModifiedByUserId uniqueidentifier
+
+update t_Framework_Mainclient_ApplicationType set dtModifiedOn=getdate(), cIsDeleted='N' where  imainclientid in(115,97,112,114)
+
+alter table t_Framework_Client_HostUrl add dtModifiedOn datetime
+alter table t_Framework_Client_HostUrl add cIsForFusion char(1)
+
+GO
+
+/**************************************************************************************************************
+  Script to create a new MainClientConfiguration for fusion .
+  The Values are made as variables for can be changed if required
+ 
+  The name if this configuration is given as 'FusionDefaultActive'
+**************************************************************************************************************/
+
+declare @iMainClientConfiguration int,
+@vMainClientConfigurationName nvarchar(max) = 'FusionDefaultActive',
+@vApplicationCachingProvider nvarchar(max) = 'Arcadix.Framework.Services.RedisServiceStackCaching',
+@vCryptographyProvider nvarchar(max) = 'Arcadix.Framework.Services.Cryptography.StandardCryptographyProvider',
+@vExtranetConnectionString nvarchar(max) = 'server=192.168.129.126;database=Fusion_Common_Extranet_Active;uid=TestDriveCommon;pwd=ksdfkd933dkdk99d98d;Max Pool Size=800;',
+@vIntranetConnectionString nvarchar(max) = 'server=192.168.129.126;database=Fusion_Common_CMS_Active;uid=TestDriveCommon;pwd=ksdfkd933dkdk99d98d;Max Pool Size=800;',
+@vExtranetDatabaseName nvarchar(max) = 'Fusion_Common_Extranet_Active',
+@vIntranetDatabaseName nvarchar(max) = 'Fusion_Common_CMS_Active',
+@vFrameworkServicesDatabaseName nvarchar(max) = 'Fusion_Common_Service_Active',
+@vExtranetServerName nvarchar(max) = '192.168.129.126',
+@vIntranetServerName nvarchar(max) = '192.168.129.126',
+@vFileHandlerProvider nvarchar(max) = 'Arcadix.Framework.Services.FileHandler.OneDriveFileDirectory',
+@vEditorDatabaseName nvarchar(max) = 'Fusion_Common_CMS_Active',
+@vEditorConnectionString nvarchar(max) = 'server=192.168.129.126;database=Fusion_Common_CMS_Active;uid=TestDriveCommon;pwd=ksdfkd933dkdk99d98d;Max Pool Size=800;',
+@vProductManagementConnectionString nvarchar(max) = 'server=192.168.129.126;database=Fusion_Common_ProductManagement;uid=TestDriveCommon;pwd=ksdfkd933dkdk99d98d;Max Pool Size=800;',
+@vProductManagementDatabaseName nvarchar(max) = 'Fusion_Common_ProductManagement',
+@vAuditDataBaseName nvarchar(max) = 'Fusion_Common_Audit',
+@vAuditConnectionString nvarchar(max) = 'server = 192.168.129.126; database = Fusion_Common_Audit; uid = TestDriveCommon; pwd = ksdfkd933dkdk99d98d; enlist = false',
+@vLogConnectionString nvarchar(max) = 'server = 192.168.129.126; database = Fusion_Common_Log; uid = TestDriveCommon; pwd = ksdfkd933dkdk99d98d; enlist = false',
+@vLogDataBaseName nvarchar(max) = 'Fusion_Common_Log'
+
+
+insert into t_Framework_MainClient_Configuration(
+vMainClientConfigurationName,
+vApplicationCachingProvider,
+vCryptographyProvider,
+vExtranetConnectionString,
+vIntranetConnectionString,
+vExtranetDatabaseName,
+vIntranetDatabaseName,
+vFrameworkServicesDatabaseName,
+vExtranetServerName,
+vIntranetServerName,
+vFileHandlerProvider,
+dtModifiedOn,
+cIsDeleted,
+vEditorDatabaseName,
+vEditorConnectionString,
+vProductManagementConnectionString,
+vProductManagementDatabaseName,
+cIsForFusion,vAuditDataBaseName,
+vAuditConnectionString,
+vLogConnectionString,
+vLogDataBaseName) values(
+@vMainClientConfigurationName,
+@vApplicationCachingProvider,
+@vCryptographyProvider,
+@vExtranetConnectionString,
+@vIntranetConnectionString
+,@vExtranetDatabaseName,
+@vIntranetDatabaseName,
+@vFrameworkServicesDatabaseName,
+@vExtranetServerName,
+@vIntranetServerName,
+@vFileHandlerProvider,
+GETDATE(),'N',
+@vEditorDatabaseName
+,@vEditorConnectionString,
+@vProductManagementConnectionString,
+@vProductManagementDatabaseName,
+'Y',
+@vAuditDataBaseName,
+@vAuditConnectionString,
+@vLogConnectionString,
+@vLogDataBaseName)
+set @iMainClientConfiguration =@@IDENTITY
+
+
+declare @iMainClientThemeConfigurationId int	
+insert into t_Framework_MainClient_ThemeConfiguration
+values(-1,'sdffsdsdf333333dddddd',3,1,'Y','',1,'Default','Y','N','N','TestApplication800By600','Y',NULL,NULL,NULL,'73@455#sDKHafS','',3,'N',getdate(),'FusionThemeConfig','Y')
+set @iMainClientThemeConfigurationId =@@IDENTITY
+
+-- Update Clients with new Configuraton Values added
+
+update t_Framework_MainClient set iFusionMainClientConfigurationId =@iMainClientConfiguration, iMainClientThemeConfigurationId =@iMainClientThemeConfigurationId where iMainclientId in(115,97,112,114,0)
+
+/**************************************************************************************************
+ the following script is to set the Identifier name as Cockpit , which is system Management curently
+
+***************************************************************************************************/
+update t_Framework_MainClient set vMainClientIdentifier='Cockpit' where imainclientId = 0
+
+GO
+
+/*******************************************************************************************************************
+ New table 
+
+********************************************************************************************************************/
+CREATE TABLE [dbo].[t_Framework_Country_MainClient](
+	[iCountryMainClientId] [int] IDENTITY(1,1) NOT NULL,
+	[iCountryId] [int] NULL,
+	[iMainClientId] [int] NULL,
+	[iApplicationTypeId] [int] NULL,
+	[dtModifiedOn] [datetime] NULL,
+	[dtCreatedOn] [datetime] NULL,
+	[uUserId] [uniqueidentifier] NULL,
+	[cIsDeleted] [char](1) NULL,
+ CONSTRAINT [PK_t_Framework_Country_MainClient] PRIMARY KEY CLUSTERED 
+(
+	[iCountryMainClientId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+insert into t_Framework_Country_MainClient values(1,0,1,getdate(),getdate(),null,'N')
+insert into t_Framework_Country_MainClient values(1,0,2,getdate(),getdate(),null,'N')
+insert into t_Framework_Country_MainClient values(1,0,4,getdate(),getdate(),null,'N')
+insert into t_Framework_Country_MainClient values(1,0,6,getdate(),getdate(),null,'N')
+insert into t_Framework_Country_MainClient values(1,0,16,getdate(),getdate(),null,'N')
+
+insert into t_Framework_Country_MainClient values(1,97,1,getdate(),getdate(),null,'N')
+insert into t_Framework_Country_MainClient values(1,97,2,getdate(),getdate(),null,'N')
+insert into t_Framework_Country_MainClient values(1,97,4,getdate(),getdate(),null,'N')
+insert into t_Framework_Country_MainClient values(1,97,6,getdate(),getdate(),null,'N')
+insert into t_Framework_Country_MainClient values(1,97,16,getdate(),getdate(),null,'N')
+
+insert into t_Framework_Country_MainClient values(1,115,1,getdate(),getdate(),null,'N')
+insert into t_Framework_Country_MainClient values(1,115,2,getdate(),getdate(),null,'N')
+insert into t_Framework_Country_MainClient values(1,115,4,getdate(),getdate(),null,'N')
+insert into t_Framework_Country_MainClient values(1,115,6,getdate(),getdate(),null,'N')
+insert into t_Framework_Country_MainClient values(1,115,16,getdate(),getdate(),null,'N')
+
+insert into t_Framework_Country_MainClient values(1,112,1,getdate(),getdate(),null,'N')
+insert into t_Framework_Country_MainClient values(1,112,2,getdate(),getdate(),null,'N')
+insert into t_Framework_Country_MainClient values(1,112,4,getdate(),getdate(),null,'N')
+insert into t_Framework_Country_MainClient values(1,112,6,getdate(),getdate(),null,'N')
+insert into t_Framework_Country_MainClient values(1,112,16,getdate(),getdate(),null,'N')
+
+insert into t_Framework_Country_MainClient values(1,114,1,getdate(),getdate(),null,'N')
+insert into t_Framework_Country_MainClient values(1,114,2,getdate(),getdate(),null,'N')
+insert into t_Framework_Country_MainClient values(1,114,4,getdate(),getdate(),null,'N')
+insert into t_Framework_Country_MainClient values(1,114,6,getdate(),getdate(),null,'N')
+insert into t_Framework_Country_MainClient values(1,114,16,getdate(),getdate(),null,'N')
+
+
+-- t_Framework_ClientConfiguration
+
+
+
+insert into t_Framework_ClientConfiguration(vClientConfigurationName,vMemberShipProvider,vSkin,vClientIdentifier,vSecretKeyForToken,vSecretKeyForEncryption,cIsDeleted,dtModifiedOn,cIsForFusion)
+values('ReactIntranet','Arcadix.Intranet.Provider.MembershipProvider.IntranetMembership,Arcadix.Intranet','Skin2018','ReactIntranet','POIYc6887rtywqadbvSwertyDffnILE','KW6STYUI3Ty6YB095','N','2020-02-26 15:15:33.717','Y')
+
+insert into t_Framework_ClientConfiguration(vClientConfigurationName,vMemberShipProvider,vSkin,vClientIdentifier,vSecretKeyForToken,vSecretKeyForEncryption,cIsDeleted,dtModifiedOn,cIsForFusion)
+values('ReactTeacher','Arcadix.Extranet.Teacher.TeacherMembership','Extranet/Skin2017','ExtranetTeacher','HPCstc21efuftwerdsaffFiwDffVnPOt','ER2SGQD3Ty1PB785','N','2019-08-01 11:34:11.060','Y')
+
+insert into t_Framework_ClientConfiguration(vClientConfigurationName,vMemberShipProvider,vSkin,vClientIdentifier,vSecretKeyForToken,vSecretKeyForEncryption,cIsDeleted,dtModifiedOn,cIsForFusion)
+values('ReactSchool','Arcadix.Extranet.School.SchoolMembership','Extranet/Skin2017','ExtranetSchool','GQDstc21ewfffffffffffFiwDffVvVBrk','MV2SGQDst21PB921','N','2019-08-01 11:34:11.060','Y')
+
+insert into t_Framework_ClientConfiguration(vClientConfigurationName,vMemberShipProvider,vSkin,vClientIdentifier,vSecretKeyForToken,vSecretKeyForEncryption,cIsDeleted,dtModifiedOn,cIsForFusion)
+values('ReactPupil','Arcadix.Extranet.Pupil.PupilMembership','Extranet/Skin2017','ExtranetPupil','KILstc68e3uftwqadbvSSFiwDffnILE','PC6STUI3Ty6YB095','N','2019-08-01 11:34:11.060','Y')
+
+insert into t_Framework_ClientConfiguration(vClientConfigurationName,vMemberShipProvider,vSkin,vClientIdentifier,vSecretKeyForToken,vSecretKeyForEncryption,cIsDeleted,dtModifiedOn,cIsForFusion)
+values('ReactTestApplication','Arcadix.Extranet.Teacher.Provider.MembershipProvider.TeacherMembership','Extranet/Skin2018','ReactTestApplication','POIYc6887rtywqadbvSwertyDffnILE','KW6STYUI3Ty6YB095','N','2019-08-01 11:34:11.060','Y')
+
+insert into t_Framework_ClientConfiguration(vClientConfigurationName,vMemberShipProvider,vSkin,vClientIdentifier,vSecretKeyForToken,vSecretKeyForEncryption,cIsDeleted,dtModifiedOn,cIsForFusion)
+values('ReactCockpit','Arcadix.ProductManagement.Provider.MembershipProvider.ProductManagementMembership,Arcadix.ProductManagement','Skin2018','ReactCockpit','POIYc6887rtywqadbvSwertyDffnILE','KW6STYUI3Ty6YB095','N','2019-08-01 11:34:11.060','Y')
+
+insert into t_Framework_ClientConfiguration(vClientConfigurationName,vMemberShipProvider,vSkin,vClientIdentifier,vSecretKeyForToken,vSecretKeyForEncryption,cIsDeleted,dtModifiedOn,cIsForFusion)
+values('ReactState','Arcadix.Extranet.State.StateMembership','Extranet/Skin2017','ExtranetState','HPCstc21efuftwerdsaffFiwDffVnPOt','ER2SGQD3Ty1PB785','N','2020-07-22 18:07:18.907','Y')
+
+--t_Framework_Client
+
+
+--t_Framework_Client_HostUrl
+
+
+Declare @iClientConfigurationId int,
+		@iMainClientId int=97,
+		@vMainClientIdentifier nvarchar(max)='Lernlupe',
+		@vClientName nvarchar(max),
+		@vApplicationName nvarchar(max),
+		@iApplicationTypeId int,
+		@iClientId int
+		
+		set @vApplicationName='School'
+		set @vClientName= @vMainClientIdentifier+'School'
+		set @iApplicationTypeId =6
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'React'+@vApplicationName
+		insert into t_Framework_Client (iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'SchuleActiveFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='Teacher'
+		set @vClientName= @vMainClientIdentifier+'Teacher'
+		set @iApplicationTypeId =1
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'React'+@vApplicationName
+		insert into t_Framework_Client (iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'LehrpersonActiveFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+
+		set @vApplicationName='Pupil'
+		set @vClientName= @vMainClientIdentifier+'Pupil'
+		set @iApplicationTypeId =16
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'React'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'ActiveFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='Intranet'
+		set @vClientName= @vMainClientIdentifier+'Intranet'
+		set @iApplicationTypeId =4
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'React'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'ActiveFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='TestApplication'
+		set @vClientName= @vMainClientIdentifier+'TestApplication'
+		set @iApplicationTypeId =2
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'React'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'ActiveFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+Go
+
+Declare @iClientConfigurationId int,
+		@iMainClientId int=115,
+		@vMainClientIdentifier nvarchar(max)='Lernpassplus',
+		@vClientName nvarchar(max),
+		@vApplicationName nvarchar(max),
+		@iApplicationTypeId int,
+		@iClientId int
+		
+		set @vApplicationName='School'
+		set @vClientName= @vMainClientIdentifier+'School'
+		set @iApplicationTypeId =6
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'React'+@vApplicationName
+		insert into t_Framework_Client (iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'SchuleActiveFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='Teacher'
+		set @vClientName= @vMainClientIdentifier+'Teacher'
+		set @iApplicationTypeId =1
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'React'+@vApplicationName
+		insert into t_Framework_Client (iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'LehrpersonActiveFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+
+		set @vApplicationName='Pupil'
+		set @vClientName= @vMainClientIdentifier+'Pupil'
+		set @iApplicationTypeId =16
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'React'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'ActiveFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='Intranet'
+		set @vClientName= @vMainClientIdentifier+'Intranet'
+		set @iApplicationTypeId =4
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'React'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'ActiveFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='TestApplication'
+		set @vClientName= @vMainClientIdentifier+'TestApplication'
+		set @iApplicationTypeId =2
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'React'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'ActiveFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+GO
+Declare @iClientConfigurationId int,
+		@iMainClientId int=112,
+		@vMainClientIdentifier nvarchar(max)='Bscberatung',
+		@vClientName nvarchar(max),
+		@vApplicationName nvarchar(max),
+		@iApplicationTypeId int,
+		@iClientId int
+		
+		set @vApplicationName='School'
+		set @vClientName= @vMainClientIdentifier+'School'
+		set @iApplicationTypeId =6
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'React'+@vApplicationName
+		insert into t_Framework_Client (iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'SchuleActiveFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='Teacher'
+		set @vClientName= @vMainClientIdentifier+'Teacher'
+		set @iApplicationTypeId =1
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'React'+@vApplicationName
+		insert into t_Framework_Client (iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'LehrpersonActiveFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+
+		set @vApplicationName='Pupil'
+		set @vClientName= @vMainClientIdentifier+'Pupil'
+		set @iApplicationTypeId =16
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'React'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'ActiveFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='Intranet'
+		set @vClientName= @vMainClientIdentifier+'Intranet'
+		set @iApplicationTypeId =4
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'React'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'ActiveFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='TestApplication'
+		set @vClientName= @vMainClientIdentifier+'TestApplication'
+		set @iApplicationTypeId =2
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'React'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'ActiveFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+Go
+Declare @iClientConfigurationId int,
+		@iMainClientId int=114,
+		@vMainClientIdentifier nvarchar(max)='Codoc',
+		@vClientName nvarchar(max),
+		@vApplicationName nvarchar(max),
+		@iApplicationTypeId int,
+		@iClientId int
+		
+		set @vApplicationName='School'
+		set @vClientName= @vMainClientIdentifier+'School'
+		set @iApplicationTypeId =6
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'React'+@vApplicationName
+		insert into t_Framework_Client (iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'SchuleActiveFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='Teacher'
+		set @vClientName= @vMainClientIdentifier+'Teacher'
+		set @iApplicationTypeId =1
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'React'+@vApplicationName
+		insert into t_Framework_Client (iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'LehrpersonActiveFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+
+		set @vApplicationName='Pupil'
+		set @vClientName= @vMainClientIdentifier+'Pupil'
+		set @iApplicationTypeId =16
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'React'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'ActiveFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='Intranet'
+		set @vClientName= @vMainClientIdentifier+'Intranet'
+		set @iApplicationTypeId =4
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'React'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'ActiveFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='TestApplication'
+		set @vClientName= @vMainClientIdentifier+'TestApplication'
+		set @iApplicationTypeId =2
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'React'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'ActiveFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+Go
+		Declare @iClientConfigurationId int,@iClientId int
+
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactCockpit'
+		insert into t_Framework_Client (iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,0,7,'Cockpit','Cockpit',GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'CockpitActiveFusion.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+  GO
+
+		--Impetus
+		declare @iMainClientId int
+
+		Declare @iMainClientThemeConfigurationId  int,@iMainClientConfiguration int
+		select @iMainClientThemeConfigurationId = iMainClientThemeConfigurationId from t_Framework_MainClient_ThemeConfiguration where vThemeConfigurationName ='FusionThemeConfig'
+		
+select @iMainClientConfiguration = iMainClientConfigurationId from t_Framework_MainClient_Configuration where vMainClientConfigurationName ='FusionDefaultActive'
+insert into t_Framework_MainClient (vMainClientIdentifier,
+											vManagerName,
+											vStreet,
+											iZIPCode,
+											vTown,
+											vPhone,
+											vEmail,
+											iMainClientConfigurationId,
+											tLicense,
+											vLogoFileName,
+											iFusionMainClientConfigurationId,
+											iMainClientThemeConfigurationId,
+											dtModifiedOn,cIsDeleted,cIsActive,cIsForFusion)
+								    values('Impetus','Impetus','Street',11,'',000000,'',229,'','',@iMainClientConfiguration,@iMainClientThemeConfigurationId,GETDATE(),'N','Y','Y')
+		set @iMainClientId=@@IDENTITY
+		insert into t_Framework_MainClient_Data (iMainClientId,vMainClientName,iLanguageId,vTitle) 
+			values(@iMainClientId,'Impetus',3,'Herr')
+
+insert into t_Framework_Country_MainClient values(1,@iMainClientId,1,getdate(),getdate(),null,'N')
+insert into t_Framework_Country_MainClient values(1,@iMainClientId,2,getdate(),getdate(),null,'N')
+insert into t_Framework_Country_MainClient values(1,@iMainClientId,4,getdate(),getdate(),null,'N')
+insert into t_Framework_Country_MainClient values(1,@iMainClientId,6,getdate(),getdate(),null,'N')
+insert into t_Framework_Country_MainClient values(1,@iMainClientId,16,getdate(),getdate(),null,'N')
+
+
+insert into t_Framework_Language_MainClient values(3,@iMainClientId,1,getdate(),getdate(),null)
+insert into t_Framework_Language_MainClient values(3,@iMainClientId,2,getdate(),getdate(),null)
+insert into t_Framework_Language_MainClient values(3,@iMainClientId,4,getdate(),getdate(),null)
+insert into t_Framework_Language_MainClient values(3,@iMainClientId,6,getdate(),getdate(),null)
+insert into t_Framework_Language_MainClient values(3,@iMainClientId,16,getdate(),getdate(),null)
+
+insert into t_Framework_MainClient_ApplicationType values(@iMainClientId,1,null,getdate(),'N',null,null)
+insert into t_Framework_MainClient_ApplicationType values(@iMainClientId,2,null,getdate(),'N',null,null)
+insert into t_Framework_MainClient_ApplicationType values(@iMainClientId,4,null,getdate(),'N',null,null)
+insert into t_Framework_MainClient_ApplicationType values(@iMainClientId,6,null,getdate(),'N',null,null)
+insert into t_Framework_MainClient_ApplicationType values(@iMainClientId,16,null,getdate(),'N',null,null)
+
+Declare @iClientConfigurationId int,
+		@vMainClientIdentifier nvarchar(max)='Impetus',
+		@vClientName nvarchar(max),
+		@vApplicationName nvarchar(max),
+		@iApplicationTypeId int,
+		@iClientId int
+		
+		set @vApplicationName='School'
+		set @vClientName= @vMainClientIdentifier+'School'
+		set @iApplicationTypeId =6
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'React'+@vApplicationName
+		insert into t_Framework_Client (iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'SchuleActiveFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='Teacher'
+		set @vClientName= @vMainClientIdentifier+'Teacher'
+		set @iApplicationTypeId =1
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'React'+@vApplicationName
+		insert into t_Framework_Client (iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'LehrpersonActiveFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+
+		set @vApplicationName='Pupil'
+		set @vClientName= @vMainClientIdentifier+'Pupil'
+		set @iApplicationTypeId =16
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'React'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'ActiveFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='Intranet'
+		set @vClientName= @vMainClientIdentifier+'Intranet'
+		set @iApplicationTypeId =4
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'React'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'ActiveFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='TestApplication'
+		set @vClientName= @vMainClientIdentifier+'TestApplication'
+		set @iApplicationTypeId =2
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'React'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'ActiveFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+
+/*****************************************************
+Validation column not required in Object configuration table
+*****************************************************/
+alter table t_Framework_ObjectConfiguration_Column drop column uControlValidationId
+
+
+/**************************************************************************************************
+Offline Definition is added for the offline preload
+***************************************************************************************************/
+
+insert into t_TestDrive_OfflineProcess_Definition select * from Fusion_Common_Service.dbo.t_TestDrive_OfflineProcess_Definition where vOfflineProcesskeyword in(
+'RunPreload',
+'PageContentConversion',
+'Translation',
+'GenerateTestPdf',
+'DataExport')
+
+insert into t_TestDrive_OfflineProcess_Definition_Data select * from Fusion_Common_Service.dbo.t_TestDrive_OfflineProcess_Definition_Data where uOfflineProcessDefinitionId  in(
+select uOfflineProcessDefinitionId from Fusion_Common_Service.dbo.t_TestDrive_OfflineProcess_Definition where  vOfflineProcessKeyword in(
+'RunPreload',
+'PageContentConversion',
+'Translation',
+'GenerateTestPdf',
+'DataExport'))
+
+
+/**************************************************************************************************
+currency data is set for two countries
+**************************************************************************************************/
+update t_framework_country set vCurrency ='CHF', dtModifiedOn =getdate(),cIsForFusion ='Y', cIsDeleted ='N' where iCountryId = 1
+update t_framework_country set vCurrency ='USD', dtModifiedOn =getdate(),cIsForFusion ='Y', cIsDeleted ='N' where iCountryId = 2
+
+
+update t_Framework_Language_Mainclient set cIsDeleted='N' where iApplicationTypeId in(1,2,4,6,16,0) and iMainClientId in(97,115,114,112,124,0)
+update t_Framework_Language set cIsForFusion ='Y' , cIsDeleted ='N', vDefaultCurrency ='EUR' where iFrameworkLanguageId in(1,2,3,4)
+update t_Framework_Mainclient_ApplicationType set cIsDeleted ='N',dtModifiedOn = getdate() where iApplicationTypeId in(1,2,4,6,16) and iMainClientId in(97,115,114,112,124)
+update t_Framework_Mainclient_ApplicationType set cIsDeleted ='N',dtModifiedOn =GETDATE() where imainclientid = 0 and iApplicationTypeId in(7)
+
+/**********************************************************************************************
+ update default values to workflow and workflowtype + set workflow identifier for task and test
+***********************************************************************************************/
+
+update t_TestDrive_Workflow set dtModifiedOn = getdate()
+update t_TestDrive_WorkflowType set dtModifiedOn = getdate(), cIsDeleted ='N'
+
+update  t_TestDrive_WorkflowType set vWorkflowTypeIdentifier ='Task Object' where uWorkflowTypeId='1C0854B1-6094-461E-9F5B-EB8FA9C5F04D'
+update  t_TestDrive_WorkflowType set vWorkflowTypeIdentifier ='Test Object' where uWorkflowTypeId='9458B9A1-B0F9-41F1-9D5F-80B1BA3ABFDA'
+
+/**********************************************************
+
+The below script updates the default values for dtModifiedOn and cIsDeleted 
+
+***********************************************************/
+
+CREATE Table #Temp(TABLE_NAME nvarchar(max))
+Insert into #Temp (TABLE_NAME)
+select (T.TABLE_NAME)
+from information_schema.tables T where  T.TABLE_NAME <> 'sysdiagrams'   order by T.TABLE_NAME 
+
+DECLARE @vTableName nvarchar(max)
+DECLARE vCursor CURSOR FOR SELECT TABLE_NAME FROM #Temp
+DECLARE @vSQL nvarchar(max)
+OPEN vCursor
+
+FETCH NEXT FROM vCursor INTO @vTableName
+WHILE @@FETCH_STATUS = 0 BEGIN
+    IF EXISTS(SELECT *
+          FROM   INFORMATION_SCHEMA.COLUMNS
+          WHERE  TABLE_NAME = @vTableName
+                 AND COLUMN_NAME = 'dtModifiedOn')
+                           BEGIN 
+                            SET @vSQL = 'UPDATE '+ @vTableName+ ' SET dtModifiedOn = GETDATE() WHERE dtModifiedOn IS NULL'
+                           BEGIN TRY 
+                             EXEC(@vSQL)
+                           END TRY 
+                            BEGIN CATCH 
+                            print 'While updating dtModifiedOn into ' + @vTableName
+                             print ERROR_MESSAGE()
+                           END CATCH 
+                            
+                            END
+       IF EXISTS(SELECT * FROM   INFORMATION_SCHEMA.COLUMNS WHERE  TABLE_NAME = @vTableName AND COLUMN_NAME = 'cIsDeleted')
+              BEGIN
+              SET @vSQL = 'UPDATE '+ @vTableName+ ' SET cIsDeleted = ''N'' WHERE cIsDeleted IS NULL'
+              BEGIN TRY 
+                             EXEC(@vSQL)
+                           END TRY 
+                            BEGIN CATCH 
+                            print 'While updating cIsDeleted into ' +  @vTableName
+                             print ERROR_MESSAGE()
+                           END CATCH 
+              END
+
+    FETCH NEXT FROM vCursor INTO @vTableName
+END
+
+CLOSE vCursor    
+DEALLOCATE vCursor
+
+drop table #Temp
+
+GO
+
+/********************************************************************************************************
+
+Run below script to generate queries for add/modify data in t_Framework_XMLConfiguration for Client Settings.
+Execute the generated Sql Queries.
+
+*********************************************************************************************************/
+--Make the below Columns Nullable (in Fusion Version)
+alter table t_Framework_XMLConfiguration alter column iConfigurationFileId char null
+alter table t_Framework_XMLConfiguration alter column cIsEditable char null
+
+--Run the script and execute the queries
+Declare @iMainClientId int, @vParentKey nvarchar(max), @vSubParentKey nvarchar(max), @vKey nvarchar(max), @vValue nvarchar(max)
+declare Cur_ClientSettings Cursor
+For Select iMainClientId, vParentKey, vSubParentKey, vKey, vValue from Fusion_Common_Service.dbo.t_Framework_XMLConfiguration where cIsForFusion = 'Y'
+Open Cur_ClientSettings
+Fetch Next from Cur_ClientSettings into @iMainClientId, @vParentKey, @vSubParentKey, @vKey, @vValue
+WHILE(@@FETCH_STATUS <> -1)
+BEGIN
+	If Exists( Select * from t_Framework_XMLConfiguration where vParentKey = @vParentKey and vSubParentKey= @vSubParentKey and vKey= @vKey and vValue = @vValue and iMainClientId = @iMainClientId)
+	BEGIN
+		Print ('Update t_Framework_XMLConfiguration Set cIsForFusion = ''Y'' where vParentKey = '''+ @vParentKey +''' and vSubParentKey= ''' + @vSubParentKey + ''' and vKey= '''+ @vKey +''' and vValue = ''' + @vValue +''' and iMainClientId = '+ Cast(@iMainClientId as nvarchar(max)))
+	END
+	Else
+	BEGIN
+		Print ('Insert Into t_Framework_XMLConfiguration (uXMLConfigurationId, iMainClientId, vParentKey, vSubParentKey, vKey, vValue, dtCreatedOn, dtModifiedOn, cIsForFusion) Values (newId(), ' + Cast(@iMainClientId as nvarchar(max)) + ', ''' + @vParentKey + ''', ''' + @vSubParentKey + ''', ''' + @vKey + ''', ''' + @vValue+ ''', '+ 'GETDATE(), GETDATE(), ' +'''Y'')')
+	END
+	Fetch Next from Cur_ClientSettings into @iMainClientId, @vParentKey, @vSubParentKey, @vKey, @vValue
+END
+CLOSE Cur_ClientSettings
+DEALLOCATE Cur_ClientSettings
+
+GO
+
+/*********************************************************************************************************************/
+
+Script to add data to t_Framework_MainClient_Configuration_TargetGroup and 
+t_Framework_MainClient_Configuration_TargetGroup_Data tables 
+
+/**********************************************************************************************************************/
+--main table
+Insert into t_Framework_MainClient_Configuration_TargetGroup
+select * from Fusion_Common_Service.dbo.t_Framework_MainClient_Configuration_TargetGroup
+
+ --data table
+Insert into t_Framework_MainClient_Configuration_TargetGroup_Data
+select * from Fusion_Common_Service.dbo.t_Framework_MainClient_Configuration_TargetGroup_Data
+
+GO
+
+
+/*********************************************************************************************************************/
+
+Script to add data to t_Framework_Gatekeeper_TargetType and 
+t_Framework_Gatekeeper_TargetType_Data tables
+
+/**********************************************************************************************************************/
+--main table
+Insert into t_Framework_Gatekeeper_TargetType
+Select * from Fusion_Common_Service.dbo.t_Framework_Gatekeeper_TargetType
+
+ --data table
+Insert into t_Framework_Gatekeeper_TargetType_Data
+Select * from Fusion_Common_Service.dbo.t_Framework_Gatekeeper_TargetType_Data 
+
+GO

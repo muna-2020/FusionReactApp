@@ -1,0 +1,82 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_OfflineProcess_Execution' AND COLUMN_NAME = 'iClientId') 
+BEGIN
+	ALTER TABLE t_TestDrive_OfflineProcess_Execution ADD iClientId int  
+END
+
+GO	 
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_OfflineProcess_Execution' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+	ALTER TABLE t_TestDrive_OfflineProcess_Execution ADD dtModifiedOn datetime  
+END
+
+GO	   
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_OfflineProcess_Execution' AND COLUMN_NAME = 'vExecutionName') 
+BEGIN
+	ALTER TABLE t_TestDrive_OfflineProcess_Execution ADD vExecutionName nvarchar(MAX)  
+END
+
+GO			 
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_OfflineProcess_Execution' AND COLUMN_NAME = 'vHostName') 
+BEGIN
+	ALTER TABLE t_TestDrive_OfflineProcess_Execution ADD vHostName nvarchar(MAX)  
+END
+
+GO				   
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_OfflineProcess_Execution' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_TestDrive_OfflineProcess_Execution ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_OfflineProcess_Execution set dtModifiedOn = getdate() where dtModifiedOn is null
+
+GO
+
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_TestDrive_Offline_GetOfflineTasks
+FProc_TestDrive_Offline_UpdateOfflineProcessProgressValue
+FProc_TestDrive_OfflineProcess_DeleteExecution
+FProc_TestDrive_OfflineProcess_UpdateExecutionBycIsViewed
+JProc_GetOnlineUsers_Core2
+JProc_TestDrive_Offline_GetCompletedOfflineTasks
+JProc_TestDrive_Offline_GetNewOfflineTasks
+JProc_TestDrive_Offline_GetOfflineTasks
+JProc_TestDrive_Offline_UpdateOfflineProcesscIsExecuted
+JProc_TestDrive_Offline_UpdateOfflineProcessProgressValue
+JProc_TestDrive_Offline_UpdateTaskInDatabase
+JProc_TestDrive_OfflineProcess_AddProcessToList
+JProc_TestDrive_OfflineProcess_AddProcessToList_New
+JProc_TestDrive_OfflineProcess_DeleteExecutionBycIsDeleted
+JProc_TestDrive_OfflineProcess_GetGenerationProcessDetailsForMainClient
+JProc_TestDrive_OfflineProcess_GetGenerationProcessDetailsForMainClient_18_03_2019
+JProc_TestDrive_OfflineProcess_GetOfflineTasksByExecutionId
+JProc_TestDrive_OfflineProcess_GetTasksForUser
+JProc_TestDrive_OfflineProcess_GetTasksForUserByExecutionId
+JProc_TestDrive_OfflineProcess_GetTasksForUserByExecutionIdAndUserId
+JProc_TestDrive_OfflineProcess_GetTasksForUserWhoHasNotViewed
+JProc_TestDrive_OfflineProcess_InsertAndGetGenerationProcessDetails
+JProc_TestDrive_OfflineProcess_UpdateExecutionByCisViewed
+JProc_TestDrive_OfflineProcess_UpdateExecutionForBottomBarStatus
+JProc_TestDrive_OfflineProcess_UpdateExecutionStartDate
+Proc_TestDrive_Offline_GetNewOfflineTasks
+Proc_TestDrive_Offline_InsertNewOfflineTask
+Proc_TestDrive_Offline_UpdateTaskInDatabase
+Proc_TestDrive_OfflineProcess_AddProcessToList
+Proc_TestDrive_OfflineProcess_GetTasksForUser
+Proc_TestDrive_OfflineProcess_UpdateExecutionStartDate
+****************************************************************/
+
+/********************Procs need to Review**********************
+no proc to update
+****************************************************************/

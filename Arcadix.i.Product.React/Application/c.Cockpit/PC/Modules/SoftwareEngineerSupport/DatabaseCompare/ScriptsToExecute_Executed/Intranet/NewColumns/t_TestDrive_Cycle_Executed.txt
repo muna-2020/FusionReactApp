@@ -1,0 +1,57 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Cycle' AND COLUMN_NAME = 'uUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Cycle ADD uUserId uniqueidentifier  
+END	  
+	
+GO	
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Cycle' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Cycle ADD uModifiedByUserId uniqueidentifier  
+END			 
+
+GO
+/**********************************
+Default Values
+**********************************/
+--update t_TestDrive_Cycle set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_TestDrive_BaseObject_Cycle_GetData
+JProc_Testdrive_Cycle_GetCycleDetailsById
+JProc_Testdrive_Cycle_GetCycleDetailsByMainClientId
+JProc_TestDrive_OfflineTestProvider_GetEssayTestTopic
+JProc_TestDrive_Tests_GetTestDetailsForCycles
+Proc_Testdrive_Cycle_AddEditCycle
+Proc_TestDrive_Cycle_DeleteCycle
+Proc_TestDrive_Cycle_GetAllCyclesForCycleInterface
+Proc_Testdrive_Cycle_GetCycleDetailsByCycleNumber
+Proc_Testdrive_Cycle_GetCycleDetailsById
+Proc_Testdrive_Cycle_GetCycleDetailsByMainClientId
+Proc_TestDrive_Cycle_GetCycleForTestApplicationBasedOnCycleAutonumberingForTestToken 
+Proc_TestDrive_Cycle_GetCycleOrderAndAutoNumberForTestToken
+Proc_Testdrive_Cycle_GetCycleResultDatabaseDetailsByMainClientId
+Proc_TestDrive_Cycle_MoveCycleUpDown
+Proc_TestDrive_Cycle_UndoCycleDelete
+Proc_Testdrive_StandardCycleProvider_GetAssignedTestForCycle_New
+Proc_TestDrive_Tests_GetTestDetailsForCycles
+Proc_TestDrive_Tests_GetTestDetailsForCycles_Old
+*************************************************/
+
+/********************Procs need to Review**********************
+Proc_Testdrive_Cycle_AddEditCycle
+Proc_TestDrive_Cycle_DeleteCycle
+Proc_TestDrive_Cycle_MoveCycleUpDown
+Proc_TestDrive_Cycle_UndoCycleDelete
+Proc_Testdrive_StandardCycleProvider_GetAssignedTestForCycle_New
+Proc_TestDrive_Tests_GetTestDetailsForCycles
+Proc_TestDrive_Tests_GetTestDetailsForCycles_Old
+************************************************************/

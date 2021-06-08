@@ -1,0 +1,100 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN 
+ALTER TABLE t_Framework_MainClient ADD dtModifiedOn datetime  
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient' AND COLUMN_NAME = 'cIsDeleted') 
+BEGIN 
+ALTER TABLE t_Framework_MainClient ADD cIsDeleted nvarchar(MAX)  
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient' AND COLUMN_NAME = 'cIsActive') 
+BEGIN 
+ALTER TABLE t_Framework_MainClient ADD cIsActive char(1)  
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient' AND COLUMN_NAME = 'cIsForFusion') 
+BEGIN 
+ALTER TABLE t_Framework_MainClient ADD cIsForFusion char(1)  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_Framework_MainClient set dtModifiedOn =getdate()  Where dtModifiedOn is null
+
+GO
+update t_Framework_MainClient set cIsDeleted='N' Where cIsDeleted is null
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_Framework_FrameworkClient_GetClientConfiguration
+FProc_Framework_FrameworkClient_GetClientConfigurationByClientId
+FProc_TestDrive_BaseObject_MainClient_AddData
+FProc_TestDrive_BaseObject_MainClient_DeleteData
+FProc_TestDrive_BaseObject_MainClient_EditData
+FProc_TestDrive_BaseObject_MainClient_GetData
+JProc_Framework_FrameworkClient_GetClientConfiguration
+JProc_Framework_FrameworkClient_GetClientConfigurationByClientId
+JProc_Framework_FrameworkMainClient_GetAllMainClients
+JProc_Framework_FrameworkMainClient_GetMainClientConfiguration
+JProc_Framework_FrameworkMainClient_GetStateSpecificConfiguration
+Proc_Framework_FrameworkClient_GetClientConfiguration
+Proc_Framework_FrameworkClient_GetClientConfiguration_JobSkills
+Proc_Framework_FrameworkClient_GetClientConfigurationByClientId
+Proc_Framework_FrameworkMainClient_GetAllMainClients
+Proc_Framework_FrameworkMainClient_GetMainClientConfiguration
+Proc_Framework_FrameworkMainClient_GetMainClientConfigurationDetails
+Proc_Framework_FrameworkMainClient_GetStateSpecificConfiguration
+Proc_Testdrive_AnonymousMembership_ValidateUser
+proc_TestDrive_Deployement_CreateMainClientConfiguration
+Proc_TestDrive_GenericImportExport_Export_GetClassesHavingNoExperienceGrade
+Proc_TestDrive_GenericImportExport_Export_GetDatabaseDetails
+Proc_TestDrive_GenericImportExport_Export_GetExtranetIntranetDatabaseDetailsByMainClientId
+Proc_TestDrive_GenericImportExport_Export_GetSubjectExperienceGrade
+Proc_TestDrive_GenericImportExport_Export_ProjectGradeExport
+Proc_TestDrive_GenericImportExport_Export_SchoolsHavingNoClasses
+Proc_TestDrive_GenericImportExport_Export_TasksAssignedToMainSubjects
+Proc_TestDrive_MainClient_UpdateMainClientLogo
+****************************************************************/
+
+/********************Procs need to Review**********************
+FProc_Framework_FrameworkClient_GetClientConfiguration
+FProc_Framework_FrameworkClient_GetClientConfigurationByClientId
+FProc_TestDrive_BaseObject_MainClient_AddData
+FProc_TestDrive_BaseObject_MainClient_DeleteData
+FProc_TestDrive_BaseObject_MainClient_EditData
+FProc_TestDrive_BaseObject_MainClient_GetData
+JProc_Framework_FrameworkClient_GetClientConfiguration
+JProc_Framework_FrameworkClient_GetClientConfigurationByClientId
+JProc_Framework_FrameworkMainClient_GetAllMainClients
+JProc_Framework_FrameworkMainClient_GetMainClientConfiguration
+JProc_Framework_FrameworkMainClient_GetStateSpecificConfiguration
+Proc_Framework_FrameworkClient_GetClientConfiguration
+Proc_Framework_FrameworkClient_GetClientConfiguration_JobSkills
+Proc_Framework_FrameworkClient_GetClientConfigurationByClientId
+Proc_Framework_FrameworkMainClient_GetAllMainClients
+Proc_Framework_FrameworkMainClient_GetMainClientConfiguration
+Proc_Framework_FrameworkMainClient_GetMainClientConfigurationDetails
+Proc_Framework_FrameworkMainClient_GetStateSpecificConfiguration
+Proc_Testdrive_AnonymousMembership_ValidateUser
+proc_TestDrive_Deployement_CreateMainClientConfiguration
+Proc_TestDrive_GenericImportExport_Export_GetClassesHavingNoExperienceGrade
+Proc_TestDrive_GenericImportExport_Export_GetDatabaseDetails
+Proc_TestDrive_GenericImportExport_Export_GetExtranetIntranetDatabaseDetailsByMainClientId
+Proc_TestDrive_GenericImportExport_Export_GetSubjectExperienceGrade
+Proc_TestDrive_GenericImportExport_Export_ProjectGradeExport
+Proc_TestDrive_GenericImportExport_Export_SchoolsHavingNoClasses
+Proc_TestDrive_GenericImportExport_Export_TasksAssignedToMainSubjects
+Proc_TestDrive_MainClient_UpdateMainClientLogo
+****************************************************************/

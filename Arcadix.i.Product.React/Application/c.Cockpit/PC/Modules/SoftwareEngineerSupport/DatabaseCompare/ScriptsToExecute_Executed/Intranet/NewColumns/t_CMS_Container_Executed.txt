@@ -1,0 +1,69 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_Container' AND COLUMN_NAME = 'cIsFusionVersion') 
+BEGIN
+ALTER TABLE t_CMS_Container ADD cIsFusionVersion char(1)  
+END  
+
+GO  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_Container' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_CMS_Container ADD uModifiedByUserId uniqueidentifier  
+END			 
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_CMS_Container set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_CMS_CMSContainer_Delete
+FProc_CMS_CMSContainer_GetAllSubContainerByContainerId
+FProc_CMS_CMSContainer_GetContainerDetailsAndHtmlById
+FProc_CMS_CMSContainer_SaveContainer_New
+FProc_CMS_CMSPage_GetPageDetailsAndHtmlById
+JEditorProc_CMS_CMSContainer_Delete
+JEditorProc_CMS_CMSContainer_GetAllSubContainerByContainerId
+JEditorProc_CMS_CMSContainer_GetContainerDetailsAndHtmlById
+JEditorProc_CMS_CMSContainer_SaveContainer_New
+JEditorProc_CMS_CMSPage_GetPageDetailsAndHtmlById
+Proc_CMS_CMSContainer_Delete
+Proc_CMS_CMSContainer_GetAllSubContainerByContainerId
+Proc_CMS_CMSContainer_GetContainerDetailsAndHtmlById
+Proc_CMS_CMSContainer_SaveContainer
+Proc_CMS_CMSContainer_SaveContainer_New
+Proc_CMS_CMSPage_GetAnchorsLinkedToPage
+Proc_CMS_CMSPage_GetPageDetailsAndHtmlById
+Proc_CMS_CMSPageContent_GetAllDictationTasksByTestId
+Proc_CMS_CMSTestDrivePage_GetAllTasksBySubjectAnCompetencyDetails
+Proc_CMS_CMSTestDrivePage_GetAllTasksBySubjectAndSchoolYearDifficult_Testing
+Proc_CMS_CMSTestDrivePage_GetAllTasksBySubjectId
+Proc_CMS_CMSTestDrivePage_GetAllTasksBySubjectId_New
+Proc_CMS_CMSTestDrivePage_GetTasksForMultipleTaskUsages
+Proc_Testdrive_DeleteAllTasksByMainclientId
+Proc_TestDrive_JTeacherTestTask_GetAllTasksByTestId
+Proc_TestDrive_PaperPencil_DeletePaperPencilImage
+Proc_TestDrive_PaperPencil_GetPaperPencilTestDetails
+Proc_TestDrive_PaperPencil_SavePaperPencilMarkerData
+Proc_TestDrive_StandardTestProvider_GetAllTasksAssignedWithTests
+Proc_TestDrive_StandardTestProvider_GetAllTasksByTestId
+Proc_TestDrive_StandardTestProvider_GetAllTasksByTestId_New
+Proc_TestDrive_StandardTestProvider_GetAllTasksByTestId_New_Calibration
+Proc_TestDrive_Test_GetAllUncaliberatedTasksByTestId
+Proc_TestDrive_Test_GetAllUncaliberatedTasksByTestId_Calibration
+Proc_TestDrive_Test_GetElementResultAttributesByPageId
+***********************************************************/
+
+/********************Procs need to Review**********************
+FProc_CMS_CMSContainer_SaveContainer_New (No Changes Required)
+JEditorProc_CMS_CMSContainer_SaveContainer_New (No Changes Required)
+Proc_CMS_CMSContainer_SaveContainer (No Changes Required)
+Proc_CMS_CMSContainer_SaveContainer_New (No Changes Required)
+Proc_TestDrive_PaperPencil_SavePaperPencilMarkerData (No Changes Required)
+***********************************************************/

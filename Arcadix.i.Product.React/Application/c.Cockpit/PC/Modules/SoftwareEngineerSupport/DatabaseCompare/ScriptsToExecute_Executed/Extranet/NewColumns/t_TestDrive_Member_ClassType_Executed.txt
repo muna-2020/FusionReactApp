@@ -1,0 +1,43 @@
+/**********************************
+New Columns
+**********************************/
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Member_ClassType' AND COLUMN_NAME = 'dtModifiedOn') 
+  BEGIN
+      ALTER TABLE t_TestDrive_Member_ClassType ADD dtModifiedOn datetime  DEFAULT (getdate())
+ END
+ Go
+
+/**********************************
+Default Values
+**********************************/
+
+update t_TestDrive_Member_ClassType set dtModifiedOn = getdate() where dtModifiedOn is null
+Go
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+FProc_TestDrive_BaseObject_ClassType_AddData
+FProc_TestDrive_BaseObject_ClassType_DeleteData
+FProc_TestDrive_BaseObject_ClassType_EditData
+FProc_TestDrive_BaseObject_ClassType_GetData
+JProc_TestDrive_AssignClassTypeToPupil_SavePupilsClassType
+JProc_TestDrive_Pupil_GetPupilClassTypeDetailsForMainClient
+JProc_TestDrive_StandardClassProvider_GetClassDetailsByClassId_New
+JProc_TestDrive_States_GetAllClassTypesByStateId
+Proc_TestDrive_StandardClassProvider_GetClassDetailsByClassId
+Proc_TestDrive_StandardClassProvider_GetClassDetailsByClassId_New
+Proc_TestDrive_StandardClassProvider_GetClassDetailsByClassId_New_2018
+Proc_TestDrive_StandardClassProvider_GetClassDetailsByClassId_New_2018_03_07_2019
+Proc_TestDrive_StandardTeacherProvider_GetAllClassesByTeacherId
+Proc_TestDrive_StandardTeacherProvider_GetAllClassesByTeacherId_New
+Proc_TestDrive_State_SaveStateDependingTablesData
+Proc_TestDrive_States_GetAllClassTypesByStateId
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/

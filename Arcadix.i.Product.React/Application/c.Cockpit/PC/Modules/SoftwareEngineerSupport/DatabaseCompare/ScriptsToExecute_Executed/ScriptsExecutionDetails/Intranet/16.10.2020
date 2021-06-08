@@ -1,0 +1,75 @@
+﻿/**********************************
+Following tables updated:
+	1) t_TestDrive_Test_ResultAttribute
+	2) t_testdrive_Task_Question
+	3) t_Testdrive_Task_Question_Polarity
+**********************************/
+
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_ResultAttribute' AND COLUMN_NAME = 'iMainClientId') 
+BEGIN
+ALTER TABLE t_TestDrive_Test_ResultAttribute ADD iMainClientId int  
+END
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_ResultAttribute' AND COLUMN_NAME = 'cIsForFusion') 
+BEGIN
+ALTER TABLE t_TestDrive_Test_ResultAttribute ADD cIsForFusion char(1)  
+END
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_ResultAttribute' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Test_ResultAttribute ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Test_ResultAttribute set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_testdrive_Task_Question' AND COLUMN_NAME = 'uUserId') 
+BEGIN
+ALTER TABLE t_testdrive_Task_Question ADD uUserId uniqueidentifier  
+END
+
+GO  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_testdrive_Task_Question' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_testdrive_Task_Question ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_testdrive_Task_Question' AND COLUMN_NAME = 'cIsDeleted') 
+BEGIN
+ALTER TABLE t_testdrive_Task_Question ADD cIsDeleted Char(1)  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_testdrive_Task_Question set cIsDeleted= 'N' where cIsDeleted is NULL
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Testdrive_Task_Question_Polarity' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_Testdrive_Task_Question_Polarity ADD dtModifiedOn datetime  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_Testdrive_Task_Question_Polarity set dtModifiedOn= GetDate() where dtModifiedOn IS NULL
+

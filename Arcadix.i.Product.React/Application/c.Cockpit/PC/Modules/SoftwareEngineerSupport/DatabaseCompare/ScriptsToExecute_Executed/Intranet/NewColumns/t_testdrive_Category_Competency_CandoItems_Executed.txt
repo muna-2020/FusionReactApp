@@ -1,0 +1,23 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_testdrive_Category_Competency_CandoItems' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_testdrive_Category_Competency_CandoItems ADD uModifiedByUserId uniqueidentifier  
+END			 
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_testdrive_Category_Competency_CandoItems set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+Proc_CMS_Category_Competency_GetCompetencyCanDoItems
+Proc_CMS_Category_Competency_GetCompetencyForCategory
+************************************************************/

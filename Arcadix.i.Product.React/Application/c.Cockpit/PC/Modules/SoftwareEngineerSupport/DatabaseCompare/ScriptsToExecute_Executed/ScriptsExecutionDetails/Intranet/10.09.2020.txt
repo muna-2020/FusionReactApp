@@ -1,0 +1,263 @@
+﻿ /**********************************
+  Following tables updated:
+
+	1) t_TestDrive_Subject
+	2) t_TestDrive_Category
+	3) t_TestDrive_Category_Competency
+	4) t_testdrive_Category_Competency_CompetencyRange
+	5) t_testdrive_Category_Competency_CompetencyLevel
+**********************************/
+
+/**********************************
+Procedures Updated:
+
+To review
+Proc_CMS_AddEditTask_InsertNewSubjects -- only few columns inserted
+Proc_CMS_AddEditTask_InsertNewSubSubjects -- only few columns inserted
+
+Proc_CMS_AddEditTask_InsertNewCategories -- only few columns inserted 
+**********************************/
+
+/**********************************
+Scripts: 
+**********************************/
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Subject' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Subject ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO	 
+
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Subject set uModifiedByUserId= uUserId Where uModifiedByUserId is null
+
+GO
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Category' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Category ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Category set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Category_Competency' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Category_Competency ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Category_Competency set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_testdrive_Category_Competency_CompetencyRange' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_testdrive_Category_Competency_CompetencyRange ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO			 
+
+
+/**********************************
+Default Values
+**********************************/
+update t_testdrive_Category_Competency_CompetencyRange set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+GO
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_testdrive_Category_Competency_CompetencyLevel' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_testdrive_Category_Competency_CompetencyLevel ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_testdrive_Category_Competency_CompetencyLevel set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+GO
+
+/*****Procs*******/
+
+ALTER proc [dbo].[Proc_CMS_AddEditTask_InsertNewSubjects]                       
+                        
+(                              
+                            
+  @tSubjectXml ntext,                              
+  @iLanguageId int,                                 
+  @iMainClientId int                    
+)                                                          
+AS                                
+BEGIN                                
+declare                              
+@g int ,   @vSubjectName nvarchar(500)  , @iDisplayOrder int , @iSubjectId int                
+                    
+/********************************************************************************************                                
+ Created By:       Vidhyut Kediya                          
+ Create Date:      5-Jul-2012                      
+ Description:      Called on Import Task Excel, it inserts Main Subjects if they don't exist in table.                        
+                         
+********************************************************************************************/                              
+                   
+ if(Datalength(@tSubjectXml) > 0)                      
+ begin               
+EXECUTE sp_xml_preparedocument @g OUTPUT, @tSubjectXml          
+          
+DECLARE cursor_Subjects CURSOR                                
+        FOR select  *                                
+            from  OPENXML(@g, 'Subjects/SubjectName') with (                
+            Name nvarchar(500) '.')                         
+          
+  open cursor_Subjects           
+  Fetch Next From cursor_Subjects into  @vSubjectName          
+     while( @@FETCH_STATUS<>-1)          
+     begin          
+     set @iDisplayOrder = (select MAX(iDisplayOrder) from t_TestDrive_Subject)          
+     insert into t_TestDrive_Subject(dConstance, dVariance, iParentSubjectId, iDisplayOrder, iMainClientId, vKeyForImage, cIsDeleted, cEnforceDisplayNameForTest,  cIsSubSubjectToSelectFromMany, cIsLearnCoacherSubject, uUserId,dtModifiedOn, dtCreatedOn, cIsTestedAtThisTime)  
+   values (NULL,NULL,0,@iDisplayOrder+1,@iMainClientId,NULL,'N',NULL,'N',NULL,NULL,NULL,NULL,NULL)          
+     set @iSubjectId = @@IDENTITY          
+     insert into t_TestDrive_Subject_Data values (@iSubjectId,@iLanguageId,@vSubjectName,NULL,NULL,NULL,NULL)          
+               
+  Fetch Next From cursor_Subjects into  @vSubjectName               
+  end          
+  close cursor_Subjects                                        
+    Deallocate cursor_Subjects                                        
+    EXEC sp_xml_removedocument @g                       
+end           
+          
+end
+
+GO
+
+    
+ALTER  PROC [dbo].[Proc_CMS_AddEditTask_InsertNewSubSubjects]                     
+                      
+(                            
+                          
+  @tSubjectXml ntext,                            
+  @iLanguageId int,                               
+  @iMainClientId int                  
+)                                                        
+AS                              
+BEGIN                              
+declare                            
+@g int ,   @iMainSubjectId int  ,@vSubSubjectName nvarchar(500),@iSubjectId int ,@iDisplayOrder int             
+                  
+/********************************************************************************************                              
+ Created By:       Vidhyut Kediya                        
+ Create Date:      5-Jul-2012                    
+ Description:      Called on Import Task Excel, it inserts Sub Subjects for Main Subject if they don't exist in table.                      
+               Xml input is  like '<Subjects><Subject ParentSubjectId="5">Maths</Subject><Subject ParentSubjectId="8">Science</Subject></Subjects>'        
+********************************************************************************************/                            
+                 
+ if(Datalength(@tSubjectXml) > 0)                    
+ begin             
+EXECUTE sp_xml_preparedocument @g OUTPUT, @tSubjectXml        
+        
+DECLARE cursor_Subjects CURSOR                              
+        FOR select  *                              
+            from  OPENXML(@g, 'SubSubjects/Subject') with (                
+            Id int './@ParentSubjectId', Name nvarchar(500) '.')                    
+        
+  open cursor_Subjects         
+  Fetch Next From cursor_Subjects into  @iMainSubjectId, @vSubSubjectName        
+     while( @@FETCH_STATUS<>-1)        
+     begin        
+     set @iDisplayOrder = (select MAX(iDisplayOrder) from t_TestDrive_Subject)        
+     insert into t_TestDrive_Subject(dConstance,dVariance,iParentSubjectId,iDisplayOrder,iMainClientId,vKeyForImage,cIsDeleted,cIsTestedAtThisTime,cEnforceDisplayNameForTest,iConfidenceIntervalLowerUpperBound,cIsSubSubjectToSelectFromMany,cIsLearnCoacherSubject)       
+     values (NULL,NULL,@iMainSubjectId,@iDisplayOrder+1,@iMainClientId,NULL,'N',NULL,'N',NULL,NULL,NULL)        
+     set @iSubjectId = @@IDENTITY        
+     insert into t_TestDrive_Subject_Data(iSubjectId,iLanguageId,vSubjectName,vSubjectDisplayName,vSubjectShortName) values (@iSubjectId,@iLanguageId,@vSubSubjectName,NULL,NULL)        
+             
+  Fetch Next From cursor_Subjects into  @iMainSubjectId, @vSubSubjectName           
+  end        
+  close cursor_Subjects                                      
+    Deallocate cursor_Subjects                                      
+    EXEC sp_xml_removedocument @g                     
+end         
+        
+end
+
+GO
+
+        
+CREATE PROC [dbo].[Proc_CMS_AddEditTask_InsertNewCategories]                       
+                        
+(                              
+                            
+  @tCategoryXml ntext,                              
+  @iLanguageId int,                                 
+  @iMainClientId int                    
+)                                                          
+AS                                
+BEGIN                                
+declare                              
+@g int ,@iSubjectId int,   @vCategoryName nvarchar(500)  , @iDisplayOrder int, @iCategoryId int          
+                    
+/********************************************************************************************                                
+ Created By:       Vidhyut Kediya                          
+ Create Date:      6-Jul-2012                      
+ Description:      Called on Import Task Excel, it inserts categories for subject.            
+     
+  Modified By: Arvind K                                         
+ Modified Date: 11/08/2020                                       
+ Description: Included column list for Insert Statement    
+                         
+********************************************************************************************/                              
+                   
+ if(Datalength(@tCategoryXml) > 0)                      
+ begin               
+EXECUTE sp_xml_preparedocument @g OUTPUT, @tCategoryXml          
+          
+DECLARE cursor_Category CURSOR                                
+        FOR select  *                                
+            from  OPENXML(@g, 'Categories/Category') with (                
+            Id int './@SubjectId', Name nvarchar(500) '.')                               
+          
+  open cursor_Category           
+  Fetch Next From cursor_Category into  @iSubjectId, @vCategoryName          
+     while( @@FETCH_STATUS<>-1)          
+     begin          
+     set @iDisplayOrder = (select MAX(iDisplayOrder) from t_TestDrive_Category)          
+     insert into t_TestDrive_Category(iSubjectId, iMainClientId, cIsDeleted, iDisplayOrder)    
+   values (@iSubjectId,@iMainClientId,'N',@iDisplayOrder+1)          
+     set @iCategoryId = @@IDENTITY          
+     insert into t_TestDrive_Category_Data (iCategoryId,iLanguageId,vCategoryName)values (@iCategoryId,@iLanguageId,@vCategoryName)          
+               
+  Fetch Next From cursor_Category into  @iSubjectId, @vCategoryName              
+  end          
+  close cursor_Category                                        
+    Deallocate cursor_Category                                        
+    EXEC sp_xml_removedocument @g                       
+end           
+          
+end 
+

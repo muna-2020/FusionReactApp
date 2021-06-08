@@ -1,0 +1,89 @@
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_Document_Folder_User' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_LearnCoacher_Document_Folder_User ADD uModifiedByUserId uniqueidentifier  
+END
+Go
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_Document_Folder_User  set uModifiedByUserId = uUserId  
+Go
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_LearnCoacher_Document_AddFolder
+JProc_LearnCoacher_Document_AddFolder_04_05_2020
+JProc_LearnCoacher_Document_AddFolder_1892018
+JProc_LearnCoacher_Document_AddFolder_Final
+JProc_LearnCoacher_Document_AddFolder_Final_07_08_2019
+JProc_LearnCoacher_Document_AssignUsers
+JProc_LearnCoacher_Document_AssignUsers_Final
+JProc_LearnCoacher_Document_AssignUsers_Final_07_08_2019
+JProc_LearnCoacher_Document_AssignUsers_New
+JProc_LearnCoacher_Document_AssignUsers_Old
+JProc_LearnCoacher_Document_CopyFolder_04_05_2020
+JProc_LearnCoacher_Document_CopyFolder_07_07_2020
+JProc_LearnCoacher_Document_CopyFolder_20_05_2020
+JProc_LearnCoacher_Document_CopyFolder_Final
+JProc_LearnCoacher_Document_CopyFolder_Final_07_08_2019
+JProc_LearnCoacher_Document_CopyFolder_New
+JProc_LearnCoacher_Document_CopyFolders
+JProc_LearnCoacher_Document_DeleteFolder
+JProc_LearnCoacher_Document_DeleteFolder_04_05_2020
+JProc_LearnCoacher_Document_DeleteFolder_Final
+JProc_LearnCoacher_Document_DeleteFolder_Final_07_08_2019
+JProc_LearnCoacher_Document_GetFolders
+JProc_LearnCoacher_Document_GetFoldersAndDocumentsForMainClientId
+JProc_LearnCoacher_Document_GetFoldersForMainClient
+JProc_LearnCoacher_Document_GetFoldersForMainClient_04_05_2020
+JProc_LearnCoacher_Document_GetFoldersForMainClient_1892018
+JProc_LearnCoacher_Document_GetFoldersForMainClient_Final
+JProc_LearnCoacher_Document_GetFoldersForMainClient_Final_07_08_2019
+JProc_LearnCoacher_Document_GetFoldersForMainClient_Sync
+JProc_LearnCoacher_Document_MoveFolders_04_05_2020
+JProc_LearnCoacher_Document_MoveFolders_1892018
+JProc_LearnCoacher_Document_MoveFolders_19_05_2020
+JProc_LearnCoacher_Document_MoveFolders_Final
+JProc_LearnCoacher_Document_MoveFolders_Final_07_08_2019
+JProc_LearnCoacher_Document_UpdateFolder
+JProc_LearnCoacher_Document_UpdateFolder_01_05_2020
+JProc_LearnCoacher_Document_UpdateFolder_1892018
+JProc_LearnCoacher_Document_UpdateFolder_Final
+JProc_LearnCoacher_Document_UpdateFolder_Final_07_08_2019
+***********************************************************/
+
+
+/********************Procs to Review**********************
+JProc_LearnCoacher_Document_AddFolder (No Change Required)
+JProc_LearnCoacher_Document_AssignUsers (No Change Required)
+
+JProc_LearnCoacher_Document_AddFolder_1892018 (Modified)
+JProc_LearnCoacher_Document_AddFolder_Final (Modified)
+JProc_LearnCoacher_Document_AddFolder_Final_07_08_2019 (Modified)
+JProc_LearnCoacher_Document_AssignUsers_Final (Modified - Review)
+JProc_LearnCoacher_Document_AssignUsers_Final_07_08_2019 (Modified)
+JProc_LearnCoacher_Document_AssignUsers_New (Modified - Review)
+JProc_LearnCoacher_Document_AssignUsers_Old (Modified)
+JProc_LearnCoacher_Document_CopyFolder_Final (Modified)
+JProc_LearnCoacher_Document_CopyFolder_Final_07_08_2019 (Modified)
+JProc_LearnCoacher_Document_CopyFolder_New (Modified)
+JProc_LearnCoacher_Document_CopyFolders (Modified)
+JProc_LearnCoacher_Document_MoveFolders_1892018 (Modified)
+JProc_LearnCoacher_Document_MoveFolders_Final (Modified)
+JProc_LearnCoacher_Document_MoveFolders_Final_07_08_2019 (Modified)
+
+JProc_LearnCoacher_Document_AddFolder_04_05_2020 (Not Modified)
+JProc_LearnCoacher_Document_CopyFolder_04_05_2020 (Not Modified)
+JProc_LearnCoacher_Document_CopyFolder_07_07_2020 (Not Modified)
+JProc_LearnCoacher_Document_CopyFolder_20_05_2020 (Not Modified)
+JProc_LearnCoacher_Document_MoveFolders_04_05_2020 (Not Modified)
+JProc_LearnCoacher_Document_MoveFolders_19_05_2020 (Not Modified)
+***********************************************************/

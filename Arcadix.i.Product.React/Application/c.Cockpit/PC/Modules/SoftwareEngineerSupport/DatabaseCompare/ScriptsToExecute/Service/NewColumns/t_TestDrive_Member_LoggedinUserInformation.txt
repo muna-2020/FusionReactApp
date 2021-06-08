@@ -1,0 +1,40 @@
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Member_LoggedinUserInformation' AND COLUMN_NAME = 'vDeviceOs') 
+BEGIN 
+alter table t_TestDrive_Member_LoggedinUserInformation add vDeviceOs nvarchar(max)
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Member_LoggedinUserInformation' AND COLUMN_NAME = 'vDevice') 
+BEGIN 
+alter table t_TestDrive_Member_LoggedinUserInformation add vDevice nvarchar(max)
+END
+
+/**********************************
+Default Values
+**********************************/
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+JProc_Framework_ClientUser_RegisterLoggedInUserSystemInformation
+JProc_Framework_ClientUser_RegisterLoggedInUserSystemInformation_10_06_2020
+JProc_Framework_ClientUser_UpdateLoggedInUserMasterLoadTime
+JProc_Testdrive_ExternalUserLoginFailure
+JProc_Testdrive_UpdateLogOffTime
+Proc_Framework_ClientUser_GetLoginDetailsForUser
+Proc_Framework_ClientUser_RegisterLoggedInUserSystemInformation
+Proc_Fusion_Framework_ClientUser_RegisterLoggedInUserSystemInformation
+Proc_TestDrive_Dashboard_GetApplicationLoggedInUserDetails
+Proc_TestDrive_Dashboard_GetDashboardUsersCount
+Proc_TestDrive_Dashboard_GetUnreadSuggestions
+Proc_TestDrive_Dashboard_GetUserLastLoginDetails
+****************************************************************/
+
+/********************Procs need to Review**********************
+
+****************************************************************/

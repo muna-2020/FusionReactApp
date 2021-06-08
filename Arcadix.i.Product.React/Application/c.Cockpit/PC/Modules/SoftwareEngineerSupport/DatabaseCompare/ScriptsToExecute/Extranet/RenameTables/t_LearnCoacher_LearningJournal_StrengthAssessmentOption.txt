@@ -1,0 +1,20 @@
+﻿/**********************************
+Rename Table
+**********************************/
+EXEC sp_rename 't_LearnCoacher_LearningJournal_Topic_StrengthAssessmentOption','t_LearnCoacher_LearningJournal_StrengthAssessmentOption'
+GO
+
+/**********************************
+Fusion procs
+**********************************/
+/********************ModifiedProc********************
+p_Extranet_StrengthAssessmentOption_GetData
+*************************************************/
+
+/**********************************
+Angular procs
+**********************************/
+/********************ModifiedProc********************
+JProc_LearnCoacher_LearningJournal_GetStrengthAssessment
+Proc_LearnCoacher_LearningJournal_GetStrengthAssessmentAndReviewCriteriaData
+*************************************************/

@@ -1,0 +1,53 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_FileSystem_PageFolder' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_CMS_FileSystem_PageFolder ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_CMS_FileSystem_PageFolder set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_CMS_CMSPage_DeleteTaskFolders
+FProc_CMS_CMSPage_GetTaskFolderDetailsById
+FProc_CMS_CMSPage_MoveTaskFolder_New
+FProc_TestDrive_BaseObject_TaskFolder_AddData
+FProc_TestDrive_BaseObject_TaskFolder_DeleteData
+FProc_TestDrive_BaseObject_TaskFolder_EditData
+FProc_TestDrive_BaseObject_TaskFolder_GetData
+JEditorProc_CMS_CMSPage_DeleteTaskFolders
+JEditorProc_CMS_CMSPage_GetTaskFolderDetailsById
+JEditorProc_CMS_CMSPage_MoveTaskFolder_New
+JProc_CMS_CMSPAGE_AddEditPageFolderProperties
+JProc_CMS_CMSPage_DeleteTaskFolders
+JProc_CMS_CMSPage_GetTaskFoldersByFolderId
+JProc_CMS_CMSPage_GetTaskFoldersDetailsById_Compact
+JProc_TestDrive_ErrorLog_GetTestTaskDetails
+JProc_TestDrive_ErrorLog_GetTestTaskDetails_06_02_2020
+Proc_CMS_CMSPAGE_AddEditPageFolderProperties
+Proc_CMS_CMSPage_CopyPasteTask
+Proc_CMS_CMSPage_CopyPasteTaskFolder
+Proc_CMS_CMSPage_CopyPasteTaskFolder_New
+Proc_CMS_CMSPage_DeleteTaskFolders
+Proc_CMS_CMSPage_GetAnimationUsage
+Proc_CMS_CMSPage_GetTaskFolderDetails
+Proc_CMS_CMSPage_GetTaskFolderDetails_New
+Proc_CMS_CMSPage_GetTaskFolderDetailsById
+Proc_CMS_CMSPage_GetTaskFolders
+Proc_CMS_CMSPage_MoveTask
+Proc_CMS_CMSPage_MoveTaskFolder
+Proc_CMS_CMSPage_MoveTaskFolder_New
+Proc_CMS_CMSPageContent_GetAllDictationTasksByTestId
+Proc_CMS_Page_GetTasDetailsByFolderRecusively
+Proc_Testdrive_DeleteAllTasksByMainclientId
+*****************************************************/

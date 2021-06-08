@@ -1,0 +1,32 @@
+/**********************************
+New table		
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 't_Fusion_Intranet_ResultPageCertificate' ) 
+BEGIN
+CREATE TABLE [dbo].[t_Fusion_Intranet_ResultPageCertificate]
+(
+	  [uResultPageCertificateId] UNIQUEIDENTIFIER NOT NULL
+	, [vResultPageComponentName] NVARCHAR(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [iMainClientId] INT NULL
+	, [cIsDeleted] CHAR(1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [cIsForFusion] CHAR(1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [uUserId] UNIQUEIDENTIFIER NULL
+	, [dtCreatedOn] DATETIME NULL
+	, [dtModifiedOn] DATETIME NULL
+	, [uModifiedByUserId] UNIQUEIDENTIFIER NULL
+	, CONSTRAINT [PK__t_Fusion__582426294B2A7964] PRIMARY KEY ([uResultPageCertificateId] ASC)
+)
+END
+GO
+/**********************************
+Default Values
+**********************************/
+
+IF NOT EXISTS (SELECT * FROM t_Fusion_Intranet_ResultPageCertificate WHERE uResultPageCertificateId =  '50C6C0AC-3566-46E9-BB8C-63F7B7F6F8AA') 
+BEGIN
+insert into t_Fusion_Intranet_ResultPageCertificate values('50C6C0AC-3566-46E9-BB8C-63F7B7F6F8AA','StandardCertificate',97,'N','Y','E4205C35-2A37-458A-BA0D-52660FD6ECE2',getdate(),getdate(),NULL)
+END
+GO
+/**********************************
+Angular proc modified
+**********************************/

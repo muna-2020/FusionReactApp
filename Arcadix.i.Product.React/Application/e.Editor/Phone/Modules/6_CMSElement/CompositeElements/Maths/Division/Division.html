@@ -1,0 +1,174 @@
+﻿
+<div class="mathSection">
+    <!--Solution Mode-->
+    <div class="mathBlock" *ngIf="Mode=='Solution'">
+        <table class="divisionNumericTable">
+            <tr>
+                <td *ngFor="let num of arrfirstnum">
+                    {{num.numval}}
+                </td>
+                <td>:</td>
+                <td *ngFor="let num of arrsecondnum">
+                    {{num.numval}}
+                </td>
+
+                <td class="sign">=</td>
+                <td>
+                    <div *ngFor="let quotient of arrquotient" style="display:inline-block;padding:0 5px">
+                        <input type="text" name="digit" class="numberInput quotient" [(ngModel)]="quotient.value" readonly />
+                    </div>
+                </td>
+
+            </tr>
+            <tr *ngFor="let values of arrvalues;let i=index">
+                <td *ngFor="let val of values">
+                    <div *ngIf="val.isvisible">
+                        {{val.number}}
+                    </div>
+                </td>
+                <td class="restInputValue" *ngIf="i==1" [attr.colspan]="arrfirstnum.length+arrsecondnum.length+2">
+                    Rest :
+                    <div *ngFor="let rem of arrremainder" style="display:inline-block;padding:5px">
+                        <input type="text" name="remdigit" class="numberInput remainder" readonly [(ngModel)]="rem.value" />
+                    </div>
+
+                </td>
+            </tr>
+
+        </table>
+    </div>
+    <!--Display Mode-->
+    <div class="mathBlock  division" *ngIf="Mode=='Display'">
+        <!--quotient pop up-->
+        <div [hidden]="!showquotientpopup">
+            <div class="popUp" [ngStyle]="{'margin-left': marginleftquo+'px','top':margintopquo+'px'}">
+                <div class="carry popUpBlock">
+
+                    <div class="numberRow">
+                        <button *ngFor="let quo of quotientfirstnumbers" id="{{quo.id}}" (click)="quotientpopupclick(quo.value)">
+                            {{quo.value}}
+                        </button>
+                    </div>
+                    <div class="numberRow">
+                        <button *ngFor="let quo of quotientsecondnumbers" id="{{quo.id}}" (click)="quotientpopupclick(quo.value)">
+                            {{quo.value}}
+                        </button>
+                    </div>
+
+
+                    <div class="closeIcon" (click)="closequotientpopup()"></div>
+                </div>
+            </div>
+        </div>
+        <!--remainder select pop up-->
+        <div [hidden]="!showrremainderpopup">
+            <div class="popUp" [ngStyle]="{'margin-left': marginleftrem+'px','top':margintoprem+'px'}">
+                <div class="popUpBlock">
+
+                    <div class="numberRow">
+                        <button *ngFor="let rem of remainderfirstnumbers" id="{{rem.id}}" (click)="remainderpopupclick(rem.value)">
+                            {{rem.value}}
+                        </button>
+                    </div>
+                    <div class="numberRow">
+                        <button *ngFor="let rem of remaindersecondnumbers" id="{{rem.id}}" (click)="remainderpopupclick(rem.value)">
+                            {{rem.value}}
+                        </button>
+                    </div>
+
+
+                    <div class="closeIcon" (click)="closeremainderpopup()"></div>
+                </div>
+            </div>
+        </div>
+        <!--intermediate numbers pop up-->
+        <div [hidden]="!showintermediatenumberpopup">
+            <div class="popUp" [ngStyle]="{'margin-left': marginleftinter+'px','top':margintopinter+'px'}">
+                <div class="popUpBlock">
+
+                    <div class="numberRow">
+                        <button *ngFor="let num of interfirstnumbers" id="{{num.id}}" (click)="internumberspopupclick(num.value)">
+                            {{num.value}}
+                        </button>
+                    </div>
+                    <div class="numberRow">
+                        <button *ngFor="let num of intersecondnumbers" id="{{num.id}}" (click)="internumberspopupclick(num.value)">
+                            {{num.value}}
+                        </button>
+                    </div>
+
+                    <div class="closeIcon" (click)="closeinternumberpopup()"></div>
+                </div>
+            </div>
+        </div>
+
+
+        <table class="divisionNumericTable">
+            <tr>
+                <td *ngFor="let num of arrfirstnum">
+                    {{num.numval}}
+                </td>
+                <td style="width:26px;">:</td>
+                <td *ngFor="let num of arrsecondnum" style="width:26px;">
+                    {{num.numval}}
+                </td>
+                <td class="sign" style="width:26px;">=</td>
+                <td>
+                    <div *ngFor="let quotient of arrquotient" style="display:inline-block;padding:0 5px">
+                        <input type="text" name="digit" class="numberInputquotient" [(ngModel)]="quotient.value" readonly (click)="showquotient(quotient.id)" />
+                    </div>
+                </td>
+            </tr>
+            <tr *ngFor="let values of arrvalues;let i=index">
+                <td *ngFor="let val of values">
+                    <div *ngIf="val.isvisible">
+                        <input type="text" name="quodigit" class="numberInputquotient" readonly [(ngModel)]="val.number" (click)="showinternumbers(val.numid)" />
+                    </div>
+                </td>
+                <td class="restInputValue" *ngIf="i==1" [attr.colspan]="arrfirstnum.length+arrsecondnum.length+2">
+                    <span>Rest :</span>
+                    <div *ngFor="let rem of arrremainder;let i=index" style="display:inline-block;padding:5px">
+                        <input type="text" name="remdigit" class="numberInputquotient" readonly [(ngModel)]="rem.value" (click)="showremainder(rem.id,i)" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!--Edit Mode-->
+    <div class="mathBlock" *ngIf="Mode=='Edit'">
+        <table class="divisionNumericTable" style="width:">
+            <tr>
+                <td *ngFor="let num of arrfirstnum">
+                    <input  id="txt_{{num.numid}}" (ngModelChange)="firstnumchange($event)" type="text" name="digit" class="numberInput" min="0" max="9" maxlength="1" (keydown)="checkfirstnum(num.numid,$event)"
+                           [(ngModel)]="num.numval" (blur)="validate(false)" />
+                </td>
+                <td>:</td>
+                <td *ngFor="let num of arrsecondnum">
+                    <input id="txt_{{num.numid}}" (ngModelChange)="secondnumchange($event)" type="text" name="digit" class="numberInput" min="0" max="9" maxlength="1" (keydown)="checksecondnum(num.numid,$event)"
+                           [(ngModel)]="num.numval" (blur)="validate(false)" />
+
+                </td>
+                <td class="sign">=</td>
+                <td>
+                    <div *ngFor="let quotient of arrquotient" style="display:inline-block;padding:0 5px;">
+                        <input type="text" name="digit" class="numberInput quotient" [(ngModel)]="quotient.value" readonly (keydown)="checkquotient($event)" />
+                    </div>
+
+                </td>
+            </tr>
+            <tr *ngFor="let values of arrvalues;let i=index">
+                <td *ngFor="let val of values">
+                    <div *ngIf="val.isvisible">
+                        {{val.number}}
+                    </div>
+                </td>
+                <td class="restInputValue" *ngIf="i==1" [attr.colspan]="arrfirstnum.length+arrsecondnum.length+2">
+                    Rest :
+                    <div *ngFor="let rem of arrremainder" style="display:inline-block;padding:5px;">
+                        <input type="text" name="remdigit" class="numberInput remainder" readonly [(ngModel)]="rem.value" (keydown)="checkremainder($event)" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

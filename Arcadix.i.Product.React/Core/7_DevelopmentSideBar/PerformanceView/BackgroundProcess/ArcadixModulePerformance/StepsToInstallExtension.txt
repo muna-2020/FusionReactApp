@@ -1,0 +1,11 @@
+﻿
+Please follow below steps to Install extension.
+
+1. Open Chrome extensions ["chrome://extensions/"] 
+2. in Right side top, enable Developer mode.
+3. then in that below we will get a white tab.
+4. from there click on "Load unpacked" button.
+5. then it will ask to point to the extension folder. for that go to - G:\Arcadix\Product.Fusion\Arcadix.i.Product.React\Core\7_DevelopmentSideBar\PerformanceView\BackgroundProcess
+6. then select 'ArcadixModulePerformance' folder.
+7. then once it's loaded. we can see that in extension list.
+8. now we can disable the Developer mode. [ follow step - 2 ]

@@ -1,0 +1,27 @@
+/**********************************
+New table		
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES   WHERE TABLE_NAME = N't_Framework_Country_MainClient')
+BEGIN
+CREATE TABLE [dbo].[t_TestDrive_Test_MissingTestIds]
+(
+	  [uMissingTestId] UNIQUEIDENTIFIER NOT NULL
+	, [uTestId] UNIQUEIDENTIFIER NULL
+	, [vTableName] NVARCHAR(500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [uCycleId] UNIQUEIDENTIFIER NULL
+	, [iMainClientId] INT NULL
+	, [dtCreatedOn] DATETIME NULL DEFAULT(getdate())
+	, [dtModifiedOn] DATETIME NULL DEFAULT(getdate())
+	, CONSTRAINT [PK_t_TestDrive_Test_MissingTestIds] PRIMARY KEY ([uMissingTestId] ASC)
+)
+End
+
+
+/**********************************
+Default Values
+**********************************/
+
+
+/**********************************
+Angular proc modified
+**********************************/

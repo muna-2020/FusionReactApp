@@ -1,0 +1,39 @@
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_Forum_Topic' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+    ALTER TABLE t_LearnCoacher_Forum_Topic ADD uModifiedByUserId uniqueidentifier  
+END
+Go
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_Forum_Topic set uModifiedByUserId = uUserId  
+Go
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+Proc_LearnCoacher_Forum_DeleteForum
+Proc_LearnCoacher_Forum_DeleteForumTopic
+Proc_LearnCoacher_Forum_EditSaveForumTopicDetails
+Proc_LearnCoacher_Forum_GetAllForumsPosts
+Proc_LearnCoacher_Forum_GetAllForumTopicDetails
+Proc_LearnCoacher_Forum_GetAllForumTopics
+Proc_LearnCoacher_Forum_GetAllForumTopicsAndSubTopics
+Proc_LearnCoacher_Forum_GetAllTeacherForumDetails
+Proc_LearnCoacher_Forum_GetLatestPostsAndForumList
+Proc_LearnCoacher_Forum_ModifyForumTopicData
+Proc_LearnCoacher_Forum_RecentForumDataFromLastLogin
+Proc_LearnCoacher_Forum_SaveForumTopicDetails
+***********************************************************/
+
+
+/********************Procs to Review**********************
+Proc_LearnCoacher_Forum_EditSaveForumTopicDetails (No Change Required)
+Proc_LearnCoacher_Forum_SaveForumTopicDetails(No Change Required)
+***********************************************************/

@@ -1,0 +1,149 @@
+﻿ /**********************************
+  Following tables updated:
+
+	1) t_Cms_Page_AssignedWorkflowStatus
+	2) t_Cms_Page_AssignedWorkflowStatus_Temp
+	3) t_CMS_Page_AutoSave
+	4) t_CMS_Page_Content_Audit
+	5) t_CMS_Page_Editor_OfficeRibbonDefault
+**********************************/
+
+ /**********************************
+  Following procs  updated:  
+    1)  FProc_CMS_CMSPageContent_UpdateOfficeRibbonDefault
+    2)	FProc_CMS_CMSPageContent_UpdateOfficeRibbonDefault
+	3)	Proc_CMS_CMSPageContent_UpdateOfficeRibbonDefault
+
+**********************************/
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Cms_Page_AssignedWorkflowStatus' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_Cms_Page_AssignedWorkflowStatus ADD uModifiedByUserId uniqueidentifier  
+END		 
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_Cms_Page_AssignedWorkflowStatus set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Cms_Page_AssignedWorkflowStatus_Temp' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_Cms_Page_AssignedWorkflowStatus_Temp ADD uModifiedByUserId uniqueidentifier  
+END	 
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_Cms_Page_AssignedWorkflowStatus_Temp set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_Page_AutoSave' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_CMS_Page_AutoSave ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_CMS_Page_AutoSave set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_Page_Content_Audit' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_CMS_Page_Content_Audit ADD uModifiedByUserId uniqueidentifier  
+END		 
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_CMS_Page_Content_Audit set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_Page_Editor_OfficeRibbonDefault' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_CMS_Page_Editor_OfficeRibbonDefault ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_CMS_Page_Editor_OfficeRibbonDefault set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+/**********************************
+Procs
+**********************************/
+GO
+
+ ALTER proc [dbo].[Proc_CMS_CMSPageContent_UpdateOfficeRibbonDefault](  
+@uEditorOfficeRibbonDefaultId uniqueidentifier,  
+@iMainClientId int,  
+@vOfficeRibbonKey varchar(255),    
+@vValue  varchar(max),                                       
+@uUserId uniqueidentifier  
+)  
+As  
+begin  
+declare @uEditorOfficeRibbonDefaultNewId uniqueidentifier;  
+set @uEditorOfficeRibbonDefaultNewId= newid();  
+if  upper(@vOfficeRibbonKey) = 'FONTSTYLE'  
+begin  
+declare @cisnew char(1);  
+select @cisnew = cIsNew from t_CMS_Page_Editor_OfficeRibbonDefault where uEditorOfficeRibbonDefaultId= @uEditorOfficeRibbonDefaultId  
+if @cisnew = 'N'  
+begin  
+insert into t_CMS_Page_Editor_OfficeRibbonDefault(uEditorOfficeRibbonDefaultId,iMainClientId,vOfficeRibbonKey,vClassName,vValue,cIsNew,cIsDeleted,dtCreatedOn,dtModifiedOn,uUserId,uModifiedByUserId) select @uEditorOfficeRibbonDefaultNewId,@iMainClientId,@vOfficeRibbonKey,vClassName,@vValue,'Y','N',GETDATE(),GETDATE(),@uUserId,NULL from t_CMS_Page_Editor_OfficeRibbonDefault where uEditorOfficeRibbonDefaultId= @uEditorOfficeRibbonDefaultId  
+insert into t_CMS_Page_Editor_OfficeRibbonDefault_Data select newid(),@uEditorOfficeRibbonDefaultNewId,iLanguageId,vDisplayName,vDescription from t_CMS_Page_Editor_OfficeRibbonDefault_Data where uEditorOfficeRibbonDefaultId= @uEditorOfficeRibbonDefaultId 
+ 
+end  
+else  
+begin  
+update t_CMS_Page_Editor_OfficeRibbonDefault set  vValue = @vValue,uUserId = @uUserId,dtModifiedOn = getdate() where uEditorOfficeRibbonDefaultId = @uEditorOfficeRibbonDefaultId  
+set @uEditorOfficeRibbonDefaultNewId= @uEditorOfficeRibbonDefaultId;  
+end  
+end   
+else   
+begin  
+ if exists(select * from t_CMS_Page_Editor_OfficeRibbonDefault  where iMainClientId = @iMainClientId and vOfficeRibbonKey = @vOfficeRibbonKey )  
+ BEGIN  
+ update t_CMS_Page_Editor_OfficeRibbonDefault set  vValue = @vValue,uUserId = @uUserId,dtModifiedOn = getdate()  where iMainClientId = @iMainClientId and vOfficeRibbonKey = @vOfficeRibbonKey  
+ END   
+ ELSE  
+ insert into t_CMS_Page_Editor_OfficeRibbonDefault(uEditorOfficeRibbonDefaultId,iMainClientId,vOfficeRibbonKey,vClassName,vValue,cIsNew,cIsDeleted,dtCreatedOn,dtModifiedOn,uUserId,uModifiedByUserId) values(@uEditorOfficeRibbonDefaultNewId,@iMainClientId,@vOfficeRibbonKey,'',@vValue,'Y','N',GETDATE(),GETDATE(),@uUserId,NULL)  
+end   
+select @uEditorOfficeRibbonDefaultNewId  
+end   
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  

@@ -1,0 +1,70 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_XMLConfiguration' AND COLUMN_NAME = 'dtCreatedOn') 
+BEGIN
+ALTER TABLE t_Framework_XMLConfiguration ADD dtCreatedOn datetime  DEFAULT (getdate())
+END
+
+GO	 
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_XMLConfiguration' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_Framework_XMLConfiguration ADD dtModifiedOn datetime  DEFAULT (getdate())
+END
+
+GO		   
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_XMLConfiguration' AND COLUMN_NAME = 'cIsForFusion') 
+BEGIN
+ALTER TABLE t_Framework_XMLConfiguration ADD cIsForFusion char(1)  
+END
+
+GO			 
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_XMLConfiguration' AND COLUMN_NAME = 'uUserId') 
+BEGIN
+ALTER TABLE t_Framework_XMLConfiguration ADD uUserId uniqueidentifier  
+END
+
+GO				   
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_XMLConfiguration' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_Framework_XMLConfiguration ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_Framework_XMLConfiguration set dtCreatedOn=getdate() where dtCreatedOn is null
+
+GO
+update t_Framework_XMLConfiguration set dtModifiedOn =getdate() where dtModifiedOn is null
+
+GO
+update t_Framework_XMLConfiguration set cIsForFusion ='N' where cIsForFusion is null
+
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_Framework_XmlFileConfiguration_GetData
+JProc_Framework_XmlFileConfiguration_GetConfigurationSettings
+JProc_Framework_XmlFileConfiguration_GetConfigurationSettingsForMainClient
+JProc_Testdrive_Test_GetAdaptiveTestSettingsForMainClient
+JProcOld_Testdrive_Test_GetAdaptiveTestSettingsForMainClient
+Proc_Framework_Xml_GetXmlConfigurationSettings
+Proc_Framework_Xml_SaveXmlConfigurationSettings
+Proc_Framework_XmlFileConfiguration_GetConfigurationSettings
+Proc_Framework_XmlFileConfiguration_GetConfigurationSettings_ALL
+Proc_Framework_XmlFileConfiguration_SaveXMLConfigurationSettings
+Proc_Testdrive_Test_GetAdaptiveTestSettingsForMainClient
+Proc_Testdrive_Test_SaveAdaptiveTestSettings
+Proc_TestDrive_XmlConfiguration_GetXmlConfigurationValue
+Proc_TestDrive_XmlConfiguration_SaveXmlConfigurationValue
+****************************************************************/
+
+/********************Procs need to Review**********************
+ Proc_TestDrive_XmlConfiguration_SaveXmlConfigurationValue :to change
+****************************************************************/
+

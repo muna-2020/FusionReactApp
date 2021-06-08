@@ -1,0 +1,552 @@
+﻿/**********************************
+Following tables updated:
+	1) t_TestDrive_InputStatus
+	2) t_TestDrive_LearnBlock
+	3) t_TestDrive_RDataExecution
+	4) t_TestDrive_RDataExecution_Folder
+	5) t_TestDrive_RScript
+	6) t_TestDrive_RScript_Folder
+	7) t_TestDrive_RScriptBatch
+	8) t_TestDrive_RScriptBatch_Folder
+	9) t_TestDrive_Test_TaskIndexDisplay
+	10) t_TestDrive_Task_Status
+	11) t_TestDrive_Test_Status
+**********************************/
+
+/**********************************
+Following Procs updated:
+    1)Proc_TestDrive_RScripts_AddEditRScriptDataExecution - t_TestDrive_RDataExecution
+	2)Proc_TestDrive_RScripts_AddEditRScriptDataExecutionFolder -  t_TestDrive_RDataExecution_Folder
+	3)Proc_TestDrive_RScripts_AddEditRScript - t_TestDrive_RScript
+	4)Proc_TestDrive_RScripts_AddEditRScriptFolder - t_TestDrive_RScript_Folder
+	5)Proc_TestDrive_RScripts_AddEditRScriptBatch - t_TestDrive_RScriptBatch
+	6)Proc_TestDrive_RScripts_AddEditRScriptBatchFolder - t_TestDrive_RScriptBatch_Folder
+**********************************/
+
+/**********************************
+Following Tables deleted:
+    1)  t_testdrive_test_tasks_temp
+    2)   t_testdrive_test_tasks_temp1
+**********************************/
+
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_InputStatus' AND COLUMN_NAME = 'dtCreatedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_InputStatus ADD dtCreatedOn datetime  
+END	  
+
+GO	  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_InputStatus' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_InputStatus ADD dtModifiedOn datetime  
+END		
+
+GO			
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_InputStatus' AND COLUMN_NAME = 'uUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_InputStatus ADD uUserId uniqueidentifier  
+END
+
+GO				  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_InputStatus' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_InputStatus ADD uModifiedByUserId uniqueidentifier  
+END		 
+
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_InputStatus set dtCreatedOn= GetDate() where dtCreatedOn is null
+
+GO
+update t_TestDrive_InputStatus set dtModifiedOn= GetDate() where dtModifiedOn is null
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_LearnBlock' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_LearnBlock ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO		 
+
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_LearnBlock set uModifiedByUserId=uUserId where uModifiedByUserId is null
+GO
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_RDataExecution' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_RDataExecution ADD uModifiedByUserId uniqueidentifier  
+END
+		 
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_RDataExecution set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+GO
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_RDataExecution_Folder' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_RDataExecution_Folder ADD uModifiedByUserId uniqueidentifier  
+END		 
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_RDataExecution_Folder set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+GO
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_RScript' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_RScript ADD uModifiedByUserId uniqueidentifier  
+END
+		 
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_RScript set uModifiedByUserId=uUserId where uModifiedByUserId is null
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_RScript_Folder' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_RScript_Folder ADD uModifiedByUserId uniqueidentifier  
+END		 
+
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_RScript_Folder set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_RScriptBatch' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_RScriptBatch ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_RScriptBatch set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+GO
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_RScriptBatch_Folder' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_RScriptBatch_Folder ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_RScriptBatch_Folder set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_TaskIndexDisplay' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_Test_TaskIndexDisplay ADD dtModifiedOn datetime  DEFAULT (getdate())
+END
+		 
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Test_TaskIndexDisplay set dtModifiedOn= GetDate() Where dtModifiedOn is null
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Task_Status' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_Task_Status ADD dtModifiedOn datetime  
+END
+
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Task_Status set dtModifiedOn= GetDate() where dtModifiedOn is null
+
+GO
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_Status' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_Test_Status ADD dtModifiedOn datetime  
+END
+
+GO		 
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Test_Status set dtModifiedOn= GetDate() Where dtModifiedOn is null
+
+GO
+
+/**********************************
+Procs 
+**********************************/
+ALTER PROC [dbo].[Proc_TestDrive_RScripts_AddEditRScriptDataExecution]     
+(    
+ @uDataExecutionId UNIQUEIDENTIFIER,  
+    @iMainClientId INT,   
+ @uUserId UNIQUEIDENTIFIER,     
+    @vDataExecutionName NVARCHAR(200),    
+ @iParentFolderId INT,        
+    @vDescription NVARCHAR(max)    
+)      
+AS     
+BEGIN   
+/********************************************************************************************                      
+ Created By: Sricharan Kalavagunta                   
+ Created Date: 20.09.2013                      
+ Description: Adds RScript Elements for respective FolderId     
+                    
+ Modified By: Arvind K                                       
+ Modified Date: 11/08/2020                                     
+ Description: Included uModifiedByUserId column    
+  
+********************************************************************************************/   
+DECLARE @NewId UNIQUEIDENTIFIER         
+IF(@uDataExecutionId='00000000-0000-0000-0000-000000000000')            
+ BEGIN  
+  SET @NewId = NEWID()  
+  INSERT INTO t_TestDrive_RDataExecution(uDataExecutionId, iDataExecutionFolderId, vDataExecutionName, vDescription, dtCreatedOn, dtModifiedOn, uUserId, cIsDeleted, iMainClientId, vDataExecution, uRScriptBatchId, uModifiedByUserId)  
+  VALUES (@NewId,@iParentFolderId,@vDataExecutionName,@vDescription,GETDATE(),GETDATE(),@uUserId,'N',@iMainClientId,'',null,@uUserId )  
+  SELECT *  
+  FROM t_TestDrive_RDataExecution  
+  WHERE uDataExecutionId = @NewId  
+ END   
+ELSE  
+ BEGIN  
+  UPDATE t_TestDrive_RDataExecution  SET  
+   vDataExecutionName =@vDataExecutionName,  
+   vDescription = @vDescription,  
+   iDataExecutionFolderId = @iParentFolderId,  
+   uUserId=@uUserId,  
+   iMainCLientId = @iMainClientId,  
+   dtModifiedOn=GETDATE()  
+  WHERE uDataExecutionId =@uDataExecutionId  
+  SELECT *  
+  FROM t_TestDrive_RDataExecution  
+  WHERE uDataExecutionId =@uDataExecutionId  
+ END  
+END  
+
+GO    
+    
+ALTER PROC [dbo].[Proc_TestDrive_RScripts_AddEditRScriptDataExecutionFolder]                              
+(                                
+    @iMainClientId int,          
+    @iDataExecutionFolderId int,                        
+    @iParentFolderId int,                      
+    @vDataExecutionFolderName nvarchar(200),                      
+    @vDescription ntext,           
+    @uUserId uniqueidentifier               
+)                                
+As                                
+BEGIN                                
+/********************************************************************************************                 
+  Created By: Sricharan Kalavagunta            
+  Created Date: 24.09.2013            
+  Description: This Procedure adds RScript folders            
+    
+ Modified By: Arvind K                                         
+ Modified Date: 11/08/2020                                       
+ Description: Included column list  
+      
+********************************************************************************************/                             
+IF(@iDataExecutionFolderId=-1)                
+BEGIN            
+                         
+DECLARE @iNewFolderId int                       
+INSERT INTO t_TestDrive_RDataExecution_Folder(iParentFolderId, vDataExecutionFolderName, vDescription, dtCreatedOn, dtModifiedOn, uUserId, cIsDeleted, iMainClientId)    
+ VALUES (@iParentFolderId,@vDataExecutionFolderName,@vDescription,GETDATE(),GETDATE(),@uUserId,'N',@iMainClientId)                      
+SET @iNewFolderId =@@IDENTITY              
+PRINT @iNewFolderId                
+SELECT * FROM t_TestDrive_RDataExecution_Folder        
+ WHERE iDataExecutionFolderId =@iNewFolderId                      
+END                
+ELSE                
+BEGIN                
+        
+UPDATE t_TestDrive_RDataExecution_Folder SET            
+dtModifiedOn=GETDATE(),           
+vDataExecutionFolderName = @vDataExecutionFolderName,                
+vDescription =@vDescription            
+        
+WHERE iDataExecutionFolderId =@iDataExecutionFolderId              
+SELECT * FROM t_TestDrive_RDataExecution_Folder WHERE iDataExecutionFolderId =@iDataExecutionFolderId                   
+END                
+END    
+    
+    
+GO
+
+    
+ALTER PROC [dbo].[Proc_TestDrive_RScripts_AddEditRScript]     
+(      
+ @uRScriptId UNIQUEIDENTIFIER,    
+    @iMainClientId INT,     
+ @uUserId UNIQUEIDENTIFIER,       
+    @vRScriptName NVARCHAR(200),      
+ @iParentFolderId INT,          
+    @vDescription NVARCHAR(max)      
+)        
+AS       
+BEGIN     
+/********************************************************************************************                        
+ Created By: Sricharan Kalavagunta                     
+ Created Date: 20.09.2013                        
+ Description: Adds RScript Elements for respective FolderId       
+                      
+ Modified By: Arvind K                                         
+ Modified Date: 11/08/2020                                       
+ Description: Included column list for Insert statements   
+    
+********************************************************************************************/     
+DECLARE @NewId UNIQUEIDENTIFIER           
+IF(@uRScriptId='00000000-0000-0000-0000-000000000000')              
+ BEGIN    
+  SET @NewId = NEWID()    
+  INSERT INTO t_TestDrive_RScript(uRScriptId, iRScriptFolderId, vScriptName, vDescription, dtCreatedOn, dtModifiedOn, uUserId, cIsDeleted, iMainClientId, vRScript)    
+  VALUES (@NewId,@iParentFolderId,@vRScriptName,@vDescription,GETDATE(),GETDATE(),@uUserId,'N',@iMainClientId,'')    
+  SELECT *    
+  FROM t_TestDrive_RScript    
+  WHERE uRScriptId = @NewId    
+ END     
+ELSE    
+ BEGIN    
+  UPDATE t_TestDrive_RScript  SET    
+   vScriptName =@vRScriptName,    
+   vDescription = @vDescription,    
+   iRScriptFolderId = @iParentFolderId,    
+   uUserId=@uUserId,    
+   iMainCLientId = @iMainClientId,    
+   dtModifiedOn=GETDATE()    
+  WHERE uRScriptId =@uRScriptId    
+  SELECT *    
+  FROM t_TestDrive_RScript    
+  WHERE uRScriptId =@uRScriptId    
+ END    
+END     
+
+GO 
+
+  
+ALTER PROC [dbo].[Proc_TestDrive_RScripts_AddEditRScriptFolder]                              
+(                              
+    @iMainClientId int,        
+    @iRScriptFolderId int,                      
+    @iParentFolderId int,                    
+    @vRScriptFolderName nvarchar(200),                    
+    @vRScriptDescription ntext,         
+    @uUserId uniqueidentifier             
+)                              
+As                              
+BEGIN                              
+/********************************************************************************************               
+  Created By: Sricharan Kalavagunta          
+  Created Date: 24.09.2013          
+  Description: This Procedure adds RScript folders          
+  
+  Modified By:           
+  Modified Date:           
+  Description:    
+    
+********************************************************************************************/                           
+IF(@iRScriptFolderId=-1)              
+BEGIN          
+                       
+DECLARE @iNewFolderId int                     
+INSERT INTO t_TestDrive_RScript_Folder(iParentFolderId, vScriptFolderName, vScriptFolderDescription, dtCreatedOn, dtModifiedOn, uUserId, cIsDeleted, iMainClientId) VALUES (@iParentFolderId,@vRScriptFolderName,@vRScriptDescription,GETDATE(),GETDATE(),@uUserId,'N',@iMainClientId)                    
+SET @iNewFolderId =@@IDENTITY            
+PRINT @iNewFolderId              
+SELECT * FROM t_TestDrive_RScript_Folder      
+ WHERE iRScriptFolderId =@iNewFolderId                    
+END              
+ELSE              
+BEGIN              
+      
+UPDATE t_TestDrive_RScript_Folder SET          
+dtModifiedOn=GETDATE(),         
+vScriptFolderName = @vRScriptFolderName,              
+vScriptFolderDescription =@vRScriptDescription          
+      
+WHERE iRScriptFolderId =@iRScriptFolderId            
+SELECT * FROM t_TestDrive_RScript_Folder WHERE iRScriptFolderId =@iRScriptFolderId                 
+END              
+END  
+
+GO 
+
+  
+ALTER PROC [dbo].[Proc_TestDrive_RScripts_AddEditRScriptBatch]   
+(    
+ @uRScriptBatchId UNIQUEIDENTIFIER,  
+    @iMainClientId INT,   
+ @uUserId UNIQUEIDENTIFIER,     
+    @vScriptBatchName NVARCHAR(200),    
+ @iParentFolderId INT,        
+    @vDescription NVARCHAR(max)    
+)      
+AS     
+BEGIN   
+/********************************************************************************************                      
+ Created By: Sricharan Kalavagunta                   
+ Created Date: 20.09.2013                      
+ Description: Adds RScript Elements for respective FolderId     
+                    
+ Modified By:                       
+ Modified Date:                       
+ Description:   
+  
+********************************************************************************************/   
+DECLARE @NewId UNIQUEIDENTIFIER         
+IF(@uRScriptBatchId='00000000-0000-0000-0000-000000000000')            
+ BEGIN  
+  SET @NewId = NEWID()  
+  INSERT INTO t_TestDrive_RScriptBatch  (uRScriptBatchId, iRScriptBatchFolderId, vScriptBatchName, vDescription, dtCreatedOn, dtModifiedOn, uUserId, cIsDeleted, iMainClientId, vRScriptBatch)
+  VALUES (@NewId,@iParentFolderId,@vScriptBatchName,@vDescription,GETDATE(),GETDATE(),@uUserId,'N',@iMainClientId,'')  
+  SELECT *  
+  FROM t_TestDrive_RScriptBatch  
+  WHERE uRScriptBatchId = @NewId  
+ END   
+ELSE  
+ BEGIN  
+  UPDATE t_TestDrive_RScriptBatch  SET  
+   vScriptBatchName =@vScriptBatchName,  
+   vDescription = @vDescription,  
+   iRScriptBatchFolderId = @iParentFolderId,  
+   uUserId=@uUserId,  
+   iMainCLientId = @iMainClientId,  
+   dtModifiedOn=GETDATE()  
+  WHERE uRScriptBatchId =@uRScriptBatchId  
+  SELECT *  
+  FROM t_TestDrive_RScriptBatch  
+  WHERE uRScriptBatchId =@uRScriptBatchId  
+ END  
+END  
+
+GO 
+
+  
+ALTER PROC [dbo].[Proc_TestDrive_RScripts_AddEditRScriptBatchFolder]                              
+(                              
+    @iMainClientId int,        
+    @iRScriptBatchFolderId int,                      
+    @iParentFolderId int,                    
+    @vScriptBatchFolderName nvarchar(200),                    
+    @vDescription ntext,         
+    @uUserId uniqueidentifier             
+)                              
+As                              
+BEGIN                              
+/********************************************************************************************               
+  Created By: Sricharan Kalavagunta          
+  Created Date: 24.09.2013          
+  Description: This Procedure adds RScript folders          
+  
+  Modified By:           
+  Modified Date:           
+  Description:    
+    
+********************************************************************************************/                           
+IF(@iRScriptBatchFolderId=-1)              
+BEGIN          
+                       
+DECLARE @iNewFolderId int                     
+INSERT INTO t_TestDrive_RScriptBatch_Folder(iParentFolderId, vScriptBatchFolderName, vDescription, dtCreatedOn, dtModifiedOn, uUserId, cIsDeleted,iMainClientId) VALUES (@iParentFolderId,@vScriptBatchFolderName,@vDescription,GETDATE(),GETDATE(),@uUserId,'N',@iMainClientId)                    
+SET @iNewFolderId =@@IDENTITY            
+PRINT @iNewFolderId              
+SELECT * FROM t_TestDrive_RScriptBatch_Folder      
+ WHERE iRScriptBatchFolderId =@iNewFolderId                    
+END              
+ELSE              
+BEGIN              
+      
+UPDATE t_TestDrive_RScriptBatch_Folder SET          
+dtModifiedOn=GETDATE(),         
+vScriptBatchFolderName = @vScriptBatchFolderName,              
+vDescription =@vDescription          
+      
+WHERE iRScriptBatchFolderId =@iRScriptBatchFolderId            
+SELECT * FROM t_TestDrive_RScriptBatch_Folder WHERE iRScriptBatchFolderId =@iRScriptBatchFolderId                 
+END              
+END  
+
+GO
+
+/*********************************************************************
+deleted the following tables
+*************************************************************************/
+IF  EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_testdrive_test_tasks_temp')
+BEGIN
+drop table t_testdrive_test_tasks_temp
+END
+
+IF  EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_testdrive_test_tasks_temp1')
+BEGIN
+drop table t_testdrive_test_tasks_temp1
+END
+
+  
+  
+  
+  
+  
+  
+  

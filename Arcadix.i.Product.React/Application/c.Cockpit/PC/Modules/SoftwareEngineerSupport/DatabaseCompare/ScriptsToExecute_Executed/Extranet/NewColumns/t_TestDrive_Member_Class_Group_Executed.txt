@@ -1,0 +1,32 @@
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Member_Class_Group' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_TestDrive_Member_Class_Group ADD uModifiedByUserId uniqueidentifier  
+END
+Go
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Member_Class_Group set uModifiedByUserId = uUserId
+Go
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+FProc_TestDrive_BaseObject_ClassGroup_AddData
+FProc_TestDrive_BaseObject_ClassGroup_DeleteData
+FProc_TestDrive_BaseObject_ClassGroup_EditData
+FProc_TestDrive_BaseObject_ClassGroup_GetData
+JProc_TestDrive_Member_Class_GetClassGroup
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/

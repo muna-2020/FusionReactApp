@@ -1,0 +1,42 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_SeparationAndCalibration_Task_CalibrationData' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_SeparationAndCalibration_Task_CalibrationData ADD dtModifiedOn datetime  
+END	  
+
+GO	  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_SeparationAndCalibration_Task_CalibrationData' AND COLUMN_NAME = 'uUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_SeparationAndCalibration_Task_CalibrationData ADD uUserId uniqueidentifier  
+END		 
+
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_SeparationAndCalibration_Task_CalibrationData set dtModifiedOn= GetDate() where dtModifiedOn is null
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+Proc_CMS_CMSPage_ResetUnCalibratedTasks_Calibration
+Proc_CMS_CMSTestDrivePage_GetRecentlyCalibratedTasks_Calibration
+Proc_CMS_CMSTestDrivePage_ResetTaskToBase_Calibration
+Proc_CMS_CMSTestDrivePage_RestartCalibrationTasks_Calibration
+Proc_TestDrive_TaskDifficultyCalibration_GetTaskCalibrationDetailsByTaskId_New
+Proc_TestDrive_TaskDifficultyCalibration_GetTaskCalibrationDetailsByTaskIdForTest_New
+Proc_TestDrive_TaskDifficultyCalibration_SaveTaskCalibrationDetails_New
+*************************************************/
+
+/********************Procs need to Review**********************
+Proc_CMS_CMSPage_ResetUnCalibratedTasks_Calibration
+Proc_CMS_CMSTestDrivePage_ResetTaskToBase_Calibration
+Proc_CMS_CMSTestDrivePage_RestartCalibrationTasks_Calibration
+Proc_TestDrive_TaskDifficultyCalibration_SaveTaskCalibrationDetails_New
+*************************************************/

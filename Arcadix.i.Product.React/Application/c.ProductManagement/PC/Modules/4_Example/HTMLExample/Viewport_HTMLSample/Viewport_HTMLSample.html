@@ -1,0 +1,107 @@
+﻿<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./ViewPort.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: calibri;
+        }
+
+        .main-wrapper {
+            width: 1024px;
+            margin: 0px auto;
+            padding: 20px;
+            font-size: 18px;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 24px;
+            padding: 10px;
+            border-bottom: 1px solid #f1f1f1;
+            font-weight: bold;
+        }
+
+        .sub-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .item-wrapper ul {
+            line-height: 2rem;
+            list-style-type: square;
+            list-style-position: inside;
+        }
+
+        .item-wrapper p {
+            margin: 10px 0px;
+        }
+
+        pre {
+            white-space: pre-line;
+            padding: 20px;
+            width: 100%;
+            padding-right: 100px;
+            margin: 10px 0px;
+            letter-spacing: 1px;
+            background: #282c34;
+            color: #b5b5b5;
+        }
+
+        .yellow-pre {
+            background: #fffcdd;
+            color: #222;
+            border-left: 5px solid #FFEB3B;
+        }
+
+        .light-text {
+            color: #999;
+            font-style: italic;
+        }
+
+        @media screen and (max-width: 1024px) {
+            .main-wrapper {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="title">
+            <span>Viewport</span>
+        </div>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Set the viewport</span>
+            </div>
+            <div class="item-wrapper">
+                <p>Pages optimized for a variety of devices must include a meta viewport tag in the head of the document. </p>
+                <p>A meta viewport tag gives the browser instructions on how to control the page's dimensions and scaling.</p>
+                <ul>
+                    <li>Use the meta viewport tag to control the width and scaling of the browser's viewport.</li>
+                    <li>Include width=device-width to match the screen's width in device-independent pixels.</li>
+                    <li>Include initial-scale=1 to establish a 1:1 relationship between CSS pixels and device-independent pixels.</li>
+                    <li>Ensure your page is accessible by not disabling user scaling.</li>
+                </ul>
+                <pre>
+                &lt;html lang="en"&gt;
+                &lt;head&gt;
+                    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+                &lt;/head&gt;
+                &lt;body&gt;
+                
+                &lt;/body&gt;
+                &lt;/html&gt;
+            </pre>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

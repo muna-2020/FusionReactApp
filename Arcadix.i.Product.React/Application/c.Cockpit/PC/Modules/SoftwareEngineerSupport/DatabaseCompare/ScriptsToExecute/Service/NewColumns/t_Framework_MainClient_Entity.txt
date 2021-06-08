@@ -1,0 +1,46 @@
+/**********************************
+New Columns
+**********************************/
+GO
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_Entity' AND COLUMN_NAME = 'cIsForProductManagement') 
+BEGIN
+ALTER TABLE t_Framework_MainClient_Entity ADD cIsForProductManagement char(1)  
+END
+
+GO	 
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_Entity' AND COLUMN_NAME = 'dtCreatedOn') 
+BEGIN
+ALTER TABLE t_Framework_MainClient_Entity ADD dtCreatedOn datetime  
+END
+
+GO	
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_Entity' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_Framework_MainClient_Entity ADD dtModifiedOn datetime  
+END
+
+GO	
+
+/**********************************
+Default Values
+**********************************/
+Update t_Framework_MainClient_Entity 
+Set cIsForProductManagement ='N', dtCreatedOn =GetDate(), dtModifiedOn =GetDate()
+GO
+
+/********************AllDependentProc********************
+JProc_Framework_UserRole_GetAccessDataForUserRole
+JProc_Framework_UserRole_GetAllMainClientEntitites
+Proc_Framework_UserRole_GetAccessDataForUserRole
+Proc_Framework_UserRole_GetAllMainClientEntitites
+Proc_Fusion_Framework_UserRole_GetAccessDataForUserRole
+Proc_Fusion_Framework_UserRole_GetAllMainClientEntitites
+Proc_Fusion_Intranet_Entity_GetData
+****************************************************************/
+
+
+/********************Procs updated**********************
+****************************************************************/

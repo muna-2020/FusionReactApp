@@ -1,0 +1,51 @@
+/**********************************
+New Columns
+**********************************/
+GO
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_UserPreference_ProfileImage' AND COLUMN_NAME = 'dtModifiedOn') 
+ BEGIN 
+ ALTER TABLE t_Framework_UserPreference_ProfileImage ADD dtModifiedOn datetime default getdate()
+ END  
+ 
+ GO
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_UserPreference_ProfileImage' AND COLUMN_NAME = 'cIsDeleted') 
+ BEGIN 
+ ALTER TABLE t_Framework_UserPreference_ProfileImage ADD cIsDeleted char(1) default 'N'
+ END  
+ 
+ GO
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_UserPreference_ProfileImage' AND COLUMN_NAME = 'uModifiedByUserId') 
+ BEGIN 
+ ALTER TABLE t_Framework_UserPreference_ProfileImage ADD uModifiedByUserId uniqueidentifier   
+ END 
+
+ GO
+/**********************************
+Default Values
+**********************************/
+
+
+UPDATE t_Framework_UserPreference_ProfileImage SET dtModifiedOn = GETDATE() where dtModifiedOn is null
+UPDATE t_Framework_UserPreference_ProfileImage SET cIsDeleted = 'N' where cIsDeleted is null
+UPDATE t_Framework_UserPreference_ProfileImage SET uModifiedByUserId = uUserId where uModifiedByUserId is null
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+JProc_Framework_UserPreference_ProfileDetails
+JProc_Framework_UserPreference_ProfileDetailsForMainClient
+JProc_Framework_UserPreference_SaveProfileDetails
+JProc_Framework_UserPreference_SaveProfileDetails_NewProc
+JProc_Framework_UserPreference_SaveProfileDetails_NewProc_06_09_2018
+JProc_Framework_UserProfileDetails_GetProfileImages
+Proc_Framework_UserPreference_ProfileDetails
+Proc_Framework_UserPreference_SaveProfileDetails
+****************************************************************/
+
+/********************Procs need to Review**********************
+JProc_Framework_UserPreference_SaveProfileDetails
+JProc_Framework_UserPreference_SaveProfileDetails_NewProc
+JProc_Framework_UserPreference_SaveProfileDetails_NewProc_06_09_2018
+Proc_Framework_UserPreference_SaveProfileDetails
+****************************************************************/

@@ -1,0 +1,31 @@
+/**********************************
+New Columns
+**********************************/
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Member_Class_License' AND COLUMN_NAME = 'uModifiedByUserId') 
+  BEGIN
+      ALTER TABLE t_TestDrive_Member_Class_License ADD uModifiedByUserId uniqueidentifier  
+ END
+ Go
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Member_Class_License set uModifiedByUserId = uUserId 
+Go
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_TestDrive_Member_EditClassLicense
+JProc_TestDrive_Member_GetClassLicense
+JProc_TestDrive_Member_GetClassLicense_Sync
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/

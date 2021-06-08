@@ -1,0 +1,35 @@
+/**********************************
+New Columns
+**********************************/
+GO
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_BusinessUnit' AND COLUMN_NAME = 'cIsForProductManagement') 
+BEGIN
+ALTER TABLE t_Framework_MainClient_BusinessUnit ADD cIsForProductManagement char(1)  
+END
+
+GO	 
+
+/**********************************
+Default Values
+**********************************/
+Update t_Framework_MainClient_BusinessUnit Set cIsForProductManagement ='N'
+where cIsForProductManagement Is Null
+GO
+
+/********************AllDependentProc********************
+Proc_Framework_BusinessUnit_GetBusinessUnits
+Proc_Fusion_Intranet_BusinessUnit_AddData
+Proc_Fusion_Intranet_BusinessUnit_DeleteData
+Proc_Fusion_Intranet_BusinessUnit_EditData
+Proc_Fusion_Intranet_BusinessUnit_GetData
+Proc_Fusion_Intranet_BusinessUnit_GetData_New
+Proc_Fusion_Intranet_BusinessUnit_GetData_Old
+Proc_Fusion_Intranet_BusinessUnitTeam_GetData
+Proc_Fusion_Intranet_BusinessUnitTeam_GetData_New
+Proc_Fusion_Intranet_BusinessUnitTeam_GetData_Old
+****************************************************************/
+
+
+/********************Procs updated**********************
+****************************************************************/

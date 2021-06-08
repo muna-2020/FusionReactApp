@@ -1,0 +1,96 @@
+/**********************************
+New table		
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES   WHERE TABLE_NAME = N't_Framework_Gatekeeper_TargetType')
+BEGIN
+CREATE TABLE [dbo].[t_Framework_Gatekeeper_TargetType]
+(
+	  [uTargetTypeId] UNIQUEIDENTIFIER NOT NULL DEFAULT(newid())
+	, [vTargetGroupIdentifier] NVARCHAR(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [cIsDeleted] CHAR(1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [dtCreatedOn] DATETIME NULL
+	, [dtModifiedOn] DATETIME NULL
+	, [uUserId] UNIQUEIDENTIFIER NULL
+	, [uModifiedByUserId ] UNIQUEIDENTIFIER NULL
+)
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES   WHERE TABLE_NAME = N't_Framework_Gatekeeper_TargetType_Data')
+BEGIN
+CREATE TABLE [dbo].[t_Framework_Gatekeeper_TargetType_Data]
+(
+	  [uTargetTypeDataId] UNIQUEIDENTIFIER NOT NULL DEFAULT(newid())
+	, [uTargetTypeId] UNIQUEIDENTIFIER NOT NULL
+	, [iLanguageId] INT NULL
+	, [vTargetTypeName] NVARCHAR(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+)
+END
+/**********************************
+Default Values
+**********************************/
+END
+
+GO
+
+CREATE NONCLUSTERED INDEX  IX_t_Framework_Gatekeeper_TargetType_uTargetTypeId ON t_Framework_Gatekeeper_TargetType ( [uTargetTypeId] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_t_Framework_Gatekeeper_TargetType_cIsDeleted ON t_Framework_Gatekeeper_TargetType ( [cIsDeleted] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_t_Framework_Gatekeeper_TargetType_dtCreatedOn ON t_Framework_Gatekeeper_TargetType ( [dtCreatedOn] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_t_Framework_Gatekeeper_TargetType_dtModifiedOn ON t_Framework_Gatekeeper_TargetType ( [dtModifiedOn] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_t_Framework_Gatekeeper_TargetType_uUserId ON t_Framework_Gatekeeper_TargetType ( [uUserId] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_t_Framework_Gatekeeper_TargetType_uModifiedByUserId  ON t_Framework_Gatekeeper_TargetType ( [uModifiedByUserId ] ASC ) 
+go
+
+CREATE NONCLUSTERED INDEX  IX_t_Framework_Gatekeeper_TargetType_Data_uTargetTypeDataId ON t_Framework_Gatekeeper_TargetType_Data ( [uTargetTypeDataId] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_t_Framework_Gatekeeper_TargetType_Data_uTargetTypeId ON t_Framework_Gatekeeper_TargetType_Data ( [uTargetTypeId] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_t_Framework_Gatekeeper_TargetType_Data_iLanguageId ON t_Framework_Gatekeeper_TargetType_Data ( [iLanguageId] ASC ) 
+
+
+GO
+
+
+
+/**********************************
+Default Values
+**********************************/
+GO
+if not exists(select * from t_Framework_Gatekeeper_TargetType where uTargetTypeId ='E842AEDD-0859-4703-B639-E262F0E90DD8')
+BEGIN
+	insert into t_Framework_Gatekeeper_TargetType values( 'E842AEDD-0859-4703-B639-E262F0E90DD8','Test','N',getdate(),getdate(),'E4205C35-2A37-458A-BA0D-52660FD6ECE2','E4205C35-2A37-458A-BA0D-52660FD6ECE2')
+END
+
+GO
+if not exists(select * from t_Framework_Gatekeeper_TargetType where uTargetTypeId ='CAABA7C6-D44B-4495-8F28-08D45475182B')
+BEGIN
+insert into t_Framework_Gatekeeper_TargetType values( 'CAABA7C6-D44B-4495-8F28-08D45475182B','Pupil','N',getdate(),getdate(),'E4205C35-2A37-458A-BA0D-52660FD6ECE2','E4205C35-2A37-458A-BA0D-52660FD6ECE2')
+END
+
+GO
+if not exists(select * from t_Framework_Gatekeeper_TargetType where uTargetTypeId ='CAABA7C6-D44B-4495-8F28-08D45475182C')
+BEGIN
+insert into t_Framework_Gatekeeper_TargetType values( 'CAABA7C6-D44B-4495-8F28-08D45475182C','School','N',getdate(),getdate(),'E4205C35-2A37-458A-BA0D-52660FD6ECE2','E4205C35-2A37-458A-BA0D-52660FD6ECE2')
+END
+
+if not exists(select * from t_Framework_Gatekeeper_TargetType where uTargetTypeId ='CAABA7C6-D44B-4495-8F28-08D45475182D')
+BEGIN
+insert into t_Framework_Gatekeeper_TargetType values( 'CAABA7C6-D44B-4495-8F28-08D45475182D','Teacher','N',getdate(),getdate(),'E4205C35-2A37-458A-BA0D-52660FD6ECE2','E4205C35-2A37-458A-BA0D-52660FD6ECE2')
+END
+
+GO
+if not exists(select * from t_Framework_Gatekeeper_TargetType where uTargetTypeId ='EB6CA735-E834-4A7C-8953-D67530F62CCB')
+BEGIN
+insert into t_Framework_Gatekeeper_TargetType values( 'EB6CA735-E834-4A7C-8953-D67530F62CCB','Intranet','N',getdate(),getdate(),'E4205C35-2A37-458A-BA0D-52660FD6ECE2','E4205C35-2A37-458A-BA0D-52660FD6ECE2')
+insert into t_Framework_Gatekeeper_TargetType_Data values('B264153C-2185-425E-A7F9-CF6923732F3F','EB6CA735-E834-4A7C-8953-D67530F62CCB',1,'Intranet')
+insert into t_Framework_Gatekeeper_TargetType_Data values('9E8F397C-89A2-4447-B80F-DCCEB44B8107','EB6CA735-E834-4A7C-8953-D67530F62CCB',2,'Intranet')
+insert into t_Framework_Gatekeeper_TargetType_Data values('7D9D5037-DAF2-4022-83F4-4C8745ABECC9','EB6CA735-E834-4A7C-8953-D67530F62CCB',3,'Intranet')
+END
+
+GO
+if not exists(select * from t_Framework_Gatekeeper_TargetType where uTargetTypeId ='FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F')
+BEGIN
+insert into t_Framework_Gatekeeper_TargetType values( 'FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F','Cockpit','N',getdate(),getdate(),'E4205C35-2A37-458A-BA0D-52660FD6ECE2','E4205C35-2A37-458A-BA0D-52660FD6ECE2')
+insert into t_Framework_Gatekeeper_TargetType_Data values('709F5BB0-370D-47FF-9792-BE47837398AE','FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F',1,'Cockpit')
+insert into t_Framework_Gatekeeper_TargetType_Data values('9D7BE2A6-6E36-4F2D-A2F3-86394CEDE50B','FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F',2,'Cockpit')
+insert into t_Framework_Gatekeeper_TargetType_Data values('6FA0235C-703E-42E7-B9A5-F85606BB0EC6','FF1D7C1B-E3E5-49A8-BC42-A0564C9E276F',3,'Cockpit')
+END
+
+GO

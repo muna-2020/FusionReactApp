@@ -1,0 +1,145 @@
+﻿<div class="mathSection">
+    <!--Solution Mode-->
+    <div class="mathBlock" *ngIf="Mode=='Solution'">
+        <table class="addNumericTable">
+            <tr *ngFor="let arr of arrlist; let i = index">
+                <td *ngIf="i==0 && colcount==1" [attr.rowspan]="rowcount+1" class="emptyTd singleCol"></td>
+                <td *ngIf="i==0 && colcount>1" [attr.rowspan]="rowcount+1" class="emptyTd"></td>
+                <td *ngFor="let val of arr" class="inputValues">
+                    {{val.value}}
+                </td>
+            </tr>
+
+            <!--carry over-->
+            <tr class="appendBlock">
+                <td *ngFor="let carry of arrcarry" id="carry.carryid">
+                    <div class="appendCol bg-color">
+                        {{carry.carryval}}
+                    </div>
+                </td>
+
+            </tr>
+            <tr class="rowBorder">
+                <td [attr.colspan]="colcount+1"></td>
+            </tr>
+            <!--result-->
+            <tr class="result">
+                <td *ngFor="let result of arrresults" class="bg-color" id="{{result.resultid}}">
+                    {{result.value}}
+                </td>
+            </tr>
+            <tr class="DoubleUnderlinedBorder">
+                <td [attr.colspan]="colcount+1"></td>
+            </tr>
+        </table>
+    </div>
+    <!--Display Mode-->
+    <div class="mathBlock" *ngIf="Mode=='Display'">
+        <!--carry over pop up-->
+        <div [hidden]="!showcarrypopup">
+            <div class="popUp" [ngStyle]="{'margin-left': marginleftsmall+'px','top':margintopsmall+'px'}">
+                <div class="carry popUpBlock">
+                    <div class="numberRow">
+                        <button *ngFor="let carry of arrfirstrowcarryover" id="{{carry.id}}" (click)="carryoverclick(carry.value)">
+                            {{carry.value}}
+                        </button>
+                    </div>
+                    <div class="numberRow">
+                        <button *ngFor="let carry of arrsecondrowcarryover" id="{{carry.id}}" (click)="carryoverclick(carry.value)">
+                            {{carry.value}}
+                        </button>
+                    </div>
+
+                    <div class="closeIcon" (click)="closecarryoverpopup()"></div>
+                </div>
+            </div>
+        </div>
+
+        <!--numbers select pop up-->
+        <div [hidden]="!showrnumberpopup">
+            <div class="popUp" [ngStyle]="{'margin-left': marginleft+'px','top':margintop+'px'}">
+                <div class="popUpBlock">
+                    <div class="numberRow">
+                        <button *ngFor="let num of arrfirstrownumbers" id="{{num.id}}" (click)="numberspopupclick(num.value)">
+                            {{num.value}}
+                        </button>
+                    </div>
+                    <div class="numberRow">
+                        <button *ngFor="let num of arrsecondrownumbers" id="{{num.id}}" (click)="numberspopupclick(num.value)">
+                            {{num.value}}
+                        </button>
+                    </div>
+                    <div class="closeIcon" (click)="closenumberpopup()"></div>
+                </div>
+            </div>
+        </div>
+
+        <table class="addNumericTable">
+            <tr *ngFor="let arr of arrlist; let i = index">
+                <td *ngIf="i==0 && colcount==1" [attr.rowspan]="rowcount+1" class="emptyTd singleCol"></td>
+                <td *ngIf="i==0 && colcount>1" [attr.rowspan]="rowcount+1" class="emptyTd"></td>
+                <td *ngFor="let val of arr" class="inputValues">
+                    {{val.value}}
+                </td>
+            </tr>
+
+            <!--carry over-->
+            <tr class="appendBlock">
+                <td *ngFor="let carry of arrcarry" id="carry.carryid">
+                    <div class="appendCol bg-color" (click)="showcarryover(carry.carryid)">
+                        {{carry.carryval}}
+                    </div>
+                </td>
+
+            </tr>
+            <tr class="rowBorder">
+                <td [attr.colspan]="colcount+1"></td>
+            </tr>
+            <!--result-->
+            <tr class="result">
+                <td *ngFor="let result of arrresults" class="bg-color" id="{{result.resultid}}" (click)="shownumbers(result.resultid)">
+                    {{result.value}}
+                </td>
+            </tr>
+            <tr class="DoubleUnderlinedBorder">
+                <td [attr.colspan]="colcount+1"></td>
+            </tr>
+        </table>
+    </div>
+    <!--Edit Mode-->
+    <div class="mathBlock" *ngIf="Mode=='Edit'">
+        <table class="addNumericTable">
+            <tr *ngFor="let arr of arrlist; let i = index">
+                <td *ngIf="i==0 && colcount==1" [attr.rowspan]="rowcount+1" class="emptyTd singleCol"></td>
+                <td *ngIf="i==0 && colcount>1" [attr.rowspan]="rowcount+1" class="emptyTd"></td>
+
+                <td *ngFor="let val of arr" class="inputValues">
+                    <input id="txt_{{val.id}}" (ngModelChange)="numchange($event)" type="text" min="0" max="9" maxlength="1" [(ngModel)]="val.value" (blur)="validate(false)"
+                           onkeypress='return event.charCode >= 48 && event.charCode <= 57' />
+                </td>
+            </tr>
+
+            <!--carry over-->
+            <tr class="appendBlock editMode">
+                <td *ngFor="let carry of arrcarry" id="carry.carryid">
+                    <div class="appendCol bg-color">
+                        {{carry.carryval}}
+                    </div>
+
+                </td>
+
+            </tr>
+            <tr class="rowBorder">
+                <td [attr.colspan]="colcount+1"></td>
+            </tr>
+
+            <!--result-->
+            <tr class="result editMode">
+                <td *ngFor="let result of arrresults" class="bg-color" id="{{result.resultid}}">
+                    {{result.value}}
+                </td>
+
+            </tr>
+        </table>
+    </div>
+</div>

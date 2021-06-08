@@ -1,0 +1,45 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_Page_Editor_OfficeRibbonDefault' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_CMS_Page_Editor_OfficeRibbonDefault ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_CMS_Page_Editor_OfficeRibbonDefault set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_CMS_CMSPageContent_AddOfficeRibbonDefaultForFontStyle
+FProc_CMS_CMSPageContent_DeleteOfficeRibbonDefaultForFontStyle
+FProc_CMS_CMSPageContent_GetOfficeRibbonDefaultForFontStyle
+FProc_CMS_CMSPageContent_GetOfficeRibbonStyleForClient
+FProc_CMS_CMSPageContent_UpdateOfficeRibbonDefault
+JEditorProc_CMS_CMSPageContent_AddOfficeRibbonDefaultForFontStyle
+JEditorProc_CMS_CMSPageContent_DeleteOfficeRibbonDefaultForFontStyle
+JEditorProc_CMS_CMSPageContent_GetOfficeRibbonDefaultForFontStyle
+JEditorProc_CMS_CMSPageContent_GetOfficeRibbonStyleForClient
+JEditorProc_CMS_CMSPageContent_UpdateOfficeRibbonDefault
+Proc_CMS_CMSPageContent_AddOfficeRibbonDefaultForFontStyle
+Proc_CMS_CMSPageContent_DeleteOfficeRibbonDefaultForFontStyle
+Proc_CMS_CMSPageContent_GetOfficeRibbonDefaultForFontStyle
+Proc_CMS_CMSPageContent_GetOfficeRibbonStyleForClient
+Proc_CMS_CMSPageContent_UpdateOfficeRibbonDefault
+***********************************************************/
+
+/********************Procs need to Review**********************
+FProc_CMS_CMSPageContent_AddOfficeRibbonDefaultForFontStyle
+JEditorProc_CMS_CMSPageContent_AddOfficeRibbonDefaultForFontStyle
+Proc_CMS_CMSPageContent_AddOfficeRibbonDefaultForFontStyle
+******************************************************************/

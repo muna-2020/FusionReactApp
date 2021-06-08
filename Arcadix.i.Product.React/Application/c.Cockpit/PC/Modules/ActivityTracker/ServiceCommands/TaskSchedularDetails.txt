@@ -1,0 +1,18 @@
+
+-------------------------------------------------------------------Arcadix_PreloadAll------------------------------------------------------------------
+Name:Arcadix_PreloadAll
+ScheduledTime: 04:00 AM EveryDay
+FileToExecute: G:\Arcadix\Product.Fusion\Arcadix.g.Offline\Arcadix.OfflineProcessExecution\bin\Debug\netcoreapp3.1\Arcadix.g.OfflineProcessExecution.exe
+Arguments: "PreloadAll"
+
+--------------------------------------------------------------------Arcadix_TranslateAll----------------------------------------------------------------
+Name:Arcadix_TranslateAll
+ScheduledTime: 01:30 AM EveryDay
+FileToExecute: G:\Arcadix\Product.Fusion\Arcadix.g.Offline\Arcadix.OfflineProcessExecution\bin\Debug\netcoreapp3.1\Arcadix.g.OfflineProcessExecution.exe
+Arguments: "TranslateAll"
+
+--------------------------------------------------------------------Arcadix_RedisToDb--------------------------------------------------------------------
+Name:Arcadix_RedisToDb
+ScheduledTime: 08:30 PM EveryDay
+FileToExecute: G:\Arcadix\Product.Fusion\Arcadix.g.Offline\Arcadix.OfflineProcessExecution\bin\Debug\netcoreapp3.1\Arcadix.g.OfflineProcessExecution.exe
+Arguments: "RedisToDb"

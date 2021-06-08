@@ -1,0 +1,19 @@
+﻿/**********************************
+Renamed Table
+**********************************/
+EXEC sp_rename 't_TestDrive_Test_ResultAttribute_ElementFormulaAttribute_BaseType','t_TestDrive_Test_ResultAttribute_ElementAttribute_BaseType'
+GO
+
+/**********************************
+Fusion procs
+**********************************/
+/********************ModifiedProc********************
+No dependent procs
+*************************************************/
+
+/**********************************
+Angular procs
+**********************************/
+/********************ModifiedProc********************
+No dependent procs
+*************************************************/

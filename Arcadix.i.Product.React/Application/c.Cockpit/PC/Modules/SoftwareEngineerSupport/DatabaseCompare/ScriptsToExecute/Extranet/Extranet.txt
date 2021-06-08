@@ -1,0 +1,159 @@
+
+ALTER TABLE t_TestDrive_Member_Pupil_ExternalSourceMapping
+ALTER COLUMN uClassId uniqueIdentifier null
+go
+
+
+ALTER TABLE t_TestDrive_Member_Teacher
+ALTER COLUMN uSchoolId uniqueIdentifier null
+
+GO
+
+IF NOT EXISTS(select * from t_Framework_ObjectConfiguration where vObjectName ='PhoneTeacherDisplay')
+BEGIN
+insert into t_Framework_ObjectConfiguration (uObjectConfigurationId, iMainClientId, vObjectName, cIsDeleted, dtCreatedOn, dtModifiedOn, uUserId, uModifiedByUserId)
+values ('4082CC25-B24A-4AFB-B73D-34C206BD983D', 0, 'PhoneTeacherDisplay', 'N', GETDATE(), GETDATE(), '3F0E0F76-1F8C-4103-94CC-672B6B61F686', '3F0E0F76-1F8C-4103-94CC-672B6B61F686');
+
+END
+
+GO
+
+
+IF NOT EXISTS(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId ='56836B16-B929-467F-9997-3D7A51F64788')
+BEGIN
+insert into t_Framework_ObjectConfiguration_Column values ('56836B16-B929-467F-9997-3D7A51F64788', '4082CC25-B24A-4AFB-B73D-34C206BD983D', 'iTitleId', 'int', 1, 'School', 'TeacherGrid_ColumnName_Title', 'dropdown', 'Y', null, 80, null, null );
+
+END
+
+GO
+
+IF NOT EXISTS(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId ='07DAFCAF-EDF3-4F8E-AD53-9D8D14C00EAD')
+BEGIN
+insert into t_Framework_ObjectConfiguration_Column values ('07DAFCAF-EDF3-4F8E-AD53-9D8D14C00EAD', '4082CC25-B24A-4AFB-B73D-34C206BD983D', 'vName', 'string', 2, 'School', 'TeacherGrid_ColumnName_Name', 'textbox', 'Y', null, null, null, null );
+
+END
+
+GO
+
+IF NOT EXISTS(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId ='B4496E42-1329-4EF3-82D4-C446E0997ABB')
+BEGIN
+insert into t_Framework_ObjectConfiguration_Column values ('B4496E42-1329-4EF3-82D4-C446E0997ABB', '4082CC25-B24A-4AFB-B73D-34C206BD983D', 'vEmail', 'string', 3, 'School', 'TeacherGrid_ColumnName_Email', 'textbox', 'Y', 'Email', 100, null, 'EmailValidationMessage' );
+
+END
+
+GO
+
+IF NOT EXISTS(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId ='92514EB5-5216-438A-A757-62DC1DC2C7CD')
+BEGIN
+insert into t_Framework_ObjectConfiguration_Column values ('92514EB5-5216-438A-A757-62DC1DC2C7CD', '4082CC25-B24A-4AFB-B73D-34C206BD983D', 'ActiveImageIcon', 'image', 4, 'School', null, 'image', 'N', null, 44, null, null );
+END
+
+GO
+
+
+
+
+
+IF NOT EXISTS(select * from t_Framework_ObjectConfiguration where vObjectName ='PhoneTeacherAddEdit')
+BEGIN
+insert into t_Framework_ObjectConfiguration (uObjectConfigurationId, iMainClientId, vObjectName, cIsDeleted, dtCreatedOn, dtModifiedOn, uUserId, uModifiedByUserId)
+values ('AD929A7B-36D2-4C2A-93EE-D662989C1BCF', 0, 'PhoneTeacherAddEdit', 'N', GETDATE(), GETDATE(), '3F0E0F76-1F8C-4103-94CC-672B6B61F686', '3F0E0F76-1F8C-4103-94CC-672B6B61F686');
+
+END
+
+GO
+
+
+IF NOT EXISTS(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId ='A100001C-C311-4C8F-85B5-6963A9A62D0F')
+BEGIN
+insert into t_Framework_ObjectConfiguration_Column values ('A100001C-C311-4C8F-85B5-6963A9A62D0F', 'AD929A7B-36D2-4C2A-93EE-D662989C1BCF', 'iTitleId', 'int', 1, 'School', 'TeacherGrid_ColumnName_Title', 'dropdown', 'Y', null, 80, null, null );
+
+END
+
+GO
+
+IF NOT EXISTS(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId ='5030C17E-1E00-4048-ADF8-0F2A32DA9BE6')
+BEGIN
+insert into t_Framework_ObjectConfiguration_Column values ('5030C17E-1E00-4048-ADF8-0F2A32DA9BE6', 'AD929A7B-36D2-4C2A-93EE-D662989C1BCF', 'vName', 'string', 2, 'School', 'TeacherGrid_ColumnName_Name', 'textbox', 'Y', null, null, null, null );
+
+END
+
+GO
+
+IF NOT EXISTS(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId ='80D609F3-A917-493F-B429-9D3C863F0B99')
+BEGIN
+insert into t_Framework_ObjectConfiguration_Column values ('80D609F3-A917-493F-B429-9D3C863F0B99', 'AD929A7B-36D2-4C2A-93EE-D662989C1BCF', 'vFirstName', 'string', 3, 'School', 'TeacherGrid_ColumnName_FirstName', 'textbox', 'Y', null, null, null, null );
+
+END
+
+GO
+
+IF NOT EXISTS(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId ='AD37CE85-1C22-460C-B9B5-5074FD09AEF6')
+BEGIN
+insert into t_Framework_ObjectConfiguration_Column values ('AD37CE85-1C22-460C-B9B5-5074FD09AEF6', 'AD929A7B-36D2-4C2A-93EE-D662989C1BCF', 'vShortCut', 'string', 4, 'School', 'TeacherGrid_ColumnName_ShortCut', 'textbox', 'Y', null, 100, null, null );
+
+END
+
+GO
+
+
+IF NOT EXISTS(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId ='DE16E6D2-6C1C-4D01-89E1-61FDEA9E7E12')
+BEGIN
+insert into t_Framework_ObjectConfiguration_Column values ('DE16E6D2-6C1C-4D01-89E1-61FDEA9E7E12', 'AD929A7B-36D2-4C2A-93EE-D662989C1BCF', 'vEmail', 'string', 5, 'School', 'TeacherGrid_ColumnName_Email', 'textbox', 'Y', 'Email', 100, null, 'EmailValidationMessage' );
+
+END
+
+GO
+
+IF NOT EXISTS(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId ='8C8094A9-E957-4E4A-B15B-28901DE4F659')
+BEGIN
+insert into t_Framework_ObjectConfiguration_Column values ('8C8094A9-E957-4E4A-B15B-28901DE4F659', 'AD929A7B-36D2-4C2A-93EE-D662989C1BCF', 'vPhonePrivate', 'string', 6, 'School', 'TeacherGrid_ColumnName_Mobile', 'textbox', 'N', 'Number', null, null, 'NumberValidationMessage' );
+
+END
+
+GO
+
+IF NOT EXISTS(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId ='EF49D495-1E98-4985-815B-C03B49072334')
+BEGIN
+insert into t_Framework_ObjectConfiguration_Column values ('EF49D495-1E98-4985-815B-C03B49072334', 'AD929A7B-36D2-4C2A-93EE-D662989C1BCF', 'vPhoneSchool', 'string', 7, 'School', 'TeacherGrid_ColumnName_Phone', 'textbox', 'N', 'Number', null, null, 'NumberValidationMessage' );
+
+END
+
+GO
+
+IF NOT EXISTS(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId ='B7473630-308A-45D2-BF24-CD1166D4F946')
+BEGIN
+insert into t_Framework_ObjectConfiguration_Column values ('B7473630-308A-45D2-BF24-CD1166D4F946', 'AD929A7B-36D2-4C2A-93EE-D662989C1BCF', 'cIsSubjectExpertTeacherMarkedBySchool', 'boolean', 8, 'School', 'TeacherGrid_ColumnName_SubjectExpertTeacherMarkedBySchool', 'image', 'N', null, 44, null, null );
+
+END
+
+GO
+
+IF NOT EXISTS(select * from t_Framework_ObjectConfiguration_Column where uObjectConfigurationColumnId ='49BA2718-85B3-4B33-90B6-BBA971B3A652')
+BEGIN
+insert into t_Framework_ObjectConfiguration_Column values ('49BA2718-85B3-4B33-90B6-BBA971B3A652', 'AD929A7B-36D2-4C2A-93EE-D662989C1BCF', 'ActiveImageIcon', 'image', 9, 'School', null, 'image', 'N', null, 44, null, null );
+
+END
+
+GO
+
+/********************************************************************
+Default values for Job tables
+*********************************************************************/
+UPDATE t_PathFinder_JobField_JobLevel 
+SET cIsDeleted ='N'
+WHERE cIsDeleted IS NULL
+
+GO
+
+UPDATE t_PathFinder_Jobs_SubjectTemplate 
+SET cIsDeleted ='N'
+WHERE cIsDeleted IS NULL
+
+GO
+
+UPDATE t_PathFinder_Jobs_SkillValue
+SET dtModifiedOn = GETDATE()
+WHERE dtModifiedOn IS NULL
+
+GO

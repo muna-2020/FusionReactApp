@@ -1,0 +1,15 @@
+﻿  Following tables updated:
+
+  
+  1) t_PathFinder_Jobs_SubjectTemplate
+  2) t_TestDrive_Certificate
+  3) t_TestDrive_Certificate_Privilege
+  4) t_TestDrive_Certificate_Template
+  5) t_TestDrive_Certificate_TextKeyword
+  6) t_TestDrive_Certificate_TextSegment
+  7) t_TestDrive_Certificate_TextSegmentRule
+
+
+  procs Updated:
+
+  Proc_TestDrive_Certificate_CopyCertificate

@@ -1,0 +1,32 @@
+/**********************************
+New Columns
+**********************************/
+GO
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_UserRole_Navigation' AND COLUMN_NAME = 'vNavigationName') 
+BEGIN
+ALTER TABLE t_Framework_MainClient_UserRole_Navigation add vNavigationName nvarchar(max) 
+END
+
+GO	 
+
+/**********************************
+Default Values
+**********************************/
+
+/********************AllDependentProc********************
+JProc_Framework_UserRole_GetAccessDataForUserRole
+JProc_Framework_UserRole_SaveAllMainClientEntityPrivileges
+Proc_Framework_MainClientUser_CopyUserRoles
+Proc_Framework_UserRole_GetAccessDataForUserRole
+Proc_Framework_UserRole_SaveAllMainClientEntityPrivileges
+Proc_Fusion_Framework_UserRole_GetAccessDataForUserRole
+Proc_Fusion_Framework_UserRole_SaveAllMainClientEntityPrivileges
+Proc_Fusion_Intranet_UserRole_AddData
+Proc_Fusion_Intranet_UserRole_EditData
+Proc_Fusion_Intranet_UserRole_GetData
+****************************************************************/
+
+
+/********************Procs updated**********************
+****************************************************************/

@@ -1,0 +1,398 @@
+﻿<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: calibri;
+        }
+
+        .main-wrapper {
+            width: 1024px;
+            margin: 0px auto;
+            padding: 20px;
+            font-size: 18px;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 24px;
+            padding: 10px;
+            border-bottom: 1px solid #f1f1f1;
+            font-weight: bold;
+        }
+
+        .sub-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .main-wrapper ul {
+            line-height: 2rem;
+            list-style-type: square;
+            margin-left: 20px;
+        }
+
+        .main-wrapper ol {
+            line-height: 2rem;
+            margin-left: 20px;
+        }
+
+        .main-wrapper p {
+            margin: 10px 0px;
+        }
+
+        pre {
+            white-space: pre-line;
+            padding: 20px;
+            width: 100%;
+            padding-right: 100px;
+            margin: 10px 0px;
+            letter-spacing: 1px;
+            background: #282c34;
+            color: #b5b5b5;
+        }
+
+        .yellow-pre {
+            background: #fffcdd;
+            color: #222;
+            border-left: 5px solid #FFEB3B;
+        }
+
+        .light-text {
+            color: #999;
+            font-style: italic;
+        }
+
+        @media screen and (max-width: 1024px) {
+            .main-wrapper {
+                width: 100%;
+            }
+        }
+</style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="title">
+            <span>HTML Code Standard</span>
+        </div>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Document Type</span>
+            </div>
+            <p>Use HTML5.</p>
+            <p> HTML5 (HTML syntax) is preferred for all HTML documents: &lt;!DOCTYPE html&gt;.</p>
+            <p> (It&rsquo;s recommended to use HTML, as text/html. Do not use XHTML. XHTML, as application/xhtml+xml, lacks both browser and infrastructure support 
+                and offers less room for optimization than HTML.)</p>
+            <p>
+                Although fine with HTML, do not close void elements, i.e. write &lt;br&gt;, not &lt;br /&gt;.
+            </p>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>HTML Validity</span>
+            </div>
+            <p>Use valid HTML where possible.</p>
+            <p>Use valid HTML code unless that is not possible due to otherwise unattainable performance goals regarding file size.</p>
+            <p>Use tools such as the <a href="http://" target="_blank" rel="noopener noreferrer">W3C HTML validator</a> to test.</p>
+            </p>Using valid HTML is a measurable baseline quality attribute that contributes to learning about technical requirements and constraints,
+             and that ensures proper HTML usage.</p>
+             <pre class="yellow-pre">
+                &lt;!-- Not recommended --&gt;
+                &lt;title&gt;Test&lt;/title&gt;
+                &lt;article&gt;This is only a test.
+             </pre>
+             <pre>
+                &lt;!-- Recommended --&gt;
+                &lt;!DOCTYPE html&gt;
+                &lt;meta charset=&quot;utf-8&quot;&gt;
+                &lt;title&gt;Test&lt;/title&gt;
+                &lt;article&gt;This is only a test.&lt;/article&gt;
+             </pre>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Semantics</span>
+            </div>
+            <p>Use HTML according to its purpose.</p>
+            <p>Use elements (sometimes incorrectly called “tags”) for what they have been created for. For example, use heading elements for headings, 
+                p elements for paragraphs, a elements for anchors, etc.</p>
+            <p>Using HTML according to its purpose is important for accessibility, reuse, and code efficiency reasons.</p>
+            <pre class="yellow-pre">
+                &lt;!-- Not recommended --&gt;
+                &lt;div onclick=&quot;goToRecommendations();&quot;&gt;All recommendations&lt;/div&gt;
+             </pre>
+             <pre>
+                &lt;!-- Recommended --&gt;
+                &lt;a href=&quot;recommendations/&quot;&gt;All recommendations&lt;/a&gt;
+             </pre>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Multimedia Fallback</span>
+            </div>
+            <p>Provide alternative contents for multimedia.</p>
+            <p>For multimedia, such as images, videos, animated objects via canvas, make sure to offer alternative access. For images that means use 
+                of meaningful alternative text (alt) and for video and audio transcripts and captions, if available.</p>
+             <pre class="yellow-pre">
+                &lt;!-- Not recommended --&gt;
+                &lt;img src=&quot;spreadsheet.png&quot;&gt;
+             </pre>
+             <pre>
+                &lt;!-- Recommended --&gt;
+                &lt;img src=&quot;spreadsheet.png&quot; alt=&quot;Spreadsheet screenshot.&quot;&gt;
+             </pre>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Separation of Concerns</span>
+            </div>
+            <p>Strictly keep structure (markup), presentation (styling), and behavior (scripting) apart, and try to keep the interaction between the three to an absolute minimum.</p>
+            <p>That is, make sure documents and templates contain only HTML and HTML that is solely serving structural purposes. Move everything presentational into style sheets, 
+                and everything behavioral into scripts.</p>
+             <pre class="yellow-pre">
+                &lt;!-- Not recommended --&gt;
+                &lt;!DOCTYPE html&gt;
+                &lt;title&gt;HTML sucks&lt;/title&gt;
+                &lt;link rel=&quot;stylesheet&quot; href=&quot;base.css&quot; media=&quot;screen&quot;&gt;
+                &lt;link rel=&quot;stylesheet&quot; href=&quot;grid.css&quot; media=&quot;screen&quot;&gt;
+                &lt;link rel=&quot;stylesheet&quot; href=&quot;print.css&quot; media=&quot;print&quot;&gt;
+             </pre>
+             <pre>
+                &lt;!-- Recommended --&gt;
+                &lt;!DOCTYPE html&gt;
+                &lt;title&gt;My first CSS-only redesign&lt;/title&gt;
+                &lt;link rel=&quot;stylesheet&quot; href=&quot;default.css&quot;&gt;
+             </pre>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>General Formatting</span>
+            </div>
+            <p>Use a new line for every block, list, or table element, and indent every such child element.</p>
+            <p>Independent of the styling of an element (as CSS allows elements to assume a different role per display property), put every block, list, or table element 
+                on a new line.</p>
+            <p>Also, indent them if they are child elements of a block, list, or table element.</p>
+             <pre>
+                &lt;table&gt;
+                    &emsp;&lt;thead&gt;
+                    &emsp;&emsp;&lt;tr&gt;
+                    &emsp;&emsp;&emsp;&lt;th scope=&quot;col&quot;&gt;Income
+                    &emsp;&emsp;&emsp;&lt;th scope=&quot;col&quot;&gt;Taxes
+                    &emsp;&emsp;&lt;/tr&gt;
+                    &emsp;&lt;/thead&gt;
+                    &emsp;&lt;tbody&gt;
+                    &emsp;&emsp;&lt;tr&gt;
+                    &emsp;&emsp;&emsp;&lt;td&gt;$ 5.00
+                    &emsp;&emsp;&emsp;&lt;td&gt;$ 4.50
+                    &emsp;&emsp;&lt;/tr&gt;
+                    &emsp;&lt;/tbody&gt;
+                &lt;/table&gt;
+             </pre>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>HTML Line-Wrapping</span>
+            </div>
+            <p>Break long lines (optional).</p>
+            <p>While there is no column limit recommendation for HTML, you may consider wrapping long lines if it significantly improves readability.</p>
+            <p>When line-wrapping, each continuation line should be indented at least 4 additional spaces from the original line.</p>
+             <pre>
+                &lt;md-progress-circular md-mode=&quot;indeterminate&quot; class=&quot;md-accent&quot;
+                    ng-show=&quot;ctrl.loading&quot; md-diameter=&quot;35&quot;&gt;
+                &lt;/md-progress-circular&gt;
+             </pre>
+             <pre>
+                &lt;md-progress-circular
+                &emsp;md-mode=&quot;indeterminate&quot;
+                &emsp;class=&quot;md-accent&quot;
+                &emsp;ng-show=&quot;ctrl.loading&quot;
+                &emsp;md-diameter=&quot;35&quot;&gt;
+                &lt;/md-progress-circular&gt;
+             </pre>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>HTML Quotation Marks</span>
+            </div>
+            <p>When quoting attributes values, use double quotation marks.</p>
+            <p>Use double ("") rather than single quotation marks ('') around attribute values.</p>
+             <pre class="yellow-pre">
+                &lt;!-- Not recommended --&gt;
+                &lt;a class='maia-button maia-button-secondary'&gt;Sign in&lt;/a&gt;
+             </pre>
+             <pre>
+                &lt;!-- Recommended --&gt;
+                &lt;a class=&quot;maia-button maia-button-secondary&quot;&gt;Sign in&lt;/a&gt;
+             </pre>
+        </section>
+        <div class="title">
+            <span>CSS Code Standard</span>
+        </div>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>CSS Validity</span>
+            </div>
+            <p>Use valid CSS where possible.</p>
+            <p>Unless dealing with CSS validator bugs or requiring proprietary syntax, use valid CSS code.</p>
+            <p>Use tools such as the <a href="http://" target="_blank" rel="noopener noreferrer">W3C CSS validator</a> to test.</p>
+            <p>Using valid CSS is a measurable baseline quality attribute that allows to spot CSS code that may not have any effect and can be removed, and that ensures proper CSS usage.</p>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>ID and Class Naming</span>
+            </div>
+            <p>Use meaningful or generic ID and class names.</p>
+            <p>Use ID and class names that are as short as possible but as long as necessary.</p>
+            <p>Separate words in ID and class names by a hyphen.</p>
+            <p>Instead of presentational or cryptic names, always use ID and class names that reflect the purpose of the element in question, or that are otherwise generic.</p>
+            <p>Use tools such as the <a href="http://" target="_blank" rel="noopener noreferrer">W3C CSS validator</a> to test.</p>
+            <p>Using valid CSS is a measurable baseline quality attribute that allows to spot CSS code that may not have any effect and can be removed, and that ensures proper CSS usage.</p>
+             <pre class="yellow-pre">
+                /* Not recommended: meaningless */
+                #yee-1901 {}
+                
+                /* Not recommended: presentational */
+                .button-green {}
+                .clear {}
+
+                /* Not recommended Name style */
+                #navigation {}
+                .atr {}
+
+                /* Not recommended: does not separate the words “demo” and “image” */
+                .demoimage {}
+
+                /* Not recommended: uses underscore instead of hyphen */
+                .error_status {}
+             </pre>
+             <pre>
+                /* Recommended: specific */
+                #gallery {}
+                #login {}
+                .video {}
+
+                /* Recommended: generic */
+                .aux {}
+                .alt {}
+
+                /* Recommended Name style */
+                #nav {}
+                .author {}
+
+                /* Recommended Name Delimiters */
+                #video-id {}
+                .ads-sample {}
+             </pre>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Type Selectors</span>
+            </div>
+            <p>Avoid qualifying ID and class names with type selectors.</p>
+            <p>Unless necessary (for example with helper classes), do not use element names in conjunction with IDs or classes.</p>
+             <pre class="yellow-pre">
+                /* Not recommended */
+                ul#example {}
+                div.error {}
+             </pre>
+             <pre>
+                /* Recommended */
+                #example {}
+                .error {}
+             </pre>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Shorthand Properties</span>
+            </div>
+            <p>Use shorthand properties where possible.</p>
+            <p>CSS offers a variety of shorthand properties (like font) that should be used whenever possible, even in cases where only one value is explicitly set.</p>
+             <pre class="yellow-pre">
+                /* Not recommended */
+                border-top-style: none;
+                font-family: palatino, georgia, serif;
+                font-size: 100%;
+                line-height: 1.6;
+                padding-bottom: 2em;
+                padding-left: 1em;
+                padding-right: 1em;
+                padding-top: 0;
+             </pre>
+             <pre>
+                /* Recommended */
+                border-top: 0;
+                font: 100%/1.6 palatino, georgia, serif;
+                padding: 0 1em 2em;
+             </pre>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>0 and Units</span>
+            </div>
+            <p>Omit unit specification after “0” values, unless required.</p>
+            <p>Do not use units after 0 values unless they are required.</p>
+             <pre>
+                flex: 0px; /* This flex-basis component requires a unit. */
+                flex: 1 1 0px; /* Not ambiguous without the unit, but needed in IE11. */
+                margin: 0;
+                padding: 0;
+                font-size: .8em;
+             </pre>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Hexadecimal Notation</span>
+            </div>
+            <p>Use 3 character hexadecimal notation where possible.</p>
+            <pre class="yellow-pre">
+               /* Not recommended */
+               color: #eebbcc;
+            </pre>
+            <pre>
+               /* Recommended */
+               color: #ebc;
+            </pre>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Block Content Indentation</span>
+            </div>
+            <p>Indent all block content, that is rules within rules as well as declarations, so to reflect hierarchy and improve understanding.</p>
+            <pre>
+                @media screen, projection {
+                    &emsp;html {
+                    &emsp;&emsp;background: #fff;
+                    &emsp;&emsp;color: #444;
+                    &emsp;}
+                }
+            </pre>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Declaration Stops</span>
+            </div>
+            <p>End every declaration with a semicolon for consistency and extensibility reasons.</p>
+            <pre class="yellow-pre">
+                /* Not recommended */
+                .test {
+                display: block;
+                height: 100px
+                }
+            </pre>
+            <pre>
+                /* Recommended */
+                .test {
+                display: block;
+                height: 100px;
+                }
+            </pre>
+        </section>
+    </div>
+</body>
+</html>

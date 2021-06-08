@@ -1,0 +1,23 @@
+﻿/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Testdrive_Task_Question_Polarity' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_Testdrive_Task_Question_Polarity ADD dtModifiedOn datetime  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_Testdrive_Task_Question_Polarity set dtModifiedOn= GetDate() where dtModifiedOn IS NULL
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+Proc_Fusion_Intranet_TaskQuestionPolarity_GetData
+***********************************************************/
+
+

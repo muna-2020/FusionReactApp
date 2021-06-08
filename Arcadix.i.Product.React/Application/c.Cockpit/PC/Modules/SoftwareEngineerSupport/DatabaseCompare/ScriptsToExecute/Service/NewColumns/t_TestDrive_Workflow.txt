@@ -1,0 +1,41 @@
+/**********************************
+New Columns
+**********************************/
+GO
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Workflow' AND COLUMN_NAME = 'cIsForProductManagement') 
+BEGIN
+ALTER TABLE t_TestDrive_Workflow ADD cIsForProductManagement char(1)  
+END
+
+GO	 
+
+/**********************************
+Default Values
+**********************************/
+Update t_TestDrive_Workflow Set cIsForProductManagement ='N'
+where cIsForProductManagement Is Null
+
+GO
+
+/********************AllDependentProc********************
+JEditorProc_Testdrive_Workflow_GetTaskWorkflowStatusByMainClientUser
+Proc_Fusion_Framework_WorkFlow_AddData
+Proc_Fusion_Framework_WorkFlow_DeleteData
+Proc_Fusion_Framework_WorkFlow_EditData
+Proc_Fusion_Framework_WorkFlow_GetData
+Proc_Fusion_Framework_WorkFlow_GetData_New
+Proc_Fusion_Framework_WorkFlow_GetData_Old
+Proc_Fusion_Framework_WorkFlowStatus_AddData
+Proc_Fusion_Framework_WorkFlowStatus_DeleteData
+Proc_Fusion_Framework_WorkFlowStatus_EditData
+Proc_Fusion_Framework_WorkFlowStatus_GetData
+Proc_Fusion_Framework_WorkFlowStatus_GetData_New
+Proc_Fusion_Framework_WorkFlowStatus_GetData_Old
+Proc_Testdrive_Workflow_GetTaskWorkflowStatusByMainClientUser
+Proc_Testdrive_Workflow_GetWorkflowByWorkflowTypeId
+****************************************************************/
+
+
+/********************Procs updated**********************
+****************************************************************/

@@ -1,0 +1,1868 @@
+/**********************************************************
+
+In Fusion , the CycleTypeId of Highstake cycles are changed to 6.
+the below script updates the Highstake Cyles with CycleTypeId 6.
+
+***********************************************************/
+
+UPDATE t_testdrive_cycle SET iCycleTypeId = 6 WHERE uCycleId IN (
+'44DF05C7-0D17-4D61-86E3-52D8CEB9FED5',
+'6D1C7472-7010-4EA2-B19A-C61C4BA710F5',
+'1F3CDDA4-D5F4-4DF1-82DE-C99CCF2AF318',
+'F8A40091-18E0-45E4-B13F-659E5BD344DB'
+)
+
+
+Go
+
+update t_TestDrive_Member_Class_SchoolYear  set cIsDeleted = 'N'
+where iMainClientId = 114 and iSchoolYearId IN (336,329,331,333)
+
+update t_TestDrive_Member_Class_SchoolYear_Data set vSchoolYearName = '3. Klasse'
+where iSchoolYearId = 336 and iLanguageId = 3
+
+update t_TestDrive_Member_Class_SchoolYear_Data set vSchoolYearName = '4. Klasse'
+where iSchoolYearId = 329 and iLanguageId = 3
+
+update t_TestDrive_Member_Class_SchoolYear_Data set vSchoolYearName = '5. Klasse'
+where iSchoolYearId = 331 and iLanguageId = 3
+
+update t_TestDrive_Member_Class_SchoolYear_Data set vSchoolYearName = '6. Klasse'
+where iSchoolYearId = 333 and iLanguageId = 3
+
+------------------------------------------
+declare @StateData NVARCHAR(MAX), @iStateId INT
+SET @StateData = '[550,545,543,553,539,555,546,541,536,549,551,537,540,559,542,534,538,548,554,552,544,547,533]'
+declare STATE_cur CURSOR FOR SELECT VALUE FROM OPENJSON(@StateData)
+OPEN state_cur 
+FETCH NEXT FROM STATE_cur INTO @iStateId
+	while(@@FETCH_STATUS <> -1)
+	BEGIN
+		if(not exists(select * from t_TestDrive_Cycle_State where uTestId = '44C9E05B-A00A-451F-A82D-2113CF566215' AND uCycleId = '17A7A830-3E16-4E3F-A2F0-ACF276DF3474' and iStateId = @iStateid))
+		BEGIN
+		INSERT into t_TestDrive_Cycle_State VALUES(NEWID(),@iStateId,'17A7A830-3E16-4E3F-A2F0-ACF276DF3474','44C9E05B-A00A-451F-A82D-2113CF566215')
+		END
+		FETCH NEXT FROM STATE_cur INTO @iStateId
+	END
+CLOSE STATE_cur
+DEALLOCATE STATE_cur
+
+if(not exists(select * from t_TestDrive_Cycle_SchoolYear where ucycleid = '17A7A830-3E16-4E3F-A2F0-ACF276DF3474' and iSchoolYearId = 358))
+BEGIN
+insert into t_TestDrive_Cycle_SchoolYear values(newid(),358,'17A7A830-3E16-4E3F-A2F0-ACF276DF3474')
+END
+
+if(not exists(select * from t_TestDrive_Cycle_SchoolYear where ucycleid = '17A7A830-3E16-4E3F-A2F0-ACF276DF3474' and iSchoolYearId = 356))
+BEGIN
+insert into t_TestDrive_Cycle_SchoolYear values(newid(),356,'17A7A830-3E16-4E3F-A2F0-ACF276DF3474')
+END
+
+if(not exists(select * from t_TestDrive_Cycle_SchoolYear where ucycleid = '17A7A830-3E16-4E3F-A2F0-ACF276DF3474' and iSchoolYearId = 355))
+BEGIN
+insert into t_TestDrive_Cycle_SchoolYear values(newid(),355,'17A7A830-3E16-4E3F-A2F0-ACF276DF3474')
+END
+----------------------------------
+
+
+update t_LearnCoacher_LearningJournal_Topic_StrengthAssessmentOption set iDisplayOrder = 1
+where iTopicStrengthAssessmentOptionId = 2
+
+update t_LearnCoacher_LearningJournal_Topic_StrengthAssessmentOption set iDisplayOrder = 2
+where iTopicStrengthAssessmentOptionId = 1
+
+update t_Framework_XMLConfiguration set vValue = 'B9A5198A-EDA5-4FC5-826D-00E3792A5F82'
+where uXMLConfigurationId = 'A307274C-2455-440B-883A-DB1442503C7C'
+
+---------------------------
+ALTER proc [dbo].[Proc_Fusion_Intranet_Test_TestStatus_GetData]        
+(        
+@vPrimaryKeyValue nvarchar(250)
+)                             
+AS                     
+ BEGIN                 
+               
+ /********************************************************************************************                                      
+  Created By: Sanjay                                  
+  Created Date: 02.03.2020      
+  *************************************************************************************************/              
+                        
+  Select(select  T.iTestStatusId, T.dtModifiedOn,   
+  ISNULL((select iTestStatusId, iLanguageId, vStatusName, cIsTranslatedBySystem from t_TestDrive_Test_Status_Data for JSON path ,include_null_values),'[]') t_TestDrive_Test_Status_Data    
+      
+     for json path, include_null_values, without_array_wrapper)  as JSONResult          
+    from    t_TestDrive_Test_Status T            
+ END  
+
+ -----------------------------------------------
+ ALTER proc [dbo].[Proc_Fusion_Intranet_Task_TaskStatus_GetData]          
+(          
+@vPrimaryKeyValue nvarchar(250)
+)                               
+AS                       
+ BEGIN                   
+                 
+ /********************************************************************************************                                        
+  Created By: Sanjay                                    
+  Created Date: 02.03.2020        
+  *************************************************************************************************/                
+                          
+  Select(select  T.iTaskStatusId, T.dtModifiedOn,       
+  ISNULL((select iTaskStatusId, iLanguageId, vStatusName, cIsTranslatedBySystem from t_testdrive_Task_Status_Data for JSON path ,include_null_values),'[]') t_TestDrive_Task_Status_Data      
+        
+     for json path, include_null_values, without_array_wrapper)  as JSONResult            
+    from    t_testdrive_Task_status T              
+ END 
+
+ ---
+
+ Declare @uNewId uniqueidentifier
+set @uNewId = NEWID()
+insert into t_LearnCoacher_Semester values (@uNewId,0,'2021-02-01 00:00:00.000','2021-07-31 00:00:00.000','N',null,GETDATE(),GETDATE(),7,null)
+
+insert into t_LearnCoacher_Semester_Data values(NEWID(),@uNewId,3,'Semester2 2021')
+
+
+
+set @uNewId = NEWID()
+insert into t_LearnCoacher_Semester values (@uNewId,0,'2020-08-01 00:00:00.000','2021-01-31 00:00:00.000','N',null,GETDATE(),GETDATE(),8,null)
+
+insert into t_LearnCoacher_Semester_Data values(NEWID(),@uNewId,3,'Semester1 2020/21')
+
+---------
+
+ALTER PROC p_Extranet_SaveDocumentFileId    
+(                                                                  
+ @vFileJson nvarchar(max)                  
+)                                            
+AS                                             
+BEGIN                  
+/*******************************************************************************                  
+ Created By:     Sanjay                   
+ Created Date:                      
+ Description:                         
+                  
+ Modified By:                           
+ Modified Date:                         
+ Description:                          
+                   
+ ********************************************************************************/                  
+  declare @uDocumentId uniqueidentifier,@vFileId nvarchar(100)                  
+  declare cursor_SaveData Cursor For                                                                              
+    Select uDocumentId,vFileId from OPENJSON(@vFileJson) with(uDocumentId uniqueidentifier '$.uDocumentId', vFileId nvarchar(100) '$.vFileId')                                                     
+  open cursor_SaveData                                                                             
+ Fetch Next from cursor_SaveData into @uDocumentId,@vFileId                                                  
+   while(@@FETCH_STATUS <> -1)                                      
+   Begin                                         
+            update t_Learncoacher_Document set vFileId=@vFileId where uDocumentId=@uDocumentId                   
+     Fetch Next from cursor_SaveData into @uDocumentId,@vFileId                                           
+   End                                        
+      Close cursor_SaveData                                                                      
+     Deallocate cursor_SaveData                                           
+                        
+   select (select       
+   --uDocumentId,iMainClientId,uDocumentFolderId,uUserId,cIsPupil,cIsTeacher,dtCreatedOn,dtModifiedOn,cIsDeleted,vFileId,vFileName,vFileType,iFileSizeInBytes,cIsSchool,uClassId,cIsFromOldOneDrive                
+   D.*,
+     ISNULL(    
+   (select uDocumentUserId,uDocumentId,uUserId,uModifiedByUserId,cIsPupil,cIsTeacher,cHasViewed,cIsSchool, uClassId from t_Learncoacher_Document_User where uDocumentId = D.uDocumentId for json path, include_null_values),'[]')    
+   t_Learncoacher_Document_User 
+   for json path,include_null_values,without_array_wrapper) as JSONResult from t_Learncoacher_Document D where  D.uDocumentId in(select                   
+uDocumentId from openjson(@vFileJson) with (uDocumentId uniqueidentifier '$.uDocumentId'))                          
+end 
+
+-----------------------------------
+CREATE PROC [dbo].[p_Extranet_News_EditData]                                                
+(                                                    
+ @iMainClientId int,         
+ @vAddData nvarchar(max)                                                  
+)                                                                  
+AS                                                           
+ BEGIN                                                       
+                                                               
+ /********************************************************************************************                                                                            
+  Created By: Sanjay                                                                           
+  Created Date: 31.10.2019                                                                           
+  Description: Add News with Attachment         
+      
+   Modified By:  Amit Kumar                           
+ Modified Date:  24-08-2020                          
+ Description:  Added new column "uModifiedByUserId"        
+  *************************************************************************************************/                                                    
+  create table #NewsId(uNewsId uniqueidentifier)      
+                      
+ declare @uNewsId uniqueidentifier, @uClassId uniqueidentifier, @uUserId uniqueidentifier, @cIsPupil char(1),@cIsSchool char(1), @cIsTeacher char(1), @vText nvarchar(max), @uOriginalNewsItemId uniqueidentifier, @uParentNewsItemId uniqueidentifier      
+     Declare @vNewsAttchmentJSON nvarchar(max), @vNewsUserJSON nvarchar(max)       
+  Declare NEWS_CUR cursor for       
+                                                
+ select  uClassId,  uUserId , cIsPupil ,cIsSchool , cIsTeacher , vText ,uOriginalNewsItemId ,uParentNewsItemId, t_LearnCoacher_News_Attachment, t_LearnCoacher_News_ToUser   from openjson(@vAddData)      
+ with(      
+ uClassId uniqueidentifier,      
+ uUserId uniqueidentifier,      
+ cIsPupil char(1),      
+ cIsSchool char(1),      
+ cIsTeacher char(1),      
+ vText nvarchar(max),      
+ uOriginalNewsItemId uniqueidentifier,      
+ uParentNewsItemId uniqueidentifier,       
+ t_LearnCoacher_News_Attachment nvarchar(max) as json,      
+ t_LearnCoacher_News_ToUser  nvarchar(max) as json      
+ )      
+  open NEWS_CUR      
+          fetch next from NEWS_CUR into @uClassId, @uUserId, @cIsPupil,@cIsSchool, @cIsTeacher, @vText, @uOriginalNewsItemId, @uParentNewsItemId, @vNewsAttchmentJSON, @vNewsUserJSON      
+      
+    while(@@FETCH_STATUS<>-1)      
+    BEGIN      
+    set @uNewsId = NEWID()      
+    insert into  t_LearnCoacher_News                                                         
+   (                                                              
+   uNewsId, uClassId, iMainClientId, uUserId, dtCreatedOn, dtModifiedOn,cIsDeleted , cIsPupil ,cIsSchool , cIsTeacher , vText ,uOriginalNewsItemId ,uParentNewsItemId                              
+   ) values(      
+   @uNewsId,                              
+   @uClassId,              
+   @iMainClientId,              
+   @uUserId,              
+   GETDATE(),                                                    
+   GETDATE(),                                      
+   'N',                                                    
+   @cIsPupil,                
+   @cIsSchool ,                                   
+   @cIsTeacher,              
+   @vText,              
+   @uOriginalNewsItemId,              
+   @uParentNewsItemId      
+   )        
+    -- attachment cursor      
+    Declare @vAttachmentFileName nvarchar(max), @iFileSizeInBytes int,@vFileType nvarchar(150),@iDisplayOrder int,@vFileId nvarchar(100)      
+    Declare Attachment_Cur cursor for      
+    select vAttachmentFileName,iFileSizeInBytes , vFileType , iDisplayOrder , vFileId  from openjson(@vNewsAttchmentJSON)      
+    with(      
+    vAttachmentFileName nvarchar(max),      
+    iFileSizeInBytes int,      
+    vFileType nvarchar(150),      
+    iDisplayOrder int,      
+    vFileId nvarchar(100)      
+    )      
+    open Attachment_Cur      
+    fetch next from Attachment_Cur into @vAttachmentFileName, @iFileSizeInBytes, @vFileType, @iDisplayOrder, @vFileId      
+      
+    while(@@FETCH_STATUS <> -1)      
+    BEGIN      
+    insert into t_LearnCoacher_News_Attachment      
+    (                                                              
+     uNewsAttachmentId, uNewsId,vAttachmentFileName,iFileSizeInBytes , vFileType , iDisplayOrder , vFileId                              
+    ) values(       
+    NEWID(),      
+    @uNewsId,      
+    @vAttachmentFileName,      
+    @iFileSizeInBytes,      
+    @vFileType,      
+    @iDisplayOrder,      
+    @vFileId      
+    )      
+      
+    fetch next from Attachment_Cur into @vAttachmentFileName, @iFileSizeInBytes, @vFileType, @iDisplayOrder, @vFileId      
+      
+          
+    END      
+    close Attachment_Cur      
+    deallocate Attachment_Cur      
+      
+      
+    -- user cursor      
+    Declare @uNewsUserId uniqueidentifier,@cUserIsPupil char(1),@cUserIsTeacher char(1),@cIsForGroup char(1),@uUserGroupId uniqueidentifier, @cHasBeenViewed char(1)      
+    Declare UserData_Cur cursor for      
+    select uNewsUserId, cUserIsPupil,cUserIsTeacher,cIsForGroup,uUserGroupId,cHasBeenViewed  from openjson(@vNewsUserJSON)      
+    with(      
+    uNewsUserId uniqueidentifier '$.uUserId',              
+    cUserIsPupil char(1) '$.cIsPupil',              
+    cUserIsTeacher char(1) '$.cIsTeacher',              
+    cIsForGroup char(1),              
+    uUserGroupId uniqueidentifier '$.uGroupId',              
+    cHasBeenViewed char(1)      
+    )      
+    open UserData_Cur      
+    fetch next from UserData_Cur into @uNewsUserId, @cUserIsPupil, @cUserIsTeacher, @cIsForGroup, @uUserGroupId, @cHasBeenViewed      
+      
+    while(@@FETCH_STATUS <> -1)      
+    BEGIN      
+    insert into t_LearnCoacher_News_ToUser                                          
+    (                                                    
+      uNewsToUserId,uNewsId,uUserId,cIsPupil,cIsTeacher ,cIsForGroup, uGroupId , cHasBeenViewed , cIsDeleted                              
+    )                                                 
+    values(      
+     NEWID(),                                                    
+     @uNewsId,                                                  
+     @uNewsUserId,               
+     @cUserIsPupil,              
+     @cUserIsTeacher,              
+     @cIsForGroup,              
+     @uUserGroupId,              
+     @cHasBeenViewed,                             
+     'N'      
+    )              
+           
+    fetch next from UserData_Cur into @uNewsUserId, @cUserIsPupil, @cUserIsTeacher, @cIsForGroup, @uUserGroupId, @cHasBeenViewed      
+          
+    END      
+    close UserData_Cur      
+    deallocate UserData_Cur      
+      
+   insert into #NewsId values(@uNewsId)      
+      
+          fetch next from NEWS_CUR into @uClassId, @uUserId, @cIsPupil,@cIsSchool, @cIsTeacher, @vText, @uOriginalNewsItemId, @uParentNewsItemId, @vNewsAttchmentJSON, @vNewsUserJSON      
+    END      
+                                     
+  close NEWS_CUR                                                        
+ deallocate NEWS_CUR                                                    
+                                                    
+ /*Return newly added data*/                                                    
+      Select (                                              
+    Select                   
+ N.uNewsId,                    
+ N.uUserId,    
+ N.uModifiedByUserId,                    
+ N.iMainClientId,                    
+ N.uClassId,                    
+ N.cIsDeleted,                    
+ N.cIsPupil,                    
+ N.dtCreatedOn,                    
+ N.dtModifiedOn,                
+ N.cIsSchool,                
+ N.cIsTeacher,                
+ N.uOriginalNewsItemId,                
+ N.uParentNewsItemId,                
+ N.vText,            
+       --getting   t_LearnCoacher_News_ToUser            
+ ISNULL((                  
+ Select               
+ NT.uNewsToUserId,                  
+ NT.uNewsId,                
+ NT.uGroupId,                    
+ NT.uUserId,    
+ NT.uModifiedByUserId,                   
+ NT.cIsPupil,                  
+ NT.cIsTeacher,                
+ NT.cIsForGroup,                
+ NT.cHasBeenViewed,                
+ NT.cIsDeleted                 
+  from t_LearnCoacher_News_ToUser NT                                      
+ Where NT.uNewsId = N.uNewsId FOR JSON PATH, INCLUDE_NULL_VALUES                   
+ ),'[]') [t_LearnCoacher_News_ToUser],                  
+                        
+   --getting  t_LearnCoacher_News_Attachment             
+ ISNULL((                                  
+ Select  NA.uNewsAttachmentId ,                  
+ NA.uNewsId ,                  
+ NA.vAttachmentFileName ,                  
+ NA.iFileSizeInBytes,                
+ NA.vFileType,                
+ NA.iDisplayOrder ,          
+ NA.vFileId               
+   from                  
+ t_LearnCoacher_News_Attachment NA                  
+ where NA.uNewsId = N.uNewsId                  
+   FOR JSON PATH, INCLUDE_NULL_VALUES                   
+   ),'[]') [t_LearnCoacher_News_Attachment]             
+               
+   for json path, include_null_values, without_array_wrapper) as jsonresult                            
+ from t_LearnCoacher_News N where N.iMainClientId = @iMainClientId and N.cIsDeleted='N' and  N.uNewsId in (select uNewsId from #NewsId)      
+       
+ drop table #NewsId      
+    END   
+
+
+  
+CREATE PROC [dbo].[p_Extranet_CycleTestMemberFilter_GetData]    
+(              
+  @uCycleId UNIQUEIDENTIFIER,    
+  @uTestId UNIQUEIDENTIFIER  ,    
+  @cIsCache CHAR(1)      
+)                            
+AS                     
+ BEGIN                 
+               
+ /********************************************************************************************                                      
+  Created By: Ayyappa                                     
+  Created Date: 02.01.2019                                     
+  Description: Gets CycleTestMemberFilter Data              
+  Tables: t_TestDrive_Cycle_State, t_TestDrive_Cycle_School, t_Testdrive_Cycle_Teacher, t_TestDrive_Cycle_Class      
+    t_Testdrive_Cycle_Pupil, t_TestDrive_Cycle_Test_SchoolYear, t_TestDrive_Member_Class_SchoolYear      
+  Sample: exec Proc_Fusion_Extranet_CycleTestMemberFilter_GetData_11_03_2019 'B9DADDA2-81F4-4D8C-BC98-0763A16D79C5','F67CB177-BD14-4B23-B064-3C8F540EEB9B'  ,'N'           
+              
+  Modified By:                                       
+  Modified Date:      
+  Description:       
+              
+  *************************************************************************************************/              
+      
+IF (@cIsCache = 'Y')    
+ BEGIN    
+  DECLARE @tblTestId TABLE (uTestId UNIQUEIDENTIFIER)    
+   INSERT INTO @tblTestId    
+   SELECT uTestId        
+   FROM t_TestDrive_Cycle_State CS      
+   WHERE CS.uCycleId = @uCycleId      
+   UNION      
+   SELECT uTestId FROM       
+   t_TestDrive_Cycle_School CSCH      
+   WHERE CSCH.uCycleId = @uCycleId      
+   UNION      
+   SELECT uTestId FROM      
+   t_Testdrive_Cycle_Teacher CT      
+   WHERE CT.uCycleId = @uCycleId      
+   UNION      
+   SELECT uTestId FROM       
+   t_TestDrive_Cycle_Class CC      
+   WHERE CC.uCycleId = @uCycleId      
+   UNION      
+   SELECT uTestId FROM       
+   t_TestDrive_Cycle_Pupil CP      
+   WHERE CP.uCycleId = @uCycleId      
+   UNION      
+   SELECT uTestId FROM       
+   t_TestDrive_Cycle_Test_SchoolYear CTSY      
+   WHERE CTSY.uCycleId = @uCycleId      
+      
+   SELECT (      
+    SELECT                             
+     TT.uTestId,      
+     ISNULL(      
+    (      
+     SELECT CS.* FROM       
+     t_TestDrive_Cycle_State CS      
+     WHERE CS.uTestId = TT.uTestId AND CS.uCycleId = @uCycleId      
+     FOR JSON PATH, INCLUDE_NULL_VALUES       
+    )      
+     ,'[]') 'State',      
+     ISNULL(      
+    (      
+     SELECT CSS.* FROM       
+     t_TestDrive_Cycle_School CSS      
+     WHERE CSS.uTestId = TT.uTestId AND CSS.uCycleId = @uCycleId      
+     FOR JSON PATH, INCLUDE_NULL_VALUES       
+    )      
+     ,'[]') 'School',      
+     ISNULL(      
+    (      
+     SELECT CT.* FROM       
+     t_Testdrive_Cycle_Teacher CT                            
+     WHERE CT.uTestId = TT.uTestId AND CT.uCycleId = @uCycleId      
+     FOR JSON PATH, INCLUDE_NULL_VALUES       
+    )      
+     ,'[]') 'Teacher',      
+     ISNULL(      
+    (      
+     SELECT CC.* FROM       
+     t_TestDrive_Cycle_Class CC      
+     INNER JOIN t_Testdrive_Cycle_Teacher CT                            
+     ON CC.uCycleId = CT.uCycleId AND CC.uTestId = CT.uTestId       
+     WHERE CC.uTestId = TT.uTestId AND CC.uCycleId = @uCycleId      
+     FOR JSON PATH, INCLUDE_NULL_VALUES       
+    )      
+     ,'[]') 'Class',      
+     ISNULL(      
+    (      
+     SELECT CP.* FROM       
+     t_Testdrive_Cycle_Pupil CP      
+     INNER JOIN t_Testdrive_Cycle_Teacher CT                            
+     ON CP.uCycleId = CT.uCycleId AND CP.uTestId = CT.uTestId      
+     WHERE CP.uTestId = TT.uTestId AND CP.uCycleId = @uCycleId      
+     FOR JSON PATH, INCLUDE_NULL_VALUES       
+    )      
+     ,'[]') 'Pupil',      
+     ISNULL(      
+    (      
+     SELECT CTSY.uTestId,MCSY.iSchoolYear,CTSY.iSchoolYearId FROM       
+     t_TestDrive_Cycle_Test_SchoolYear CTSY      
+     INNER JOIN t_TestDrive_Member_Class_SchoolYear MCSY                            
+     ON CTSY.iSchoolYearId = MCSY.iSchoolYearId      
+     WHERE CTSY.uTestId = TT.uTestId AND CTSY.uCycleId = @uCycleId      
+     FOR JSON PATH, INCLUDE_NULL_VALUES       
+    )      
+     ,'[]') 'SchoolYear',      
+     GETDATE() as 'dtModifiedOn'      
+     FOR JSON PATH,INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER      
+   ) AS JsonResult      
+    FROM @tblTestId TT      
+      
+ END    
+ELSE    
+ BEGIN    
+       
+   DECLARE @tblTestId1 TABLE (uTestId UNIQUEIDENTIFIER)    
+   INSERT INTO @tblTestId1    
+   SELECT uTestId          
+   FROM t_TestDrive_Cycle_State CS      
+   WHERE CS.uCycleId = @uCycleId  AND CS.uTestId = @uTestId     
+   UNION      
+   SELECT uTestId FROM       
+   t_TestDrive_Cycle_School CSCH      
+   WHERE CSCH.uCycleId = @uCycleId AND CSCH.uTestId = @uTestId    
+   UNION      
+   SELECT uTestId FROM      
+   t_Testdrive_Cycle_Teacher CT      
+   WHERE CT.uCycleId = @uCycleId  AND CT.uTestId = @uTestId     
+   UNION      
+   SELECT uTestId FROM       
+   t_TestDrive_Cycle_Class CC      
+   WHERE CC.uCycleId = @uCycleId  AND CC.uTestId = @uTestId     
+   UNION      
+   SELECT uTestId FROM       
+   t_TestDrive_Cycle_Pupil CP      
+   WHERE CP.uCycleId = @uCycleId AND CP.uTestId = @uTestId    
+   UNION      
+   SELECT uTestId FROM       
+   t_TestDrive_Cycle_Test_SchoolYear CTSY      
+   WHERE CTSY.uCycleId = @uCycleId AND CTSY.uTestId = @uTestId    
+    
+   SELECT (      
+    SELECT                             
+     TT.uTestId,      
+     ISNULL(      
+    (      
+     SELECT CS.* FROM       
+     t_TestDrive_Cycle_State CS      
+     WHERE CS.uTestId = TT.uTestId AND CS.uCycleId = @uCycleId      
+     FOR JSON PATH, INCLUDE_NULL_VALUES       
+    )      
+     ,'[]') 'State',      
+     ISNULL(      
+    (      
+     SELECT CSS.* FROM       
+     t_TestDrive_Cycle_School CSS      
+     WHERE CSS.uTestId = TT.uTestId AND CSS.uCycleId = @uCycleId      
+     FOR JSON PATH, INCLUDE_NULL_VALUES       
+    )      
+     ,'[]') 'School',      
+     ISNULL(      
+    (      
+     SELECT CT.* FROM       
+     t_Testdrive_Cycle_Teacher CT                            
+     WHERE CT.uTestId = TT.uTestId AND CT.uCycleId = @uCycleId      
+     FOR JSON PATH, INCLUDE_NULL_VALUES       
+    )      
+     ,'[]') 'Teacher',      
+     ISNULL(      
+    (      
+     SELECT CC.* FROM       
+     t_TestDrive_Cycle_Class CC      
+     INNER JOIN t_Testdrive_Cycle_Teacher CT                            
+     ON CC.uCycleId = CT.uCycleId AND CC.uTestId = CT.uTestId       
+     WHERE CC.uTestId = TT.uTestId AND CC.uCycleId = @uCycleId      
+     FOR JSON PATH, INCLUDE_NULL_VALUES       
+    )      
+     ,'[]') 'Class',      
+     ISNULL(      
+    (      
+     SELECT CP.* FROM       
+     t_Testdrive_Cycle_Pupil CP      
+     INNER JOIN t_Testdrive_Cycle_Teacher CT                            
+     ON CP.uCycleId = CT.uCycleId AND CP.uTestId = CT.uTestId      
+     WHERE CP.uTestId = TT.uTestId AND CP.uCycleId = @uCycleId      
+     FOR JSON PATH, INCLUDE_NULL_VALUES       
+    )      
+     ,'[]') 'Pupil',      
+     ISNULL(      
+    (      
+     SELECT CTSY.uTestId,MCSY.iSchoolYear,CTSY.iSchoolYearId FROM       
+     t_TestDrive_Cycle_Test_SchoolYear CTSY      
+     INNER JOIN t_TestDrive_Member_Class_SchoolYear MCSY                            
+     ON CTSY.iSchoolYearId = MCSY.iSchoolYearId      
+     WHERE CTSY.uTestId = TT.uTestId AND CTSY.uCycleId = @uCycleId      
+     FOR JSON PATH, INCLUDE_NULL_VALUES       
+    )      
+     ,'[]') 'SchoolYear',      
+     GETDATE() as 'dtModifiedOn'      
+     FOR JSON PATH,INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER      
+   ) AS JsonResult      
+    FROM @tblTestId1 TT      
+ END    
+END     
+    
+
+    ------------------------------
+
+        
+CREATE PROC [dbo].[p_Extranet_Topic_GetData](          
+ @iMainClientId int,              
+ @uClassId uniqueidentifier  ,            
+@vPrimaryKeyValue nvarchar(max)            
+                 
+)                                            
+AS                                     
+ BEGIN                                 
+                               
+ /********************************************************************************************                                                      
+  Created By: Sanjay                                                     
+  Created Date: 19.03.2019                                                     
+  Description: Gets Topic                     
+                  
+  Modified By:  Amit Kumar                                
+  Modified Date: 07-08-2020                                  
+  Description: Common sp change (for Batch preload)                                           
+                
+  *************************************************************************************************/                
+-----------Common approach to fetch data in Batch--------------            
+Declare @uLearningJournalPupilTopicId uniqueidentifier                 
+If(@vPrimaryKeyValue = '0')            
+BEGIN            
+ Set @uLearningJournalPupilTopicId = '00000000-0000-0000-0000-000000000000'    
+END            
+Else            
+Begin            
+ Set @uLearningJournalPupilTopicId = Cast(@vPrimaryKeyValue as uniqueidentifier)            
+END                      
+---------------------------------------------------------------             
+              
+if(@uClassId = '00000000-0000-0000-0000-000000000000')            
+    BEGIN      
+ select top(5000)(                
+    Select (                                   
+   select LJPT.uLearningJournalPupilTopicId,LJPT.uSegmentId,LJPT.uPupilId,LJPT.uClassId,LJPT.dtTopicDate,LJPT.vTopic,LJPT.vTopicDescription, LJPT.dtModifiedOn,                            
+   ISNULL((                                              
+   Select LJPSA.uLearningJournalPupilStrengthAssessmentId, LJPSA.uLearningJournalPupilTopicId,LJPSA.iStrengthAssessmentOptionId                     
+    from t_LearnCoacher_LearningJournal_Pupil_StrengthAssessment LJPSA                                          
+     where LJPT.uLearningJournalPupilTopicId = LJPSA.uLearningJournalPupilTopicId                                          
+    for json path, include_null_values                                    
+     ),'[]') [t_LearnCoacher_LearningJournal_Pupil_StrengthAssessment],            
+   ISNULL((                                              
+   Select LJPWA.uLearningJournalPupilWorkApproachId,LJPWA.uLearningJournalPupilTopicId,LJPWA.iReviewCriteriaId,LJPWA.iReviewLevel                      
+    from t_LearnCoacher_LearningJournal_Pupil_WorkApproach LJPWA                                          
+     where LJPT.uLearningJournalPupilTopicId = LJPWA.uLearningJournalPupilTopicId                                          
+    for json path, include_null_values                                    
+     ),'[]') [t_LearnCoacher_LearningJournal_Pupil_WorkApproach]  ,            
+   ISNULL((                                              
+   Select LJPCF.uLearningJournalPupilCommentFeedbackId,LJPCF.uLearningJournalPupilTopicId,LJPCF.tComment,LJPCF.dtCommentDate,LJPCF.iOrder,LJPCF.cIsByTeacher,LJPCF.cIsByPupil,LJPCF.cHasBeenViewed                      
+    from t_LearnCoacher_LearningJournal_Pupil_CommentFeedback LJPCF                                          
+     where LJPT.uLearningJournalPupilTopicId = LJPCF.uLearningJournalPupilTopicId                                          
+    for json path, include_null_values                                    
+     ),'[]') [t_LearnCoacher_LearningJournal_Pupil_CommentFeedback]                                      
+   for json path, include_null_values, without_array_wrapper)) as JSONResult                                   
+   from t_LearnCoacher_LearningJournal_Pupil_Topic LJPT   
+   inner join t_LearnCoacher_Planner_Segment S on S.uSegmentId = LJPT.uSegmentId      
+   inner join t_TestDrive_Member_Class C on  LJPT.uClassId = C.uClassId              
+   inner join t_TestDrive_Member_Class_Teacher CT on C.uClassId = CT.uClassId AND CT.cIsCoTeacher = 'N' AND CT.cIsSubjectExpert = 'N'        
+   inner join t_TestDrive_Member_Teacher T on T.uTeacherId = CT.uTeacherId               
+    where t.iMainClientId =@iMainClientId   and LJPT.uLearningJournalPupilTopicId >   @uLearningJournalPupilTopicId    
+ order by LJPT.uLearningJournalPupilTopicId    
+             
+   END             
+   ELSE            
+   BEGIn    
+   select top(5000)(            
+   Select (                                   
+   select LJPT.uLearningJournalPupilTopicId,LJPT.uSegmentId,LJPT.uPupilId,LJPT.uClassId,LJPT.dtTopicDate,LJPT.vTopic,LJPT.vTopicDescription, LJPT.dtModifiedOn,                         
+   ISNULL((                                          
+   Select LJPSA.uLearningJournalPupilStrengthAssessmentId, LJPSA.uLearningJournalPupilTopicId,LJPSA.iStrengthAssessmentOptionId                     
+    from t_LearnCoacher_LearningJournal_Pupil_StrengthAssessment LJPSA                                          
+     where LJPT.uLearningJournalPupilTopicId = LJPSA.uLearningJournalPupilTopicId                                          
+    for json path, include_null_values                                    
+     ),'[]') [t_LearnCoacher_LearningJournal_Pupil_StrengthAssessment],            
+   ISNULL((                                              
+   Select LJPWA.uLearningJournalPupilWorkApproachId,LJPWA.uLearningJournalPupilTopicId,LJPWA.iReviewCriteriaId,LJPWA.iReviewLevel                      
+    from t_LearnCoacher_LearningJournal_Pupil_WorkApproach LJPWA                                          
+     where LJPT.uLearningJournalPupilTopicId = LJPWA.uLearningJournalPupilTopicId                                          
+    for json path, include_null_values                                    
+     ),'[]') [t_LearnCoacher_LearningJournal_Pupil_WorkApproach]  ,            
+   ISNULL((                                              
+   Select LJPCF.uLearningJournalPupilCommentFeedbackId,LJPCF.uLearningJournalPupilTopicId,LJPCF.tComment,LJPCF.dtCommentDate,LJPCF.iOrder,LJPCF.cIsByTeacher,LJPCF.cIsByPupil,LJPCF.cHasBeenViewed                      
+    from t_LearnCoacher_LearningJournal_Pupil_CommentFeedback LJPCF                                          
+     where LJPT.uLearningJournalPupilTopicId = LJPCF.uLearningJournalPupilTopicId                                          
+    for json path, include_null_values                                    
+     ),'[]') [t_LearnCoacher_LearningJournal_Pupil_CommentFeedback]                                      
+   for json path, include_null_values, without_array_wrapper)) as JSONResult                                   
+   from t_LearnCoacher_LearningJournal_Pupil_Topic LJPT  where LJPT.uClassId = @uClassId  and LJPT.uLearningJournalPupilTopicId >   @uLearningJournalPupilTopicId    
+ order by LJPT.uLearningJournalPupilTopicId          
+   END                                 
+ END    
+    
+
+
+    ----------------------------------
+
+    CREATE PROC [dbo].[p_Extranet_Topic_EditData](              
+@vEditData nvarchar(max)              
+)              
+AS              
+BEGIN              
+              
+ /********************************************************************************************                                                        
+  Created By: Sanjay                                                       
+  Created Date: 20.03.2019                                                       
+  Description: Edit topic of learning journal                          
+                    
+  Modified By:                                                         
+  Modified Date:                                                         
+  Description:                                                         
+                                
+  *************************************************************************************************/                  
+    
+DECLARE @tblLearningJournalPupilTopicId TABLE (uLearningJournalPupilTopicId uniqueidentifier)              
+Declare               
+@uLearningJournalPupilTopicId uniqueidentifier, @uSegmentId uniqueidentifier, @uPupilId uniqueidentifier, @uClassId uniqueidentifier, @vTopic nvarchar(500),@vTopicDescription nvarchar(1000), @dtTopicDate nvarchar(100),           
+@uLearningJournalPupilStrengthAssessmentId uniqueidentifier, @iStrengthAssessmentOptionId int,              
+@uLearningJournalPupilWorkApproachId uniqueidentifier,@iReviewCriteriaId int, @iReviewLevel int,              
+@uLearningJournalPupilCommentFeedbackId uniqueidentifier,@tComment nvarchar(max), @iOrder int, @cIsByTeacher char(1), @cIsByPupil char(1), @cHasBeenViewed char(1),              
+@StrengthAssessmentData nvarchar(max),              
+@WorkApproachData nvarchar(max),              
+@CommentFeedbackData nvarchar(max),        
+@flag nvarchar(max)      --for checking work approach data is there or not        
+              
+              
+ declare cur cursor for         
+ select t_LearnCoacher_LearningJournal_Pupil_WorkApproach from openjson(@vEditData)with(t_LearnCoacher_LearningJournal_Pupil_WorkApproach nvarchar(max)'$.t_LearnCoacher_LearningJournal_Pupil_WorkApproach' as json)        
+ open cur         
+ fetch next from cur into @flag        
+ close cur        
+ deallocate cur        
+         
+if(@flag is not null)         
+BEGIN        
+print 'not else'        
+Declare PupilTopic_Cur cursor for               
+select uLearningJournalPupilTopicId, uSegmentId, uPupilId, uClassId, vTopicDescription,dtTopicDate, StrengthAssessmentData, WorkApproachData, CommentFeedbackData  from OPENJSON(@vEditData)WITH(              
+uLearningJournalPupilTopicId uniqueidentifier '$.uLearningJournalPupilTopicId',              
+uSegmentId uniqueidentifier '$.uSegmentId',              
+uPupilId uniqueidentifier '$.uPupilId',              
+uClassId uniqueidentifier '$.uClassId',              
+vTopicDescription nvarchar(1000) '$.vTopicDescription',           
+dtTopicDate nvarchar(100) '$.dtTopicDate'   ,        
+StrengthAssessmentData nvarchar(max) '$.t_LearnCoacher_LearningJournal_Pupil_StrengthAssessment' as JSON,              
+WorkApproachData nvarchar(max) '$.t_LearnCoacher_LearningJournal_Pupil_WorkApproach' as JSON,              
+CommentFeedbackData nvarchar(max) '$.t_LearnCoacher_LearningJournal_Pupil_CommentFeedback' as JSON              
+)                      
+              
+open PupilTopic_Cur         
+              
+fetch next from PupilTopic_Cur  into @uLearningJournalPupilTopicId, @uSegmentId, @uPupilId, @uClassId, @vTopicDescription, @dtTopicDate, @StrengthAssessmentData, @WorkApproachData, @CommentFeedbackData              
+ print 'pupil topic started high'        
+          
+while(@@FETCH_STATUS<> -1)              
+ BEGIN               
+ print 'pupil topic started'        
+ if(exists(select * from t_LearnCoacher_LearningJournal_Pupil_Topic where  uLearningJournalPupilTopicId = @uLearningJournalPupilTopicId))              
+  BEGIN           
+         
+  update t_LearnCoacher_LearningJournal_Pupil_Topic set uSegmentId = @uSegmentId, uPupilId =@uPupilId, uClassId =@uClassId, vTopicDescription = @vTopicDescription  ,   dtModifiedOn= GETDATE()            
+        where uLearningJournalPupilTopicId = @uLearningJournalPupilTopicId                  
+  insert into @tblLearningJournalPupilTopicId values(@uLearningJournalPupilTopicId)              
+  END              
+  ELSE              
+  BEGIN              
+  set @uLearningJournalPupilTopicId = NEWID()              
+  insert into t_LearnCoacher_LearningJournal_Pupil_Topic(uLearningJournalPupilTopicId,uSegmentId,uPupilId,uClassId,vTopicDescription,dtTopicDate, dtModifiedOn)values(              
+  @uLearningJournalPupilTopicId, @uSegmentId, @uPupilId, @uClassId, @vTopicDescription, @dtTopicDate, GETDATE()              
+  )              
+  insert into @tblLearningJournalPupilTopicId values(@uLearningJournalPupilTopicId)              
+  END--end of topic table              
+                
+              
+  Declare StrengthAssessmentData_Cur cursor for              
+  Select uLearningJournalPupilStrengthAssessmentId, iStrengthAssessmentOptionId from OPENJSON(@StrengthAssessmentData)with(              
+  uLearningJournalPupilStrengthAssessmentId uniqueidentifier '$.uLearningJournalPupilStrengthAssessmentId',              
+  iStrengthAssessmentOptionId int '$.iStrengthAssessmentOptionId'              
+  )              
+  open StrengthAssessmentData_Cur              
+  fetch next from StrengthAssessmentData_Cur into @uLearningJournalPupilStrengthAssessmentId, @iStrengthAssessmentOptionId              
+              
+  while(@@FETCH_STATUS<>-1)              
+  BEGIN               
+   if(exists(select * from t_LearnCoacher_LearningJournal_Pupil_StrengthAssessment where uLearningJournalPupilStrengthAssessmentId = @uLearningJournalPupilStrengthAssessmentId and uLearningJournalPupilTopicId = @uLearningJournalPupilTopicId))             
+ 
+    BEGIN              
+    print 'sass'            
+  update t_LearnCoacher_LearningJournal_Pupil_StrengthAssessment set iStrengthAssessmentOptionId = @iStrengthAssessmentOptionId               
+  where uLearningJournalPupilStrengthAssessmentId = @uLearningJournalPupilStrengthAssessmentId              
+    END              
+   ELSE              
+    BEGIN              
+  set @uLearningJournalPupilStrengthAssessmentId = NEWID()              
+  insert into t_LearnCoacher_LearningJournal_Pupil_StrengthAssessment values(@uLearningJournalPupilStrengthAssessmentId,@uLearningJournalPupilTopicId,@iStrengthAssessmentOptionId,GetDate(),GetDate())              
+    END              
+   fetch next from StrengthAssessmentData_Cur into @uLearningJournalPupilStrengthAssessmentId, @iStrengthAssessmentOptionId              
+  END -- strass while              
+  close StrengthAssessmentData_Cur              
+  deallocate StrengthAssessmentData_Cur              
+              
+  declare WorkApproachData_Cur cursor for               
+  select uLearningJournalPupilWorkApproachId, iReviewCriteriaId, iReviewLevel from OPENJSON(@WorkApproachData)with(              
+  uLearningJournalPupilWorkApproachId uniqueidentifier '$.uLearningJournalPupilWorkApproachId',              
+  iReviewCriteriaId int '$.iReviewCriteriaId',              
+  iReviewLevel int '$.iReviewLevel'             
+  )              
+  open WorkApproachData_Cur              
+  fetch next from WorkApproachData_Cur into @uLearningJournalPupilWorkApproachId, @iReviewCriteriaId, @iReviewLevel              
+  while(@@FETCH_STATUS<>-1)              
+  BEGIN         
+  print 'work app while'        
+   if(exists(select * from t_LearnCoacher_LearningJournal_Pupil_WorkApproach where uLearningJournalPupilWorkApproachId = @uLearningJournalPupilWorkApproachId and uLearningJournalPupilTopicId = @uLearningJournalPupilTopicId))              
+    BEGIN              
+    print 'waa'            
+  update t_LearnCoacher_LearningJournal_Pupil_WorkApproach set iReviewCriteriaId = @iReviewCriteriaId , iReviewLevel = @iReviewLevel              
+  where uLearningJournalPupilWorkApproachId = @uLearningJournalPupilWorkApproachId              
+    END              
+   ELSE              
+    BEGIN              
+    print 'work app insert'        
+  set @uLearningJournalPupilWorkApproachId = NEWID()              
+  insert into t_LearnCoacher_LearningJournal_Pupil_WorkApproach values(@uLearningJournalPupilWorkApproachId,@uLearningJournalPupilTopicId,@iReviewCriteriaId,@iReviewLevel,GetDate(),GetDate())              
+    END              
+   fetch next from WorkApproachData_Cur into @uLearningJournalPupilWorkApproachId, @iReviewCriteriaId, @iReviewLevel              
+  END -- wrok appraoch while              
+              
+  close WorkApproachData_Cur              
+  deallocate WorkApproachData_Cur              
+              
+              
+  declare CommentFeedback_Cur cursor for               
+  select uLearningJournalPupilCommentFeedbackId, tComment,cIsByTeacher,cIsByPupil, cHasBeenViewed   from OPENJSON(@CommentFeedbackData)with(              
+  uLearningJournalPupilCommentFeedbackId uniqueidentifier '$.uLearningJournalPupilCommentFeedbackId',              
+  tComment nvarchar(max) '$.tComment',              
+  cIsByTeacher char(1) '$.cIsByTeacher',              
+  cIsByPupil char(1) '$.cIsByPupil',              
+  cHasBeenViewed char(1) '$.cHasBeenViewed'              
+  )              
+  open CommentFeedback_Cur              
+  fetch next from CommentFeedback_Cur into @uLearningJournalPupilCommentFeedbackId, @tComment, @cIsByTeacher, @cIsByPupil, @cHasBeenViewed              
+  while(@@FETCH_STATUS<>-1)              
+  BEGIN               
+   print 'comme while'        
+   if(exists(select * from t_LearnCoacher_LearningJournal_Pupil_CommentFeedback where uLearningJournalPupilCommentFeedbackId = @uLearningJournalPupilCommentFeedbackId and uLearningJournalPupilTopicId = @uLearningJournalPupilTopicId))              
+    BEGIN              
+    print 'cfee'            
+    update t_LearnCoacher_LearningJournal_Pupil_CommentFeedback set tComment = @tComment , cIsByTeacher = @cIsByTeacher, cIsByPupil = @cIsByPupil, cHasBeenViewed = @cHasBeenViewed              
+  where uLearningJournalPupilCommentFeedbackId = @uLearningJournalPupilCommentFeedbackId              
+    END              
+   ELSE              
+    BEGIN          
+    print 'comment insert'            
+  set @uLearningJournalPupilCommentFeedbackId = NEWID()              
+  insert into t_LearnCoacher_LearningJournal_Pupil_CommentFeedback values(@uLearningJournalPupilCommentFeedbackId,@uLearningJournalPupilTopicId,@tComment,GETDATE(),1, @cIsByTeacher,@cIsByPupil, @cHasBeenViewed)              
+    END              
+   fetch next from CommentFeedback_Cur into @uLearningJournalPupilCommentFeedbackId, @tComment, @cIsByTeacher, @cIsByPupil, @cHasBeenViewed               
+  END -- CommentFeedback while              
+  close CommentFeedback_Cur              
+  deallocate CommentFeedback_Cur              
+        
+  fetch next from PupilTopic_Cur  into @uLearningJournalPupilTopicId, @uSegmentId, @uPupilId, @uClassId, @vTopicDescription,@dtTopicDate, @StrengthAssessmentData, @WorkApproachData, @CommentFeedbackData              
+             
+ END --tpc while              
+  END        
+        
+  ---njhjh        
+  ELSE        
+  BEGIN        
+  print 'else topic'        
+  Declare PupilTopic_Cur cursor for               
+ select uLearningJournalPupilTopicId, uSegmentId, uPupilId, uClassId, vTopicDescription, dtTopicDate from OPENJSON(@vEditData)WITH(              
+ uLearningJournalPupilTopicId uniqueidentifier '$.uLearningJournalPupilTopicId',              
+ uSegmentId uniqueidentifier '$.uSegmentId',              
+ uPupilId uniqueidentifier '$.uPupilId',              
+ uClassId uniqueidentifier '$.uClassId',              
+ vTopicDescription nvarchar(1000) '$.vTopicDescription',            
+ dtTopicDate nvarchar(100) '$.dtTopicDate'            
+          
+ )        
+ open PupilTopic_Cur        
+  fetch next from PupilTopic_Cur  into @uLearningJournalPupilTopicId, @uSegmentId, @uPupilId, @uClassId, @vTopicDescription, @dtTopicDate        
+  if(@@FETCH_STATUS <> -1)        
+  BEGIN        
+  if(exists(select * from t_LearnCoacher_LearningJournal_Pupil_Topic where uLearningJournalPupilTopicId = @uLearningJournalPupilTopicId))        
+   BEGIN        
+   update t_LearnCoacher_LearningJournal_Pupil_Topic set vTopicDescription = @vTopicDescription        
+   where uLearningJournalPupilTopicId = @uLearningJournalPupilTopicId        
+   END        
+   ELSE        
+   BEGIN        
+    set @uLearningJournalPupilTopicId = NEWID()              
+    insert into t_LearnCoacher_LearningJournal_Pupil_Topic(uLearningJournalPupilTopicId,uSegmentId,uPupilId,uClassId,vTopicDescription,dtTopicDate, dtModifiedOn)values(              
+    @uLearningJournalPupilTopicId, @uSegmentId, @uPupilId, @uClassId, @vTopicDescription, @dtTopicDate, GETDATE()              
+    )              
+    END        
+    insert into @tblLearningJournalPupilTopicId values(@uLearningJournalPupilTopicId)         
+  END        
+  END           
+              
+ --return data              
+ Select (                                       
+   select LJPT.uLearningJournalPupilTopicId,LJPT.uSegmentId,LJPT.uPupilId,LJPT.uClassId,LJPT.dtTopicDate,LJPT.vTopic,LJPT.vTopicDescription, LJPT.dtModifiedOn,            
+   ISNULL((                                                  
+   Select LJPSA.uLearningJournalPupilStrengthAssessmentId, LJPSA.uLearningJournalPupilTopicId,LJPSA.iStrengthAssessmentOptionId                         
+    from t_LearnCoacher_LearningJournal_Pupil_StrengthAssessment LJPSA                                              
+     where LJPT.uLearningJournalPupilTopicId = LJPSA.uLearningJournalPupilTopicId                                              
+    for json path, include_null_values                                        
+     ),'[]') [t_LearnCoacher_LearningJournal_Pupil_StrengthAssessment],                
+   ISNULL((                                                  
+   Select LJPWA.uLearningJournalPupilWorkApproachId,LJPWA.uLearningJournalPupilTopicId,LJPWA.iReviewCriteriaId,LJPWA.iReviewLevel                          
+    from t_LearnCoacher_LearningJournal_Pupil_WorkApproach LJPWA                                              
+     where LJPT.uLearningJournalPupilTopicId = LJPWA.uLearningJournalPupilTopicId                                              
+    for json path, include_null_values                                        
+     ),'[]') [t_LearnCoacher_LearningJournal_Pupil_WorkApproach]  ,                
+   ISNULL((                                                  
+   Select LJPCF.uLearningJournalPupilCommentFeedbackId,LJPCF.uLearningJournalPupilTopicId,LJPCF.tComment,LJPCF.dtCommentDate,LJPCF.iOrder,LJPCF.cIsByTeacher,LJPCF.cIsByPupil,LJPCF.cHasBeenViewed                          
+    from t_LearnCoacher_LearningJournal_Pupil_CommentFeedback LJPCF                                              
+     where LJPT.uLearningJournalPupilTopicId = LJPCF.uLearningJournalPupilTopicId                                              
+    for json path, include_null_values                                        
+),'[]') [t_LearnCoacher_LearningJournal_Pupil_CommentFeedback]                                          
+   for json path, include_null_values, without_array_wrapper) as JSONResult                                       
+   from t_LearnCoacher_LearningJournal_Pupil_Topic LJPT  where LJPT.uLearningJournalPupilTopicId in (select uLearningJournalPupilTopicId from @tblLearningJournalPupilTopicId )              
+           
+ close PupilTopic_Cur              
+ deallocate PupilTopic_Cur              
+              
+END     
+    
+---------------------
+
+CREATE PROC [dbo].[p_Extranet_LearningTestPupilGroup_GetData]            
+(            
+ @uUserId UNIQUEIDENTIFIER,            
+ @vPrimaryKeyValue nvarchar(max)            
+)            
+AS        
+Begin          
+/***********************************************************************************************            
+Created By: Aviral            
+Created Date: 15.05.2019            
+Description: Gets PupilGroup Data            
+Tables: t_TestDrive_LearningTest_PupilGroup, t_TestDrive_LearningTest_PupilGroup_Data, t_TestDrive_LearningTest_PupilGroup_Pupils            
+Sample: exec Proc_Fusion_Extranet_PupilGroup_GetData '36CCEAB1-3E24-4C14-A592-4FF593464FB4', 'Y'            
+            
+  Modified By:  Amit Kumar                                  
+  Modified Date: 07-08-2020                                    
+  Description: Common sp change (for Batch preload)                                             
+                  
+  *************************************************************************************************/                  
+-----------Common approach to fetch data in Batch--------------              
+Declare @uPupilGroupId uniqueidentifier                   
+If(@vPrimaryKeyValue = '0')              
+BEGIN              
+ Set @uPupilGroupId = '00000000-0000-0000-0000-000000000000'      
+END              
+Else              
+Begin              
+ Set @uPupilGroupId = Cast(@vPrimaryKeyValue as uniqueidentifier)              
+END                        
+---------------------------------------------------------------      
+      
+ IF(@uUserId = '00000000-0000-0000-0000-000000000000')            
+ BEGIN       
+ Select top(5000)(           
+  SELECT            
+  (             
+   SELECT             
+   PG.uPupilGroupId,            
+   PG.uClassId,            
+   PG.uUserId,    
+   PG.uModifiedByUserId,            
+   PG.dtCreatedOn,          
+   PG.dtModifiedOn,          
+   ISNULL            
+   (            
+    (            
+     SELECT             
+     PGD.uPupilGroupDataId,            
+     PGD.uPupilGroupId,            
+     PGD.iLanguageId,            
+     PGD.vPupilGroupName            
+     FROM t_TestDrive_LearningTest_PupilGroup_Data PGD             
+     WHERE PG.uPupilGroupId = PGD.uPupilGroupId FOR JSON PATH, INCLUDE_NULL_VALUES            
+    ),'[]'            
+   )[t_TestDrive_LearningTest_PupilGroup_Data],            
+   ISNULL            
+   (            
+    (            
+     SELECT             
+     PGP.uPupilGroupPupilId,            
+     PGP.uPupilGroupId,            
+     PGP.uPupilId            
+     FROM t_TestDrive_LearningTest_PupilGroup_Pupils PGP             
+     WHERE PG.uPupilGroupId = PGP.uPupilGroupId FOR JSON PATH, INCLUDE_NULL_VALUES            
+    ),'[]'            
+   )[t_TestDrive_LearningTest_PupilGroup_Pupils]            
+   FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER            
+  )) AS JSONRESULT             
+  FROM t_TestDrive_LearningTest_PupilGroup PG        
+  where  PG.uPupilGroupId > @uPupilGroupId      
+  order by PG.uPupilGroupId      
+  --INNER JOIN t_TestDrive_LearningTest_PupilGroup_Data PGD ON PG.uPupilGroupId = PGD.uPupilGroupId             
+  --INNER JOIN t_TestDrive_LearningTest_PupilGroup_Pupils PGP ON PG.uPupilGroupId = PGP.uPupilGroupId            
+ END            
+ ELSE            
+ BEGIN       
+ select top(5000)(           
+  SELECT            
+  (             
+   SELECT             
+   PG.uPupilGroupId,            
+   PG.uClassId,            
+   PG.uUserId,    
+   PG.uModifiedByUserId,            
+   PG.dtCreatedOn,            
+   PG.dtModifiedOn,          
+   ISNULL            
+   (            
+    (            
+     SELECT             
+     PGD.uPupilGroupDataId,            
+     PGD.uPupilGroupId,            
+     PGD.iLanguageId,            
+     PGD.vPupilGroupName            
+     FROM t_TestDrive_LearningTest_PupilGroup_Data PGD             
+     WHERE PG.uPupilGroupId = PGD.uPupilGroupId FOR JSON PATH, INCLUDE_NULL_VALUES            
+    ),'[]'            
+   )[t_TestDrive_LearningTest_PupilGroup_Data],            
+   ISNULL        
+   (            
+    (            
+     SELECT             
+     PGP.uPupilGroupPupilId,            
+     PGP.uPupilGroupId,            
+     PGP.uPupilId            
+     FROM t_TestDrive_LearningTest_PupilGroup_Pupils PGP             
+     WHERE PG.uPupilGroupId = PGP.uPupilGroupId FOR JSON PATH, INCLUDE_NULL_VALUES            
+    ),'[]'            
+   )[t_TestDrive_LearningTest_PupilGroup_Pupils]            
+   FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER            
+ )) AS JSONRESULT             
+  FROM t_TestDrive_LearningTest_PupilGroup PG WHERE PG.uUserId = @uUserId  and PG.uPupilGroupId > @uPupilGroupId      
+  order by PG.uPupilGroupId      
+  --INNER JOIN t_TestDrive_LearningTest_PupilGroup_Data PGD ON PG.uPupilGroupId = PGD.uPupilGroupId             
+  --INNER JOIN t_TestDrive_LearningTest_PupilGroup_Pupils PGP ON PG.uPupilGroupId = PGP.uPupilGroupId            
+  --WHERE PG.uUserId = @uUserId        
+ END            
+END    
+    
+
+---------------------------------------
+
+CREATE PROC [dbo].[p_Extranet_LearningTestPupilGroup_AddData]        
+(        
+ @vAddData NVARCHAR(MAX)        
+)        
+AS        
+/***********************************************************************************************        
+Created By: Aviral        
+Created Date: 15.05.2019        
+Description: Adds to PupilGroup Data        
+Tables: t_TestDrive_LearningTest_PupilGroup, t_TestDrive_LearningTest_PupilGroup_Data, t_TestDrive_LearningTest_PupilGroup_Pupils        
+Sample: exec Proc_Fusion_Extranet_PupilGroup_AddData <Json Data>        
+        
+ Modified By:  Amit Kumar                           
+ Modified Date:  25-08-2020                          
+ Description:  Added new column "uModifiedByUserId"                                                    
+*************************************************************************************************/        
+BEGIN        
+ DECLARE @uUserId UNIQUEIDENTIFIER;        
+ DECLARE @uPupilGroupId UNIQUEIDENTIFIER = NEWID();        
+ DECLARE @vPupilGroupDataJson NVARCHAR(MAX);        
+ DECLARE @vPupilGroupPupilJson NVARCHAR(MAX);        
+ SELECT @uUserId = uUserId from OPENJSON(@vAddData) WITH (uUserId UNIQUEIDENTIFIER);        
+        
+ INSERT INTO t_TestDrive_LearningTest_PupilGroup        
+ (        
+  uPupilGroupId,        
+  uUserId,        
+  uClassId,        
+  dtCreatedOn,        
+  dtModifiedOn        
+ )        
+ SELECT        
+  @uPupilGroupId,        
+  uUserId,        
+  uClassId,        
+  GETDATE(),        
+  GETDATE()        
+ FROM OPENJSON(@vAddData)        
+ WITH         
+ (        
+  uUserId UNIQUEIDENTIFIER,        
+  uClassId UNIQUEIDENTIFIER        
+ )        
+ DECLARE Cur_PupilGroupData CURSOR FOR SELECT VALUE FROM OPENJSON(@vAddData, '$.t_TestDrive_LearningTest_PupilGroup_Data')        
+ OPEN Cur_PupilGroupData        
+ FETCH NEXT FROM Cur_PupilGroupData INTO @vPupilGroupDataJson        
+ WHILE(@@FETCH_STATUS<>-1)        
+ BEGIN        
+  INSERT INTO t_TestDrive_LearningTest_PupilGroup_Data        
+  (        
+   uPupilGroupDataId,        
+   uPupilGroupId,        
+   iLanguageId,        
+   vPupilGroupName        
+  )        
+  SELECT        
+   NEWID(),        
+   @uPupilGroupId,        
+   iLanguageId,        
+   vPupilGroupName        
+  FROM OPENJSON(@vPupilGroupDataJson)        
+  WITH         
+  (        
+   iLanguageId INT,        
+   vPupilGroupName NVARCHAR(50)        
+  )        
+  FETCH NEXT FROM Cur_PupilGroupData INTO @vPupilGroupDataJson        
+ END        
+ CLOSE Cur_PupilGroupData        
+ DEALLOCATE Cur_PupilGroupData        
+        
+ DECLARE Cur_PupilGroupPupil CURSOR FOR SELECT VALUE FROM OPENJSON(@vAddData, '$.t_TestDrive_LearningTest_PupilGroup_Pupils')        
+ OPEN Cur_PupilGroupPupil        
+ FETCH NEXT FROM Cur_PupilGroupPupil INTO @vPupilGroupPupilJson        
+ WHILE(@@FETCH_STATUS<>-1)        
+ BEGIN        
+  INSERT INTO t_TestDrive_LearningTest_PupilGroup_Pupils        
+  (        
+   uPupilGroupPupilId,        
+   uPupilGroupId,        
+   uPupilId        
+  )        
+  SELECT        
+   NEWID(),        
+   @uPupilGroupId,        
+   uPupilId        
+  FROM OPENJSON(@vPupilGroupPupilJson)        
+  WITH         
+  (        
+   uPupilId UNIQUEIDENTIFIER        
+  )        
+  FETCH NEXT FROM Cur_PupilGroupPupil INTO @vPupilGroupPupilJson        
+ END        
+ CLOSE Cur_PupilGroupPupil        
+ DEALLOCATE Cur_PupilGroupPupil        
+        
+ /*Return newly added data*/        
+ SELECT        
+ (         
+  SELECT         
+  PG.uPupilGroupId,        
+  PG.uClassId,        
+  PG.uUserId,    
+  PG.uModifiedByUserId,        
+  PG.dtCreatedOn,        
+  PG.dtModifiedOn,        
+  ISNULL        
+  (        
+   (        
+    SELECT         
+    PGD.uPupilGroupDataId,        
+    PGD.uPupilGroupId,        
+    PGD.iLanguageId,        
+    PGD.vPupilGroupName        
+    FROM t_TestDrive_LearningTest_PupilGroup_Data PGD         
+    WHERE PG.uPupilGroupId = PGD.uPupilGroupId FOR JSON PATH, INCLUDE_NULL_VALUES      
+   ),'[]'        
+  )[t_TestDrive_LearningTest_PupilGroup_Data],        
+  ISNULL        
+  (        
+   (        
+    SELECT         
+    PGP.uPupilGroupPupilId,        
+    PGP.uPupilGroupId,        
+    PGP.uPupilId        
+    FROM t_TestDrive_LearningTest_PupilGroup_Pupils PGP         
+    WHERE PG.uPupilGroupId = PGP.uPupilGroupId FOR JSON PATH, INCLUDE_NULL_VALUES        
+   ),'[]'        
+  )[t_TestDrive_LearningTest_PupilGroup_Pupils]        
+  FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER        
+ ) AS JSONRESULT         
+ FROM t_TestDrive_LearningTest_PupilGroup PG where PG.uPupilGroupId = @uPupilGroupId       
+ --INNER JOIN t_TestDrive_LearningTest_PupilGroup_Data PGD ON PG.uPupilGroupId = PGD.uPupilGroupId         
+ --INNER JOIN t_TestDrive_LearningTest_PupilGroup_Pupils PGP ON PG.uPupilGroupId = PGP.uPupilGroupId        
+ --WHERE PG.uPupilGroupId = @uPupilGroupId        
+END   
+
+
+
+
+
+CREATE procEDURE [dbo].[p_Extranet_Billing_Module_GetBillingDataForExcelFromDataBase]    
+(      
+ @vDateFrom nvarchar(50),                                        
+ @vDateTo nvarchar(50),           
+ @vDateFromExclude nvarchar(50),                                        
+ @vDateToExclude nvarchar(50),             
+ @uSchoolId uniqueidentifier,       
+ @uClassId NVARCHAR(250),                
+ @uSchoolYearPeriodId uniqueidentifier,         
+ @vExtranetConnectionString nvarchar(max)       
+)      
+AS      
+-- =============================================      
+-- Author:  Ayyappa P      
+-- Create date: 28-12-2020      
+-- Description: Get Billing Data For Excel      
+-- =============================================      
+BEGIN    
+ Declare @vQuery nvarchar(max)         
+ if(@vDateFromExclude='' or @vDateToExclude='')        
+ BEGIN        
+ set @vQuery =                 
+ '      
+  SELECT(              
+ SELECT              
+  P.vName,P.vFirstName,CONVERT(varchar(250),dtFirstLoginTime,104) dtFirstLoginTime,        
+  CASE         
+ WHEN CP.cIsDeleted = ''N'' THEN ''Nein''         
+ WHEN CP.cIsDeleted = ''Y'' THEN ''Ja''         
+ END AS cIsDeleted          
+ FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER) AS JSONResult               
+ FROM                  
+  (                
+   SELECT                  
+     LU.uUserID AS PupilId,MIN(LU.dtDateTimeOfLogin) AS dtFirstLoginTime             
+   FROM                 
+    t_TestDrive_Member_LoggedinUserInformation LU                
+   WHERE                 
+     LU.iApplicationTypeId = 16 and LU.cIsManualLogin=''Y'' '              
+                 
+If(@vDateFrom <> '' and @vDateTo = '')                                      
+  Begin                                        
+   set @vQuery = @vQuery + ' AND dtDateTimeOfLogin >= convert(datetime,'''+@vDateFrom+''',101)'                            
+  End                                      
+ Else If(@vDateFrom = '' and @vDateTo <> '')                                      
+  Begin                                        
+   set @vQuery = @vQuery + ' AND dtDateTimeOfLogin <= convert(datetime,'''+@vDateTo+''',101)'                            
+  End                                      
+ Else If(@vDateFrom <> '' and @vDateTo <> '')                              
+  Begin                                      
+   set @vQuery = @vQuery + ' AND dtDateTimeOfLogin >= convert(datetime,'''+@vDateFrom+''',101) AND dtDateTimeOfLogin< convert(datetime,'''+@vDateTo+''',101)'                            
+  End                
+              
+              
+   set @vQuery =@vQuery+'      
+   GROUP BY LU.uUserId     )LoggedinInfo  '              
+               
+  set @vQuery =@vQuery+'INNER JOIN                
+  ['+@vExtranetConnectionString+'].dbo.t_TestDrive_Member_Class_Pupil CP                
+  ON LoggedinInfo.PupilId = CP.uPupilId AND CP.cIsArchive != ''Y''                
+ INNER JOIN                 
+  ['+@vExtranetConnectionString+'].dbo.t_TestDrive_Member_Class_Teacher CT                
+  ON CT.uClassId = CP.uClassId AND CT.cIsCoTeacher = ''N'' AND CT.cIsSubjectExpert = ''N''                
+ INNER JOIN                 
+  ['+@vExtranetConnectionString+'].dbo.t_TestDrive_Member_Teacher_School TS                
+  ON TS.uTeacherId = CT.uTeacherId                 
+          
+ INNER JOIN                 
+  ['+@vExtranetConnectionString+'].dbo.t_TestDrive_Member_School S                
+  ON S.uSchoolId =  TS.uSchoolId and (S.cIsExternalMember is null or  S.cIsExternalMember=''N'')          
+          
+  INNER JOIN              
+  ['+@vExtranetConnectionString+'].dbo.t_TestDrive_Member_Pupil P              
+  ON CP.uPupilId = P.uPupilId          
+      
+   INNER JOIN                   
+  ['+@vExtranetConnectionString+'].dbo.t_TestDrive_Member_Pupil_Password PP               
+  ON PP.uPupilId = CP.uPupilId AND PP.uSchoolYearPeriodId=    '''+cast(@uSchoolYearPeriodId as nvarchar(max))+'''         
+        
+  WHERE TS.uSchoolId = '''+cast(@uSchoolId as nvarchar(max)) +''''             
+                           
+End         
+ELSE   
+        
+BEGIN        
+set @vQuery =                 
+ '  SELECT(              
+ SELECT              
+  P.vName,P.vFirstName,CONVERT(varchar(250),dtFirstLoginTime,104) dtFirstLoginTime,        
+  CASE         
+ WHEN CP.cIsDeleted = ''N'' THEN ''Nein''         
+ WHEN CP.cIsDeleted = ''Y'' THEN ''Ja''         
+ END AS cIsDeleted          
+ FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER) AS JSONResult               
+ FROM                  
+  (                
+   SELECT                  
+     LU.uUserID AS PupilId,MIN(LU.dtDateTimeOfLogin) AS dtFirstLoginTime          
+   FROM                 
+    t_TestDrive_Member_LoggedinUserInformation LU                
+   WHERE                 
+     LU.iApplicationTypeId = 16 and LU.cIsManualLogin=''Y'' '              
+                 
+If(@vDateFrom <> '' and @vDateTo = '')                                      
+  Begin                                        
+   set @vQuery = @vQuery + ' AND dtDateTimeOfLogin >= convert(datetime,'''+@vDateFrom+''',101)'                            
+  End                                      
+ Else If(@vDateFrom = '' and @vDateTo <> '')                                      
+  Begin                                        
+   set @vQuery = @vQuery + ' AND dtDateTimeOfLogin <= convert(datetime,'''+@vDateTo+''',101)'                            
+  End                                      
+ Else If(@vDateFrom <> '' and @vDateTo <> '')                              
+  Begin                                      
+   set @vQuery = @vQuery + ' AND dtDateTimeOfLogin >= convert(datetime,'''+@vDateFrom+''',101) AND dtDateTimeOfLogin< convert(datetime,'''+@vDateTo+''',101)'                            
+  End                
+              
+              
+   set @vQuery =@vQuery+'          
+           
+   and LU.uUserId not in(            
+select             
+distinct uUserId from            
+t_TestDrive_Member_LoggedinUserInformation  L          
+where   L.cIsManualLogin=''Y'' AND L.dtDateTimeOfLogin >= convert(datetime,'''+@vDateFromExclude+''',101) AND L.dtDateTimeOfLogin< convert(datetime,'''+@vDateToExclude+''',101)        
+   and L.iApplicationTypeId = 16         
+   )      
+   GROUP BY LU.uUserId           
+   ) LoggedinInfo  '              
+               
+  set @vQuery =@vQuery+'INNER JOIN                
+  ['+@vExtranetConnectionString+'].dbo.t_TestDrive_Member_Class_Pupil CP                
+  ON LoggedinInfo.PupilId = CP.uPupilId AND CP.cIsArchive != ''Y''                
+ INNER JOIN                 
+  ['+@vExtranetConnectionString+'].dbo.t_TestDrive_Member_Class_Teacher CT                
+  ON CT.uClassId = CP.uClassId AND CT.cIsCoTeacher = ''N'' AND CT.cIsSubjectExpert = ''N''                
+ INNER JOIN                 
+  ['+@vExtranetConnectionString+'].dbo.t_TestDrive_Member_Teacher_School TS                
+  ON TS.uTeacherId = CT.uTeacherId                 
+          
+ INNER JOIN                 
+  ['+@vExtranetConnectionString+'].dbo.t_TestDrive_Member_School S                
+  ON S.uSchoolId =  TS.uSchoolId and (S.cIsExternalMember is null or  S.cIsExternalMember=''N'')          
+          
+  INNER JOIN              
+  ['+@vExtranetConnectionString+'].dbo.t_TestDrive_Member_Pupil P              
+  ON CP.uPupilId = P.uPupilId          
+            
+   INNER JOIN                   
+  ['+@vExtranetConnectionString+'].dbo.t_TestDrive_Member_Pupil_Password PP               
+  ON PP.uPupilId = CP.uPupilId AND PP.uSchoolYearPeriodId=    '''+cast(@uSchoolYearPeriodId as nvarchar(max))+'''         
+        
+  WHERE TS.uSchoolId = '''+cast(@uSchoolId as nvarchar(max)) +''' '          
+END        
+      
+  if(@uClassId!='')          
+  BEGIN          
+ SET @vQuery= @vQuery+'           
+ AND CP.uClassId = '''+@uClassId +''''          
+  END          
+           
+ SET @vQuery= @vQuery+'           
+ ORDER BY P.vName,P.vFirstName  '           
+           
+      
+ PRINT @vQuery;                
+ EXEC SP_EXECUTESQL @vQuery;      
+ END    
+
+
+ --------------------------
+ CREATE procEDURE [dbo].[p_Extranet_Billing_Module_GetPacketDetailsFromDataBase]    
+(      
+ @dtFrom NVARCHAR(250),      
+ @dtTo NVARCHAR(250),      
+ @uSchoolId NVARCHAR(250),      
+ @vExtranetDataBaseName NVARCHAR(250)      
+)      
+AS      
+-- =============================================      
+-- Author:  Ayyappa P      
+-- Create date: 13-06-2019      
+-- Description: Get Distinct Pupil Count Per Class for Given SchoolId Between the times      
+-- =============================================      
+BEGIN      
+ DECLARE @vQuery NVARCHAR(MAX);         
+ SET @vQuery =       
+ '      
+ SELECT(      
+ SELECT      
+  CP.uClassId, COUNT(LoggedinInfo.PupilId) AS PupilCount       
+ FOR JSON PATH, INCLUDE_NULL_VALUES, WITHOUT_ARRAY_WRAPPER) AS JSONResult       
+ FROM      
+  (      
+   SELECT        
+    DISTINCT LU.uUserID AS PupilId      
+   FROM       
+    t_TestDrive_Member_LoggedinUserInformation LU      
+   WHERE       
+     LU.iApplicationTypeId = 16      
+    AND LU.dtDateTimeOfLogin <= CONVERT(datetime,'''+@dtTo+''',104)      
+    AND LU.dtDateTimeOfLogin >= CONVERT(datetime,'''+@dtFrom+''',104)      
+  )LoggedinInfo      
+ INNER JOIN      
+  ['+@vExtranetDataBaseName+'].dbo.t_TestDrive_Member_Class_Pupil CP      
+  ON LoggedinInfo.PupilId = CP.uPupilId AND CP.cIsArchive != ''Y''      
+ INNER JOIN       
+  ['+@vExtranetDataBaseName+'].dbo.t_TestDrive_Member_Class_Teacher CT      
+  ON CT.uClassId = CP.uClassId AND CT.cIsCoTeacher = ''N'' AND CT.cIsSubjectExpert = ''N''      
+ INNER JOIN       
+  ['+@vExtranetDataBaseName+'].dbo.t_TestDrive_Member_Teacher_School TS      
+  ON TS.uTeacherId = CT.uTeacherId AND TS.uSchoolId = '''+@uSchoolId +'''      
+ GROUP BY CP.uClassId';      
+ PRINT @vQuery;      
+ EXEC SP_EXECUTESQL @vQuery;      
+END   
+
+--------------------------
+
+CREATE PROCEDURE [dbo].[p_Extranet_Pupil_Module_MovePupilToClass]            
+(                                                                   
+  @uSourceClassId nvarchar(100),                                              
+  @uTargetClassId nvarchar(100),                                              
+  @vPupilJson nvarchar(max),                                     
+  @cIsNormalMovePupil char(1),            
+  @cIsMoveSchool CHAR(1),            
+  @uSourceSchoolId NVARCHAR(250),            
+  @uTargetSchoolId NVARCHAR(250)            
+)                                              
+AS                                              
+Begin                                        
+ /********************************************************************************************                                      
+   Changed By: Sanjay                                                                                         
+   Changed Date: 03.09.2019                                      
+   Description: Updating class id ischange. when pupil moved. he/she is deleted from current class                                      
+   and set as archive. new entry in Class_Pupil table is made for that pupil      
+       
+    Modified By:  Amit Kumar                           
+ Modified Date:  25-08-2020                          
+ Description:  Added new column "uModifiedByUserId"                                    
+ ********************************************************************************************/                                               
+create table #tempRecords(uPupilId uniqueidentifier)                           
+declare @uPupilId uniqueidentifier                            
+declare @uClassGroupId uniqueidentifier                       
+                          
+declare cursor_SaveData Cursor For                                                      
+Select * from OPENJSON(@vPupilJson) with(uPupilId uniqueidentifier '$.uPupilId')                              
+ open cursor_SaveData             
+ Fetch Next from cursor_SaveData into @uPupilId                          
+ while(@@FETCH_STATUS <> -1)                                                 
+  Begin            
+   print @uPupilId                          
+   update t_TestDrive_Member_Class_Pupil             
+   set cIsDeleted = 'Y', cIsArchive = 'Y'             
+   where uClassId = @uSourceClassId and uPupilId =@uPupilId            
+                           
+   if(@cIsNormalMovePupil = 'Y')            
+    Begin             
+     if exists(            
+      select * from t_TestDrive_Member_Class_Pupil where uClassId = @uTargetClassId  and uPupilId =@uPupilId and cIsDeleted = 'Y'            
+      )            
+      begin                        
+       update t_TestDrive_Member_Class_Pupil set cIsDeleted='N', cIsArchive='N' where uClassId = @uTargetClassId                                
+       and uPupilId =@uPupilId and cIsDeleted = 'Y'                        
+      end                     
+     else                    
+      begin                    
+       set @uClassGroupId=(select uClassGroupId from t_TestDrive_Member_Class_Pupil where uClassId = @uSourceClassId and uPupilId =@uPupilId and cIsDeleted='N')                        
+       insert into t_TestDrive_Member_Class_Pupil values (@uTargetClassId,@uPupilId,'N',GETDATE(),GETDATE(),'N',getdate(),newid(),@uClassGroupId)                       
+      End            
+                              
+     update t_TestDrive_StateExtension_PupilProjectGrade set uClassId = @uTargetClassId                                            
+     where uClassId = @uSourceClassId  and uPupilId =@uPupilId                        
+                        
+     update t_TestDrive_Member_Pupil_AssignedSubjectClassType set uClassId = @uTargetClassId                                            
+     where uClassId =  @uSourceClassId  and uPupilId =@uPupilId                         
+    End            
+               
+   IF(@cIsMoveSchool='Y')            
+    BEGIN            
+     UPDATE t_TestDrive_Member_School_Pupil            
+     SET cIsDeleted = 'Y'            
+     WHERE uSchoolId = @uSourceSchoolId AND uPupilId = @uPupilId          
+            
+     IF EXISTS(             
+      SELECT *             
+      FROM  t_TestDrive_Member_School_Pupil             
+      WHERE             
+        uSchoolId = @uTargetSchoolId             
+       AND uPupilId = @uPupilId            
+       AND cIsDeleted = 'Y'            
+      )            
+      BEGIN          
+       UPDATE t_TestDrive_Member_School_Pupil             
+       SET cIsDeleted = 'N'            
+       WHERE             
+         uSchoolId = @uTargetSchoolId             
+  AND uPupilId = @uPupilId            
+        AND cIsDeleted = 'Y'            
+      END            
+     ELSE            
+      BEGIN            
+       INSERT INTO t_TestDrive_Member_School_Pupil            
+       VALUES (NEWID(),@uPupilId,@uTargetSchoolId,'N','N')            
+      END            
+    END            
+            
+   insert into #tempRecords (uPupilId)values(@uPupilId)                          
+   Fetch Next from cursor_SaveData into @uPupilId                            
+  End            
+                           
+Close cursor_SaveData                                              
+Deallocate cursor_SaveData                           
+                          
+select (                                     
+select                               
+P.uPupilId                   
+,P.iProfileCode                              
+,P.iGenderId                              
+,P.vFirstName                              
+,P.vName                              
+,P.vBirthdate                              
+,P.cIsForeignLanguage                              
+,P.vEmail                              
+,P.vPassword                              
+,P.vIPLastModifiedFrom                              
+,P.dtCreatedOn                              
+,P.dtModifiedOn                              
+,P.vStreet                              
+,P.iZip                              
+,P.vTown                              
+,P.iProfessionId                              
+,P.dtLearncoacherPasswordCreatedOn                              
+,P.vLearnCoacherPassword                              
+,P.iProfilePictureFileSize                              
+,P.iProfilePictureFileVersion                              
+,P.vProfilePictureFileType                              
+,P.dtPasswordCreatedOn                              
+,P.dtWhenLearnCoacherLoginHasBeenBilled                              
+,P.iPupilTypeId                              
+,P.vPhonePrivate                              
+,P.vSSN                              
+,P.uJobFieldId                              
+,P.uJobLevelId                              
+,P.uUserId     
+,P.uModifiedByUserId                             
+,P.iLanguageId                              
+,P.iMainClientId                              
+,P.vPasswordHash                              
+,P.vUserName                              
+,ISNULL(P.cIsExternal,'N') cIsExternal                            
+,ISNULL(P.cIsTestPupil,'N') cIsTestPupil                      
+,ISNULL((                                                
+select                               
+CP.uClassId,CP.cIsDeleted,CP.dtCreatedOn,CP.dtLearncoacherLoggedInDate,CP.cIsArchive,CP.dtPackageActivatedOn,CP.uClassPupilId,CP.uClassGroupId,                              
+CT.uTeacherId,TS.uSchoolId,MS.iStateId,CT.cIsCoTeacher,CT.cIsSubjectExpert                              
+from t_TestDrive_Member_Class_Pupil CP                              
+JOIN t_TestDrive_Member_Class_Teacher CT ON CP.uClassId = CT.uClassId                            
+JOIN t_TestDrive_Member_Teacher_School TS ON CT.uTeacherId = TS.uTeacherId                              
+JOIN t_TestDrive_Member_School MS ON MS.uSchoolId = TS.uSchoolId                              
+where P.uPupilId = CP.uPupilId                                            
+for json path, include_null_values                                      
+),'[]') [t_TestDrive_Member_Class_Pupil]                               
+,ISNULL((                          
+SELECT SP.uSchoolPupilId,SP.uPupilId,SP.uSchoolId,SP.cIsDeleted,SP.cIsAdmin,MS.iStateId                          
+FROM t_TestDrive_Member_School_Pupil SP                          
+JOIN t_TestDrive_Member_School MS ON MS.uSchoolId = SP.uSchoolId              
+WHERE P.uPupilId = SP.uPupilId                          
+FOR JSON PATH, INCLUDE_NULL_VALUES                          
+),'[]') t_TestDrive_Member_School_Pupil,          
+ISNULL((          
+SELECT uPupilPasswordId, uPupilId, uSchoolYearPeriodId, vPasswordHash, dtPasswordCreatedOn, dtModifiedOn          
+FROM t_TestDrive_Member_Pupil_Password PP          
+where PP.uPupilId = P.uPupilId          
+FOR JSON PATH, INCLUDE_NULL_VALUES           
+),'[]')  t_TestDrive_Member_Pupil_Password                       
+for json path, include_null_values, without_array_wrapper) as jsonresult                                     
+from t_TestDrive_Member_Pupil P                      
+WHERE P.uPupilId in (  select uPupilId from #tempRecords )                        
+                
+select (select  uPupilSubjectClassTypeId,uPupilId,uClassId,iSubjectId,iClassTypeId for json path,INCLUDE_NULL_VALUES, without_array_wrapper) as JSONResult             
+from t_TestDrive_Member_Pupil_AssignedSubjectClassType                                          
+where uClassId =  @uTargetClassId  and uPupilId in(select uPupilId from #tempRecords)                        
+                      
+                      
+select (select  uPupilSubjectClassTypeId,uPupilId,uClassId,iSubjectId,iClassTypeId for json path,INCLUDE_NULL_VALUES, without_array_wrapper) as JSONResult             
+from t_TestDrive_Member_Pupil_AssignedSubjectClassType                                          
+where uClassId =  @uSourceClassId  and uPupilId in(select uPupilId from #tempRecords)               
+            
+SELECT (SELECT SP.* for json path,INCLUDE_NULL_VALUES, without_array_wrapper) as JSONResult             
+FROM t_TestDrive_Member_School_Pupil SP            
+WHERE ( @cIsMoveSchool ='N' OR (uSchoolId = @uTargetSchoolId OR uSchoolId = @uSourceSchoolId ) )AND uPupilId IN (select uPupilId from #tempRecords)            
+            
+                   
+End   
+
+------------------
+CREATE PROCEDURE [dbo].[p_Extranet_Pupil_Module_MergeLearningTestDataBaseCall]                
+(                                                            
+ @vTestIds nvarchar(4000),        
+ @uPupilId uniqueidentifier,        
+ @uClassId uniqueidentifier,        
+ @uTeacherId uniqueidentifier,      
+ @uTargetPupilId uniqueidentifier                      
+)                                
+AS                              
+/********************************************************************************************                                                            
+ Created By: Praveen                                       
+ Created Date: 04.01.2018                  
+ Description: Move the learningtest to new class to which pupil is moved        
+********************************************************************************************/                                           
+BEGIN           
+        
+update t_TestDrive_Cycle_Pupil set uClassId = @uClassId,uPupilId = @uTargetPupilId where uPupilId = @uPupilId and uTestId in (SELECT *        
+FROM OPENJSON(@vTestIds) with (uTestId nvarchar(200) '$.TestId'))        
+        
+update t_Testdrive_Cycle_Teacher set uTeacherId = @uTeacherId where  uTestId in (SELECT *        
+FROM OPENJSON(@vTestIds) with (uTestId nvarchar(200) '$.TestId'))        
+        
+ select( Select @@ROWCOUNT as RowsAffected for json path,INCLUDE_NULL_VALUES, without_array_wrapper) as JSONResult         
+        
+End  
+ ----------------------------
+
+
+ CREATE PROCEDURE [dbo].[p_Extranet_Pupil_Module_MoveLearningTestDataBaseCall]              
+(                                                          
+ @vTestIds nvarchar(4000),      
+ @uPupilId uniqueidentifier,      
+ @uClassId uniqueidentifier,      
+ @uTeacherId uniqueidentifier                      
+)                              
+AS                            
+/********************************************************************************************                                                          
+ Created By: Praveen                                     
+ Created Date: 04.01.2018                
+ Description: Move the learningtest to new class to which pupil is moved      
+********************************************************************************************/                                         
+BEGIN         
+      
+update t_TestDrive_Cycle_Pupil set uClassId = @uClassId where uPupilId = @uPupilId and uTestId in (SELECT *      
+FROM OPENJSON(@vTestIds) with (uTestId nvarchar(200) '$.TestId'))      
+      
+update t_Testdrive_Cycle_Teacher set uTeacherId = @uTeacherId where  uTestId in (SELECT *      
+FROM OPENJSON(@vTestIds) with (uTestId nvarchar(200) '$.TestId'))      
+      
+ select( Select @@ROWCOUNT as RowsAffected for json path,INCLUDE_NULL_VALUES, without_array_wrapper) as JSONResult       
+      
+End  
+
+
+
+------------------------------------------------
+
+ALTER PROC [dbo].[p_Extranet_Pupil_GetData]                                         
+(                                                      
+@iMainClientId INT,                                          
+@uClassId UNIQUEIDENTIFIER,     
+@iStateId int,              
+@vPrimaryKeyValue nvarchar(max)                  
+)                                                                    
+AS                                                             
+BEGIN                                                         
+                                                       
+/********************************************************************************************                                                                              
+Created By: Sanjay                                                                             
+Created Date: 05.12.2018                                                                             
+Description: Gets Pupil Data                                                      
+Tables: t_TestDrive_Member_Pupil, t_TestDrive_Member_Class_Pupil                                                       
+Sample: exec Proc_Fusion_Extranet_Pupil_GetData 97                                                      
+                                                      
+Modified By: Arvind K                                                               
+Modified Date: 15/06/2020                                                              
+Description: To return uPupilExternalSourceId from t_TestDrive_Member_Pupil_ExternalSourceMapping  table                                   
+                          
+Modified By: Arvind K                                                               
+Modified Date: 18/06/2020                                                              
+Description: To return t_TestDrive_Member_Pupil_ExternalSourceMapping as a sub table                           
+                      
+Modified By: Arvind K                                                               
+Modified Date: 22/07/2020                                                              
+Description: To Get PupilData in batch-wise manner during Preload. Added input arguments @iInterval, @iOffSet to the proc and returning data based on these values.                                                                        
+                            
+Modified By: Arvind K                                                               
+Modified Date: 28/07/2020                                                              
+Description: Batch Preload common approach changes          
+        
+ Modified By:  Amit Kumar                               
+ Modified Date:  25-08-2020                              
+ Description:  Added new column "uModifiedByUserId"                                       
+*************************************************************************************************/                   
+-----------Common approach to fetch data in Batch--------------                  
+Declare @uPupilId uniqueidentifier                       
+If(@vPrimaryKeyValue = '0')                  
+BEGIN                  
+ Set @uPupilId ='00000000-0000-0000-0000-000000000000'                  
+END                  
+Else                  
+Begin                  
+ Set @uPupilId = Cast(@vPrimaryKeyValue as uniqueidentifier)                  
+END                            
+---------------------------------------------------------------                                     
+IF(@uClassId='00000000-0000-0000-0000-000000000000')                                          
+BEGIN                                                
+select top(5000) (                                                           
+select                                   
+P.uPupilId                                                    
+,P.iProfileCode                                                    
+,P.iGenderId                                                    
+,P.vFirstName    
+,P.vName                                                    
+,P.vBirthdate                                                    
+,P.cIsForeignLanguage                                                    
+,P.vEmail                
+,P.vPassword                                                    
+,P.vIPLastModifiedFrom                              
+,P.dtCreatedOn                                                    
+,P.dtModifiedOn                                                    
+,P.vStreet                                                    
+,P.iZip                                                    
+,P.vTown                                    
+,P.iProfessionId                                                    
+,P.dtLearncoacherPasswordCreatedOn                                                
+,P.vLearnCoacherPassword                                                    
+,P.iProfilePictureFileSize                                            
+,P.iProfilePictureFileVersion                                                    
+,P.vProfilePictureFileType                                                
+,P.dtPasswordCreatedOn                                                    
+,P.dtWhenLearnCoacherLoginHasBeenBilled                                             
+,P.iPupilTypeId                                                    
+,P.vPhonePrivate                                                    
+,P.vSSN                                                    
+,P.uJobFieldId                                                    
+,P.uJobLevelId                                                    
+,P.uUserId        
+,P.uModifiedByUserId                                                    
+,P.iLanguageId                                                    
+,P.iMainClientId                                                    
+,P.vPasswordHash                                                    
+,P.vUserName                        
+,P.cIsExternalMember                                                    
+,ISNULL(P.cIsExternal,'N') cIsExternal                                                  
+,ISNULL(P.cIsTestPupil,'N') cIsTestPupil                            
+,ISNULL((                                                                      
+select                                                     
+CP.uClassId,CP.cIsDeleted,CP.dtCreatedOn,CP.dtLearncoacherLoggedInDate,CP.cIsArchive,CP.dtPackageActivatedOn,CP.uClassPupilId,CP.uClassGroupId,                                                    
+CT.uTeacherId,TS.uSchoolId,MS.iStateId,CT.cIsCoTeacher,CT.cIsSubjectExpert                                                    
+from t_TestDrive_Member_Class_Pupil CP                                                    
+JOIN t_TestDrive_Member_Class_Teacher CT ON CP.uClassId = CT.uClassId                                                  
+JOIN t_TestDrive_Member_Teacher_School TS ON CT.uTeacherId = TS.uTeacherId                                                    
+JOIN t_TestDrive_Member_School MS ON MS.uSchoolId = TS.uSchoolId                                                    
+where P.uPupilId = CP.uPupilId                                                                  
+for json path, include_null_values                                                            
+),'[]') [t_TestDrive_Member_Class_Pupil]                                                     
+,ISNULL((                                                
+SELECT SP.uSchoolPupilId,SP.uPupilId,SP.uSchoolId,SP.cIsDeleted,SP.cIsAdmin,MS.iStateId                                                
+FROM t_TestDrive_Member_School_Pupil SP                                                
+JOIN t_TestDrive_Member_School MS ON MS.uSchoolId = SP.uSchoolId                                                 
+WHERE P.uPupilId = SP.uPupilId                                    
+FOR JSON PATH, INCLUDE_NULL_VALUES                                                
+),'[]') t_TestDrive_Member_School_Pupil,                                
+ISNULL((                                
+SELECT uPupilPasswordId, uPupilId, uSchoolYearPeriodId, vPasswordHash, dtPasswordCreatedOn, dtModifiedOn ,dtFirstLoggedInDate                              
+FROM t_TestDrive_Member_Pupil_Password PP                                
+where PP.uPupilId = P.uPupilId                        
+FOR JSON PATH, INCLUDE_NULL_VALUES                                 
+),'[]')  t_TestDrive_Member_Pupil_Password                          
+,ISNULL((                                            
+  Select                           
+     EP.uPupilId,                          
+  EP.uPupilExternalSourceIdGuid,                          
+  EP.uPupilExternalSourceId,            
+  EP.dtCreatedOn,           
+  EP.dtModifiedOn,                          
+  EP.cIsDemoData,      
+  EP.vAdditionalInformation                          
+  From  t_TestDrive_Member_Pupil_ExternalSourceMapping EP                           
+  Where EP.uPupilId = P.uPupilId                           
+  for json path, include_null_values                          
+  ),'[]') [t_TestDrive_Member_Pupil_ExternalSourceMapping]                                  
+for json path, include_null_values, without_array_wrapper) as jsonresult                                                           
+from t_TestDrive_Member_Pupil P                                
+--inner join t_TestDrive_Member_School_Pupil SP on P.uPupilId = SP.uPupilId                                            
+--inner join t_TestDrive_Member_School S on S.uSchoolId = SP.uSchoolId                                             
+--and  S.iMainClientId=@iMainClientId                                  
+WHERE P.uPupilId in (                                  
+Select uPupilId from t_TestDrive_Member_Class_Pupil cp                                   
+ inner join t_TestDrive_Member_Class_Teacher ct on ct.uClassId = cp.uClassId                                   
+ inner join t_TestDrive_Member_Teacher t on t.uTeacherId = ct.uTeacherId                                   
+ inner join t_TestDrive_Member_Teacher_School ts on ts.uTeacherId=t.uTeacherId                                   
+ inner join t_TestDrive_Member_School s on s.uSchoolId = ts.uSchoolId where s.iMainClientId = @iMainClientId and s.iStateId = @iStateId  
+union                                   
+ select uPupilId from t_TestDrive_Member_School_Pupil KSP  
+  inner join  t_TestDrive_Member_School KS on KS.uSchoolId = KSP.uSchoolId  
+  where iMainClientId =@iMainClientId  and KS.iStateId = @iStateId  
+)                      
+AND P.uPupilId > @uPupilId                          
+ORDER BY P.uPupilId                  
+END                                           
+ELSE                                          
+BEGIN                                          
+select top(5000)(                                                           
+select                                                    
+P.uPupilId                                         
+,P.iProfileCode                                                    
+,P.iGenderId                                     
+,P.vFirstName                                                    
+,P.vName                                                    
+,P.vBirthdate                                                    
+,P.cIsForeignLanguage                                                    
+,P.vEmail                                                    
+,P.vPassword                                                    
+,P.vIPLastModifiedFrom                                                    
+,P.dtCreatedOn                                                    
+,P.dtModifiedOn                                                    
+,P.vStreet                                                    
+,P.iZip                                                    
+,P.vTown                                                    
+,P.iProfessionId                                                    
+,P.dtLearncoacherPasswordCreatedOn                                                    
+,P.vLearnCoacherPassword                                                    
+,P.iProfilePictureFileSize                                                    
+,P.iProfilePictureFileVersion                                                    
+,P.vProfilePictureFileType                                                    
+,P.dtPasswordCreatedOn                                                    
+,P.dtWhenLearnCoacherLoginHasBeenBilled                                                    
+,P.iPupilTypeId                   
+,P.vPhonePrivate                                                    
+,P.vSSN                               
+,P.uJobFieldId                                                    
+,P.uJobLevelId                                                    
+,P.uUserId          
+,P.uModifiedByUserId                                               
+,P.iLanguageId                                                    
+,P.iMainClientId                                                    
+,P.vPasswordHash                                                    
+,P.vUserName                         
+,P.cIsExternalMember                                                   
+,ISNULL(P.cIsExternal,'N') cIsExternal                                                
+,ISNULL(P.cIsTestPupil,'N') cIsTestPupil                             
+,ISNULL((                                                                      
+select                                                     
+CP.uClassId,CP.cIsDeleted,CP.dtCreatedOn,CP.dtLearncoacherLoggedInDate,CP.cIsArchive,CP.dtPackageActivatedOn,CP.uClassPupilId,CP.uClassGroupId,                                                    
+CT.uTeacherId,TS.uSchoolId,MS.iStateId,CT.cIsCoTeacher,CT.cIsSubjectExpert                                          
+from t_TestDrive_Member_Class_Pupil CP                                                    
+JOIN t_TestDrive_Member_Class_Teacher CT ON CP.uClassId = CT.uClassId                                                  
+JOIN t_TestDrive_Member_Teacher_School TS ON CT.uTeacherId = TS.uTeacherId                                                    
+JOIN t_TestDrive_Member_School MS ON MS.uSchoolId = TS.uSchoolId                                                    
+where P.uPupilId = CP.uPupilId                                                                  
+for json path, include_null_values                                                            
+),'[]') [t_TestDrive_Member_Class_Pupil]                                                     
+,ISNULL((                          
+SELECT SP.uSchoolPupilId,SP.uPupilId,SP.uSchoolId,SP.cIsDeleted,SP.cIsAdmin,MS.iStateId                                                
+FROM t_TestDrive_Member_School_Pupil SP                                              
+JOIN t_TestDrive_Member_School MS ON MS.uSchoolId = SP.uSchoolId                                                 
+WHERE P.uPupilId = SP.uPupilId                                                
+FOR JSON PATH, INCLUDE_NULL_VALUES                                                
+),'[]') t_TestDrive_Member_School_Pupil,                                
+ISNULL((                                
+SELECT uPupilPasswordId, uPupilId, uSchoolYearPeriodId, vPasswordHash, dtPasswordCreatedOn, dtModifiedOn,dtFirstLoggedInDate                                
+FROM t_TestDrive_Member_Pupil_Password PP                                
+where PP.uPupilId = P.uPupilId                          
+FOR JSON PATH, INCLUDE_NULL_VALUES                                 
+),'[]')  t_TestDrive_Member_Pupil_Password                            
+,ISNULL((                                                            
+  Select                           
+     EP.uPupilId,                          
+  EP.uPupilExternalSourceIdGuid,                          
+  EP.uPupilExternalSourceId,                          
+  EP.dtCreatedOn,                          
+  EP.dtModifiedOn,                          
+  EP.cIsDemoData,      
+  EP.vAdditionalInformation                       
+  From  t_TestDrive_Member_Pupil_ExternalSourceMapping EP                           
+  Where EP.uPupilId = P.uPupilId             
+  for json path, include_null_values                          
+  ),'[]') [t_TestDrive_Member_Pupil_ExternalSourceMapping]                            
+for json path, include_null_values, without_array_wrapper) as jsonresult                                                           
+from t_TestDrive_Member_Pupil P                             
+WHERE P.uPupilId in (                                  
+ Select uPupilId from t_TestDrive_Member_Class_Pupil cp                                   
+ inner join t_TestDrive_Member_Class_Teacher ct on ct.uClassId = cp.uClassId                                   
+ inner join t_TestDrive_Member_Teacher t on t.uTeacherId = ct.uTeacherId                                   
+ inner join t_TestDrive_Member_Teacher_School ts on ts.uTeacherId=t.uTeacherId                                   
+ inner join t_TestDrive_Member_School s on s.uSchoolId = ts.uSchoolId where s.iMainClientId = @iMainClientId and cp.uClassId =@uClassId and s.iStateId = @iStateId             
+                              
+)                  
+AND P.uPupilId > @uPupilId                          
+ORDER BY P.uPupilId                                         
+END                                          
+END 

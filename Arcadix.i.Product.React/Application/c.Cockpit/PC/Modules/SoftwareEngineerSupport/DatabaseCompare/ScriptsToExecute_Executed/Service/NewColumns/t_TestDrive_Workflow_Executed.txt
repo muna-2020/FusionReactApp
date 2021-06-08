@@ -1,0 +1,34 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Workflow' AND COLUMN_NAME = 'dtCreatedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_Workflow ADD dtCreatedOn datetime  
+END
+
+GO	 
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Workflow' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_Workflow ADD dtModifiedOn datetime  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Workflow set dtCreatedOn = getdate() where dtCreatedOn is null
+
+GO
+update t_TestDrive_Workflow set dtModifiedOn = getdate() where dtModifiedOn is null
+
+GO
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+JEditorProc_Testdrive_Workflow_GetTaskWorkflowStatusByMainClientUser
+Proc_Testdrive_Workflow_GetTaskWorkflowStatusByMainClientUser
+Proc_Testdrive_Workflow_GetWorkflowByWorkflowTypeId
+****************************************************************/
+

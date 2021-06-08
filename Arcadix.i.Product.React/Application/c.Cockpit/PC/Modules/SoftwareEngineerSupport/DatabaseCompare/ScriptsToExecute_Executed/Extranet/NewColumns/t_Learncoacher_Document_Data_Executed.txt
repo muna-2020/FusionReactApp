@@ -1,0 +1,31 @@
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Learncoacher_Document_Data' AND COLUMN_NAME = 'vFileId') 
+BEGIN
+	ALTER TABLE t_Learncoacher_Document_Data ADD vFileId nvarchar(max)  
+END
+Go
+
+/**********************************
+Default Values
+**********************************/  
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_LearnCoacher_Document_CopyFolders
+JProc_LearnCoacher_Document_GetDocuments
+JProc_LearnCoacher_Document_GetFoldersAndDocumentsForMainClientId
+***********************************************************/
+
+
+
+/********************Procs to Review**********************
+JProc_LearnCoacher_Document_CopyFolders (Modified)
+***********************************************************/
+

@@ -1,0 +1,1 @@
+﻿export * from '@shared/Application/d.Extranet/5_Shared/PC/Modules/Contact/Contact_Hook';

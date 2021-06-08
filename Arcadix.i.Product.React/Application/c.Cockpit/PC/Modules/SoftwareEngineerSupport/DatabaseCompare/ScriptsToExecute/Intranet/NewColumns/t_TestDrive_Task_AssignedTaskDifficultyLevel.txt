@@ -1,0 +1,2 @@
+DISABLE TRIGGER [dbo].[trg_t_TestDrive_Task_AssignedTaskDifficultyLevel] ON [dbo].[t_TestDrive_Task_AssignedTaskDifficultyLevel]
+GO

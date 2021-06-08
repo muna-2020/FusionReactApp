@@ -1,0 +1,37 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_RScript' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_RScript ADD uModifiedByUserId uniqueidentifier  
+END
+		 
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_RScript set uModifiedByUserId=uUserId where uModifiedByUserId is null
+
+GO
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+Proc_TestDrive_RScripts_AddEditRScript
+Proc_TestDrive_RScripts_DeleteRScript
+Proc_TestDrive_RScripts_DeleteRScriptFolder
+Proc_TestDrive_RScripts_GetRScriptBatchScriptDetails
+Proc_TestDrive_RScripts_GetRScriptDetails
+Proc_TestDrive_RScripts_GetRScriptElements
+Proc_TestDrive_RScripts_GetRScriptFolderDetailsById
+Proc_TestDrive_RScripts_GetRScriptsByFolderId
+Proc_TestDrive_RScripts_GetRScriptsFolders
+Proc_TestDrive_RScripts_SaveRScriptDetails
+*************************************************/
+
+/********************AllDependentProc********************
+Proc_TestDrive_RScripts_AddEditRScript
+Proc_TestDrive_RScripts_SaveRScriptDetails
+*************************************************/

@@ -1,0 +1,27 @@
+/**********************************
+New table		
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 't_Fusion_Intranet_ResultPageCertificate_Data' ) 
+BEGIN
+CREATE TABLE [dbo].[t_Fusion_Intranet_ResultPageCertificate_Data]
+(
+	  [uResultPageCertificateDataId] UNIQUEIDENTIFIER NOT NULL
+	, [uResultPageCertificateId] UNIQUEIDENTIFIER NULL
+	, [iLanguageId] INT NULL
+	, [vResultPageCertificateText] NVARCHAR(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, CONSTRAINT [PK__t_Fusion__D07B8A6F840BDAE9] PRIMARY KEY ([uResultPageCertificateDataId] ASC)
+)
+END
+GO
+/**********************************
+Default Values
+**********************************/
+IF NOT EXISTS (SELECT * FROM t_Fusion_Intranet_ResultPageCertificate_Data WHERE uResultPageCertificateDataId =  'DCAF7171-E46D-4A96-BE86-58A7CAFB3ECD') 
+BEGIN
+insert into t_Fusion_Intranet_ResultPageCertificate_Data values('DCAF7171-E46D-4A96-BE86-58A7CAFB3ECD','50C6C0AC-3566-46E9-BB8C-63F7B7F6F8AA',3,'StandardResultCertificate')
+END
+GO
+GO
+/**********************************
+Angular proc modified
+**********************************/

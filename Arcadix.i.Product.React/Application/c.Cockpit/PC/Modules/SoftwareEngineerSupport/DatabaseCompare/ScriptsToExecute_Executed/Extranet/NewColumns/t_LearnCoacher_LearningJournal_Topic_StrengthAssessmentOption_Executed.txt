@@ -1,0 +1,31 @@
+/**********************************
+New Columns
+**********************************/
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_LearningJournal_Topic_StrengthAssessmentOption' AND COLUMN_NAME = 'dtModifiedOn') 
+ BEGIN
+     ALTER TABLE t_LearnCoacher_LearningJournal_Topic_StrengthAssessmentOption ADD dtModifiedOn datetime  
+ END
+ Go
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_LearningJournal_Topic_StrengthAssessmentOption  set dtModifiedOn = GETDATE()
+where dtModifiedOn is null
+
+Go
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_LearnCoacher_LearningJournal_GetStrengthAssessment
+Proc_LearnCoacher_LearningJournal_GetStrengthAssessmentAndReviewCriteriaData
+***********************************************************/
+
+
+/********************Procs to Review**********************
+***********************************************************/

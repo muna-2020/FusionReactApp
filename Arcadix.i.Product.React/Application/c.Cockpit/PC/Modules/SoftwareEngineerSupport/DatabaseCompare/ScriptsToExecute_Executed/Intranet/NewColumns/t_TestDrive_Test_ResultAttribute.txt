@@ -1,0 +1,47 @@
+﻿
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_ResultAttribute' AND COLUMN_NAME = 'iMainClientId') 
+BEGIN
+ALTER TABLE t_TestDrive_Test_ResultAttribute ADD iMainClientId int  
+END
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_ResultAttribute' AND COLUMN_NAME = 'cIsForFusion') 
+BEGIN
+ALTER TABLE t_TestDrive_Test_ResultAttribute ADD cIsForFusion char(1)  
+END
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_ResultAttribute' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Test_ResultAttribute ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Test_ResultAttribute set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_TestDrive_BaseObject_TestResultAttributes_GetData
+JProc_Testdrive_StandardResultCalculation_GetTestResultAttributes
+Proc_Fusion_Intranet_Object_Test_TestResultAttributes_GetData
+Proc_Fusion_Intranet_Object_Test_TestResultAttributes_GetData_New
+Proc_Fusion_Intranet_Object_Test_TestResultAttributes_GetData_Old
+Proc_TestDrive_PageTestResultAttribute_GetTestResultAttributeDetails
+Proc_TestDrive_ResultAttribute_DeleteResultAttributes
+Proc_TestDrive_ResultAttributes_GetResultAttributeCode
+Proc_TestDrive_ResultAttributes_GetResultAttributeExistenceStatus
+Proc_TestDrive_ResultAttributes_SaveResultAttributeTemplates
+Proc_Testdrive_StandardResultCalculation_GetElementResultAttributes
+Proc_Testdrive_StandardResultCalculation_GetTestResultAttributes
+Proc_TestDrive_Test_GetElementResultAttributesByPageId
+***********************************************************/
+
+

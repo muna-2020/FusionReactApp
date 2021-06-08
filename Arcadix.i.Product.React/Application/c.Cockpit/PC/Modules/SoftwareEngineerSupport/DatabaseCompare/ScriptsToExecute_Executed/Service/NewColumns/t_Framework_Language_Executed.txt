@@ -1,0 +1,62 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_Language' AND COLUMN_NAME = 'vDefaultCurrency') 
+BEGIN
+ALTER TABLE t_Framework_Language ADD vDefaultCurrency nvarchar(MAX)  
+END
+
+GO	 
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_Language' AND COLUMN_NAME = 'cIsDeleted') 
+BEGIN
+ALTER TABLE t_Framework_Language ADD cIsDeleted char(1)  DEFAULT ('N')
+END
+
+GO		   
+/**********************************
+Default Values
+**********************************/
+update t_Framework_Language set vDefaultCurrency ='EUR' Where vDefaultCurrency is null
+
+GO
+update t_Framework_Language set cIsDeleted='N' Where cIsDeleted is null
+
+GO
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_Framework_FrameworkClient_GetClientConfiguration
+FProc_Framework_FrameworkClient_GetClientConfigurationByClientId
+FProc_TestDrive_BaseObject_Language_GetData
+FProc_TestDrive_BaseObject_MainClientLanguage_AddData
+FProc_TestDrive_BaseObject_MainClientLanguage_DeleteData
+FProc_TestDrive_BaseObject_MainClientLanguage_EditData
+FProc_TestDrive_BaseObject_MainClientLanguage_GetData
+JEditorProc_Framework_ClientConfiguration_GetCultureByLanguageId
+JEditorProc_Framework_Language_GetAllLanguageForMainClient
+JEditorProc_Framework_Language_GetAllLanguages
+JProc_Framework_ClientConfiguration_GetCultureByLanguageId
+JProc_Framework_Language_GetAllLanguageForMainClient
+JProc_Framework_Language_GetAllLanguages
+JProc_Framework_Language_GetAllLanguagesForMainClient
+JProc_Framework_OnlineTranslation_CreateChangedResourceEntry
+JProc_Framework_OnlineTranslation_GetPreviousChangedNavigationText
+JProc_Framework_OnlineTranslation_SaveAndDeleteChangeResourceText
+Proc_Framework_ClientConfiguration_GetCultureByLanguageId
+Proc_Framework_JNavigationCommit_GetSystenTranslateNavigationDetails
+Proc_Framework_Language_GetAllLanguageForMainClient
+Proc_Framework_Language_GetAllLanguageForMainClientJson
+Proc_Framework_Language_GetAllLanguages
+Proc_Framework_OnlineTranslation_CreateChangedResourceEntry
+Proc_Framework_OnlineTranslation_GetPreviousChangedNavigationText
+Proc_Framework_OnlineTranslation_SaveAndDeleteChangeResourceText
+Proc_Framework_PageContextMenu_GetMenuDetailsForCommit
+Proc_Framework_ResourceFolderTranslation_GetResourceDetails
+Proc_Framework_TableDataTranslation_GetTableDataToTranslate
+****************************************************************/
+
+/********************Procs need to Review**********************
+No procs to update
+****************************************************************/

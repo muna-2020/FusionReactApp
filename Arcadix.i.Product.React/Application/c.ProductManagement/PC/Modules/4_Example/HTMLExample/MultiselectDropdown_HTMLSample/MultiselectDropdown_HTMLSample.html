@@ -1,0 +1,134 @@
+﻿<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: calibri;
+        }
+        .main-wrapper {
+            padding: 20px;
+        }
+
+        /* multi select dropdown */
+        button.dropdownbox {
+            display: flex;
+            width: 200px;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            outline: 0;
+        }
+
+            button.dropdownbox img {
+                width: 15px;
+            }
+
+        .selected-values {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .menu {
+            display: none;
+            border: 1px solid #ccc;
+            width: 200px;
+            list-style: none;
+        }
+
+        .showMenu {
+            display: block;
+        }
+
+        ul.menu li {
+            padding: 5px;
+        }
+
+            ul.menu li:hover {
+                background: #ccc;
+            }
+
+        .downIcon {
+            transform: rotate(180deg);
+        }
+
+        .upIcon {
+            transform: rotate(0deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <section class="content-wrapper">
+            <div class="text">
+                <span>Multiselect Dropdown</span>
+            </div>
+            <div class="dropdown-wrapper">
+                <button class="dropdownbox"><span class="selected-values">default value</span><span class="downIcon">&#94;</span></button>
+                <ul class="menu">
+                    <li>default value</li>
+                    <li>
+                        <input type="checkbox" id="v1" name="Item" value="Value 1">
+                        <label for="v1">Value 1</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="v2" name="Item" value="Value 2">
+                        <label for="v2">Value 2</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="v3" name="Item" value="Value 3">
+                        <label for="v3">Value 3</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="v4" name="Item" value="Value 4">
+                        <label for="v4">Value 4</label>
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </div>
+    <script>
+
+        /* multiselect dropdown */
+
+        let cb = document.querySelectorAll('ul input');
+
+        function updateText() {
+            let selectedValues = document.querySelector(".selected-values");
+            let itemCount = 0;
+            itemCount = document.querySelectorAll("input[name='Item']:checked");
+            if (itemCount.length > 0) {
+                selectedValues.innerHTML = " ";
+                for (let k = 0; k < itemCount.length; k++) {
+                    let text = document.querySelectorAll("input[name='Item']:checked")[k].value;
+                    selectedValues.innerHTML = selectedValues.innerHTML + text + " ";
+                    console.log(itemCount.length);
+                }
+            }
+            else {
+                selectedValues.innerHTML = "Default Value";
+            }
+        }
+
+        for (let i = 0; i < cb.length; i++) {
+            cb[i].addEventListener('click', updateText);
+        }
+
+        let button = document.querySelector(".dropdownbox");
+        let list = document.querySelector(".menu");
+        function toggleList() {
+            list.classList.toggle("showMenu");
+            document.querySelector(".downIcon").classList.toggle("upIcon");
+        }
+
+        button.addEventListener("click", toggleList);
+    </script>
+</body>
+</html>

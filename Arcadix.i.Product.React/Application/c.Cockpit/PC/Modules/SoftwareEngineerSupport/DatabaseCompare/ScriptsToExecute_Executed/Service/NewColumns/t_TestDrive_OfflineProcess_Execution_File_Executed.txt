@@ -1,0 +1,39 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_OfflineProcess_Execution_File' AND COLUMN_NAME = 'vFileDescription') 
+BEGIN
+ALTER TABLE t_TestDrive_OfflineProcess_Execution_File ADD vFileDescription nvarchar(MAX)  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_TestDrive_Offline_GetOfflineTasks
+FProc_TestDrive_Offline_UpdateOfflineProcessProgressValue
+FProc_TestDrive_OfflineProcess_DeleteExecution
+FProc_TestDrive_OfflineProcess_UpdateExecutionBycIsViewed
+JProc_TestDrive_Offline_GetOfflineTasks
+JProc_TestDrive_Offline_InsertOfflineExecutionFileDetails
+JProc_TestDrive_Offline_UpdateTaskInDatabase
+JProc_TestDrive_OfflineProcess_GetGenerationProcessDetailsForMainClient
+JProc_TestDrive_OfflineProcess_GetGenerationProcessDetailsForMainClient_18_03_2019
+JProc_TestDrive_OfflineProcess_GetOfflineTasksByExecutionId
+JProc_TestDrive_OfflineProcess_GetTasksForUser
+JProc_TestDrive_OfflineProcess_GetTasksForUserByExecutionId
+JProc_TestDrive_OfflineProcess_GetTasksForUserByExecutionIdAndUserId
+JProc_TestDrive_OfflineProcess_InsertAndGetGenerationProcessDetails
+****************************************************************/
+
+/********************Procs need to Review**********************
+no procs to update
+****************************************************************/

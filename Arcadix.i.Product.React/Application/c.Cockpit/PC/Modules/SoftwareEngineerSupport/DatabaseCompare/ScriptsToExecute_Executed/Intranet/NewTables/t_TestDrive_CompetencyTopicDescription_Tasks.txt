@@ -1,0 +1,26 @@
+/**********************************
+New table		
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 't_TestDrive_CompetencyTopicDescription_Tasks' ) 
+BEGIN
+CREATE TABLE [dbo].[t_TestDrive_CompetencyTopicDescription_Tasks]
+(
+	  [uCompetencyTopicDescriptionTaskId] UNIQUEIDENTIFIER NULL
+	, [uCompetencyTopicDescriptionId] UNIQUEIDENTIFIER NULL
+	, [iOrder] INT NULL
+	, [cIsDeleted] CHAR(1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+)
+END
+GO
+/**********************************
+Default Values
+
+**********************************/
+
+--No DefaultValues
+
+
+/**********************************
+Angular proc modified
+**********************************/

@@ -1,0 +1,34 @@
+/**********************************
+New table		
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES   WHERE TABLE_NAME = N'T_Framework_ElasticObjectUpdate')
+BEGIN
+CREATE TABLE [dbo].[T_Framework_ElasticObjectUpdate]
+(
+	  [uElasticObjectUpdateId] UNIQUEIDENTIFIER NULL
+	, [vPrimaryKeyValue] NVARCHAR(200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [vObjectName] NVARCHAR(500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [vObjectUpdatedForApplication] NVARCHAR(200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [vObjectToBeUpdatedInApplication] NVARCHAR(200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [dtCreatedOn] DATETIME NULL
+	, [dtPickedForUpdate] DATETIME NULL
+	, [iMainClientId] INT NULL
+)
+
+END
+
+GO
+
+CREATE NONCLUSTERED INDEX  IX_T_Framework_ElasticObjectUpdate_uElasticObjectUpdateId ON T_Framework_ElasticObjectUpdate ( [uElasticObjectUpdateId] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_T_Framework_ElasticObjectUpdate_dtCreatedOn ON T_Framework_ElasticObjectUpdate ( [dtCreatedOn] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_T_Framework_ElasticObjectUpdate_dtPickedForUpdate ON T_Framework_ElasticObjectUpdate ( [dtPickedForUpdate] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_T_Framework_ElasticObjectUpdate_iMainClientId ON T_Framework_ElasticObjectUpdate ( [iMainClientId] ASC ) 
+
+go
+/**********************************
+Default Values
+**********************************/
+
+--No Default values
+

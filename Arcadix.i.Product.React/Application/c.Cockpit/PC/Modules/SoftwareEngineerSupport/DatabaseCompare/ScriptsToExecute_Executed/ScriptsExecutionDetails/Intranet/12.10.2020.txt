@@ -1,0 +1,276 @@
+﻿/**********************************
+Following tables updated:
+1) t_TestDrive_FileSystem_TestFolder
+2) t_CMS_TextArea_Corpus
+3) t_CMS_Page_Editor_OfficeRibbonDefault
+4) t_CMS_PageProperty_TestDrive
+5) t_CMS_Page
+6) t_CMS_FileSystem_PageFolder
+7) t_testdrive_Test_Tasks
+8) t_TestDrive_Test
+**********************************/
+
+/**********************************
+Following procs updated:
+1) Proc_TestDrive_Test_AddEditTestFolderProperties - t_TestDrive_FileSystem_TestFolder
+2) Proc_CMS_TextArea_SaveCorpusData - t_CMS_TextArea_Corpus
+**********************************/
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_FileSystem_TestFolder' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_FileSystem_TestFolder ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_FileSystem_TestFolder set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_TextArea_Corpus' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_CMS_TextArea_Corpus ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_CMS_TextArea_Corpus set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_Page_Editor_OfficeRibbonDefault' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_CMS_Page_Editor_OfficeRibbonDefault ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_CMS_Page_Editor_OfficeRibbonDefault set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_PageProperty_TestDrive' AND COLUMN_NAME = 'cIsTaskImageTobeGenerated') 
+BEGIN
+ALTER TABLE t_CMS_PageProperty_TestDrive ADD cIsTaskImageTobeGenerated char(1)  DEFAULT ('Y')
+END
+			 
+GO
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_Page' AND COLUMN_NAME = 'cIsFusionVersion') 
+BEGIN
+ALTER TABLE t_CMS_Page ADD cIsFusionVersion char(1)  
+END
+
+GO	  	  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_Page' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_CMS_Page ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO	  
+/**********************************
+Default Values
+**********************************/
+update t_CMS_Page set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_FileSystem_PageFolder' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_CMS_FileSystem_PageFolder ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_CMS_FileSystem_PageFolder set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_testdrive_Test_Tasks' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_testdrive_Test_Tasks ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_testdrive_Test_Tasks set uModifiedByUserId= uUserId Where uModifiedByUserId is null
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test' AND COLUMN_NAME = 'uResultPageCertificateId') 
+BEGIN
+ALTER TABLE t_TestDrive_Test ADD uResultPageCertificateId uniqueidentifier  
+END
+
+GO
+	  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Test ADD uModifiedByUserId uniqueidentifier  
+END
+			 
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Test set uModifiedByUserId= uUserId Where uModifiedByUserId is null
+
+GO
+
+/**********************************
+Default Values
+**********************************/
+
+ALTER proc [dbo].[Proc_TestDrive_Test_AddEditTestFolderProperties]                                      
+(                                      
+    @iMainClientId int,                
+    @iFolderId int,                
+    @iParentFolderId int,                            
+    @vFolderName nvarchar(200),                            
+    @vFolderDescription ntext,                
+    @vLanguageXml ntext,             
+    @uUserId uniqueidentifier,      
+    @cIsForInternalTesting char(1)                    
+)                                      
+As                                      
+Begin                                      
+/********************************************************************************************                                                  
+                                                    
+  Created By: Arvind Sharma                                                  
+  Created Date: 27.09.2011                                                  
+  Description: Adds/Edits the test folder             
+                              
+  Modified By:                                                   
+  Modified Date:                                                   
+  Description:                                                   
+                                                  
+********************************************************************************************/                                   
+Declare @iTestFolderId int               
+if(@iFolderId=-1)                      
+BEGIN                  
+                               
+Declare @iNewFolderId int                             
+Insert into t_TestDrive_FileSystem_TestFolder (iTestParentFolderID,iMainClientId,dtCreatedOn,dtModifiedOn,cIsDeleted,vTestFolderName,vTestFolderDescription,uUserId,cIsForInternalTesting,uModifiedById) values
+(@iParentFolderId,@iMainClientId,GETDATE(),GETDATE(),'N',@vFolderName,@vFolderDescription,@uUserId,@cIsForInternalTesting,NULL)                            
+set @iNewFolderId =@@IDENTITY                    
+set @iTestFolderId = @iNewFolderId            
+select * from t_TestDrive_FileSystem_TestFolder where iTestFolderID =@iNewFolderId                            
+END                      
+ELSE                      
+BEGIN                      
+     
+ WITH TestFolderLevels (iTestFolderId)        
+   AS        
+   (        
+   -- Parent member definition        
+    SELECT iTestFolderId        
+    FROM t_TestDrive_FileSystem_TestFolder         
+    WHERE iTestFolderID = @iFolderId        
+    UNION ALL        
+   -- Recursive member definition        
+    SELECT P.iTestFolderID        
+    FROM t_TestDrive_FileSystem_TestFolder P        
+    INNER JOIN TestFolderLevels AS F        
+     ON P.iTestParentFolderID = F.iTestFolderId            
+   )        
+   -- Statement that executes the CTE and inserts the value into the Temp Table                   
+            SELECT iTestFolderId into #tbl_TestFolders FROM TestFolderLevels OPTION (MAXRECURSION 0)    
+        
+   --- updates the Folders in All the Levels for cIsForInternaltesting attributes.        
+            Update PF SET PF.cIsForInternalTesting=@cIsForInternalTesting         
+   FROM #tbl_TestFolders FL,t_TestDrive_FileSystem_TestFolder PF        
+   where FL.iTestFolderId = PF.iTestFolderID           
+        
+   --- updates the tasks in All the Levels for cIsForInternaltesting attributes.        
+            Update TP SET TP.cIsForInternalTesting=@cIsForInternalTesting        
+   FROM #tbl_TestFolders F,t_TestDrive_Test_TestProperty TP        
+   inner join t_TestDrive_Test P on P.uTestId =TP.uTestId    
+   where F.iTestFolderId = P.iFolderId        
+            --- Drop the Temp Table        
+            Drop Table #tbl_TestFolders       
+              
+UPDATE t_TestDrive_FileSystem_TestFolder SET                  
+dtModifiedOn=GETDATE(),vTestFolderName = @vFolderName,vTestFolderDescription =@vFolderDescription,cIsForInternalTesting =@cIsForInternalTesting,uModifiedById=@uUserId  where iTestFolderID =@iFolderId               
+set @iTestFolderId = @iFolderId               
+select * from t_TestDrive_FileSystem_TestFolder where iTestFolderID =@iFolderId    
+END               
+     
+--Adding in language table            
+            
+DELETE FROM t_TestDrive_FileSystem_TestFolder_Language WHERE iTestFolderId = @iTestFolderId                
+DECLARE @XmlDoc INT,                  
+@iLanguageId INT                  
+                  
+EXEC sp_xml_preparedocument @XmlDoc OUTPUT, @vLanguageXml                   
+DECLARE  Cur_Test CURSOR FOR                  
+SELECT  iLanguageId  FROM    OPENXML(@XmlDoc, 'Language/Id',1) WITH (iLanguageId INT '.' )                    
+OPEN  Cur_Test                   
+FETCH NEXT from Cur_Test into @iLanguageId                  
+WHILE( @@FETCH_STATUS <> -1 )                   
+BEGIN                  
+ INSERT INTO t_TestDrive_FileSystem_TestFolder_Language values(@iTestFolderId,@iLanguageId)                  
+FETCH NEXT FROM Cur_Test INTO @iLanguageId                  
+END                  
+CLOSE Cur_Test                  
+DEALLOCATE Cur_Test             
+                   
+End 
+
+GO 
+
+ALTER  proc [dbo].[Proc_CMS_TextArea_SaveCorpusData]  
+(  
+@iLanguageId int,  
+@iMainClientId int,  
+@iCorpusId int,  
+@uUserId uniqueidentifier,  
+@vCorpusName varchar(255),  
+@dLSAVector decimal(3,2),  
+@cIsLocal char(1)  
+)  
+As   
+Begin   
+if(@iCorpusId = 0)  
+begin  
+insert into t_CMS_TextArea_Corpus (iMainClientId,vCorpusName,iLanguageId,cIsDeleted,dtCreatedOn,dtModifiedOn,uUserId,dLSAVector,cIsLocal) values(@iMainClientId,@vCorpusName,@iLanguageId,'N',GETDATE(),GETDATE(),@uUserId,@dLSAVector,@cIsLocal)  
+set @iCorpusId = @@identity   
+End  
+Else  
+begin  
+update t_CMS_TextArea_Corpus set vCorpusName=@vCorpusName,dtModifiedOn = GETDATE(),uUserId=@uUserId,dLSAVector=@dLSAVector,cIsLocal=@cIsLocal where iCorpusId=@iCorpusId  
+End  
+select * from t_CMS_TextArea_Corpus where iCorpusId=@iCorpusId  
+End  
+
+GO

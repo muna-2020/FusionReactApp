@@ -1,0 +1,5 @@
+﻿List of Table Columns changed as Identity in Service Db (needs to be updated from SQL Editor)
+
+1) t_Framework_Country
+2) t_Framework_Country_Data
+3) t_Framework_Language

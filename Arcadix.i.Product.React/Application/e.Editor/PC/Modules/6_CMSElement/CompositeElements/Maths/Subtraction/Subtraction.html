@@ -1,0 +1,131 @@
+﻿<div class="mathSection">
+    <!--Solution Mode-->
+    <div class="mathBlock" *ngIf="Mode=='Solution'">
+        <table class="subNumericTable">
+            <tr *ngFor="let arr of arrlist">
+                <td *ngFor="let val of arr" [ngClass]="{'singleCol': colcount==1}">
+                    {{val.value}}
+                </td>
+            </tr>
+
+            <!--carry over-->
+            <tr class="sub appendBlock">
+                <td *ngFor="let carry of arrcarry" id="carry.carryid">
+                    <div class="appendCol bg-color">
+                        {{carry.carryval}}
+                    </div>
+                </td>
+
+            </tr>
+            <tr class="rowBorder">
+                <td [attr.colspan]="colcount"></td>
+            </tr>
+            <!--result-->
+            <tr class="result">
+                <td *ngFor="let result of arrresults" class="bg-color" id="{{result.resultid}}">
+                    {{result.value}}
+                </td>
+            </tr>
+            <!--result-->
+            <tr class="DoubleUnderlinedBorder">
+                <td [attr.colspan]="colcount"></td>
+            </tr>
+        </table>
+    </div>
+    <!--Display Mode-->
+    <div class="mathBlock" *ngIf="Mode=='Display'">
+        <!--carry over pop up-->
+        <div [hidden]="!showcarrypopup">
+            <div class="smallPopUp" [ngStyle]="{'margin-left': marginleftsmall+'px','top':'88px'}">
+                <div class="smallPopUpBlock">
+                    <div class="numberRow">
+                        <button *ngFor="let carry of carryover" id="{{carry.id}}" (click)="carryoverclick(carry.value)">
+                            {{carry.value}}
+                        </button>
+                    </div>
+                    <div class="closeIcon" (click)="closecarryoverpopup()"></div>
+                </div>
+            </div>
+        </div>
+
+        <!--numbers select pop up-->
+        <div [hidden]="!showrnumberpopup">
+            <div class="popUp" [ngStyle]="{'margin-left': marginleft+'px','top':'125px'}">
+                <div class="popUpBlock">
+                    <div class="numberRow">
+                        <button *ngFor="let num of arrfirstnumbers" id="{{num.id}}" (click)="numberspopupclick(num.value)">
+                            {{num.value}}
+                        </button>
+                    </div>
+                    <div class="numberRow">
+                        <button *ngFor="let num of arrsecondnumbers" id="{{num.id}}" (click)="numberspopupclick(num.value)">
+                            {{num.value}}
+                        </button>
+                    </div>
+                    <div class="closeIcon" (click)="closenumberpopup()"></div>
+                </div>
+            </div>
+        </div>
+
+        <table class="subNumericTable">
+            <tr *ngFor="let arr of arrlist">
+                <td *ngFor="let val of arr" [ngClass]="{'singleCol': colcount==1}">
+                    {{val.value}}
+                </td>
+            </tr>
+
+            <!--carry over-->
+            <tr class="sub appendBlock">
+                <td *ngFor="let carry of arrcarry" id="carry.carryid">
+                    <div class="appendCol bg-color" (click)="showcarryover(carry.carryid)">
+                        {{carry.carryval}}
+                    </div>
+                </td>
+
+            </tr>
+            <tr class="rowBorder">
+                <td [attr.colspan]="colcount"></td>
+            </tr>
+            <!--result-->
+            <tr class="result">
+                <td *ngFor="let result of arrresults" class="bg-color" id="{{result.resultid}}" (click)="shownumbers(result.resultid)">
+                    {{result.value}}
+                </td>
+            </tr>
+            <tr class="DoubleUnderlinedBorder">
+                <td [attr.colspan]="colcount"></td>
+            </tr>
+        </table>
+    </div>
+    <!--Edit Mode-->
+    <div class="mathBlock" *ngIf="Mode=='Edit'">
+        <table class="subNumericTable">
+            <tr *ngFor="let arr of arrlist">
+                <td *ngFor="let val of arr" [ngClass]="{'singleCol': colcount==1}">
+                    <input id="txt_{{val.id}}" (ngModelChange)="numchange($event)" type="text" min="0" max="9" maxlength="1" [(ngModel)]="val.value" (blur)="validate(false)"
+                           onkeypress='return event.charCode >= 48 && event.charCode <= 57' />
+                </td>
+            </tr>
+            <!--carry over-->
+            <tr class="sub appendBlock editMode">
+                <td *ngFor="let carry of arrcarry" id="carry.carryid">
+                    <div class="appendCol bg-color">
+                        {{carry.carryval}}
+                    </div>
+                </td>
+
+            </tr>
+            <tr class="rowBorder">
+                <td [attr.colspan]="colcount"></td>
+            </tr>
+            <!--result-->
+            <tr class="result editMode">
+                <td *ngFor="let result of arrresults" class="bg-color" id="{{result.resultid}}">
+                    {{result.value}}
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+

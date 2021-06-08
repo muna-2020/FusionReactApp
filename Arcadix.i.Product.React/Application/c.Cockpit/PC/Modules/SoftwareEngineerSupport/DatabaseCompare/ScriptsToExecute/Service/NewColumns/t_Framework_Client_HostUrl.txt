@@ -1,0 +1,62 @@
+/**********************************
+New column		
+**********************************/
+
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_Client_HostUrl' AND COLUMN_NAME = 'vPrefetchURL') 
+BEGIN 
+alter table t_Framework_Client_HostUrl add vPrefetchURL	nvarchar(max)
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+GO
+Update t_Framework_Client_HostUrl
+set vPrefetchURL ='prefetchdev.lernpassplus.ch'
+where iHostURLId in (select iHostURLId from t_Framework_Client_HostUrl where vHostUrl like '%devfusion%' and cIsDeleted ='N' and cIsForFusion ='Y')
+
+GO
+
+Update t_Framework_Client_HostUrl
+set vPrefetchURL ='prefetchtest.lernpassplus.ch'
+where iHostURLId in (select iHostURLId from t_Framework_Client_HostUrl where vHostUrl like '%testfusion%' and cIsDeleted ='N' and cIsForFusion ='Y')
+
+GO
+Update t_Framework_Client_HostUrl
+set vPrefetchURL ='prefetch.lernpassplus.ch'
+where iHostURLId in (select iHostURLId from t_Framework_Client_HostUrl where vHostUrl not like '%testfusion%' and vHostUrl not like '%devfusion%' and vHostUrl not like '%localhost%' and cIsDeleted ='N' and cIsForFusion ='Y')
+
+GO
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_Framework_FrameworkClient_GetClientConfiguration
+FProc_Framework_FrameworkClient_GetClientConfigurationByClientId
+JProc_Framework_FrameworkClient_GetActiveClientDetails
+JProc_Framework_FrameworkClient_GetAllClientsForMainClient
+JProc_Framework_FrameworkClient_GetClientConfiguration
+JProc_Framework_FrameworkClient_GetClientConfigurationByClientId
+p_Framework_ClientHostUrl_AddData
+p_Framework_ClientHostUrl_DeleteData
+p_Framework_ClientHostUrl_EditData
+p_Framework_ClientHostUrl_GetData
+Proc_Framework_ClientHostURL_GetClientHostURLData
+Proc_Framework_FrameworkClient_GetActiveClientDetails
+Proc_Framework_FrameworkClient_GetAllClientsForMainClient
+Proc_Framework_FrameworkClient_GetAllHostUrlDetailsByMainClient
+Proc_Framework_FrameworkClient_GetClientConfiguration
+Proc_Framework_FrameworkClient_GetClientConfiguration_JobSkills
+Proc_Framework_FrameworkClient_GetClientConfigurationByClientId
+Proc_Fusion_Framework_ClientUrls_GetData
+Proc_Fusion_Framework_FrameworkClient_GetClientConfiguration
+Proc_Fusion_Framework_FrameworkClient_GetClientConfigurationByClientId
+Proc_Fusion_Framework_FrameworkClient_GetClientConfigurationByTargetDeviceAndApplicationType
+Proc_TestDrive_ClientHostURL_SaveClientHostURLData
+Proc_TestDrive_ClientHostURL_SaveClientHostURLData_Beta
+Proc_TestDrive_ClientHostURL_SaveClientHostURLData_Old
+proc_TestDrive_Deployement_CreateMainClientConfiguration
+Proc_Testdrive_UpdateHostURL
+****************************************************************/

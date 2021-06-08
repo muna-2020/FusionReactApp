@@ -1,0 +1,61 @@
+﻿
+insert into t_CMS_ElementType(iElementTypeId, vElementTypeName,	vMainElementClass,	vEditorProvider,	vTestTaskToPDFProvider,	vTestProvider,	vWebsiteProvider,	vOfflineProvider,	dtCreatedOn,	dtModifiedOn,	vMainElementClass_Fusion ) values( 59, 'TextHighlight', NULL, NULL, NULL, NULL, NULL, NULL, GETDATE(), GETDATE(), NULL )
+
+insert into t_CMS_ElementType(iElementTypeId, vElementTypeName,	vMainElementClass,	vEditorProvider,	vTestTaskToPDFProvider,	vTestProvider,	vWebsiteProvider,	vOfflineProvider,	dtCreatedOn,	dtModifiedOn,	vMainElementClass_Fusion ) values( 58, 'LineAssign', NULL, NULL, NULL, NULL, NULL, NULL, GETDATE(), GETDATE(), NULL )
+
+insert into t_CMS_ElementType(iElementTypeId, vElementTypeName,	vMainElementClass,	vEditorProvider,	vTestTaskToPDFProvider,	vTestProvider,	vWebsiteProvider,	vOfflineProvider,	dtCreatedOn,	dtModifiedOn,	vMainElementClass_Fusion ) values( 60, 'CrossOutWord', NULL, NULL, NULL, NULL, NULL, NULL, GETDATE(), GETDATE(), NULL )
+
+insert into t_CMS_ElementType(iElementTypeId, vElementTypeName,	vMainElementClass,	vEditorProvider,	vTestTaskToPDFProvider,	vTestProvider,	vWebsiteProvider,	vOfflineProvider,	dtCreatedOn,	dtModifiedOn,	vMainElementClass_Fusion ) values( 62,'AudioRecorder', NULL, NULL, NULL, NULL, NULL, NULL, GETDATE(), GETDATE(), NULL )
+
+DROP INDEX t_CMS_Element_Image._dta_index_t_CMS_Element_Image_7_366624349__K2_1_3_4_5_6_7_8_9_10_11_12_13;
+
+GO
+
+ALTER TABLE t_CMS_Element_Image ALTER COLUMN vImageType CHAR(4)
+
+GO
+
+CREATE NONCLUSTERED INDEX IX_t_CMS_Element_Image_iElementId ON t_CMS_Element_Image ( [iElementId] ASC )
+CREATE NONCLUSTERED INDEX IX_t_CMS_Element_Image_iElementImageWidth ON t_CMS_Element_Image ( [iElementImageWidth] ASC )
+CREATE NONCLUSTERED INDEX IX_t_CMS_Element_Image_iElementImageHeight ON t_CMS_Element_Image ( [iElementImageHeight] ASC )
+CREATE NONCLUSTERED INDEX IX_t_CMS_Element_Image_cShowTitle ON t_CMS_Element_Image ( [cShowTitle] ASC )
+CREATE NONCLUSTERED INDEX IX_t_CMS_Element_Image_cShowDescription ON t_CMS_Element_Image ( [cShowDescription] ASC )
+CREATE NONCLUSTERED INDEX IX_t_CMS_Element_Image_vImageType ON t_CMS_Element_Image ( [vImageType] ASC )
+CREATE NONCLUSTERED INDEX IX_t_CMS_Element_Image_iImageFileSize ON t_CMS_Element_Image ( [iImageFileSize] ASC )
+CREATE NONCLUSTERED INDEX IX_t_CMS_Element_Image_iImageFileVersion ON t_CMS_Element_Image ( [iImageFileVersion] ASC )
+CREATE NONCLUSTERED INDEX IX_t_CMS_Element_Image_cIsHighResolution ON t_CMS_Element_Image ( [cIsHighResolution] ASC )
+CREATE NONCLUSTERED INDEX IX_t_CMS_Element_Image_iImageHighResolutionFileSize ON t_CMS_Element_Image ( [iImageHighResolutionFileSize] ASC )
+
+--Addition animation changes
+update t_CMS_Element_Animation_Attribute set vAttributeName='InitialArcadix_Numbers' where iElementAnimationAttributeId=11448
+update t_CMS_Element_Animation_Attribute set vAttributeName='InitialArcadix_RowCount' where iElementAnimationAttributeId=11446
+update t_CMS_Element_Animation_Attribute set vAttributeName='InitialArcadix_ColumnCount' where iElementAnimationAttributeId=11447
+update t_CMS_Element_Animation_Attribute set vAttributeName='InitialArcadix_Mode' where iElementAnimationAttributeId=11449
+update t_CMS_Element_Animation_Attribute set vAttributeName='ResultArcadix_CarryOver' where iElementAnimationAttributeId=11450
+update t_CMS_Element_Animation_Attribute set vAttributeName='ResultArcadix_ResultValue' where iElementAnimationAttributeId=11451
+insert into t_CMS_Element_Animation_Attribute values(3517,'InitialArcadix_FrameWidth',7,null,null,null)
+
+--Subtraction animation changes
+update t_CMS_Element_Animation_Attribute set vAttributeName='InitialArcadix_RowCount' where iElementAnimationAttributeId=11676
+update t_CMS_Element_Animation_Attribute set vAttributeName='InitialArcadix_ColumnCount' where iElementAnimationAttributeId=11677
+update t_CMS_Element_Animation_Attribute set vAttributeName='InitialArcadix_Numbers' where iElementAnimationAttributeId=11678
+update t_CMS_Element_Animation_Attribute set vAttributeName='InitialArcadix_Mode' where iElementAnimationAttributeId=11679
+update t_CMS_Element_Animation_Attribute set vAttributeName='ResultArcadix_CarryOver' where iElementAnimationAttributeId=11680
+update t_CMS_Element_Animation_Attribute set vAttributeName='ResultArcadix_ResultValue' where iElementAnimationAttributeId=11681
+insert into t_CMS_Element_Animation_Attribute values(3533,'InitialArcadix_FrameWidth',7,null,null,null)
+
+--Multiplication animation changes
+update t_CMS_Element_Animation_Attribute set vAttributeName='InitialArcadix_Numbers' where iElementAnimationAttributeId=12023
+update t_CMS_Element_Animation_Attribute set vAttributeName='ResultArcadix_IntermediateValue' where iElementAnimationAttributeId=12024
+update t_CMS_Element_Animation_Attribute set vAttributeName='InitialArcadix_Mode' where iElementAnimationAttributeId=12022
+update t_CMS_Element_Animation_Attribute set vAttributeName='ResultArcadix_CarryOver' where iElementAnimationAttributeId=12025
+update t_CMS_Element_Animation_Attribute set vAttributeName='ResultArcadix_ResultValue' where iElementAnimationAttributeId=12026
+insert into t_CMS_Element_Animation_Attribute values(3547,'InitialArcadix_FrameWidth',7,null,null,null)
+
+--Division animation changes
+update t_CMS_Element_Animation_Attribute set vAttributeName='InitialArcadix_Numbers' where iElementAnimationAttributeId=12821
+update t_CMS_Element_Animation_Attribute set vAttributeName='ResultArcadix_IntermediateValue' where iElementAnimationAttributeId=12825
+update t_CMS_Element_Animation_Attribute set vAttributeName='InitialArcadix_Mode' where iElementAnimationAttributeId=12824
+update t_CMS_Element_Animation_Attribute set vAttributeName='ResultArcadix_Quotient' where iElementAnimationAttributeId=12823
+update t_CMS_Element_Animation_Attribute set vAttributeName='ResultArcadix_Remainder' where iElementAnimationAttributeId=12822
+insert into t_CMS_Element_Animation_Attribute values(3567,'InitialArcadix_FrameWidth',7,null,null,null)

@@ -1,0 +1,88 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_Client' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_Framework_Client ADD dtModifiedOn datetime  
+END
+
+GO	 
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_Client' AND COLUMN_NAME = 'cIsDeleted') 
+BEGIN
+ALTER TABLE t_Framework_Client ADD cIsDeleted char(1)  
+END
+
+GO		   
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_Client' AND COLUMN_NAME = 'cIsForFusion') 
+BEGIN
+ALTER TABLE t_Framework_Client ADD cIsForFusion char(1)  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_Framework_Client set cIsDeleted='N' Where cIsDeleted is null
+
+GO
+update t_Framework_Client set dtModifiedOn = getdate() Where dtModifiedOn is null
+
+GO
+update t_Framework_Client set cIsForFusion='N' where cIsForFusion is null
+
+GO
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_Framework_FrameworkClient_GetClientConfiguration
+FProc_Framework_FrameworkClient_GetClientConfigurationByClientId
+FProc_TestDrive_BaseObject_Client_GetData
+JProc_Framework_Exception_GetExceptionDetailsForManClientAndApplication
+JProc_Framework_FrameworkClient_GetActiveClientDetails
+JProc_Framework_FrameworkClient_GetAllClientsForMainClient
+JProc_Framework_FrameworkClient_GetClientConfiguration
+JProc_Framework_FrameworkClient_GetClientConfigurationByClientId
+JProc_Framework_FrameworkClient_GetClientConfigurationForMainClient
+JProc_Framework_FrameworkMainClient_GetStateSpecificConfiguration
+JProc_Framework_FrameworkRole_GetRolesByClientId
+Proc_Framework_Exception_GetExceptionDetailsForManClientAndApplication
+Proc_Framework_Exception_GetExceptionDetailsForSchoolRegistration
+Proc_Framework_FrameworkClient_GetActiveClientDetails
+Proc_Framework_FrameworkClient_GetAllClientsForMainClient
+Proc_Framework_FrameworkClient_GetAllHostUrlDetailsByMainClient
+Proc_Framework_FrameworkClient_GetClientConfiguration
+Proc_Framework_FrameworkClient_GetClientConfiguration_JobSkills
+Proc_Framework_FrameworkClient_GetClientConfigurationByClientId
+Proc_Framework_FrameworkClient_GetClientConfigurationForMainClient
+Proc_Framework_FrameworkMainClient_GetStateSpecificConfiguration
+Proc_Framework_FrameworkRole_GetRolesByClientId
+proc_TestDrive_Deployement_CreateMainClientConfiguration
+****************************************************************/
+
+/********************Procs need to Review**********************
+FProc_Framework_FrameworkClient_GetClientConfiguration
+FProc_Framework_FrameworkClient_GetClientConfigurationByClientId
+FProc_TestDrive_BaseObject_Client_GetData
+JProc_Framework_Exception_GetExceptionDetailsForManClientAndApplication
+JProc_Framework_FrameworkClient_GetActiveClientDetails
+JProc_Framework_FrameworkClient_GetAllClientsForMainClient
+JProc_Framework_FrameworkClient_GetClientConfiguration
+JProc_Framework_FrameworkClient_GetClientConfigurationByClientId
+JProc_Framework_FrameworkClient_GetClientConfigurationForMainClient
+JProc_Framework_FrameworkMainClient_GetStateSpecificConfiguration
+JProc_Framework_FrameworkRole_GetRolesByClientId
+Proc_Framework_Exception_GetExceptionDetailsForManClientAndApplication
+Proc_Framework_Exception_GetExceptionDetailsForSchoolRegistration
+Proc_Framework_FrameworkClient_GetActiveClientDetails
+Proc_Framework_FrameworkClient_GetAllClientsForMainClient
+Proc_Framework_FrameworkClient_GetAllHostUrlDetailsByMainClient
+Proc_Framework_FrameworkClient_GetClientConfiguration
+Proc_Framework_FrameworkClient_GetClientConfiguration_JobSkills
+Proc_Framework_FrameworkClient_GetClientConfigurationByClientId
+Proc_Framework_FrameworkClient_GetClientConfigurationForMainClient
+Proc_Framework_FrameworkMainClient_GetStateSpecificConfiguration
+Proc_Framework_FrameworkRole_GetRolesByClientId
+proc_TestDrive_Deployement_CreateMainClientConfiguration :Changed
+****************************************************************/

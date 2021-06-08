@@ -1,0 +1,364 @@
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Member_State' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_TestDrive_Member_State ADD uModifiedByUserId uniqueidentifier  
+END  
+Go
+
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Member_State set uModifiedByUserId = uUserId  
+Go
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+
+
+
+alter PROCEDURE Proc_TestDrive_StellwerkExternalDataSourceProvider_MapAndSaveMemberData                                          
+(                                                
+    @MemberXml nvarchar(max),              
+ @vMemberType nvarchar(500),              
+ @uSchoolId uniqueidentifier,              
+ @imainclientId int,              
+ @ExtranetTeacherId nvarchar(max),              
+ @iStateId int              
+)                                                
+AS                                            
+ /********************************************************************************************                                                                        
+   Changed By: Sendil                                                                       
+   Changed Date: 08.03.2016              
+   Description: updates member information               
+ ********************************************************************************************/                                                                        
+Begin              
+ Declare @TempMemberId uniqueidentifier              
+ Declare @DocHandle int              
+              
+ --set @MemberXml = replace(@MemberXml,'&','&amp;')              
+              
+ EXECUTE sp_xml_preparedocument @DocHandle OUTPUT,@MemberXml              
+ if(@vMemberType = 'TEACHER')              
+ Begin              
+  if not exists(select * from t_TestDrive_Member_Teacher_ExternalSourceMapping where uTeacherExternalSourceId = @ExtranetTeacherId)              
+  Begin              
+   set @TempMemberId = newid()              
+              
+   insert into t_TestDrive_Member_Teacher(uTeacherId,uSchoolId,iTitleId,vFirstName,vName,vPhoneSchool,vPhonePrivate,vEmail,vPassword,dtCreatedOn,dtModifiedOn,vIPLastModifiedFrom ,              
+    dtWhenLoginEmailSent,               
+    cIsDeleted ,iMainClientId ,vStreet ,vTown ,iZip ,vFunction ,uLastVisitedClassId              
+    ,iProfilePictureFileSize ,iProfilePictureFileVersion ,vProfilePictureFileType              
+    ,cIsTeacherCreatedByTeacher,uUserId,uTeacherCreatedById,iLanguageId,vAdministrationIP              
+    ,vTestIP,vPasswordHash,vShortCut,cIsExternal)           
+   SELECT @TempMemberId ,@uSchoolId ,iTitleId              
+    ,vFirstName ,vName ,vPhoneSchool ,vPhonePrivate ,vEmail              
+    ,vPassword ,GEtDate(), GETDATe(),      
+    vIPLastModifiedFrom ,              
+    GETDATE(),               
+    cIsDeleted ,@imainclientId ,vStreet ,vTown ,iZip ,vFunction ,uLastVisitedClassId              
+    ,iProfilePictureFileSize ,iProfilePictureFileVersion ,vProfilePictureFileType              
+    ,cIsTeacherCreatedByTeacher,uUserId,uTeacherCreatedById,iLanguageId,vAdministrationIP              
+    ,vTestIP,vPasswordHash,'','Y'               
+   FROM OPENXML (@DocHandle, '/MemberData',1)              
+   WITH               
+   (              
+    uTeacherId uniqueidentifier 'uTeacherId'              
+    ,uSchoolId nvarchar(max) 'uSchoolId'              
+    ,iTitleId nvarchar(max) 'iTitleId'              
+    ,vFirstName nvarchar(max) 'vFirstName'              
+    ,vName nvarchar(max) 'vName'              
+    ,vPhoneSchool nvarchar(max) 'vPhoneSchool'              
+    ,vPhonePrivate nvarchar(max) 'vPhonePrivate'              
+    ,vEmail nvarchar(max) 'vEmail'              
+    ,vPassword nvarchar(max) 'vPassword'              
+    --,dtCreatedOn datetime 'dtCreatedOn'              
+    --,dtModifiedOn datetime 'dtModifiedOn'              
+    ,vIPLastModifiedFrom nvarchar(max) 'vIPLastModifiedFrom'              
+    --,dtWhenLoginEmailSent datetime 'dtWhenLoginEmailSent'              
+    ,cIsDeleted nvarchar(max) 'cIsDeleted'              
+    ,iMainClientId nvarchar(max) 'iMainClientId'              
+    ,vStreet nvarchar(max) 'vStreet'              
+    ,vTown nvarchar(max) 'vTown'              
+    ,iZip nvarchar(max) 'iZip'              
+    ,vFunction nvarchar(max) 'vFunction'              
+    ,uLastVisitedClassId nvarchar(max) 'uLastVisitedClassId'       
+    ,iProfilePictureFileSize nvarchar(max) 'iProfilePictureFileSize'              
+    ,iProfilePictureFileVersion nvarchar(max) 'iProfilePictureFileVersion'              
+    ,vProfilePictureFileType nvarchar(max) 'vProfilePictureFileType'              
+    ,cIsTeacherCreatedByTeacher nvarchar(max) 'cIsTeacherCreatedByTeacher'              
+    ,uUserId nvarchar(max) 'uUserId'              
+    ,uTeacherCreatedById uniqueidentifier 'uTeacherCreatedById'              
+    ,iLanguageId nvarchar(max) 'iLanguageId'              
+    ,vAdministrationIP nvarchar(max) 'vAdministrationIP'              
+    ,vTestIP nvarchar(max) 'vTestIP'              
+    ,vPasswordHash nvarchar(max) 'vPasswordHash'              
+   )              
+   if exists(select uTeacherId from t_TestDrive_Member_Teacher where uTeacherId = @TempMemberId)              
+   Begin              
+    insert into t_TestDrive_Member_Teacher_ExternalSourceMapping values (@TempMemberId,null,null,@imainclientId,@uSchoolId,null,@ExtranetTeacherId,@ExtranetTeacherId,getdate(),getdate(),NULL)              
+   end              
+  End              
+                
+  select @TempMemberId = uTeacherId from t_TestDrive_Member_Teacher_ExternalSourceMapping where uTeacherExternalSourceId = @ExtranetTeacherId              
+              
+              
+  select *, iStateId, vSchoolName, '00000000-0000-0000-0000-000000000000' uClassId,'00000000-0000-0000-0000-000000000000' 'MainTeacherId',              
+  'N' cIsTeacherCreatedByTeacher, tt.uTeacherId 'UserId'              
+   from t_testdrive_member_teacher tt               
+  join t_TestDrive_Member_Teacher_ExternalSourceMapping tm on tm.uTeacherId = tt.uTeacherId              
+  join t_testdrive_member_school ts on ts.uSchoolId = tt.uSchoolId               
+  where tt.uTeacherId = @TempMemberId              
+              
+  select * from t_TestDrive_Member_Teacher_ExternalSourceMapping where uTeacherId = @TempMemberId              
+  
+  if not exists(select * from t_TestDrive_Member_Teacher_School where uTeacherId = @TempMemberId and uSchoolId = @uSchoolId)   
+   Begin  
+       insert into t_TestDrive_Member_Teacher_School(uTeacherSchoolId,uSchoolId,uTeacherId,cIsAdmin,cIsDeleted) values  
+    (NEWID(),@uSchoolId,@TempMemberId,'N','N')  
+   End    
+  Else  
+   Begin  
+          update t_TestDrive_Member_Teacher_School set cIsDeleted = 'N' WHERE uTeacherId = @TempMemberId and uSchoolId = @uSchoolId  
+   End  
+               
+ End              
+ if(@vMemberType = 'SCHOOL')              
+ Begin              
+   if not exists(select * from t_TestDrive_Member_school_ExternalSourceMapping where uSchoolExternalSourceId = cast(@uSchoolId as nvarchar(36)))              
+   Begin              
+    set @TempMemberId = newid()              
+              
+    insert into t_TestDrive_Member_School(uSchoolId              
+      ,vSchoolName              
+      ,iStateId              
+      ,iTitleId              
+      ,vFirstName              
+      ,vName              
+      ,vStreet              
+      ,iZIPCode              
+      ,vTown              
+      ,vPhone              
+      ,vEmail              
+      ,vPassword              
+      ,dtCreatedOn            
+      ,dtModifiedOn    
+      ,vIPLastModifiedFrom              
+      ,dtWhenLoginlEmailSent               
+      ,cIsDeleted              
+      ,iMainClientId              
+      ,iLanguageId              
+      ,cIsTestSchool              
+      ,iSchoolTypeId              
+      ,cHasLearnCoacher              
+      ,iProfilePictureFileSize              
+      ,iProfilePictureFileVersion              
+      ,vProfilePictureFileType              
+      ,vPhonePrivate              
+      ,uUserId              
+      ,vAdministrationIP              
+      ,vTestIP              
+      ,vPasswordHash              
+      ,uLastVisitedTeacherId      
+   ,cIsExternal)             
+    SELECT @TempMemberId              
+      ,vSchoolName              
+      ,@iStateId              
+      ,iTitleId              
+      ,vFirstName              
+      ,vName              
+      ,vStreet              
+      ,iZIPCode              
+      ,vTown              
+      ,vPhone              
+      ,vEmail              
+      ,vPassword              
+      ,GetDAte() --CASE  WHEN dtCreatedOn= '' THEN null WHEN dtCreatedOn< > '' THEN convert(datetime,dtCreatedOn,104) END              
+      ,GetDAte() --CASE  WHEN dtModifiedOn= '' THEN null WHEN dtModifiedOn< > '' THEN convert(datetime,dtModifiedOn,104) END              
+      ,vIPLastModifiedFrom              
+      ,GetDAte() --CASE  WHEN dtWhenLoginlEmailSent= '' THEN null WHEN dtWhenLoginlEmailSent< > '' THEN convert(datetime,dtWhenLoginlEmailSent,104) END               
+      ,cIsDeleted              
+      ,@imainclientId              
+      ,iLanguageId              
+      ,cIsTestSchool            
+      ,iSchoolTypeId              
+      ,cHasLearnCoacher              
+      ,iProfilePictureFileSize              
+      ,iProfilePictureFileVersion              
+      ,vProfilePictureFileType              
+      ,vPhonePrivate              
+      ,uUserId              
+      ,vAdministrationIP              
+      ,vTestIP              
+      ,vPasswordHash              
+      ,uLastVisitedTeacherId      
+   ,'Y'             
+      FROM OPENXML (@DocHandle, '/MemberData',1)              
+    WITH               
+    (              
+       uSchoolId uniqueidentifier 'uSchoolId'              
+      ,vSchoolName nvarchar(max) 'vSchoolName'              
+      ,iStateId nvarchar(max) 'iStateId'              
+      ,iTitleId nvarchar(max) 'iTitleId'              
+      ,vFirstName nvarchar(max) 'vFirstName'              
+      ,vName nvarchar(max) 'vName'              
+      ,vStreet nvarchar(max) 'vStreet'              
+      ,iZIPCode nvarchar(max) 'iZIPCode'              
+      ,vTown nvarchar(max) 'vTown'              
+      ,vPhone nvarchar(max) 'vPhone'              
+      ,vEmail nvarchar(max) 'vEmail'              
+      ,vPassword nvarchar(max) 'vPassword'              
+      --,dtCreatedOn datetime 'dtCreatedOn'              
+      --,dtModifiedOn datetime 'dtModifiedOn'              
+      ,vIPLastModifiedFrom nvarchar(max) 'vIPLastModifiedFrom'              
+      --,dtWhenLoginlEmailSent nvarchar(max) 'dtWhenLoginlEmailSent'              
+      ,cIsDeleted nvarchar(max) 'cIsDeleted'              
+      ,iMainClientId nvarchar(max) 'iMainClientId'              
+      ,iLanguageId nvarchar(max) 'iLanguageId'              
+      ,cIsTestSchool nvarchar(max) 'cIsTestSchool'              
+      ,iSchoolTypeId nvarchar(max) 'iSchoolTypeId'              
+      ,cHasLearnCoacher nvarchar(max) 'cHasLearnCoacher'              
+      ,iProfilePictureFileSize nvarchar(max) 'iProfilePictureFileSize'              
+      ,iProfilePictureFileVersion nvarchar(max) 'iProfilePictureFileVersion'              
+      ,vProfilePictureFileType nvarchar(max) 'vProfilePictureFileType'              
+      ,vPhonePrivate nvarchar(max) 'vPhonePrivate'              
+      ,uUserId nvarchar(max) 'uSchoolId'              
+      ,vAdministrationIP nvarchar(max) 'vAdministrationIP'              
+      ,vTestIP nvarchar(max) 'vTestIP'              
+      ,vPasswordHash nvarchar(max) 'vPasswordHash'              
+      ,uLastVisitedTeacherId uniqueidentifier 'uLastVisitedTeacherId'              
+    )              
+    if exists(select uschoolid from t_TestDrive_Member_School where uSchoolId = @TempMemberId)              
+    begin              
+     insert into t_TestDrive_Member_school_ExternalSourceMapping values (@TempMemberId, @uSchoolId, @imainclientId,@uSchoolId,GETDATE(),getdate(),null)              
+    end              
+   End              
+   select @TempMemberId = uSchoolId from t_TestDrive_Member_school_ExternalSourceMapping where uSchoolExternalSourceId = cast(@uSchoolId as nvarchar(36))              
+              
+   select * from t_TestDrive_Member_School where uSchoolId = @TempMemberId              
+   select * from t_TestDrive_Member_school_ExternalSourceMapping where uSchoolId = @TempMemberId              
+ End              
+ if(@vMemberType = 'STATE')              
+ Begin              
+                
+  if not exists(select * from t_TestDrive_Member_State_ExternalSourceMapping where iStateExternalSourceId = @iStateId)              
+  Begin              
+   Declare @tempStateId int              
+                 
+              
+   insert into t_TestDrive_Member_State (iDisplayOrder,iMainClientId,iStateNumberForTestToken,cHasLearnCoacher,vLogoFileName,
+   iLogoSize,iLogoFileVersion,vLogoFileType,iTitleId,vFirstName,vName,vLongName,cIsUsedForDemoTestActivityRecording,cIsDeleted,dtModifiedOn,dtCreatedOn,uUserId)             
+   SELECT iDisplayOrder              
+     ,@imainclientId              
+     ,iStateNumberForTestToken              
+     ,cHasLearnCoacher              
+     ,vLogoFileName              
+     ,iLogoSize              
+     ,iLogoFileVersion              
+     ,vLogoFileType              
+     ,iTitleId              
+     ,vFirstName              
+     ,vName              
+     ,vLongName,cIsUsedForDemoTestActivityRecording,'N',GETDATE(),GETDATE(),null              
+    FROM OPENXML (@DocHandle, '/MemberData',1)              
+    WITH               
+    (              
+     iDisplayOrder nvarchar(max) 'iDisplayOrder'              
+     ,iMainClientId nvarchar(max) 'iMainClientId'              
+     ,iStateNumberForTestToken nvarchar(max) 'iStateNumberForTestToken'              
+     ,cHasLearnCoacher nvarchar(max) 'cHasLearnCoacher'              
+     ,vLogoFileName nvarchar(max) 'vLogoFileName'              
+     ,iLogoSize nvarchar(max) 'iLogoSize'              
+     ,iLogoFileVersion nvarchar(max) 'iLogoFileVersion'              
+     ,vLogoFileType nvarchar(max) 'vLogoFileType'              
+     ,iTitleId nvarchar(max) 'iTitleId'              
+     ,vFirstName nvarchar(max) 'vFirstName'              
+     ,vName nvarchar(max) 'vName'              
+     ,vLongName nvarchar(max) 'vLongName'              
+     ,cIsUsedForDemoTestActivityRecording nvarchar(max) 'cIsUsedForDemoTestActivityRecording'                   
+    )              
+   set @tempStateId = @@IDENTITY              
+              
+   if exists (select istateId from t_TestDrive_Member_State where iStateId = @tempStateId)              
+   Begin              
+    insert into t_TestDrive_Member_State_ExternalSourceMapping values (@tempStateId, @iStateId, @imainclientId)              
+              
+    insert into t_TestDrive_Member_State_Data              
+    select @tempStateId              
+       ,iLanguageId              
+       ,vShortStateName              
+       ,vStateName              
+       FROM OPENXML (@DocHandle, '/MemberData/',1)              
+     WITH               
+     (               
+       iStateId nvarchar(max) 'iStateId'              
+      ,iLanguageId nvarchar(max) 'iLanguageId'              
+      ,vShortStateName nvarchar(max) 'vShortStateName'              
+      ,vStateName nvarchar(max) 'vStateName'              
+     )              
+   end              
+  End              
+  select @tempStateId = iStateId from t_TestDrive_Member_State_ExternalSourceMapping where iStateExternalSourceId = @iStateId              
+              
+  select * from t_TestDrive_Member_State where iStateId = @tempStateId              
+  select * from t_TestDrive_Member_State_ExternalSourceMapping where iStateId = @tempStateId              
+ End              
+ EXEC sp_xml_removedocument @DocHandle              
+End 
+
+
+  
+ 
+  
+  
+  
+
+
+/********************All Dependent Procs******************
+FProc_TestDrive_BaseObject_State_AddData
+FProc_TestDrive_BaseObject_State_DeleteData
+FProc_TestDrive_BaseObject_State_EditData
+FProc_TestDrive_BaseObject_State_GetData
+JProc_TestDrive_Pupil_GetPupilDetailsOfSameEmail
+JProc_TestDrive_State_GetAllStates_New
+Proc_TestDrive_ClassManagement_GetClassDataForPreview
+Proc_TestDrive_Cycle_GetClassTestsByCycleId
+Proc_TestDrive_Cycle_GetCycleClassByCycleId
+Proc_TestDrive_Cycle_GetSchoolTestsByCycleId
+Proc_TestDrive_Cycle_GetStatesByCycleId
+Proc_TestDrive_Cycle_School_GetCycleSchoolsByCycleId
+Proc_TestDrive_Demo_SaveDemoUserDetails
+proc_TestDrive_Member_GetSchoolDetailsBySchoolId
+proc_TestDrive_Member_School_InitialForm_GetDropDownData
+Proc_TestDrive_MiscExport_GetDocumentCount
+Proc_TestDrive_MiscExport_GetNewsCount
+Proc_TestDrive_PageBilling_GetSchoolDetails
+Proc_TestDrive_PageBilling_GetSchoolDetails_New
+Proc_TestDrive_PageResultTransfer_GetStateNumberByClassId
+Proc_TestDrive_PageResultTransfer_GetTeacherSchoolDetailsByClass
+proc_TestDrive_Pupil_GetPupilDetailsOfSameEmail
+Proc_TestDrive_PupilManagement_GetGridData
+Proc_TestDrive_School_GetSchoolCountForStates
+Proc_TestDrive_School_GetSchoolDetailsById
+Proc_TestDrive_School_UpdateLearncoacherStatus
+Proc_TestDrive_State_GetAllStates
+Proc_TestDrive_State_GetAllStates_New
+Proc_TestDrive_State_GetStateDetailById
+Proc_TestDrive_State_GetStateDetailByStateAdministratorId
+Proc_TestDrive_State_SaveStateNumberForTestToken
+Proc_TestDrive_State_UpdateStateLogo
+Proc_Testdrive_StateMembership_ValidateUser
+Proc_TestDrive_StellwerkExternalDataSourceProvider_GetMemberDataFromActive
+Proc_TestDrive_StellwerkExternalDataSourceProvider_MapAndSaveMemberData
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/

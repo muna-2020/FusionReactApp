@@ -1,0 +1,55 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_OfflineProcess_Definition' AND COLUMN_NAME = 'dtCreatedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_OfflineProcess_Definition ADD dtCreatedOn datetime  
+END
+
+GO 
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_OfflineProcess_Definition' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_OfflineProcess_Definition ADD dtModifiedOn datetime  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_OfflineProcess_Definition set dtCreatedOn = getdate() where dtCreatedOn is null
+update t_TestDrive_OfflineProcess_Definition set dtModifiedOn=getdate() where dtModifiedOn is null
+
+GO
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_TestDrive_Offline_GetOfflineTasks
+FProc_TestDrive_Offline_UpdateOfflineProcessProgressValue
+FProc_TestDrive_OfflineProcess_DeleteExecution
+FProc_TestDrive_OfflineProcess_UpdateExecutionBycIsViewed
+JProc_TestDrive_Offline_GetNewOfflineTasks
+JProc_TestDrive_Offline_GetOfflineTasks
+JProc_TestDrive_Offline_UpdateTaskInDatabase
+JProc_TestDrive_OfflineProcess_AddProcessToList
+JProc_TestDrive_OfflineProcess_AddProcessToList_New
+JProc_TestDrive_OfflineProcess_GetGenerationProcessDetailsForMainClient
+JProc_TestDrive_OfflineProcess_GetGenerationProcessDetailsForMainClient_18_03_2019
+JProc_TestDrive_OfflineProcess_GetOfflineProcessKeywords
+JProc_TestDrive_OfflineProcess_GetOfflineTasksByExecutionId
+JProc_TestDrive_OfflineProcess_GetTasksForUser
+JProc_TestDrive_OfflineProcess_GetTasksForUserByExecutionId
+JProc_TestDrive_OfflineProcess_GetTasksForUserByExecutionIdAndUserId
+JProc_TestDrive_OfflineProcess_GetTasksForUserWhoHasNotViewed
+JProc_TestDrive_OfflineProcess_InsertAndGetGenerationProcessDetails
+JProc_TestDrive_OfflineProcess_UpdateExecutionForBottomBarStatus
+Proc_TestDrive_Offline_GetNewOfflineTasks
+Proc_TestDrive_OfflineProcess_AddProcessToList
+Proc_TestDrive_OfflineProcess_GetTasksForUser
+****************************************************************/
+
+
+/********************Procs need to Review**********************
+no procs to update
+****************************************************************/

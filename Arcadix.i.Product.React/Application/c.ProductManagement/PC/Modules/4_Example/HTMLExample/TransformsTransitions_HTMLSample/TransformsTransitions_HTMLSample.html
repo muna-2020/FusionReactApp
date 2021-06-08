@@ -1,0 +1,505 @@
+﻿<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: calibri;
+        }
+
+        .main-wrapper {
+            width: 1024px;
+            margin: 0px auto;
+            padding: 20px;
+            font-size: 18px;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 24px;
+            padding: 10px;
+            border-bottom: 1px solid #f1f1f1;
+            font-weight: bold;
+        }
+
+        .sub-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .item-wrapper ul {
+            line-height: 2rem;
+            list-style-type: square;
+            list-style-position: inside;
+        }
+
+        .item-wrapper p {
+            margin: 10px 0px;
+        }
+
+        pre {
+            white-space: pre-line;
+            padding: 20px;
+            width: 100%;
+            padding-right: 100px;
+            margin: 10px 0px;
+            letter-spacing: 1px;
+            background: #282c34;
+            color: #b5b5b5;
+        }
+
+        .yellow-pre {
+            background: #fffcdd;
+            color: #222;
+            border-left: 5px solid #FFEB3B;
+        }
+
+        .light-text {
+            color: #999;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .output {
+            border: 1px solid #f7f4f4;
+            display: flex;
+        }
+
+        .original {
+            background: #eaeaed;
+            border: 1px dashed #cecfd5;
+            width: 100px;
+            height: 100px;
+            margin: 12px 15px;
+        }
+
+        .box {
+            background: #2db34a;
+            height: 95px;
+            line-height: 95px;
+            text-align: center;
+            width: 95px;
+            color: #fff;
+        }
+
+        .box-1 {
+            transform: rotate(20deg);
+        }
+
+        .box-2 {
+            transform: scale(.75);
+        }
+
+        .box-3 {
+            transform: translate(-10px, 25%);
+        }
+
+        .box-4 {
+            transform: skew(5deg, -20deg);
+        }
+
+        .box-5 {
+            transform: rotate(25deg) scale(.75);
+        }
+
+        .box-6 {
+            transform: scale(.5);
+            transform-origin: 100% 100%;
+        }
+
+        .box-7 {
+            transform: perspective(100px) rotateX(45deg);
+        }
+
+        .box-8 {
+            transform: perspective(200px) rotateY(45deg);
+        }
+
+        .box-9 {
+            transform: perspective(200px) scaleZ(1.75) rotateX(45deg);
+        }
+
+        .box-10 {
+            transform: perspective(200px) translateZ(-50px);
+        }
+
+        .rotate {
+            background: rgba(45, 179, 74, .3);
+            transform: perspective(200px) rotateY(45deg);
+        }
+
+        .three-d {
+            transform-style: preserve-3d;
+        }
+
+        .box-11 {
+            background: #2db34a;
+            height: 95px;
+            line-height: 95px;
+            text-align: center;
+            transform: rotateX(15deg) translateZ(20px);
+            transform-origin: 0 0;
+            width: 95px;
+        }
+
+        .box-12 {
+            backface-visibility: visible;
+            transform: rotateY(180deg);
+        }
+
+        .box-13 {
+            backface-visibility: hidden;
+            transform: rotateY(180deg);
+        }
+
+        .spin {
+            cursor: pointer;
+            transform-style: preserve-3d;
+        }
+
+            .spin:hover {
+                animation: spin 5s linear infinite;
+            }
+
+        @keyframes spin {
+            0% {
+                transform: rotateY(0deg);
+            }
+
+            100% {
+                transform: rotateY(360deg);
+            }
+        }
+
+        @media screen and (max-width: 1024px) {
+            .main-wrapper {
+                width: 100%;
+            }
+            .output{
+                display:block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="title">
+            <span>CSS transforms</span>
+        </div>
+        <section class="content-wrapper">
+            <p>
+                CSS transforms are implemented using a set of CSS properties that let you apply affine linear transformations to HTML elements.
+                These transformations include rotation, skewing, scaling, and translation both in the plane and in the 3D space.
+            </p>
+            <div class="sub-title">
+                <span>Transform syntex</span>
+            </div>
+            <div class="text-wrapper">
+                <p>
+                    Transform syntex include the transform property followed by the value.
+                    The value specifies the transform type followed by a specific amount inside parentheses.
+                </p>
+                <pre class="yellow-pre">
+                    div{
+                        transform:scale(1.5);
+                    }
+                </pre>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>2D Rotate</span>
+            </div>
+            <p>The rotate() CSS function defines a transformation that rotates an element around a fixed point on the 2D plane, without deforming it.</p>
+            <p>
+                The amount of rotation created by rotate() is specified by an &lt;angle&gt;.
+                If positive, the movement will be clockwise; if negative, it will be counter-clockwise. A rotation by 180° is called point reflection.
+            </p>
+            <div class="output">
+                <pre>
+                    .box{
+                        transform: rotate(20deg);
+                    }                           
+                </pre>
+                <div class="original">
+                    <div class="spin">
+                        <figure class="box box-1">Box</figure>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>2D Scale</span>
+            </div>
+            <p>
+                The scale() CSS function defines a transformation that resizes an element on the 2D plane.
+                Because the amount of scaling is defined by a vector, it can resize the horizontal and vertical dimensions at different scales.
+            </p>
+            <p>The scale() function only scales in 2D. To scale in 3D, use scale3d() instead.</p>
+            <p>The scale() function is specified with either one or two values, which represent the amount of scaling to be applied in each direction.</p>
+            <pre class="yellow-pre">
+                scale(sx)
+
+                scale(sx, sy)
+            </pre>
+            <div class="output">
+                <pre>
+                    .box{
+                        transform: scale(.75);
+                    }                          
+                </pre>
+                <div class="original">
+                    <div class="spin">
+                        <figure class="box box-2">Box</figure>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>2D Translate</span>
+            </div>
+            <p>The translate() CSS function repositions an element in the horizontal and/or vertical directions.</p>
+            <p>This transformation is characterized by a two-dimensional vector. Its coordinates define how much the element moves in each direction.</p>
+            <pre class="yellow-pre">
+                /* Single values */
+                    transform: translate(200px);
+                    transform: translate(50%);
+                    
+                /* Double values */
+                    transform: translate(100px, 200px);
+                    transform: translate(100px, 50%);
+                    transform: translate(30%, 50%);
+            </pre>
+            <div class="output">
+                <pre>
+                    .box{
+                        transform: translate(-10px, 25%);
+                    }                          
+                </pre>
+                <div class="original">
+                    <div class="spin">
+                        <figure class="box box-3">Box</figure>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>2D Skew</span>
+            </div>
+            <p>The skew() CSS function defines a transformation that skews an element on the 2D plane.</p>
+            <p>The skew() function is specified with either one or two values, which represent the amount of skewing to be applied in each direction.</p>
+            <pre class="yellow-pre">
+                skew(ax)
+
+                skew(ax, ay)
+            </pre>
+            <div class="output">
+                <pre>
+                    .box{
+                        transform: skew(5deg, -20deg);
+                    }                          
+                </pre>
+                <div class="original">
+                    <div class="spin">
+                        <figure class="box box-4">Box</figure>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Combining Trabsform</span>
+            </div>
+            <p>It's common to use multiple transforms at once.</p>
+            <p>For example</p>
+            <pre class="yellow-pre">
+                transform: rotate(-5deg) scale(1.1);
+            </pre>
+            <p>Define only one transform declaration in a rule, otherwise the bottom-most declaration will override the transforms above.</p>
+            <div class="output">
+                <pre>
+                    .box{
+                        transform: rotate(25deg) scale(.75);
+                    }                            
+                </pre>
+                <div class="original">
+                    <div class="spin">
+                        <figure class="box box-5">Box</figure>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Transform origin</span>
+            </div>
+            <p>The transform-origin CSS property sets the origin for an element's transformations.</p>
+            <p>
+                The transformation origin is the point around which a transformation is applied. For example, the transformation origin of the rotate() function
+                is the center of rotation.
+            </p>
+            <div class="output">
+                <pre>
+                    .box{
+                        transform-origin: 100% 100%;
+                        transform: scale(.5);
+                    }                            
+                </pre>
+                <div class="original">
+                    <div class="spin">
+                        <figure class="box box-6">Box</figure>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Perspective</span>
+            </div>
+            <p>
+                The perspective CSS property determines the distance between the z=0 plane and the user in order to give a 3D-positioned element some perspective.
+                Each 3D element with z&gt;0 becomes larger; each 3D-element with z&lt;0 becomes smaller. The strength of the effect is determined by the value of this property.
+            </p>
+            <div class="output">
+                <pre>
+                    .box{
+                        transform: perspective(100px) rotateX(45deg);
+                    }                          
+                </pre>
+                <div class="original">
+                    <div class="spin">
+                        <figure class="box box-7">Box </figure>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>3D Rotate</span>
+            </div>
+            <div class="output">
+                <pre>
+                    .box{
+                        transform: perspective(200px) rotateY(45deg);
+                    }                         
+                </pre>
+                <div class="original">
+                    <div class="spin">
+                        <figure class="box box-8">Box</figure>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>3D Scale</span>
+            </div>
+            <div class="output">
+                <pre>
+                    .box{
+                        transform: perspective(200px) scaleZ(1.75) rotateX(45deg);
+                    }                        
+                </pre>
+                <div class="original">
+                    <div class="spin">
+                        <figure class="box box-9">Box</figure>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>3D Translate</span>
+            </div>
+            <div class="output">
+                <pre>
+                    .box{
+                        transform: perspective(200px) translateZ(-50px);
+                    }                         
+                </pre>
+                <div class="original">
+                    <div class="spin">
+                        <figure class="box box-10">Box</figure>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Transform Style</span>
+            </div>
+            <p>The transform-style CSS property sets whether children of an element are positioned in the 3D space or are flattened in the plane of the element.</p>
+            <pre class="yellow-pre">
+                transform-style: flat;
+                transform-style: preserve-3d;
+            </pre>
+            <p><strong>flat</strong> Indicates that the children of the element are lying in the plane of the element itself.</p>
+            <p><strong>preserve-3d</strong> Indicates that the children of the element should be positioned in the 3D-space.</p>
+            <div class="output">
+                <pre>
+                    .rotate {
+                        transform: perspective(200px) rotateY(45deg);
+                    }
+                    .three-d {
+                        transform-style: preserve-3d;
+                    }
+                    .box {
+                        transform: rotateX(15deg) translateZ(20px);
+                        transform-origin: 0 0;
+                    }                          
+                </pre>
+                <div class="original">
+                    <div class="spin">
+                        <div class="rotate three-d">
+                            <figure class="box box-11">Box 1</figure>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Backface Visibility</span>
+            </div>
+            <p>The backface-visibility CSS property sets whether the back face of an element is visible when turned towards the user. </p>
+            <p>The backface-visibility property is specified as one of the keywords listed below.</p>
+            <pre class="yellow-pre">
+                backface-visibility: visible;
+                backface-visibility: hidden;
+            </pre>
+            <p><strong>visible</strong> The back face is visible when turned towards the user.</p>
+            <p><strong>hidden</strong> The back face is hidden, effectively making the element invisible when turned away from the user.</p>
+            <div class="output">
+                <pre>
+                    .box-1 {
+                        transform: rotateY(180deg);
+                    }
+                    .box-2 {
+                        backface-visibility: hidden;
+                        transform: rotateY(180deg);
+                    }                           
+                </pre>
+                <div class="original">
+                    <div class="spin">
+                        <figure class="box box-12">Box 1</figure>
+                    </div>
+                </div>
+
+                <div class="original">
+                    <div class="spin">
+                        <figure class="box box-13">Box 2</figure>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

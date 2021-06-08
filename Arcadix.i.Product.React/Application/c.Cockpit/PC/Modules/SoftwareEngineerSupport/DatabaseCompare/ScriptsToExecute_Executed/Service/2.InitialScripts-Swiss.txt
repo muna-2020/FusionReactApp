@@ -1,0 +1,1310 @@
+/*** Initial Scripts for service on indian server ***/
+
+
+/*****************************************************************************************************
+ the result database connection strings are updated to common for main and state specific databases.
+ 
+ Note: if the databse name/ connection string is different then that needs to be changed before executing.
+
+ --Executed
+
+*****************************************************************************************************/
+
+update t_TestDrive_ResultDatabase_individualstateversion set vDatabaseProvider='SqlServer'
+update t_TestDrive_ResultDatabase set vDatabaseProvider='SqlServer'
+
+
+/******************************************************************
+  The following script is to add new columns required for fusion
+  Table Name: 
+			- t_Framework_MainClient_Configuration
+			- t_Framework_MainClient_ThemeConfiguration
+			- t_Framework_MainClient
+			- t_Framework_ClientConfiguration
+			- t_Framework_ApplicationType
+			- t_Framework_Mainclient_ApplicationType
+			- t_Framework_Client_HostUrl
+
+ After the columns are added , dtModifiedOn and cIsDeleted is to be updated, 
+ These two columns must have values for data to be loaded in fusion
+ New column cIsFusion is added, so that previous values are not disturbed
+
+***************************************************************************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_Configuration' AND COLUMN_NAME = 'vFileHandlerProvider')
+BEGIN
+	ALTER TABLE t_Framework_MainClient_Configuration ADD vFileHandlerProvider nvarchar(max)	
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_Configuration' AND COLUMN_NAME = 'vTemplateResourcePath')
+BEGIN
+	ALTER TABLE t_Framework_MainClient_Configuration ADD vTemplateResourcePath nvarchar(max)	
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_Configuration' AND COLUMN_NAME = 'dtModifiedOn')
+BEGIN
+	ALTER TABLE t_Framework_MainClient_Configuration ADD dtModifiedOn datetime
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_Configuration' AND COLUMN_NAME = 'cIsDeleted')
+BEGIN
+	ALTER TABLE t_Framework_MainClient_Configuration ADD cIsDeleted	char(1)
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_Configuration' AND COLUMN_NAME = 'vEditorDatabaseName')
+BEGIN
+	ALTER TABLE t_Framework_MainClient_Configuration ADD vEditorDatabaseName nvarchar(max)
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_Configuration' AND COLUMN_NAME = 'vEditorConnectionString')
+BEGIN
+	ALTER TABLE t_Framework_MainClient_Configuration ADD vEditorConnectionString	nvarchar(max)
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_Configuration' AND COLUMN_NAME = 'vProductManagementConnectionString')
+BEGIN
+	ALTER TABLE t_Framework_MainClient_Configuration ADD vProductManagementConnectionString	nvarchar(max)
+END
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_Configuration' AND COLUMN_NAME = 'vProductManagementDatabaseName')
+BEGIN
+	ALTER TABLE t_Framework_MainClient_Configuration ADD vProductManagementDatabaseName	nvarchar(max)
+END
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_Configuration' AND COLUMN_NAME = 'cIsForFusion')
+BEGIN
+	ALTER TABLE t_Framework_MainClient_Configuration ADD cIsForFusion char(1)
+END
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_Configuration' AND COLUMN_NAME = 'vAuditDataBaseName')
+BEGIN
+	ALTER TABLE t_Framework_MainClient_Configuration ADD vAuditDataBaseName nvarchar(max)
+END
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_Configuration' AND COLUMN_NAME = 'vAuditConnectionString')
+BEGIN
+	ALTER TABLE t_Framework_MainClient_Configuration ADD vAuditConnectionString	nvarchar(max)
+END
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_Configuration' AND COLUMN_NAME = 'vLogConnectionString')
+BEGIN
+	ALTER TABLE t_Framework_MainClient_Configuration ADD vLogConnectionString nvarchar(max)
+END
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_Configuration' AND COLUMN_NAME = 'vLogDataBaseName')
+BEGIN
+	ALTER TABLE t_Framework_MainClient_Configuration ADD vLogDataBaseName nvarchar(max)
+END
+
+go
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_ThemeConfiguration' AND COLUMN_NAME = 'cIsDeleted')
+BEGIN
+	ALTER TABLE t_Framework_MainClient_ThemeConfiguration ADD cIsDeleted char(1)
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_ThemeConfiguration' AND COLUMN_NAME = 'dtModifiedOn')
+BEGIN
+	ALTER TABLE t_Framework_MainClient_ThemeConfiguration ADD dtModifiedOn datetime
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_ThemeConfiguration' AND COLUMN_NAME = 'vThemeConfigurationName')
+BEGIN
+	ALTER TABLE t_Framework_MainClient_ThemeConfiguration ADD vThemeConfigurationName nvarchar(max)
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_ThemeConfiguration' AND COLUMN_NAME = 'cIsForFusion')
+BEGIN
+	ALTER TABLE t_Framework_MainClient_ThemeConfiguration ADD cIsForFusion char(1)
+END
+
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient' AND COLUMN_NAME = 'dtModifiedOn')
+BEGIN
+	ALTER TABLE t_Framework_MainClient add dtModifiedOn	datetime
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient' AND COLUMN_NAME = 'cIsDeleted')
+BEGIN
+	ALTER TABLE t_Framework_MainClient add cIsDeleted char(1)	
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient' AND COLUMN_NAME = 'cIsActive')
+BEGIN
+	ALTER TABLE t_Framework_MainClient add cIsActive char(1)	
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient' AND COLUMN_NAME = 'cIsForFusion')
+BEGIN
+	ALTER TABLE t_Framework_MainClient add cIsForFusion char(1)
+END
+go
+
+
+
+
+/*****************************************************************************
+ Add the columns in follwing tables
+
+******************************************************************************/
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_ClientConfiguration' AND COLUMN_NAME = 'vSecretKeyForToken')
+BEGIN
+	ALTER TABLE t_Framework_ClientConfiguration add vSecretKeyForToken	nvarchar(max)
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_ClientConfiguration' AND COLUMN_NAME = 'vSecretKeyForEncryption')
+BEGIN
+	ALTER TABLE t_Framework_ClientConfiguration add vSecretKeyForEncryption	nvarchar(max) 
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_ClientConfiguration' AND COLUMN_NAME = 'cIsDeleted')
+BEGIN
+	ALTER TABLE t_Framework_ClientConfiguration add cIsDeleted	char(1)
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_ClientConfiguration' AND COLUMN_NAME = 'dtModifiedOn')
+BEGIN
+	ALTER TABLE t_Framework_ClientConfiguration add dtModifiedOn datetime
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_ClientConfiguration' AND COLUMN_NAME = 'cIsForFusion')
+BEGIN
+	ALTER TABLE t_Framework_ClientConfiguration add cIsForFusion char(1)
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_Client' AND COLUMN_NAME = 'dtModifiedOn')
+BEGIN
+ALTER TABLE t_Framework_Client add dtModifiedOn datetime
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_Client' AND COLUMN_NAME = 'cIsDeleted')
+BEGIN
+ALTER TABLE t_Framework_Client add cIsDeleted	char(1)
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_Client' AND COLUMN_NAME = 'cIsForFusion')
+BEGIN
+ALTER TABLE t_Framework_Client add cIsForFusion char(1)
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_ApplicationType' AND COLUMN_NAME = 'dtModifiedOn')
+BEGIN
+	ALTER TABLE t_Framework_ApplicationType add dtModifiedOn	datetime
+END
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_ApplicationType' AND COLUMN_NAME = 'cIsDeleted')
+BEGIN
+	ALTER TABLE t_Framework_ApplicationType add cIsDeleted char(1)	
+END
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_ApplicationType' AND COLUMN_NAME = 'cIsForFusion')
+BEGIN
+	ALTER TABLE t_Framework_ApplicationType add cIsForFusion char(1)
+END
+go
+
+/***********************************************************
+update t_Framework_ApplicationType set dtModifiedOn=getdate(),cIsDeleted ='N', cIsForFusion ='Y' where iApplicationTypeid in(1,2,4,6,7,12,16)
+
+--Executed
+***********************************************************/
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_Mainclient_ApplicationType' AND COLUMN_NAME = 'dtModifiedOn')
+BEGIN
+	ALTER TABLE t_Framework_Mainclient_ApplicationType add dtModifiedOn	datetime
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_Mainclient_ApplicationType' AND COLUMN_NAME = 'cIsDeleted')
+BEGIN
+	ALTER TABLE t_Framework_Mainclient_ApplicationType add cIsDeleted char(1)	
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_Mainclient_ApplicationType' AND COLUMN_NAME = 'uUserId')
+BEGIN
+	ALTER TABLE t_Framework_Mainclient_ApplicationType add uUserId uniqueidentifier
+END
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_Mainclient_ApplicationType' AND COLUMN_NAME = 'uModifiedByUserId')
+BEGIN
+	ALTER TABLE t_Framework_Mainclient_ApplicationType add uModifiedByUserId uniqueidentifier
+END
+go
+update t_Framework_Mainclient_ApplicationType set dtModifiedOn=getdate(), cIsDeleted='N' where  imainclientid in(115,97,112,114)
+
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_Client_HostUrl' AND COLUMN_NAME = 'dtModifiedOn')
+BEGIN
+	ALTER TABLE t_Framework_Client_HostUrl add dtModifiedOn	datetime
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_Client_HostUrl' AND COLUMN_NAME = 'cIsForFusion')
+BEGIN
+	ALTER TABLE t_Framework_Client_HostUrl add cIsForFusion char(1)	
+END
+
+GO
+
+/**************************************************************************************************
+Offline Definition is added for the offline preload
+***************************************************************************************************/
+IF NOT EXISTS(select * from t_TestDrive_OfflineProcess_Definition where vMethodName ='RunPreload')
+BEGIN
+insert into t_TestDrive_OfflineProcess_Definition values('C46ED34F-1307-41D1-B9AE-774F53B7D92D','Arcadix.Object.Framework.SystemTracking.Preload','RunPreload','Y','N','N',NULL,'RunPreload',NULL,'Arcadix.Object','2019-05-31 17:19:59.863','2019-05-31 17:19:59.863')
+insert into t_TestDrive_OfflineProcess_Definition_Data values('5081EA44-DF53-452C-88F1-649CDF94C28C','C46ED34F-1307-41D1-B9AE-774F53B7D92D',3,'PreloadExecution','PreloadExecutionOffline')
+
+END
+
+IF NOT EXISTS(select * from t_TestDrive_OfflineProcess_Definition where vMethodName ='RunConversion')
+BEGIN
+insert into t_TestDrive_OfflineProcess_Definition values('7B4E6D7C-D1DF-4A6C-BBC8-4B0DAC98D4A0','Arcadix.Editor.TaskConversion_OldToNew.TaskConversion_OldToNew','RunConversion','Y','N','N',NULL,'PageContentConversion',NULL,'Arcadix.Editor','2020-02-19 12:13:53.883','2020-02-19 12:13:53.883')
+insert into t_TestDrive_OfflineProcess_Definition_Data values('4BCE9130-5F77-4313-B8CC-AD30D5807C85','7B4E6D7C-D1DF-4A6C-BBC8-4B0DAC98D4A0',3,'PageContentConversion','Conversion of Page Content for viewing in the fusion.')
+
+END
+
+IF NOT EXISTS(select * from t_TestDrive_OfflineProcess_Definition where vMethodName ='TranslateJsonFile')
+BEGIN
+insert into t_TestDrive_OfflineProcess_Definition values('5D6918ED-5FFF-46B8-8EB8-E70D87A88124','Arcadix.Object.Framework.SystemTracking.Translate','TranslateJsonFile','Y','N','N',NULL,'Translation',NULL,'Arcadix.Object','2020-07-27 11:57:59.297','2020-07-27 11:57:59.297')
+END
+
+IF NOT EXISTS(select * from t_TestDrive_OfflineProcess_Definition where vMethodName ='GenerateTestPdf')
+BEGIN
+insert into t_TestDrive_OfflineProcess_Definition values('8FDDD40A-A597-4517-968F-039DD0F72EA3','Arcadix.Intranet.Modules.Test.TestPdf_Module','GenerateTestPdf','Y','N','N',NULL,'GenerateTestPdf',NULL,'Arcadix.Intranet','2020-05-05 02:21:13.183','2020-05-05 02:21:13.183')
+END
+
+IF NOT EXISTS(select * from t_TestDrive_OfflineProcess_Definition where vMethodName ='DataExport')
+BEGIN
+insert into t_TestDrive_OfflineProcess_Definition values('44349353-99D5-408B-9FAD-6713B186FB46','Arcadix.Intranet.Modules.Reports.DataExport_Module','DataExport','Y','N','N',NULL,'DataExport',NULL,'Arcadix.Intranet','2020-05-05 02:21:13.183','2020-05-05 02:21:13.183')
+END
+
+go
+
+
+
+/**************************************************************************************************
+currency data is set for two countries
+**************************************************************************************************/
+update t_framework_country set vCurrency ='CHF', dtModifiedOn =getdate(), cIsDeleted ='N' where iCountryId = 1
+update t_framework_country set vCurrency ='USD', dtModifiedOn =getdate(), cIsDeleted ='N' where iCountryId = 2
+
+
+update t_Framework_Language_Mainclient set cIsDeleted='N' where iApplicationTypeId in(1,2,4,6,16,0) and iMainClientId in(97,115,114,112,124,0)
+update t_Framework_Language set cIsDeleted ='N', vDefaultCurrency ='EUR' where iFrameworkLanguageId in(1,2,3,4)
+update t_Framework_Mainclient_ApplicationType set cIsDeleted ='N',dtModifiedOn = getdate() where iApplicationTypeId in(1,2,4,6,16) and iMainClientId in(97,115,114,112,124)
+update t_Framework_Mainclient_ApplicationType set cIsDeleted ='N',dtModifiedOn =GETDATE() where imainclientid = 0 and iApplicationTypeId in(7)
+
+/**********************************************************************************************
+ update default values to workflow and workflowtype + set workflow identifier for task and test
+***********************************************************************************************/
+
+update t_TestDrive_Workflow set dtModifiedOn = getdate()
+update t_TestDrive_WorkflowType set dtModifiedOn = getdate(), cIsDeleted ='N'
+
+update  t_TestDrive_WorkflowType set vWorkflowTypeIdentifier ='Task Object' where uWorkflowTypeId='1C0854B1-6094-461E-9F5B-EB8FA9C5F04D'
+update  t_TestDrive_WorkflowType set vWorkflowTypeIdentifier ='Test Object' where uWorkflowTypeId='9458B9A1-B0F9-41F1-9D5F-80B1BA3ABFDA'
+
+
+/*************************************************
+t_Framework_MainClient_Configuration_TargetGroup
+
+***************************************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_Configuration_TargetGroup' AND COLUMN_NAME = 'dtModifiedOn')
+BEGIN
+   alter table t_Framework_MainClient_Configuration_TargetGroup add  dtModifiedOn datetime
+END
+update t_Framework_MainClient_Configuration_TargetGroup set dtModifiedOn =getdate()
+
+go
+
+
+/**************************************************************************************************************
+  Script to create a new MainClientConfiguration for fusion .
+  The Values are made as variables for can be changed if required
+ 
+  The name if this configuration is given as 'FusionDefaultActive'
+**************************************************************************************************************/
+
+declare @iMainClientConfiguration int,
+@vMainClientConfigurationName nvarchar(max) = 'FusionDefaultActive',
+@vApplicationCachingProvider nvarchar(max) = 'Arcadix.Framework.Services.RedisServiceStackCaching',
+@vCryptographyProvider nvarchar(max) = 'Arcadix.Framework.Services.Cryptography.StandardCryptographyProvider',
+@vExtranetConnectionString nvarchar(max) = 'server=10.247.143.151;database=Arcadix_Common_Extranet;uid=TestDriveCommon;pwd=ksdfkd933dkdk99d98d;Max Pool Size=800;',
+@vIntranetConnectionString nvarchar(max) = 'server=10.247.143.151;database=Arcadix_Common_CMS;uid=TestDriveCommon;pwd=ksdfkd933dkdk99d98d;Max Pool Size=800;',
+@vExtranetDatabaseName nvarchar(max) = 'Arcadix_Common_Extranet',
+@vIntranetDatabaseName nvarchar(max) = 'Arcadix_Common_CMS',
+@vFrameworkServicesDatabaseName nvarchar(max) = 'Arcadix_Common_Service',
+@vExtranetServerName nvarchar(max) = '10.247.143.151',
+@vIntranetServerName nvarchar(max) = '10.247.143.151',
+@vFileHandlerProvider nvarchar(max) = 'Arcadix.Framework.Services.FileHandler.OneDriveFileDirectory',
+@vEditorDatabaseName nvarchar(max) = 'Arcadix_Common_CMS',
+@vEditorConnectionString nvarchar(max) = 'server=10.247.143.151;database=Arcadix_Common_CMS;uid=TestDriveCommon;pwd=ksdfkd933dkdk99d98d;Max Pool Size=800;',
+@vProductManagementConnectionString nvarchar(max) = 'server=10.247.143.151;database=Arcadix_Common_ProductManagement;uid=TestDriveCommon;pwd=ksdfkd933dkdk99d98d;Max Pool Size=800;',
+@vProductManagementDatabaseName nvarchar(max) = 'Arcadix_Common_ProductManagement',
+@vAuditDataBaseName nvarchar(max) = 'Arcadix_Common_Audit',
+@vAuditConnectionString nvarchar(max) = 'server = 10.247.143.151; database = Arcadix_Common_Audit; uid = TestDriveCommon; pwd = ksdfkd933dkdk99d98d; enlist = false',
+@vLogConnectionString nvarchar(max) = 'server = 10.247.143.151; database = Arcadix_Common_Log; uid = TestDriveCommon; pwd = ksdfkd933dkdk99d98d; enlist = false',
+@vLogDataBaseName nvarchar(max) = 'Arcadix_Common_Log'
+
+IF NOT EXISTS (select * from t_Framework_MainClient_Configuration where vMainClientConfigurationName ='FusionDefaultActive')
+BEGIN
+insert into t_Framework_MainClient_Configuration(
+vMainClientConfigurationName,
+vApplicationCachingProvider,
+vCryptographyProvider,
+vExtranetConnectionString,
+vIntranetConnectionString,
+vExtranetDatabaseName,
+vIntranetDatabaseName,
+vFrameworkServicesDatabaseName,
+vExtranetServerName,
+vIntranetServerName,
+vFileHandlerProvider,
+dtModifiedOn,
+cIsDeleted,
+vEditorDatabaseName,
+vEditorConnectionString,
+vProductManagementConnectionString,
+vProductManagementDatabaseName,
+cIsForFusion,vAuditDataBaseName,
+vAuditConnectionString,
+vLogConnectionString,
+vLogDataBaseName) 
+values(
+@vMainClientConfigurationName,
+@vApplicationCachingProvider,
+@vCryptographyProvider,
+@vExtranetConnectionString,
+@vIntranetConnectionString
+,@vExtranetDatabaseName,
+@vIntranetDatabaseName,
+@vFrameworkServicesDatabaseName,
+@vExtranetServerName,
+@vIntranetServerName,
+@vFileHandlerProvider,
+GETDATE(),'N',
+@vEditorDatabaseName
+,@vEditorConnectionString,
+@vProductManagementConnectionString,
+@vProductManagementDatabaseName,
+'Y',
+@vAuditDataBaseName,
+@vAuditConnectionString,
+@vLogConnectionString,
+@vLogDataBaseName)
+set @iMainClientConfiguration =@@IDENTITY
+END
+ELSE
+BEGIN
+	SELECT @iMainClientConfiguration = iMainClientConfigurationId  from t_Framework_MainClient_Configuration where vMainClientConfigurationName ='FusionDefaultActive'
+END
+
+
+declare @iMainClientThemeConfigurationId int	
+IF NOT EXISTS (select * from t_Framework_MainClient_ThemeConfiguration where vThemeConfigurationName ='FusionThemeConfig')
+BEGIN
+	insert into t_Framework_MainClient_ThemeConfiguration
+	values(-1,'sdffsdsdf333333dddddd',3,1,'Y','',1,'Default','Y','N','N','TestApplication800By600','Y',NULL,NULL,NULL,'73@455#sDKHafS','',3,'N',getdate(),'FusionThemeConfig','Y')
+	set @iMainClientThemeConfigurationId =@@IDENTITY
+END
+ELSE
+BEGIN
+SELECT @iMainClientThemeConfigurationId = iMainClientThemeConfigurationId  from t_Framework_MainClient_ThemeConfiguration where vThemeConfigurationName ='FusionThemeConfig'
+END
+
+-- Update Clients with new Configuraton Values added
+
+/********************************************
+this script is not be run now, to be checked for keycloak intranet first
+--update t_Framework_MainClient set iFusionMainClientConfigurationId =@iMainClientConfiguration, iMainClientThemeConfigurationId =@iMainClientThemeConfigurationId where iMainclientId in(115,97,112,114,0)
+
+GO
+********************************************/
+
+/****************************************************************
+-- t_Framework_ClientConfiguration
+ Client Configuration is created for each react client
+
+****************************************************************/
+IF NOT EXISTS (select * from t_Framework_ClientConfiguration where vClientConfigurationName='ReactActiveIntranet')
+BEGIN
+	insert into t_Framework_ClientConfiguration(vClientConfigurationName,vMemberShipProvider,vSkin,vClientIdentifier,vSecretKeyForToken,vSecretKeyForEncryption,cIsDeleted,dtModifiedOn,cIsForFusion)
+	values('ReactActiveIntranet','Arcadix.Intranet.Provider.MembershipProvider.IntranetMembership,Arcadix.Intranet','Skin2018','ReactIntranet','POIYc6887rtywqadbvSwertyDffnILE','KW6STYUI3Ty6YB095','N','2020-02-26 15:15:33.717','Y')
+END
+
+IF NOT EXISTS (select * from t_Framework_ClientConfiguration where vClientConfigurationName='ReactActiveTeacher')
+BEGIN
+	insert into t_Framework_ClientConfiguration(vClientConfigurationName,vMemberShipProvider,vSkin,vClientIdentifier,vSecretKeyForToken,vSecretKeyForEncryption,cIsDeleted,dtModifiedOn,cIsForFusion)
+	values('ReactActiveTeacher','Arcadix.Extranet.Teacher.TeacherMembership','Extranet/Skin2017','ExtranetTeacher','HPCstc21efuftwerdsaffFiwDffVnPOt','ER2SGQD3Ty1PB785','N','2019-08-01 11:34:11.060','Y')
+END
+
+IF NOT EXISTS (select * from t_Framework_ClientConfiguration where vClientConfigurationName='ReactActiveSchool')
+BEGIN
+ insert into t_Framework_ClientConfiguration(vClientConfigurationName,vMemberShipProvider,vSkin,vClientIdentifier,vSecretKeyForToken,vSecretKeyForEncryption,cIsDeleted,dtModifiedOn,cIsForFusion)
+ values('ReactActiveSchool','Arcadix.Extranet.School.SchoolMembership','Extranet/Skin2017','ExtranetSchool','GQDstc21ewfffffffffffFiwDffVvVBrk','MV2SGQDst21PB921','N','2019-08-01 11:34:11.060','Y')
+END
+
+IF NOT EXISTS (select * from t_Framework_ClientConfiguration where vClientConfigurationName='ReactActivePupil')
+BEGIN
+	insert into t_Framework_ClientConfiguration(vClientConfigurationName,vMemberShipProvider,vSkin,vClientIdentifier,vSecretKeyForToken,vSecretKeyForEncryption,cIsDeleted,dtModifiedOn,cIsForFusion)
+	values('ReactActivePupil','Arcadix.Extranet.Pupil.PupilMembership','Extranet/Skin2017','ExtranetPupil','KILstc68e3uftwqadbvSSFiwDffnILE','PC6STUI3Ty6YB095','N','2019-08-01 11:34:11.060','Y')
+END
+
+IF NOT EXISTS (select * from t_Framework_ClientConfiguration where vClientConfigurationName='ReactActiveTestApplication')
+BEGIN
+	insert into t_Framework_ClientConfiguration(vClientConfigurationName,vMemberShipProvider,vSkin,vClientIdentifier,vSecretKeyForToken,vSecretKeyForEncryption,cIsDeleted,dtModifiedOn,cIsForFusion)
+	values('ReactActiveTestApplication','Arcadix.Extranet.Teacher.Provider.MembershipProvider.TeacherMembership','Extranet/Skin2018','ReactTestApplication','POIYc6887rtywqadbvSwertyDffnILE','KW6STYUI3Ty6YB095','N','2019-08-01 11:34:11.060','Y')
+END
+
+IF NOT EXISTS (select * from t_Framework_ClientConfiguration where vClientConfigurationName='ReactActiveCockpit')
+BEGIN
+	insert into t_Framework_ClientConfiguration(vClientConfigurationName,vMemberShipProvider,vSkin,vClientIdentifier,vSecretKeyForToken,vSecretKeyForEncryption,cIsDeleted,dtModifiedOn,cIsForFusion)
+	values('ReactActiveCockpit','Arcadix.ProductManagement.Provider.MembershipProvider.ProductManagementMembership,Arcadix.ProductManagement','Skin2018','ReactCockpit','POIYc6887rtywqadbvSwertyDffnILE','KW6STYUI3Ty6YB095','N','2019-08-01 11:34:11.060','Y')
+END
+
+IF NOT EXISTS (select * from t_Framework_ClientConfiguration where vClientConfigurationName='ReactActiveState')
+BEGIN
+	insert into t_Framework_ClientConfiguration(vClientConfigurationName,vMemberShipProvider,vSkin,vClientIdentifier,vSecretKeyForToken,vSecretKeyForEncryption,cIsDeleted,dtModifiedOn,cIsForFusion)
+	values('ReactActiveState','Arcadix.Extranet.State.StateMembership','Extranet/Skin2017','ExtranetState','HPCstc21efuftwerdsaffFiwDffVnPOt','ER2SGQD3Ty1PB785','N','2020-07-22 18:07:18.907','Y')
+END
+
+/***************************************************************************************************
+--t_Framework_Client
+--t_Framework_Client_HostUrl
+
+ The following script is to create client for each MainClient and host Url to them: 97,115,112,114,0
+ Run Following script if urls are not there (this is to be run only once)
+*****************************************************************************************************/
+Declare @iClientConfigurationId int,
+		@iMainClientId int=97,
+		@vMainClientIdentifier nvarchar(max)='Lernlupe',
+		@vClientName nvarchar(max),
+		@vApplicationName nvarchar(max),
+		@iApplicationTypeId int,
+		@iClientId int
+		
+		set @vApplicationName='School'
+		set @vClientName= @vMainClientIdentifier+'FusionSchool'
+		set @iApplicationTypeId =6
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActive'+@vApplicationName
+		insert into t_Framework_Client (iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'SchuleFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'SchuleDevFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'SchuleTestFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='Teacher'
+		set @vClientName= @vMainClientIdentifier+'FusionTeacher'
+		set @iApplicationTypeId =1
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActive'+@vApplicationName
+		insert into t_Framework_Client (iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'LehrpersonFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'LehrpersonDevFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'LehrpersonTestFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='Pupil'
+		set @vClientName= @vMainClientIdentifier+'FusionPupil'
+		set @iApplicationTypeId =16
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActive'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'Fusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'DevFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'TestFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='Intranet'
+		set @vClientName= @vMainClientIdentifier+'FusionIntranet'
+		set @iApplicationTypeId =4
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActive'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'Fusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'DevFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'TestFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='TestApplication'
+		set @vClientName= @vMainClientIdentifier+'FusionTestApplication'
+		set @iApplicationTypeId =2
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActive'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'Fusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'DevFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'TestFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+Go
+
+Declare @iClientConfigurationId int,
+		@iMainClientId int=115,
+		@vMainClientIdentifier nvarchar(max)='Lernpassplus',
+		@vClientName nvarchar(max),
+		@vApplicationName nvarchar(max),
+		@iApplicationTypeId int,
+		@iClientId int
+		
+		set @vApplicationName='School'
+		set @vClientName= @vMainClientIdentifier+'FusionSchool'
+		set @iApplicationTypeId =6
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActive'+@vApplicationName
+		insert into t_Framework_Client (iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'SchuleFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'SchuleDevFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'SchuleTestFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='Teacher'
+		set @vClientName= @vMainClientIdentifier+'FusionTeacher'
+		set @iApplicationTypeId =1
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActive'+@vApplicationName
+		insert into t_Framework_Client (iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'LehrpersonFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'LehrpersonDevFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'LehrpersonTestFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+
+		set @vApplicationName='Pupil'
+		set @vClientName= @vMainClientIdentifier+'FusionPupil'
+		set @iApplicationTypeId =16
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActive'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'Fusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'DevFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'TestFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='Intranet'
+		set @vClientName= @vMainClientIdentifier+'FusionIntranet'
+		set @iApplicationTypeId =4
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActive'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'Fusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'DevFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'TestFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='TestApplication'
+		set @vClientName= @vMainClientIdentifier+'FusionTestApplication'
+		set @iApplicationTypeId =2
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActive'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'Fusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'DevFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'TestFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+GO
+Declare @iClientConfigurationId int,
+		@iMainClientId int=112,
+		@vMainClientIdentifier nvarchar(max)='Bscberatung',
+		@vClientName nvarchar(max),
+		@vApplicationName nvarchar(max),
+		@iApplicationTypeId int,
+		@iClientId int
+		
+
+		set @vApplicationName='Teacher'
+		set @vClientName= @vMainClientIdentifier+'FusionTeacher'
+		set @iApplicationTypeId =1
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActive'+@vApplicationName
+		insert into t_Framework_Client (iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'LehrpersonFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'LehrpersonDevFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'LehrpersonTestFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+
+		set @vApplicationName='Intranet'
+		set @vClientName= @vMainClientIdentifier+'FusionIntranet'
+		set @iApplicationTypeId =4
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActive'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'Fusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'DevFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'TestFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='TestApplication'
+		set @vClientName= @vMainClientIdentifier+'FusionTestApplication'
+		set @iApplicationTypeId =2
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActive'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'Fusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'DevFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'TestFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+Go
+Declare @iClientConfigurationId int,
+		@iMainClientId int=114,
+		@vMainClientIdentifier nvarchar(max)='Codoc',
+		@vClientName nvarchar(max),
+		@vApplicationName nvarchar(max),
+		@iApplicationTypeId int,
+		@iClientId int
+		
+		set @vApplicationName='School'
+		set @vClientName= @vMainClientIdentifier+'FusionSchool'
+		set @iApplicationTypeId =6
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActive'+@vApplicationName
+		insert into t_Framework_Client (iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'SchuleFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'SchuleDevFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'SchuleTestFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='Teacher'
+		set @vClientName= @vMainClientIdentifier+'FusionTeacher'
+		set @iApplicationTypeId =1
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActive'+@vApplicationName
+		insert into t_Framework_Client (iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'LehrpersonFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'LehrpersonDevFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'LehrpersonTestFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+
+		set @vApplicationName='Pupil'
+		set @vClientName= @vMainClientIdentifier+'FusionPupil'
+		set @iApplicationTypeId =16
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActive'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'Fusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'DevFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'TestFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='Intranet'
+		set @vClientName= @vMainClientIdentifier+'FusionIntranet'
+		set @iApplicationTypeId =4
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActive'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'Fusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'DevFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'TestFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='TestApplication'
+		set @vClientName= @vMainClientIdentifier+'FusionTestApplication'
+		set @iApplicationTypeId =2
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActive'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'Fusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'DevFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'TestFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+Go
+		Declare @iClientConfigurationId int,@iClientId int
+
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActiveCockpit'
+		insert into t_Framework_Client (iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,0,7,'FusionCockpit','Cockpit',GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'CockpitFusion.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'CockpitDevFusion.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'CockpitTestFusion.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'localhost:9007','N','Y',3,7,getdate(),'Y')
+  GO
+
+  IF NOT Exists(Select * from t_Framework_MainClient where vMainClientIdentifier='Impetus')
+  BEGIN
+		--Impetus
+		declare @iMainClientId int
+
+		Declare @iMainClientThemeConfigurationId  int,@iMainClientConfiguration int
+		select @iMainClientThemeConfigurationId = iMainClientThemeConfigurationId from t_Framework_MainClient_ThemeConfiguration where vThemeConfigurationName ='FusionThemeConfig'
+		
+select @iMainClientConfiguration = iMainClientConfigurationId from t_Framework_MainClient_Configuration where vMainClientConfigurationName ='FusionDefaultActive'
+insert into t_Framework_MainClient (vMainClientIdentifier,
+											vManagerName,
+											vStreet,
+											iZIPCode,
+											vTown,
+											vPhone,
+											vEmail,
+											iMainClientConfigurationId,
+											tLicense,
+											vLogoFileName,
+											iFusionMainClientConfigurationId,
+											iMainClientThemeConfigurationId,
+											dtModifiedOn,cIsDeleted,cIsActive,cIsForFusion)
+								    values('Impetus','Impetus','Street',11,'',000000,'',229,'','',@iMainClientConfiguration,@iMainClientThemeConfigurationId,GETDATE(),'N','Y','Y')
+		set @iMainClientId=@@IDENTITY
+		insert into t_Framework_MainClient_Data (iMainClientId,vMainClientName,iLanguageId,vTitle) 
+			values(@iMainClientId,'Impetus',3,'Herr')
+
+insert into t_Framework_Country_MainClient values(1,@iMainClientId,1,getdate(),getdate(),null,'N',null)
+insert into t_Framework_Country_MainClient values(1,@iMainClientId,2,getdate(),getdate(),null,'N',null)
+insert into t_Framework_Country_MainClient values(1,@iMainClientId,4,getdate(),getdate(),null,'N',null)
+insert into t_Framework_Country_MainClient values(1,@iMainClientId,6,getdate(),getdate(),null,'N',null)
+insert into t_Framework_Country_MainClient values(1,@iMainClientId,16,getdate(),getdate(),null,'N',null)
+
+
+insert into t_Framework_Language_MainClient values(3,@iMainClientId,1,getdate(),getdate(),null,'N',null)
+insert into t_Framework_Language_MainClient values(3,@iMainClientId,2,getdate(),getdate(),null,'N',null)
+insert into t_Framework_Language_MainClient values(3,@iMainClientId,4,getdate(),getdate(),null,'N',null)
+insert into t_Framework_Language_MainClient values(3,@iMainClientId,6,getdate(),getdate(),null,'N',null)
+insert into t_Framework_Language_MainClient values(3,@iMainClientId,16,getdate(),getdate(),null,'N',null)
+
+insert into t_Framework_MainClient_ApplicationType values(@iMainClientId,1,null,getdate(),'N',null,null)
+insert into t_Framework_MainClient_ApplicationType values(@iMainClientId,2,null,getdate(),'N',null,null)
+insert into t_Framework_MainClient_ApplicationType values(@iMainClientId,4,null,getdate(),'N',null,null)
+insert into t_Framework_MainClient_ApplicationType values(@iMainClientId,6,null,getdate(),'N',null,null)
+insert into t_Framework_MainClient_ApplicationType values(@iMainClientId,16,null,getdate(),'N',null,null)
+
+Declare @iClientConfigurationId int,
+		@vMainClientIdentifier nvarchar(max)='Impetus',
+		@vClientName nvarchar(max),
+		@vApplicationName nvarchar(max),
+		@iApplicationTypeId int,
+		@iClientId int
+		
+		set @vApplicationName='School'
+		set @vClientName= @vMainClientIdentifier+'FusionSchool'
+		set @iApplicationTypeId =6
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActive'+@vApplicationName
+		insert into t_Framework_Client (iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'SchuleFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'SchuleDevFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'SchuleTestFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='Teacher'
+		set @vClientName= @vMainClientIdentifier+'FusionTeacher'
+		set @iApplicationTypeId =1
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActive'+@vApplicationName
+		insert into t_Framework_Client (iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'LehrpersonFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'LehrpersonDevFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,'LehrpersonTestFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+
+		set @vApplicationName='Pupil'
+		set @vClientName= @vMainClientIdentifier+'FusionPupil'
+		set @iApplicationTypeId =16
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActive'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'Fusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'DevFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'TestFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='Intranet'
+		set @vClientName= @vMainClientIdentifier+'FusionIntranet'
+		set @iApplicationTypeId =4
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActive'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'Fusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'DevFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'TestFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		set @vApplicationName='TestApplication'
+		set @vClientName= @vMainClientIdentifier+'FusionTestApplication'
+		set @iApplicationTypeId =2
+		select @iClientConfigurationId=iClientConfigurationId from t_Framework_ClientConfiguration where vClientConfigurationName= 'ReactActive'+@vApplicationName
+		insert into t_Framework_Client(iClientConfigurationId,iMainClientId,iApplicationTypeId,vClientName,vPageTitle,dtModifiedOn,cIsDeleted,cIsForFusion	) 
+		values(@iClientConfigurationId,@iMainClientId,@iApplicationTypeId,@vClientName,@vApplicationName,GETDATE(),'N','Y')
+		set @iClientId=@@IDENTITY
+		
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'Fusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'DevFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+		insert into t_Framework_Client_HostUrl(iClientId,vHostURL,cIsDeleted,cIsActive,iLanguageId,iTargetDeviceId,dtModifiedOn,cIsForFusion)
+		values(@iClientId,@vApplicationName+'TestFusion'+@vMainClientIdentifier+'.arcadixdevelopment.com','N','Y',3,7,getdate(),'Y')
+
+		END
+go
+
+
+
+/********************************************
+this script is not be run now, to be checked for keycloak intranet first
+
+********************************************/
+declare @iMainClientConfiguration int,@iMainClientThemeConfigurationId int
+SELECT @iMainClientThemeConfigurationId = iMainClientThemeConfigurationId  from t_Framework_MainClient_ThemeConfiguration where vThemeConfigurationName ='FusionThemeConfig'
+SELECT @iMainClientConfiguration = iMainClientConfigurationId  from t_Framework_MainClient_Configuration where vMainClientConfigurationName ='FusionDefaultActive'
+update t_Framework_MainClient set iFusionMainClientConfigurationId =@iMainClientConfiguration, iMainClientThemeConfigurationId =@iMainClientThemeConfigurationId where iMainclientId in(115,97,112,114,0)
+
+GO
+
+/******************************************************************
+-- The MainClientIdentifier is used to get resource and navigation path
+
+********************************************************************/
+update t_framework_mainclient set cisforfusion='Y',cIsDeleted='N',cIsActive='Y', dtModifiedOn = getdate() where imainclientId in(97,112,115,124,114,0)
+update t_Framework_MainClient set vMainClientIdentifier ='Lernpassplus' where iMainClientId = 115
+update t_Framework_MainClient set vMainClientIdentifier ='Bscberatung' where iMainClientId = 112
+
+/**************************************************************************************************
+ the following script is to set the Identifier name as Cockpit , which is system Management curently
+
+***************************************************************************************************/
+update t_Framework_MainClient set vMainClientIdentifier='Cockpit' where imainclientId = 0
+
+/******************************************************************************************************************************
+ in older verison the names of Application is Intranetrtestdrive, bit we use intranet in fusion ( to check if existing system can gove any issue)
+ and for cockpit it is empty
+******************************************************************************************************************************/
+
+update t_Framework_ApplicationType set vApplicationName='Cockpit' where iApplicationTypeId = 7
+
+
+/*********************************************
+
+--Executed till here from top
+*********************************************
+
+
+update t_Framework_ApplicationType set vApplicationName ='Intranet' where iApplicationTypeId = 4
+update t_Framework_ApplicationType set vApplicationName = 'ExtranetPupil' WHERE iApplicationTypeId = 16
+
+/***********************************
+  --t_Framework_XMLConfiguration
+************************************/
+
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_MaxNumberUnseparated' and vValue = '3' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DiscriminationEstimator' and vKey= 'DiscriminationEstimator_NumberOfStudentsToDetermineDiscriminationForATask' and vValue = '4' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasCustomerTaskId' and vValue = 'Y' and iMainClientId = 114
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'ExtranetTeacher' and vSubParentKey= 'LearningTest' and vKey= 'NumberOfTasksForSystemGeneratedTest' and vValue = '15' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_MaxNumberUncalibrated' and vValue = '3' and iMainClientId = 98
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasWorkflowStatus' and vValue = 'N' and iMainClientId = 114
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DifficultyEstimator' and vKey= 'DifficultyEstimator_bnd1' and vValue = '0.12' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestConfiguration' and vSubParentKey= 'Result' and vKey= 'CustomActionProvider' and vValue = 'Arcadix.TestApplication.Provider.ResultPageCustomActionProvider.BscberatungResultPageCustomActionProvider' and iMainClientId = 112
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'HasCategory' and vValue = 'Y' and iMainClientId = 115
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'HasMetaAttributes' and vValue = 'Y' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DiscriminationEstimator' and vKey= 'DiscriminationEstimator_MinDiscriminationToPass' and vValue = '-5.0' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Common' and vSubParentKey= 'IISCreation' and vKey= 'DEVDNSAPI' and vValue = 'https://api.godaddy.com/v1/domains/{DomainName}/records' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'HasCompetency' and vValue = 'N' and iMainClientId = 121
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasCustomerTaskId' and vValue = 'Y' and iMainClientId = 115
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasTaskActualPoints' and vValue = 'Y' and iMainClientId = 114
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'ExtranetTeacher' and vSubParentKey= 'LearningTest' and vKey= 'NumberOfRepetitionForSystemGeneratedTest' and vValue = '3' and iMainClientId = 114
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasText' and vValue = 'N' and iMainClientId = 114
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasDescription' and vValue = 'N' and iMainClientId = 114
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasCustomerTaskId' and vValue = 'Y' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestConfiguration' and vSubParentKey= 'Result' and vKey= 'CustomActionProvider' and vValue = 'Arcadix.TestApplication.Provider.ResultPageCustomActionProvider.StellwerkResultPageCustomActionProvider' and iMainClientId = 115
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasSchoolYear' and vValue = 'Y' and iMainClientId = 115
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestConfiguration' and vSubParentKey= 'Result' and vKey= 'CustomActionProvider' and vValue = '' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestParentKey' and vSubParentKey= 'TestSubParentKey' and vKey= 'Testkey' and vValue = 'Y' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'HasCompetency' and vValue = 'Y' and iMainClientId = 122
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'HasCategory' and vValue = 'Y' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Common' and vSubParentKey= 'TestingUnitMailConfig' and vKey= 'FromMailAddress' and vValue = 'noreply@lernpassplus.ch' and iMainClientId = 115
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasWorkflowStatus' and vValue = 'Y' and iMainClientId = 112
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_bound1' and vValue = '0.4' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DiscriminationEstimator' and vKey= 'DiscriminationEstimator_UnSeparatedTaskStartRange' and vValue = '4' and iMainClientId = 98
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasWorkflowStatus' and vValue = 'Y' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'HasCanDo' and vValue = 'N' and iMainClientId = 114
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasSchoolYear' and vValue = 'Y' and iMainClientId = 114
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Common' and vSubParentKey= 'IISCreation' and vKey= 'DEVSSLName' and vValue = '*.arcadixdevelopment.com' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Common' and vSubParentKey= 'OneDrive' and vKey= 'OneDriveTenantId' and vValue = '2df06c52-197f-428e-b032-8b02fb0fc138' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DiscriminationEstimator' and vKey= 'DiscriminationEstimator_NumberOfStudentsToDetermineDiscriminationForATask' and vValue = '200' and iMainClientId = 98
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'HasCategory' and vValue = 'N' and iMainClientId = 112
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'ExtranetTeacher' and vSubParentKey= 'LearningTest' and vKey= 'NumberOfRepetitionForSystemGeneratedTest' and vValue = '3' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'CompetencyMatrix' and vValue = 'N' and iMainClientId = 114
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasText' and vValue = 'N' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DifficultyEstimator' and vKey= 'DifficultyEstimator_MaxNumberOfPupils' and vValue = '3' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasTaskActualPoints' and vValue = 'N' and iMainClientId = 112
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'StandardErrorConfidenceIntervalAlpha' and vValue = '0.5' and iMainClientId = 98
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'HasCanDo' and vValue = 'Y' and iMainClientId = 115
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DifficultyEstimator' and vKey= 'DifficultyEstimator_bnd2' and vValue = '0.5' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_Start_Prob' and vValue = '0.25' and iMainClientId = 98
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DifficultyEstimator' and vKey= 'DifficultyEstimator_MinNumberOfPupils' and vValue = '300' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DifficultyEstimator' and vKey= 'DifficultyEstimator_Start_Prob' and vValue = '0.25' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DiscriminationEstimator' and vKey= 'DiscriminationEstimator_UnSeparatedTaskStartRange' and vValue = '2' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'TaskDifficultyLevel' and vValue = 'All' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasDescription' and vValue = 'N' and iMainClientId = 84
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'CompetencyMatrix' and vValue = 'N' and iMainClientId = 98
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Common' and vSubParentKey= 'OneDrive' and vKey= 'OneDriveId' and vValue = 'b!0ZrWyYH1g02iLmqME8e-CoRZ7BZbbfxJmGSF36_WtcJ59DsUoSfYRqKM-Iwk_UyX' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_MinNumberExercises' and vValue = '20' and iMainClientId = 98
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'HasMetaAttributes' and vValue = 'Y' and iMainClientId = 84
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasTaskActualPoints' and vValue = 'N' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'StandardErrorConfidenceIntervalAlpha' and vValue = '0.5' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_bound1' and vValue = '0.4' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasPoints' and vValue = 'N' and iMainClientId = 84
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'HasCompetency' and vValue = 'N' and iMainClientId = 114
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_MaxNumberExercises' and vValue = '40' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'UncalibratedTaskSettings' and vKey= 'UnCalibratedTaskEndRange' and vValue = '3' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DifficultyEstimator' and vKey= 'DifficultyEstimator_MinNumberOfPupils' and vValue = '300' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'UncalibratedTaskSettings' and vKey= 'LockTime' and vValue = '15' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'HasCategory' and vValue = 'Y' and iMainClientId = 122
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_MaxNumberUnseparated' and vValue = '2' and iMainClientId = 98
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'TaskDifficultyLevel' and vValue = 'BySchoolYear' and iMainClientId = 121
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'HasCanDo' and vValue = 'N' and iMainClientId = 84
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_MinNumberCalibrated' and vValue = '2' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DiscriminationEstimator' and vKey= 'DiscriminationEstimator_MinDiscriminationToPass' and vValue = '0.3' and iMainClientId = 98
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestConfiguration' and vSubParentKey= 'Task' and vKey= 'LearningTestSkinId' and vValue = 'F54F8654-D9AD-4AF0-B5EB-2CF748BD0F91' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DifficultyEstimator' and vKey= 'DifficultyEstimator_MaxNumberOfPupils' and vValue = '2' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DiscriminationEstimator' and vKey= 'DiscriminationEstimator_UnSeparatedTaskEndRange' and vValue = '7' and iMainClientId = 98
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_Upperbound' and vValue = '10' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasText' and vValue = 'N' and iMainClientId = 115
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Common' and vSubParentKey= 'TestingUnitMailConfig' and vKey= 'FromMailAddress' and vValue = 'NoResponse@Arcadix.com' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasDescription' and vValue = 'Y' and iMainClientId = 115
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasPoints' and vValue = 'N' and iMainClientId = 115
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestConfiguration' and vSubParentKey= 'Login' and vKey= 'iMaximumTimeBetweenTasksBeforeTestIsLocked' and vValue = '15' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasPoints' and vValue = 'Y' and iMainClientId = 114
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_Upperbound' and vValue = '10' and iMainClientId = 98
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestConfiguration' and vSubParentKey= 'Login' and vKey= 'iMaximumTimeBetweenTasksBeforeTestIsLocked' and vValue = '15' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Common' and vSubParentKey= 'IISCreation' and vKey= 'IISIPAddress' and vValue = '192.168.129.168' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DiscriminationEstimator' and vKey= 'DiscriminationEstimator_NumberOfStudentsToDetermineDiscriminationForATask' and vValue = '4' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasTaskActualPoints' and vValue = 'N' and iMainClientId = 115
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'UncalibratedTaskSettings' and vKey= 'LockTime' and vValue = '15' and iMainClientId = 98
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'StandardErrorConfidenceIntervalAlpha' and vValue = '0.5' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DifficultyEstimator' and vKey= 'DifficultyEstimator_MaxNumberOfTasksAndLargerUpperbound' and vValue = '200' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'CompetencyMatrix' and vValue = 'Y' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'HasCanDo' and vValue = 'N' and iMainClientId = 121
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_MaxNumberExercises' and vValue = '40' and iMainClientId = 97
+Insert Into t_Framework_XMLConfiguration (uXMLConfigurationId, iMainClientId, vParentKey, vSubParentKey, vKey, vValue, dtCreatedOn, dtModifiedOn, cIsForFusion) Values (newId(), 97, 'ExtranetTeacher', 'LearningTest', 'TaskFoldersForLearningTest', '18110,18115,18120,18086,18091,18096,18129,18130,18131,18138,18139,18140', GETDATE(), GETDATE(), 'Y')
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_PerfectNumber' and vValue = '20' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasText' and vValue = 'N' and iMainClientId = 112
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_bound2' and vValue = '0.5' and iMainClientId = 98
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DiscriminationEstimator' and vKey= 'DiscriminationEstimator_UnSeparatedTaskEndRange' and vValue = '3' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'UncalibratedTaskSettings' and vKey= 'UnCalibratedTaskStartRange' and vValue = '3' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasDescription' and vValue = 'N' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_MaxNumberUncalibrated' and vValue = '5' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasWorkflowStatus' and vValue = 'N' and iMainClientId = 84
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'UncalibratedTaskSettings' and vKey= 'UnCalibratedTaskStartRange' and vValue = '4' and iMainClientId = 98
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'ExtranetPupil' and vSubParentKey= 'LoginPasswordGeneration' and vKey= 'GenerateOnlyLowerCasePassword' and vValue = 'Y' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DifficultyEstimator' and vKey= 'DifficultyEstimator_Start_Prob' and vValue = '0.25' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'CompetencyMatrix' and vValue = 'N' and iMainClientId = 84
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DifficultyEstimator' and vKey= 'DifficultyEstimator_MinNumberOfPupils' and vValue = '300' and iMainClientId = 98
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'CompetencyMatrix' and vValue = 'N' and iMainClientId = 112
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'HasCanDo' and vValue = 'Y' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DiscriminationEstimator' and vKey= 'DiscriminationEstimator_MinDiscriminationToPass' and vValue = '-5.0' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasWorkflowStatus' and vValue = 'Y' and iMainClientId = 115
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Common' and vSubParentKey= 'IISCreation' and vKey= 'DEVIISPort' and vValue = '443' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'HasCanDo' and vValue = 'N' and iMainClientId = 112
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_MinNumberCalibrated' and vValue = '10' and iMainClientId = 98
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'UncalibratedTaskSettings' and vKey= 'UnCalibratedTaskStartRange' and vValue = '3' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DifficultyEstimator' and vKey= 'DifficultyEstimator_bnd1' and vValue = '0.12' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'UncalibratedTaskSettings' and vKey= 'LockTime' and vValue = '15' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_PerfectNumber' and vValue = '20' and iMainClientId = 98
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestConfiguration' and vSubParentKey= 'Result' and vKey= 'CustomActionProvider' and vValue = 'Arcadix.TestApplication.Client.Bscberatung.ResultPageCustomAction' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DifficultyEstimator' and vKey= 'DifficultyEstimator_MaxNumberOfPupils' and vValue = '400' and iMainClientId = 98
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Common' and vSubParentKey= 'OneDrive' and vKey= 'OneDriveClientSecret' and vValue = 'OxFmq1i+dUPTba0iEFQ+5I10Rzac3hqRglVDWliM+no=' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DifficultyEstimator' and vKey= 'DifficultyEstimator_bnd2' and vValue = '0.5' and iMainClientId = 98
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'HasCompetency' and vValue = 'N' and iMainClientId = 112
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DiscriminationEstimator' and vKey= 'DiscriminationEstimator_UnSeparatedTaskStartRange' and vValue = '2' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Common' and vSubParentKey= 'IISCreation' and vKey= 'TESTIISPort' and vValue = '443' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DiscriminationEstimator' and vKey= 'DiscriminationEstimator_UnSeparatedTaskEndRange' and vValue = '3' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestConfiguration' and vSubParentKey= 'Login' and vKey= 'iMaximumTimeBetweenTasksBeforeTestIsLocked' and vValue = '60' and iMainClientId = 106
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasDescription' and vValue = 'N' and iMainClientId = 112
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Common' and vSubParentKey= 'IISCreation' and vKey= 'TESTSSLName' and vValue = '*.arcadixdevelopment.com' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_bound2' and vValue = '0.5' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_MaxNumberUnseparated' and vValue = '3' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Common' and vSubParentKey= 'IISCreation' and vKey= 'DEVDNSIPAddress' and vValue = '182.156.232.90' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Common' and vSubParentKey= 'IISCreation' and vKey= 'DEVSSOKey' and vValue = 'dKNjsJeYtRRV_B5mz51g8qGZDS8fQZ7DDea:J7DpC5WNfeVVuBUQtCZDnf' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'TaskDifficultyLevel' and vValue = 'BySchoolYear' and iMainClientId = 84
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Common' and vSubParentKey= 'IISCreation' and vKey= 'TESTDNSIPAddress' and vValue = '182.156.232.94' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Common' and vSubParentKey= 'IISCreation' and vKey= 'DNSAPI' and vValue = 'https://api.godaddy.com/v1/domains/{DomainName}/records' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestConfiguration' and vSubParentKey= 'Login' and vKey= 'iMaximumTimeBetweenTasksBeforeTestIsLocked' and vValue = '15' and iMainClientId = 98
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Common' and vSubParentKey= 'IISCreation' and vKey= 'IISPort' and vValue = '443' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Common' and vSubParentKey= 'TestingUnitMailConfig' and vKey= 'FromMailAddress' and vValue = 'NoResponse@Arcadix.com' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'CompetencyMatrix' and vValue = 'N' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DifficultyEstimator' and vKey= 'DifficultyEstimator_bnd2' and vValue = '0.5' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasSchoolYear' and vValue = 'N' and iMainClientId = 84
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'TestApplicationLogin' and vKey= 'RequiresOverrideCodeForTestRelogin' and vValue = 'N' and iMainClientId = 106
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Common' and vSubParentKey= 'IISCreation' and vKey= 'SSOKey' and vValue = 'dKNjsJeYtRRV_B5mz51g8qGZDS8fQZ7DDea:J7DpC5WNfeVVuBUQtCZDnf' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DifficultyEstimator' and vKey= 'DifficultyEstimator_bnd1' and vValue = '0.12' and iMainClientId = 98
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasSchoolYear' and vValue = 'N' and iMainClientId = 112
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'TestApplicationLogin' and vKey= 'RequiresOverrideCodeForTestRelogin' and vValue = 'Y' and iMainClientId = 115
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestParentKey' and vSubParentKey= 'TestSubParentKey' and vKey= 'Testkey' and vValue = 'Y' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'HasMetaAttributes' and vValue = 'N' and iMainClientId = 112
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'UncalibratedTaskSettings' and vKey= 'UnCalibratedTaskEndRange' and vValue = '3' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasPoints' and vValue = 'Y' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_MaxNumberUncalibrated' and vValue = '5' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Common' and vSubParentKey= 'IISCreation' and vKey= 'SSLName' and vValue = '*.arcadixdevelopment.com' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'HasCompetency' and vValue = 'Y' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_MinNumberExercises' and vValue = '20' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'TaskDifficultyLevel' and vValue = 'BySchoolYear' and iMainClientId = 122
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestConfiguration' and vSubParentKey= 'Task' and vKey= 'LearningTestSkinId' and vValue = 'F54F8654-D9AD-4AF0-B5EB-2CF748BD0F91' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'ExtranetTeacher' and vSubParentKey= 'LearningTest' and vKey= 'NumberOfRepetitionForSystemGeneratedTest' and vValue = '3' and iMainClientId = 115
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'CompetencyMatrix' and vValue = 'N' and iMainClientId = 119
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasPoints' and vValue = 'Y' and iMainClientId = 112
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DifficultyEstimator' and vKey= 'DifficultyEstimator_MaxNumberOfTasksAndLargerUpperbound' and vValue = '200' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'HasCategory' and vValue = 'Y' and iMainClientId = 84
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'CompetencyMatrix' and vValue = 'N' and iMainClientId = 106
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'ExtranetTeacher' and vSubParentKey= 'TestLoginPaperless' and vKey= 'InvalidateTokenTime' and vValue = '90' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'HasMetaAttributes' and vValue = 'N' and iMainClientId = 114
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DifficultyEstimator' and vKey= 'DifficultyEstimator_MaxNumberOfTasksAndLargerUpperbound' and vValue = '200' and iMainClientId = 98
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasCustomerTaskId' and vValue = 'N' and iMainClientId = 84
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'UncalibratedTaskSettings' and vKey= 'UnCalibratedTaskEndRange' and vValue = '5' and iMainClientId = 98
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Common' and vSubParentKey= 'IISCreation' and vKey= 'TESTDNSAPI' and vValue = 'https://api.godaddy.com/v1/domains/{DomainName}/records' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DifficultyEstimator' and vKey= 'DifficultyEstimator_MaxDifficulty' and vValue = '10' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Common' and vSubParentKey= 'IISCreation' and vKey= 'TESTIISIPAddress' and vValue = '192.168.129.116' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Common' and vSubParentKey= 'IISCreation' and vKey= 'DEVIISIPAddress' and vValue = '192.168.129.168' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Common' and vSubParentKey= 'OneDrive' and vKey= 'OneDriveClientId' and vValue = 'da162a70-184a-424a-817a-c294e7e0b720' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'HasMetaAttributes' and vValue = 'Y' and iMainClientId = 115
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DifficultyEstimator' and vKey= 'DifficultyEstimator_Start_Prob' and vValue = '0.25' and iMainClientId = 98
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_MinNumberExercises' and vValue = '20' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Common' and vSubParentKey= 'IISCreation' and vKey= 'TESTSSOKey' and vValue = 'dKNjsJeYtRRV_B5mz51g8qGZDS8fQZ7DDea:J7DpC5WNfeVVuBUQtCZDnf' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasText' and vValue = 'N' and iMainClientId = 84
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_bound1' and vValue = '0.4' and iMainClientId = 98
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'HasCategory' and vValue = 'N' and iMainClientId = 114
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'ExtranetPupil' and vSubParentKey= 'LoginPasswordGeneration' and vKey= 'GenerateOnlyLowerCasePassword' and vValue = 'N' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'CompetencyMatrix' and vValue = 'N' and iMainClientId = 115
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestParentKey1' and vSubParentKey= 'TestSubParentKey2' and vKey= 'Testkey3' and vValue = 'Y' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'HasCategory' and vValue = 'N' and iMainClientId = 121
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'TaskDifficultyLevel' and vValue = 'All' and iMainClientId = 114
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'TaskDifficultyLevel' and vValue = 'All' and iMainClientId = 115
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'ExtranetTeacher' and vSubParentKey= 'TestLoginPaperless' and vKey= 'InvalidateTokenTime' and vValue = '90' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_bound2' and vValue = '0.5' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'TaskDifficultyLevel' and vValue = 'BySchoolYear' and iMainClientId = 112
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_MaxNumberExercises' and vValue = '50' and iMainClientId = 98
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DifficultyEstimator' and vKey= 'DifficultyEstimator_MaxDifficulty' and vValue = '10' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'HasCompetency' and vValue = 'Y' and iMainClientId = 84
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_MinNumberCalibrated' and vValue = '2' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'CompetencyMatrix' and vValue = 'N' and iMainClientId = 117
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Common' and vSubParentKey= 'IISCreation' and vKey= 'DNSIPAddress' and vValue = '182.156.232.90' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasSchoolYear' and vValue = 'Y' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_PerfectNumber' and vValue = '20' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'ExtranetTeacher' and vSubParentKey= 'LearningTest' and vKey= 'NumberOfTasksForSystemGeneratedTest' and vValue = '15' and iMainClientId = 115
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_Start_Prob' and vValue = '0.25' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestConfiguration' and vSubParentKey= 'Login' and vKey= 'iMaximumTimeBetweenTasksBeforeTestIsLocked' and vValue = '15' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestConfiguration' and vSubParentKey= 'Task' and vKey= 'LearningTestSkinId' and vValue = 'F54F8654-D9AD-4AF0-B5EB-2CF748BD0F91' and iMainClientId = 97
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'TaskColumnsDisplay' and vKey= 'HasCustomerTaskId' and vValue = 'N' and iMainClientId = 112
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'TestApplicationLogin' and vKey= 'RequiresOverrideCodeForTestRelogin' and vValue = 'Y' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'DifficultyEstimator' and vKey= 'DifficultyEstimator_MaxDifficulty' and vValue = '10' and iMainClientId = 98
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_Start_Prob' and vValue = '0.25' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'TestApplication' and vSubParentKey= 'AbilityEstimator' and vKey= 'AbilityEstimator_Upperbound' and vValue = '10' and iMainClientId = 0
+Update t_Framework_XMLConfiguration Set cIsForFusion = 'Y' where vParentKey = 'Intranet' and vSubParentKey= 'BasicSetup' and vKey= 'HasCompetency' and vValue = 'Y' and iMainClientId = 115
+
+
+
+/********************************************************
+there were many offline executution data in active, so the preload tales a lot of time.
+*********************************************************/
+--truncate table t_TestDrive_OfflineProcess_Execution
+
+-------------------------------------
+-- adding default background themes for mainclient 0
+
+if not exists(select * from t_Framework_UserPreference_BackgroundTheme where vBackgroundFileName = 'background-1' and iMainClientId = 0)
+	BEGIN
+ insert into t_Framework_UserPreference_BackgroundTheme select  NEWID(),	0,	uUserId,	vBackgroundFileName,	vBackgroundFileSize,	vBackgroundFileVersion,	vBackgroundFileType,	vBackgroundColor,	vFontColor,	cIsDefault,	GETDATE(),	cIsDeleted,	uModifiedByUserId
+ from t_Framework_UserPreference_BackgroundTheme
+ where iMainClientId = 114 and vBackgroundFileName = 'background-1'
+ END
+
+  if not exists(select * from t_Framework_UserPreference_BackgroundTheme where vBackgroundFileName = 'background-2' and iMainClientId = 0)
+	BEGIN
+ insert into t_Framework_UserPreference_BackgroundTheme select  NEWID(),	0,	uUserId,	vBackgroundFileName,	vBackgroundFileSize,	vBackgroundFileVersion,	vBackgroundFileType,	vBackgroundColor,	vFontColor,	cIsDefault,	GETDATE(),	cIsDeleted,	uModifiedByUserId
+ from t_Framework_UserPreference_BackgroundTheme
+ where iMainClientId = 115 and vBackgroundFileName = 'background-2'
+ END
+
+  if not exists(select * from t_Framework_UserPreference_BackgroundTheme where vBackgroundFileName = 'background-3' and iMainClientId = 0)
+	BEGIN
+ insert into t_Framework_UserPreference_BackgroundTheme select  NEWID(),	0,	uUserId,	vBackgroundFileName,	vBackgroundFileSize,	vBackgroundFileVersion,	vBackgroundFileType,	vBackgroundColor,	vFontColor,	cIsDefault,	GETDATE(),	cIsDeleted,	uModifiedByUserId
+ from t_Framework_UserPreference_BackgroundTheme
+ where iMainClientId = 115 and vBackgroundFileName = 'background-3'
+ END
+
+  if not exists(select * from t_Framework_UserPreference_BackgroundTheme where vBackgroundFileName = 'background-4' and iMainClientId = 0)
+	BEGIN
+ insert into t_Framework_UserPreference_BackgroundTheme select  NEWID(),	0,	uUserId,	vBackgroundFileName,	vBackgroundFileSize,	vBackgroundFileVersion,	vBackgroundFileType,	vBackgroundColor,	vFontColor,	cIsDefault,	GETDATE(),	cIsDeleted,	uModifiedByUserId
+ from t_Framework_UserPreference_BackgroundTheme
+ where iMainClientId = 115 and vBackgroundFileName = 'background-4'
+ END
+
+  if not exists(select * from t_Framework_UserPreference_BackgroundTheme where vBackgroundFileName = 'background-5' and iMainClientId = 0)
+	BEGIN
+ insert into t_Framework_UserPreference_BackgroundTheme select  NEWID(),	0,	uUserId,	vBackgroundFileName,	vBackgroundFileSize,	vBackgroundFileVersion,	vBackgroundFileType,	vBackgroundColor,	vFontColor,	cIsDefault,	GETDATE(),	cIsDeleted,	uModifiedByUserId
+ from t_Framework_UserPreference_BackgroundTheme
+ where iMainClientId = 115 and vBackgroundFileName = 'background-5'
+ END
+
+ -------------------------------------------------------------------------------------------------------------------------------------
+ ---------------------------------------------------------
+  -- added condtion if userId = '00000000-0000-0000-0000-000000000000' then return imanclient = 0 records also
+ ALTER PROCEDURE [dbo].[Proc_Fusion_Framework_UserPreference_BackgroundTheme_GetData]  
+(                              
+  @iMainClientId INT,              
+  @uUserId Uniqueidentifier,            
+  @vPrimaryKeyValue nvarchar(max)                                           
+)   
+As                              
+Begin             
+ /*******************************************************************************                          
+ Created By: Rohit Kumar             
+ Created Date: 31.01.2018                    
+ Description:                                 
+                          
+          
+  Modified By:  Amit Kumar                            
+  Modified Date: 03-08-2020                              
+  Description: Common sp change (for Batch preload)       
+    
+  Modified By: Arvind K                                       
+  Modified Date: 24/08/2020                                     
+  Description: Included column uModifiedByUserId                               
+          
+*************************************************************************************************/                    
+     
+  
+-----------Common approach to fecth data in Batch--------------        
+Declare @uBackgroundThemeId uniqueIdentifier             
+If(@vPrimaryKeyValue = '0')        
+BEGIN        
+ Set @uBackgroundThemeId = '00000000-0000-0000-0000-000000000000'        
+END        
+Else        
+Begin        
+ Set @uBackgroundThemeId = Cast(@vPrimaryKeyValue as uniqueIdentifier)        
+END                  
+---------------------------------------------------------------                               
+                             
+ If(@uUserId='00000000-0000-0000-0000-000000000000')            
+ BEGIN    
+ select top(5000) (          
+  Select (                              
+    Select            
+  BT.uBackgroundThemeId,            
+  BT.iMainClientId,            
+  BT.uUserId,   
+  BT.uModifiedByUserId,            
+  BT.vBackGroundFileName,            
+  BT.vBackgroundFileSize,            
+  BT.vBackgroundFileVersion,            
+  BT.vBackgroundFileType,            
+  BT.vBackgroundColor,            
+  BT.vFontColor,            
+  BT.cIsDefault,            
+  BT.dtModifiedOn,    
+  BT.cIsDeleted    
+   for json path,INCLUDE_NULL_VALUES, without_array_wrapper)) as JSONResult               
+From t_Framework_UserPreference_BackgroundTheme BT where              
+( BT.iMainClientId=@iMainClientId or BT.iMainClientId=0) and BT.cIsDeleted = 'N'  and BT.uBackgroundThemeId > @uBackgroundThemeId  
+ order by BT.uBackgroundThemeId         
+ END            
+ ELSE            
+   BEGIN   
+   select top(5000) (           
+       Select (                              
+    Select            
+  BT.uBackgroundThemeId,            
+  BT.iMainClientId,            
+  BT.uUserId,   
+  BT.uModifiedByUserId,            
+  BT.vBackGroundFileName,            
+  BT.vBackgroundFileSize,            
+  BT.vBackgroundFileVersion,            
+  BT.vBackgroundFileType,            
+  BT.vBackgroundColor,            
+  BT.vFontColor,            
+  BT.cIsDefault,            
+  BT.dtModifiedOn,    
+  BT.cIsDeleted    
+  for json path,INCLUDE_NULL_VALUES, without_array_wrapper)) as JSONResult               
+From t_Framework_UserPreference_BackgroundTheme BT where               
+ BT.uUserId=@uUserId and BT.iMainClientId=@iMainClientId  and BT.cIsDefault = 'N'   and BT.uBackgroundThemeId > @uBackgroundThemeId  
+ order by BT.uBackgroundThemeId       
+   END            
+                     
+END   
+  

@@ -1,0 +1,40 @@
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Learncoacher_Document_User' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_Learncoacher_Document_User ADD uModifiedByUserId uniqueidentifier  
+END
+Go
+
+/**********************************
+Default Values
+**********************************/
+update t_Learncoacher_Document_User set uModifiedByUserId = uUserId  
+Go
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_LearnCoacher_Document_DeleteDocument_Final
+JProc_LearnCoacher_Document_DeleteFolder
+JProc_LearnCoacher_Document_DeleteFolder_04_05_2020
+JProc_LearnCoacher_Document_DeleteFolder_Final
+JProc_LearnCoacher_Document_DeleteFolder_Final_07_08_2019
+JProc_LearnCoacher_Document_UploadFiles
+JProc_LearnCoacher_Document_UploadFiles_1892018
+JProc_LearnCoacher_Document_View
+JProc_LearnCoacher_Document_View_Final
+JProc_LearnCoacher_Document_ViewStatus
+JProc_LearnCoacher_Document_ViewStatus_ForMainClient
+JProc_LearnCoacher_Document_ViewStatus_ForMainClient_Final
+***********************************************************/
+
+
+/********************Procs to Review**********************
+JProc_LearnCoacher_Document_UploadFiles (Modified)
+JProc_LearnCoacher_Document_UploadFiles_1892018 (Modified)
+***********************************************************/

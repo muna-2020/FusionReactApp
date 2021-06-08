@@ -1,0 +1,62 @@
+/**********************************
+New table		
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES   WHERE TABLE_NAME = N't_TestDrive_Tip')
+BEGIN
+CREATE TABLE [dbo].[t_TestDrive_Tip]
+(
+	  [uTipId] UNIQUEIDENTIFIER NULL
+	, [iMainClientId] INT NULL
+	, [iApplicationTypeId] INT NULL
+	, [dtTipDate] DATETIME NULL
+	, [cIsActive] CHAR(1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [cIsDeleted] CHAR(1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [uUserId] UNIQUEIDENTIFIER NULL
+	, [dtCreatedOn] DATETIME NULL
+	, [dtModifiedOn] DATETIME NULL
+	, [iPageId] INT NULL
+	, [iOrder] INT NULL
+	, [uModifiedByUserId] UNIQUEIDENTIFIER NULL
+)
+END
+Go
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES   WHERE TABLE_NAME = N't_TestDrive_Tip_Data')
+BEGIN
+CREATE TABLE [dbo].[t_TestDrive_Tip_Data]
+(
+	  [uTipDataId] UNIQUEIDENTIFIER NULL
+	, [uTipId] UNIQUEIDENTIFIER NULL
+	, [iLanguageId] INT NULL
+	, [vTipTitle] NVARCHAR(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+)
+END
+
+GO
+
+
+CREATE NONCLUSTERED INDEX  IX_t_TestDrive_Tip_uTipId ON t_TestDrive_Tip ( [uTipId] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_t_TestDrive_Tip_iMainClientId ON t_TestDrive_Tip ( [iMainClientId] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_t_TestDrive_Tip_iApplicationTypeId ON t_TestDrive_Tip ( [iApplicationTypeId] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_t_TestDrive_Tip_dtTipDate ON t_TestDrive_Tip ( [dtTipDate] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_t_TestDrive_Tip_cIsActive ON t_TestDrive_Tip ( [cIsActive] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_t_TestDrive_Tip_cIsDeleted ON t_TestDrive_Tip ( [cIsDeleted] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_t_TestDrive_Tip_uUserId ON t_TestDrive_Tip ( [uUserId] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_t_TestDrive_Tip_dtCreatedOn ON t_TestDrive_Tip ( [dtCreatedOn] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_t_TestDrive_Tip_dtModifiedOn ON t_TestDrive_Tip ( [dtModifiedOn] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_t_TestDrive_Tip_iPageId ON t_TestDrive_Tip ( [iPageId] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_t_TestDrive_Tip_iOrder ON t_TestDrive_Tip ( [iOrder] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_t_TestDrive_Tip_uModifiedByUserId ON t_TestDrive_Tip ( [uModifiedByUserId] ASC ) 
+
+go
+CREATE NONCLUSTERED INDEX  IX_t_TestDrive_Tip_Data_uTipDataId ON t_TestDrive_Tip_Data ( [uTipDataId] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_t_TestDrive_Tip_Data_uTipId ON t_TestDrive_Tip_Data ( [uTipId] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_t_TestDrive_Tip_Data_iLanguageId ON t_TestDrive_Tip_Data ( [iLanguageId] ASC ) 
+go
+
+/**********************************
+Default Values
+**********************************/
+
+--There is only testing data there. Not required to be added.

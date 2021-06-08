@@ -1,0 +1,36 @@
+/**********************************
+New Columns
+**********************************/
+GO
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_UserRole' AND COLUMN_NAME = 'cIsForProductManagement') 
+BEGIN
+ALTER TABLE t_Framework_MainClient_UserRole ADD cIsForProductManagement char(1)  
+END
+
+GO	 
+
+/**********************************
+Default Values
+**********************************/
+Update t_Framework_MainClient_UserRole Set cIsForProductManagement ='N'
+where cIsForProductManagement Is Null
+
+GO
+
+/********************AllDependentProc********************
+Proc_Framework_MainClientUser_CopyUserRoles
+Proc_Framework_MainClientUser_GetAllAssignedRoles
+Proc_Framework_MainClientUser_GetAllAssignedRolesToTeam
+Proc_Framework_MainClientUser_GetAllUserRoles
+Proc_Fusion_Intranet_UserRole_AddData
+Proc_Fusion_Intranet_UserRole_DeleteData
+Proc_Fusion_Intranet_UserRole_EditData
+Proc_Fusion_Intranet_UserRole_GetData
+Proc_Fusion_Intranet_UserRole_GetData_New
+Proc_Fusion_Intranet_UserRole_GetData_Old
+****************************************************************/
+
+
+/********************Procs updated**********************
+****************************************************************/

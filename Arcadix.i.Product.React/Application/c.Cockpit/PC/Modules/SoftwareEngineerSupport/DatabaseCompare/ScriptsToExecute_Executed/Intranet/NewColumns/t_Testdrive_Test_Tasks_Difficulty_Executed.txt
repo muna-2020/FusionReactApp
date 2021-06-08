@@ -1,0 +1,36 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Testdrive_Test_Tasks_Difficulty' AND COLUMN_NAME = 'uSeparationAndCalibrationGroupId') 
+BEGIN
+ALTER TABLE t_Testdrive_Test_Tasks_Difficulty ADD uSeparationAndCalibrationGroupId uniqueidentifier  
+END	    
+
+GO
+/**********************************
+Default Values
+**********************************/
+--update t_Testdrive_Test_Tasks_Difficulty set uSeparationAndCalibrationGroupId= '00000000-0000-0000-0000-000000000000'
+
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_TestDrive_BaseObject_Task_AddData
+FProc_TestDrive_BaseObject_Task_DeleteData
+FProc_TestDrive_BaseObject_Task_EditData
+FProc_TestDrive_BaseObject_Task_GetData
+GetTaskDifficulty
+Proc_CMS_CMSTestDrivePage_GetAllTestLinkedToTask
+Proc_CMS_CMSTestDrivePage_ResetTaskToBase_Calibration
+Proc_TestDrive_CMSPage_GetTaskDifficultyDetailsForTest
+Proc_TestDrive_Test_AssignTaskToTest_Calibration
+****************************************************************/
+
+/********************Procs need to Review**********************
+FProc_TestDrive_BaseObject_Task_AddData
+Proc_CMS_CMSTestDrivePage_ResetTaskToBase_Calibration
+Proc_TestDrive_Test_AssignTaskToTest_Calibration
+****************************************************************/

@@ -1,0 +1,372 @@
+﻿ /**********************************
+  Following tables updated:
+
+	1) t_CMS_Container
+	2) t_CMS_Container_Element
+	3) t_CMS_Element_Comment
+	4) t_CMS_ElementType
+	5) t_CMS_FileSystem_ElementFolder
+**********************************/
+
+ /**********************************
+  Following procs  updated:  
+    1)  Proc_CMS_CMSElement_SaveComment
+    2)  Proc_CMS_CMSElement_GetElementFolderDetails (by Arvind S)
+**********************************/
+
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_Container' AND COLUMN_NAME = 'cIsFusionVersion') 
+BEGIN
+ALTER TABLE t_CMS_Container ADD cIsFusionVersion char(1)  
+END  
+
+GO  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_Container' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_CMS_Container ADD uModifiedByUserId uniqueidentifier  
+END			 
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_CMS_Container set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_Container_Element' AND COLUMN_NAME = 'iElementId_New') 
+BEGIN
+ALTER TABLE t_CMS_Container_Element ADD iElementId_New int  
+END  
+	
+GO	
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_Container_Element' AND COLUMN_NAME = 'iFusionOrder') 
+BEGIN
+ALTER TABLE t_CMS_Container_Element ADD iFusionOrder int  
+END
+	 
+GO
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_Element_Comment' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_CMS_Element_Comment ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_CMS_Element_Comment set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_Element_Comment' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_CMS_Element_Comment ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_CMS_Element_Comment set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_ElementType' AND COLUMN_NAME = 'dtCreatedOn') 
+BEGIN
+ALTER TABLE t_CMS_ElementType ADD dtCreatedOn datetime  
+END
+
+GO	  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_ElementType' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_CMS_ElementType ADD dtModifiedOn datetime  
+END
+	
+GO	
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_ElementType' AND COLUMN_NAME = 'vMainElementClass_Fusion') 
+BEGIN
+ALTER TABLE t_CMS_ElementType ADD vMainElementClass_Fusion nvarchar(200)  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_CMS_ElementType set  dtCreatedOn=GetDate() where dtCreatedOn is null 
+update t_CMS_ElementType set  dtModifiedOn=GetDate() where dtModifiedOn is null
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_CMS_FileSystem_ElementFolder' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_CMS_FileSystem_ElementFolder ADD uModifiedByUserId uniqueidentifier  
+END			 
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_CMS_FileSystem_ElementFolder set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+
+GO
+    
+ALter PROCEDURE [dbo].[FProc_CMS_CMSElement_SaveComment]    
+(      
+ @iElementId int  ,    
+ @vElementXML nvarchar(max),    
+ @iContainerId int = 0,    
+ @UserId uniqueidentifier,    
+ @iMainClientId int    
+)      
+AS      
+Begin      
+ /********************************************************************************************      
+   Created By:  Raghavendra Prasanna      
+   Create Date:  20.06.2016     
+   Description:  Save Comment Text    
+ ********************************************************************************************/      
+    
+    --insert into [Arcadix_Common_Service].dbo.[t_framework_exception] values (newid(),1000,333,'Comment',@vElementXML+' '+str(@iContainerId),'',null,getdate())    
+    
+ Declare @h int,@Id uniqueidentifier,@vText nvarchar(max),@iTextElementId int,@PrimaryKey int,@iCommentElementId int    
+ EXECUTE sp_xml_preparedocument @h OUTPUT, @vElementXML    
+     
+    
+ DECLARE Cursor_Elements CURSOR FOR  SELECT Id, vText,PrimaryKey from OpenXml(@h,'/Element/Comments/User',1)    
+ with(Id uniqueidentifier './@Id',vText  nvarchar(max) '.' ,PrimaryKey int './@PrimaryKey')    
+ OPEN Cursor_Elements FETCH NEXT FROM Cursor_Elements INTO @Id,@vText, @PrimaryKey         
+ WHILE( @@Fetch_Status <> -1 )                                  
+  BEGIN    
+   if(@PrimaryKey = -1 or @PrimaryKey is null)    
+   BEGIN    
+    INSERT INTO t_CMS_Element  ([iElementTypeId],[iMainClientId],[iFolderID],[cIsDeleted],[cIsDisplayedInElementTree],[dtCreatedOn],[dtModifiedOn],[cIsSecure],[uUserId]) VALUES (1,@iMainClientId,0,'N','Y',GETDATE(),GETDATE(),'Y',@UserId)        
+    set @iTextElementId = @@Identity     
+    
+    INSERT INTO t_CMS_Element_Text ([cIsToggleText],[cIsWithBorder],[iElementId],[iShowContentTime],[vElementTextDescription],[vElementTextName],[vElementTextHtml])    
+    Select 'N','N',@iTextElementId,NULL,'','',@vText    
+    
+    Insert into t_CMS_Element_Comment (iElementId, iCommentElementId, uUserId, dtCreatedOn, dtModifiedOn, iContainerId) values(@iElementId,@iTextElementId,@UserId,GETDATE(),getdate(),@iContainerId)    
+   END    
+   ELSE    
+   BEGIN    
+    Select @iCommentElementId = iCommentElementId from t_CMS_Element_Comment where iElementCommentId=@PrimaryKey    
+    if(@iCommentElementId is not null)    
+    BEGIN    
+     Update t_CMS_Element_Text set vElementTextHtml = @vText where iElementId=@iCommentElementId    
+    
+     DELETE FROM t_CMS_Element_Comment WHERE iElementId=@iElementId and iElementCommentId NOT IN (SELECT PrimaryKey FROM OPENXML (@h, '/Element/Comments/User',1)     
+     WITH (PrimaryKey int './@PrimaryKey') where PrimaryKey is not null) and uUserId=@UserId    
+    
+    END    
+   END    
+   FETCH NEXT FROM Cursor_Elements INTO @Id,@vText,@PrimaryKey    
+  END       
+  CLOSE Cursor_Elements                                  
+  DEALLOCATE Cursor_Elements                      
+    
+END     
+
+GO 
+
+ALTER PROCEDURE [dbo].[JEditorProc_CMS_CMSElement_SaveComment]    
+(      
+ @iElementId int  ,    
+ @vElementXML nvarchar(max),    
+ @iContainerId int = 0,    
+ @UserId uniqueidentifier,    
+ @iMainClientId int    
+)      
+AS      
+Begin      
+ /********************************************************************************************      
+   Created By:  Raghavendra Prasanna      
+   Create Date:  20.06.2016     
+   Description:  Save Comment Text    
+  
+   Modified By: Arvind K                                       
+   Modified Date: 12/08/2020                                     
+   Description: Included default value for uModifiedByUserId column  
+ ********************************************************************************************/      
+    
+    --insert into [Arcadix_Common_Service].dbo.[t_framework_exception] values (newid(),1000,333,'Comment',@vElementXML+' '+str(@iContainerId),'',null,getdate())    
+    
+ Declare @h int,@Id uniqueidentifier,@vText nvarchar(max),@iTextElementId int,@PrimaryKey int,@iCommentElementId int    
+ EXECUTE sp_xml_preparedocument @h OUTPUT, @vElementXML    
+     
+    
+ DECLARE Cursor_Elements CURSOR FOR  SELECT Id, vText,PrimaryKey from OpenXml(@h,'/Element/Comments/User',1)    
+ with(Id uniqueidentifier './@Id',vText  nvarchar(max) '.' ,PrimaryKey int './@PrimaryKey')    
+ OPEN Cursor_Elements FETCH NEXT FROM Cursor_Elements INTO @Id,@vText, @PrimaryKey         
+ WHILE( @@Fetch_Status <> -1 )                                  
+  BEGIN    
+   if(@PrimaryKey = -1 or @PrimaryKey is null)    
+   BEGIN    
+    INSERT INTO t_CMS_Element  ([iElementTypeId],[iMainClientId],[iFolderID],[cIsDeleted],[cIsDisplayedInElementTree],[dtCreatedOn],[dtModifiedOn],[cIsSecure],[uUserId]) VALUES (1,@iMainClientId,0,'N','Y',GETDATE(),GETDATE(),'Y',@UserId)        
+    set @iTextElementId = @@Identity     
+    
+    INSERT INTO t_CMS_Element_Text ([cIsToggleText],[cIsWithBorder],[iElementId],[iShowContentTime],[vElementTextDescription],[vElementTextName],[vElementTextHtml])    
+    Select 'N','N',@iTextElementId,NULL,'','',@vText    
+    
+    Insert into t_CMS_Element_Comment (iElementId, iCommentElementId, uUserId, dtCreatedOn, dtModifiedOn, iContainerId) values(@iElementId,@iTextElementId,@UserId,GETDATE(),getdate(),@iContainerId)    
+   END    
+   ELSE    
+   BEGIN    
+    Select @iCommentElementId = iCommentElementId from t_CMS_Element_Comment where iElementCommentId=@PrimaryKey    
+    if(@iCommentElementId is not null)    
+    BEGIN    
+     Update t_CMS_Element_Text set vElementTextHtml = @vText where iElementId=@iCommentElementId    
+    
+     DELETE FROM t_CMS_Element_Comment WHERE iElementId=@iElementId and iElementCommentId NOT IN (SELECT PrimaryKey FROM OPENXML (@h, '/Element/Comments/User',1)     
+     WITH (PrimaryKey int './@PrimaryKey') where PrimaryKey is not null) and uUserId=@UserId    
+    
+    END    
+   END    
+   FETCH NEXT FROM Cursor_Elements INTO @Id,@vText,@PrimaryKey    
+  END       
+  CLOSE Cursor_Elements                                  
+  DEALLOCATE Cursor_Elements                      
+    
+END 
+
+GO
+
+ALTER PROCEDURE [Proc_CMS_CMSElement_SaveComment]    
+(      
+ @iElementId int  ,    
+ @vElementXML nvarchar(max),    
+ @iContainerId int = 0,    
+ @UserId uniqueidentifier,    
+ @iMainClientId int    
+)      
+AS      
+Begin      
+ /********************************************************************************************      
+   Created By:  Raghavendra Prasanna      
+   Create Date:  20.06.2016     
+   Description:  Save Comment Text    
+  
+   Modified By: Arvind K                                       
+   Modified Date: 12/08/2020                                     
+   Description: Included default value for uModifiedByUserId column  
+ ********************************************************************************************/      
+    
+    --insert into [Arcadix_Common_Service].dbo.[t_framework_exception] values (newid(),1000,333,'Comment',@vElementXML+' '+str(@iContainerId),'',null,getdate())    
+    
+ Declare @h int,@Id uniqueidentifier,@vText nvarchar(max),@iTextElementId int,@PrimaryKey int,@iCommentElementId int    
+ EXECUTE sp_xml_preparedocument @h OUTPUT, @vElementXML    
+     
+    
+ DECLARE Cursor_Elements CURSOR FOR  SELECT Id, vText,PrimaryKey from OpenXml(@h,'/Element/Comments/User',1)    
+ with(Id uniqueidentifier './@Id',vText  nvarchar(max) '.' ,PrimaryKey int './@PrimaryKey')    
+ OPEN Cursor_Elements FETCH NEXT FROM Cursor_Elements INTO @Id,@vText, @PrimaryKey         
+ WHILE( @@Fetch_Status <> -1 )                                  
+  BEGIN    
+   if(@PrimaryKey = -1 or @PrimaryKey is null)    
+   BEGIN    
+    INSERT INTO t_CMS_Element  ([iElementTypeId],[iMainClientId],[iFolderID],[cIsDeleted],[cIsDisplayedInElementTree],[dtCreatedOn],[dtModifiedOn],[cIsSecure],[uUserId]) VALUES (1,@iMainClientId,0,'N','Y',GETDATE(),GETDATE(),'Y',@UserId)        
+    set @iTextElementId = @@Identity     
+    
+    INSERT INTO t_CMS_Element_Text ([cIsToggleText],[cIsWithBorder],[iElementId],[iShowContentTime],[vElementTextDescription],[vElementTextName],[vElementTextHtml])    
+    Select 'N','N',@iTextElementId,NULL,'','',@vText    
+    
+    Insert into t_CMS_Element_Comment (iElementId, iCommentElementId, uUserId, dtCreatedOn, dtModifiedOn, iContainerId) values(@iElementId,@iTextElementId,@UserId,GETDATE(),getdate(),@iContainerId)    
+   END    
+   ELSE    
+   BEGIN    
+    Select @iCommentElementId = iCommentElementId from t_CMS_Element_Comment where iElementCommentId=@PrimaryKey    
+    if(@iCommentElementId is not null)    
+    BEGIN    
+     Update t_CMS_Element_Text set vElementTextHtml = @vText where iElementId=@iCommentElementId    
+    
+     DELETE FROM t_CMS_Element_Comment WHERE iElementId=@iElementId and iElementCommentId NOT IN (SELECT PrimaryKey FROM OPENXML (@h, '/Element/Comments/User',1)     
+     WITH (PrimaryKey int './@PrimaryKey') where PrimaryKey is not null) and uUserId=@UserId    
+    
+    END    
+   END    
+   FETCH NEXT FROM Cursor_Elements INTO @Id,@vText,@PrimaryKey    
+  END       
+  CLOSE Cursor_Elements                                  
+  DEALLOCATE Cursor_Elements                      
+    
+END 
+
+GO
+
+ALTER PROCEDURE [dbo].[Proc_Fusion_Editor_CMS_CMSElement_SaveComment]    
+(      
+ @iElementId int  ,    
+ @vElementXML nvarchar(max),    
+ @iContainerId int = 0,    
+ @UserId uniqueidentifier,    
+ @iMainClientId int    
+)      
+AS      
+Begin      
+ /********************************************************************************************      
+   Created By:  Raghavendra Prasanna      
+   Create Date:  20.06.2016     
+   Description:  Save Comment Text    
+  
+  Modified By: Amit Kumar          
+  Modified Date: 17.08.2020  
+  Description: Added new column "uModifiedByUserId"    
+ ********************************************************************************************/      
+    
+    --insert into [Arcadix_Common_Service].dbo.[t_framework_exception] values (newid(),1000,333,'Comment',@vElementXML+' '+str(@iContainerId),'',null,getdate())    
+    
+ Declare @h int,@Id uniqueidentifier,@vText nvarchar(max),@iTextElementId int,@PrimaryKey int,@iCommentElementId int    
+ EXECUTE sp_xml_preparedocument @h OUTPUT, @vElementXML    
+     
+    
+ DECLARE Cursor_Elements CURSOR FOR  SELECT Id, vText,PrimaryKey from OpenXml(@h,'/Element/Comments/User',1)    
+ with(Id uniqueidentifier './@Id',vText  nvarchar(max) '.' ,PrimaryKey int './@PrimaryKey')    
+ OPEN Cursor_Elements FETCH NEXT FROM Cursor_Elements INTO @Id,@vText, @PrimaryKey         
+ WHILE( @@Fetch_Status <> -1 )                                  
+  BEGIN    
+   if(@PrimaryKey = -1 or @PrimaryKey is null)    
+   BEGIN    
+    INSERT INTO t_CMS_Element  ([iElementTypeId],[iMainClientId],[iFolderID],[cIsDeleted],[cIsDisplayedInElementTree],[dtCreatedOn],[dtModifiedOn],[cIsSecure],[uUserId],[uModifiedByUserId]) VALUES (1,@iMainClientId,0,'N','Y',GETDATE(),GETDATE(),'Y',@UserId,@UserId)        
+    set @iTextElementId = @@Identity     
+    
+    INSERT INTO t_CMS_Element_Text ([cIsToggleText],[cIsWithBorder],[iElementId],[iShowContentTime],[vElementTextDescription],[vElementTextName],[vElementTextHtml])    
+    Select 'N','N',@iTextElementId,NULL,'','',@vText    
+    
+    Insert into t_CMS_Element_Comment(iElementId, iCommentElementId, uUserId, dtCreatedOn, dtModifiedOn, iContainerId) values(@iElementId,@iTextElementId,@UserId,GETDATE(),getdate(),@iContainerId,@UserId)    
+   END    
+   ELSE    
+   BEGIN    
+    Select @iCommentElementId = iCommentElementId from t_CMS_Element_Comment where iElementCommentId=@PrimaryKey    
+    if(@iCommentElementId is not null)    
+    BEGIN    
+     Update t_CMS_Element_Text set vElementTextHtml = @vText where iElementId=@iCommentElementId    
+    
+     DELETE FROM t_CMS_Element_Comment WHERE iElementId=@iElementId and iElementCommentId NOT IN (SELECT PrimaryKey FROM OPENXML (@h, '/Element/Comments/User',1)     
+     WITH (PrimaryKey int './@PrimaryKey') where PrimaryKey is not null) and uUserId=@UserId    
+    
+    END    
+   END    
+   FETCH NEXT FROM Cursor_Elements INTO @Id,@vText,@PrimaryKey    
+  END       
+  CLOSE Cursor_Elements                                  
+  DEALLOCATE Cursor_Elements                      
+    
+END 

@@ -1,0 +1,22 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_Status' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_Test_Status ADD dtModifiedOn datetime  
+END
+
+GO		 
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Test_Status set dtModifiedOn= GetDate() Where dtModifiedOn is null
+
+GO
+
+/**********************************
+Angular proc modified
+**********************************/
+

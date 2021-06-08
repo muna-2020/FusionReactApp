@@ -1,0 +1,28 @@
+﻿/**********************************
+Renamed Table
+**********************************/
+EXEC sp_rename 't_TestDrive_Test_ResultAttribute_ElementFormulaAttribute_Template' ,'t_TestDrive_Test_ResultAttribute_ElementAttribute_Template'
+GO
+
+/**********************************
+Fusion procs
+**********************************/
+/********************ModifiedProc********************
+p_Intranet_ElementFormulaAttribute_AddData
+p_Intranet_ElementFormulaAttribute_DeleteData
+p_Intranet_ElementFormulaAttribute_EditData
+p_Intranet_ElementFormulaAttribute_GetData
+*************************************************/
+
+/**********************************
+Angular procs
+**********************************/
+/********************ModifiedProc********************
+JProc_TestDrive_Test_GetElementAttributeTemplates
+Proc_TestDrive_ElementFormulaAttributesAddEdit_GetElementFormulaAttributes
+Proc_TestDrive_ElementObjectRules_DeleteElementFormulaAttributeTemplate
+Proc_TestDrive_ElementObjectRules_SaveElementObjectRulesAndFormulaAttributes
+Proc_TestDrive_Test_ElementObjectRules_SaveAsCutomTemplate
+Proc_TestDrive_Test_GetElementAttributeTemplates
+*************************************************/
+

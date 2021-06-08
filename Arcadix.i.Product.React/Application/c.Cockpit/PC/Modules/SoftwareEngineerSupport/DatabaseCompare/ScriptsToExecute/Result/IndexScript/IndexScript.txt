@@ -1,0 +1,254 @@
+﻿/*****************************************
+Index for t_TestDrive_Test_Execution table
+*****************************************/
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_dBound1] ON [dbo].[t_TestDrive_Test_Execution] ([dBound1])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_dBound2] ON [dbo].[t_TestDrive_Test_Execution] ([dBound2])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_dDifficultyUpperBound] ON [dbo].[t_TestDrive_Test_Execution] ([dDifficultyUpperBound])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_dStandardErrorConfidenceIntervalAlpha] ON [dbo].[t_TestDrive_Test_Execution] ([dStandardErrorConfidenceIntervalAlpha])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_dStartProb] ON [dbo].[t_TestDrive_Test_Execution] ([dStartProb])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_dTestSubjectConstance] ON [dbo].[t_TestDrive_Test_Execution] ([dTestSubjectConstance])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_dTestSubjectVariance] ON [dbo].[t_TestDrive_Test_Execution] ([dTestSubjectVariance])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_dtLastTaskAnsweredOn] ON [dbo].[t_TestDrive_Test_Execution] ([dtLastTaskAnsweredOn])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_dtTestEnd] ON [dbo].[t_TestDrive_Test_Execution] ([dtTestEnd])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_dtTestStart] ON [dbo].[t_TestDrive_Test_Execution] ([dtTestStart])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_iAlgorithmId] ON [dbo].[t_TestDrive_Test_Execution] ([iAlgorithmId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_iLanguageId] ON [dbo].[t_TestDrive_Test_Execution] ([iLanguageId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_iMaximumTasksToBeShown] ON [dbo].[t_TestDrive_Test_Execution] ([iMaximumTasksToBeShown])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_iMinimumTasksToBeShown] ON [dbo].[t_TestDrive_Test_Execution] ([iMinimumTasksToBeShown])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_iPerfectNumber] ON [dbo].[t_TestDrive_Test_Execution] ([iPerfectNumber])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_iSoundVolume] ON [dbo].[t_TestDrive_Test_Execution] ([iSoundVolume])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_iTaskCountDisplayed] ON [dbo].[t_TestDrive_Test_Execution] ([iTaskCountDisplayed])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_iTestStatusId] ON [dbo].[t_TestDrive_Test_Execution] ([iTestStatusId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_iTestSubjectId] ON [dbo].[t_TestDrive_Test_Execution] ([iTestSubjectId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_iTotalEffectiveTimeTaken] ON [dbo].[t_TestDrive_Test_Execution] ([iTotalEffectiveTimeTaken])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_uElementFormulaAttributeTemplateId] ON [dbo].[t_TestDrive_Test_Execution] ([uElementFormulaAttributeTemplateId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_uResultAttributeGroupId] ON [dbo].[t_TestDrive_Test_Execution] ([uResultAttributeGroupId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_uTestTokenId] ON [dbo].[t_TestDrive_Test_Execution] ([uTestTokenId])
+GO
+
+/*****************************************
+Index for t_TestDrive_Test_Execution_AdaptiveLearning table
+*****************************************/
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_AdaptiveLearning_uExecutionAdaptiveLearningId] ON [dbo].[t_TestDrive_Test_Execution_AdaptiveLearning] ([uExecutionAdaptiveLearningId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_AdaptiveLearning_uExecutionId] ON [dbo].[t_TestDrive_Test_Execution_AdaptiveLearning] ([uExecutionId])
+GO
+
+/*****************************************
+Index for t_TestDrive_Test_Execution_SubSubjectDetails table
+*****************************************/
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_SubSubjectDetails_dConstance] ON [dbo].[t_TestDrive_Test_Execution_SubSubjectDetails] ([dConstance])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_SubSubjectDetails_dVariance] ON [dbo].[t_TestDrive_Test_Execution_SubSubjectDetails] ([dVariance])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_SubSubjectDetails_iSubjectId] ON [dbo].[t_TestDrive_Test_Execution_SubSubjectDetails] ([iSubjectId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_SubSubjectDetails_uExecutionId] ON [dbo].[t_TestDrive_Test_Execution_SubSubjectDetails] ([uExecutionId])
+GO
+
+/*****************************************
+Index for t_TestDrive_Test_Execution_SystemDetails table
+*****************************************/
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_SystemDetails_dtDatetimeOfLogin] ON [dbo].[t_TestDrive_Test_Execution_SystemDetails] ([dtDatetimeOfLogin])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_SystemDetails_uExecutionId] ON [dbo].[t_TestDrive_Test_Execution_SystemDetails] ([uExecutionId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_SystemDetails_vBrowser] ON [dbo].[t_TestDrive_Test_Execution_SystemDetails] ([vBrowser])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_SystemDetails_vBrowserVersion] ON [dbo].[t_TestDrive_Test_Execution_SystemDetails] ([vBrowserVersion])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_SystemDetails_vIPAddress] ON [dbo].[t_TestDrive_Test_Execution_SystemDetails] ([vIPAddress])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Execution_SystemDetails_vOs] ON [dbo].[t_TestDrive_Test_Execution_SystemDetails] ([vOs])
+GO
+
+/*****************************************
+Index for t_Testdrive_Test_ResultElementData table
+*****************************************/
+CREATE NONCLUSTERED INDEX [IX_t_Testdrive_Test_ResultElementData_iElementId] ON [dbo].[t_Testdrive_Test_ResultElementData] ([iElementId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_Testdrive_Test_ResultElementData_uResultId] ON [dbo].[t_Testdrive_Test_ResultElementData] ([uResultId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_Testdrive_Test_ResultElementData_vElementType] ON [dbo].[t_Testdrive_Test_ResultElementData] ([vElementType])
+GO
+
+/*****************************************
+Index for t_TestDrive_Test_ResultSummary table
+*****************************************/
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultSummary_dTestCorrectAnswerValue] ON [dbo].[t_TestDrive_Test_ResultSummary] ([dTestCorrectAnswerValue])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultSummary_dTestNotAttemptedValue] ON [dbo].[t_TestDrive_Test_ResultSummary] ([dTestNotAttemptedValue])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultSummary_dTestPoints] ON [dbo].[t_TestDrive_Test_ResultSummary] ([dTestPoints])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultSummary_dTestStandardErrorConfidenceIntervalLowerBound] ON [dbo].[t_TestDrive_Test_ResultSummary] ([dTestStandardErrorConfidenceIntervalLowerBound])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultSummary_dTestStandardErrorConfidenceIntervalUpperBound] ON [dbo].[t_TestDrive_Test_ResultSummary] ([dTestStandardErrorConfidenceIntervalUpperBound])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultSummary_dTestWrongAnswerValue] ON [dbo].[t_TestDrive_Test_ResultSummary] ([dTestWrongAnswerValue])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultSummary_iTaskObjectsCorrect] ON [dbo].[t_TestDrive_Test_ResultSummary] ([iTaskObjectsCorrect])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultSummary_iTaskObjectsNotAnswered] ON [dbo].[t_TestDrive_Test_ResultSummary] ([iTaskObjectsNotAnswered])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultSummary_iTaskObjectsWrong] ON [dbo].[t_TestDrive_Test_ResultSummary] ([iTaskObjectsWrong])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultSummary_iTestNumberOfTasks] ON [dbo].[t_TestDrive_Test_ResultSummary] ([iTestNumberOfTasks])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultSummary_uExecutionId] ON [dbo].[t_TestDrive_Test_ResultSummary] ([uExecutionId])
+GO
+
+
+/*****************************************
+Index for t_TestDrive_Test_ResultSummary_SubSubject table
+*****************************************/
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultSummary_SubSubject_dSubSubjectPoints] ON [dbo].[t_TestDrive_Test_ResultSummary_SubSubject] ([dSubSubjectPoints])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultSummary_SubSubject_dSubSubjectStandardErrorConfidenceIntervalLowerBound] ON [dbo].[t_TestDrive_Test_ResultSummary_SubSubject] ([dSubSubjectStandardErrorConfidenceIntervalLowerBound])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultSummary_SubSubject_dSubSubjectStandardErrorConfidenceIntervalUpperBound] ON [dbo].[t_TestDrive_Test_ResultSummary_SubSubject] ([dSubSubjectStandardErrorConfidenceIntervalUpperBound])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultSummary_SubSubject_dSubSubjectWrongAnswerValue] ON [dbo].[t_TestDrive_Test_ResultSummary_SubSubject] ([dSubSubjectWrongAnswerValue])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultSummary_SubSubject_iSubSubjectNumberOfTasks] ON [dbo].[t_TestDrive_Test_ResultSummary_SubSubject] ([iSubSubjectNumberOfTasks])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultSummary_SubSubject_iTaskObjectsCorrect] ON [dbo].[t_TestDrive_Test_ResultSummary_SubSubject] ([iTaskObjectsCorrect])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultSummary_SubSubject_iTaskObjectsNotAnswered] ON [dbo].[t_TestDrive_Test_ResultSummary_SubSubject] ([iTaskObjectsNotAnswered])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultSummary_SubSubject_iTaskObjectsWrong] ON [dbo].[t_TestDrive_Test_ResultSummary_SubSubject] ([iTaskObjectsWrong])
+GO
+
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultSummary_SubSubject_cIsSurveySubject] ON [dbo].[t_TestDrive_Test_ResultSummary_SubSubject] ([cIsSurveySubject])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultSummary_SubSubject_dSubSubjectCorrectAnswerValue] ON [dbo].[t_TestDrive_Test_ResultSummary_SubSubject] ([dSubSubjectCorrectAnswerValue])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultSummary_SubSubject_dSubSubjectNotAttemptedValue] ON [dbo].[t_TestDrive_Test_ResultSummary_SubSubject] ([dSubSubjectNotAttemptedValue])
+GO
+
+/*****************************************
+Index for t_TestDrive_Test_ResultValues table
+*****************************************/
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultValues_cIsCorrectAnswer] ON [dbo].[t_TestDrive_Test_ResultValues] ([cIsCorrectAnswer])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultValues_dMarkerValue] ON [dbo].[t_TestDrive_Test_ResultValues] ([dMarkerValue])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultValues_iAnswerIndex] ON [dbo].[t_TestDrive_Test_ResultValues] ([iAnswerIndex])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultValues_iAttemptsToSolveTaskCorrectly] ON [dbo].[t_TestDrive_Test_ResultValues] ([iAttemptsToSolveTaskCorrectly])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultValues_iContainerId] ON [dbo].[t_TestDrive_Test_ResultValues] ([iContainerId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultValues_iElementDisplayedOrder] ON [dbo].[t_TestDrive_Test_ResultValues] ([iElementDisplayedOrder])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultValues_iElementId] ON [dbo].[t_TestDrive_Test_ResultValues] ([iElementId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultValues_iElementValueId] ON [dbo].[t_TestDrive_Test_ResultValues] ([iElementValueId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultValues_iObjectStatus] ON [dbo].[t_TestDrive_Test_ResultValues] ([iObjectStatus])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultValues_uResultId] ON [dbo].[t_TestDrive_Test_ResultValues] ([uResultId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_ResultValues_vElementType] ON [dbo].[t_TestDrive_Test_ResultValues] ([vElementType])
+GO
+
+/*****************************************
+Index for t_TestDrive_Test_Token table
+*****************************************/
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Token_cIsActive] ON [dbo].[t_TestDrive_Test_Token] ([cIsActive])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Token_cIsPracticeTest] ON [dbo].[t_TestDrive_Test_Token] ([cIsPracticeTest])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Token_dtCreatedOn] ON [dbo].[t_TestDrive_Test_Token] ([dtCreatedOn])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Token_dtValidFrom] ON [dbo].[t_TestDrive_Test_Token] ([dtValidFrom])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Token_dtValidTill] ON [dbo].[t_TestDrive_Test_Token] ([dtValidTill])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Token_dtValidTo] ON [dbo].[t_TestDrive_Test_Token] ([dtValidTo])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Token_iCycleRepetition] ON [dbo].[t_TestDrive_Test_Token] ([iCycleRepetition])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Token_iLoginProviderId] ON [dbo].[t_TestDrive_Test_Token] ([iLoginProviderId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Token_iSubjectId] ON [dbo].[t_TestDrive_Test_Token] ([iSubjectId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Token_uClassId] ON [dbo].[t_TestDrive_Test_Token] ([uClassId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Token_uCycleId] ON [dbo].[t_TestDrive_Test_Token] ([uCycleId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Token_uParentTestId] ON [dbo].[t_TestDrive_Test_Token] ([uParentTestId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Token_uPupilId] ON [dbo].[t_TestDrive_Test_Token] ([uPupilId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Token_uTestId] ON [dbo].[t_TestDrive_Test_Token] ([uTestId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Token_vTestTokenNumber] ON [dbo].[t_TestDrive_Test_Token] ([vTestTokenNumber])
+GO
+
+/*****************************************
+Index for t_TestDrive_Test_Token_Audit table
+*****************************************/
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Token_Audit_dtCreatedOn] ON [dbo].[t_TestDrive_Test_Token_Audit] ([dtCreatedOn])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Token_Audit_iApplicationTypeId] ON [dbo].[t_TestDrive_Test_Token_Audit] ([iApplicationTypeId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Token_Audit_uExecutionId] ON [dbo].[t_TestDrive_Test_Token_Audit] ([uExecutionId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Token_Audit_uTestStatusFlowId] ON [dbo].[t_TestDrive_Test_Token_Audit] ([uTestStatusFlowId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Token_Audit_uTestTokenAuditId] ON [dbo].[t_TestDrive_Test_Token_Audit] ([uTestTokenAuditId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Token_Audit_uTestTokenId] ON [dbo].[t_TestDrive_Test_Token_Audit] ([uTestTokenId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Token_Audit_uUserId] ON [dbo].[t_TestDrive_Test_Token_Audit] ([uUserId])
+GO
+
+/*****************************************
+Index for t_TestDrive_Test_Token_Category table
+*****************************************/
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Token_Category_uTestTokenId] ON [dbo].[t_TestDrive_Test_Token_Category] ([uTestTokenId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Test_Token_Category_vCategoryText] ON [dbo].[t_TestDrive_Test_Token_Category] ([vCategoryText])
+GO
+
+/*****************************************
+Index for t_TestDrive_WrapperTest_TestForPupil table
+*****************************************/
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_WrapperTest_TestForPupil_iCycleRepetition] ON [dbo].[t_TestDrive_WrapperTest_TestForPupil] ([iCycleRepetition])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_WrapperTest_TestForPupil_uClassId] ON [dbo].[t_TestDrive_WrapperTest_TestForPupil] ([uClassId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_WrapperTest_TestForPupil_uCycleId] ON [dbo].[t_TestDrive_WrapperTest_TestForPupil] ([uCycleId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_WrapperTest_TestForPupil_uPupilId] ON [dbo].[t_TestDrive_WrapperTest_TestForPupil] ([uPupilId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_WrapperTest_TestForPupil_uTestId] ON [dbo].[t_TestDrive_WrapperTest_TestForPupil] ([uTestId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_WrapperTest_TestForPupil_uWrapperTestId] ON [dbo].[t_TestDrive_WrapperTest_TestForPupil] ([uWrapperTestId])
+GO
+
+
+

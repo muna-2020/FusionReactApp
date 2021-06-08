@@ -1,0 +1,8 @@
+﻿ 
+  Following tables updated:
+
+	1) t_PathFinder_Jobs_SkillValue
+	2) t_PathFinder_Jobs
+	3) t_PathFinder_JobField_JobLevel
+	4) t_PathFinder_JobField
+	5) t_LearnCoacher_TimeTable_Color

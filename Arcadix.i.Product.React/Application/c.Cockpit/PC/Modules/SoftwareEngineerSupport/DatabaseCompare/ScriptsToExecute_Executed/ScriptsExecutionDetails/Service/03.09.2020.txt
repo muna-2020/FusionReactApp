@@ -1,0 +1,19 @@
+ 
+  Tables Updated:
+ 
+  t_Framework_Language
+  t_Framework_Language_MainClient
+  t_Framework_XMLConfiguration
+  t_TestDrive_OfflineProcess_Definition
+  t_TestDrive_OfflineProcess_Execution
+  t_TestDrive_OfflineProcess_Execution_File
+  t_TestDrive_ResultDatabase
+  t_TestDrive_ResultDatabase_IndividualStateVersion
+  t_TestDrive_Skin
+   t_TestDrive_Workflow
+   t_TestDrive_WorkflowStatus
+   t_TestDrive_WorkflowType
+
+procs:
+  Proc_TestDrive_Language_SaveLanguageForApplicationType
+  Proc_TestDrive_XmlConfiguration_SaveXmlConfigurationValue

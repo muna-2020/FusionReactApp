@@ -1,0 +1,34 @@
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_LearnCoacher_Email_UserFolder' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_LearnCoacher_Email_UserFolder ADD uModifiedByUserId uniqueidentifier  
+END
+Go
+
+/**********************************
+Default Values
+**********************************/
+update t_LearnCoacher_Email_UserFolder set uModifiedByUserId = uUserId  
+Go
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+Proc_LearnCoacher_Email_CreateNewFolder
+Proc_LearnCoacher_Email_DeleteFolder
+Proc_LearnCoacher_Email_EditFolder
+Proc_LearnCoacher_Email_GetEmailFolderDetails
+Proc_LearnCoacher_Email_MoveEmailFolder
+***********************************************************/
+
+
+/********************Procs to Review**********************
+Proc_LearnCoacher_Email_CreateNewFolder (No Change Required)
+***********************************************************/
+
+

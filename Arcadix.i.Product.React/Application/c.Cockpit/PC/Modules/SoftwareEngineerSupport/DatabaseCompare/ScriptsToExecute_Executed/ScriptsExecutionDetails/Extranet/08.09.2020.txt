@@ -1,0 +1,16 @@
+ 
+  Following tables updated:
+
+1) t_Learncoacher_Document_User
+2) t_LearnCoacher_Document_Folder_User
+3) t_LearnCoacher_Document_Folder
+4) t_Learncoacher_Document_Data
+5) t_LearnCoacher_Document
+
+
+procs Updated:
+
+JProc_LearnCoacher_Document_AddFolder_04_05_2020
+JProc_LearnCoacher_Document_AssignUsers_Final_07_08_2019
+JProc_LearnCoacher_Document_MoveFolders_19_05_2020
+JProc_LearnCoacher_Document_CopyFolder_07_07_2020

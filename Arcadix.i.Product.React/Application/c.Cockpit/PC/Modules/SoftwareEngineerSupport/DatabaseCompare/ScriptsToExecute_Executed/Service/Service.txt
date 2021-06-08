@@ -1,0 +1,10 @@
+/****************************************************************************************************************/
+To Make the below Columns as Nullable in t_Framework_XMLConfiguration (as these are not used in Fusion Version)
+/****************************************************************************************************************/
+GO
+ALTER TABLE t_Framework_XMLConfiguration
+ALTER COLUMN iConfigurationFileId int null
+
+GO
+ALTER TABLE t_Framework_XMLConfiguration
+ALTER COLUMN cIsEditable int null

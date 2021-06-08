@@ -1,0 +1,290 @@
+﻿ /**********************************
+  Following tables updated:
+
+	1) t_TestDrive_SeparationAndCalibration_Group
+	2) t_TestDrive_SeparationAndCalibration_Task
+	3) t_TestDrive_SeparationAndCalibration_Task_CalibrationData
+	4) t_TestDrive_SeparationAndCalibration_Task_SeparationData
+	5) t_Testdrive_Test_Tasks_Difficulty
+**********************************/
+
+/**********************************
+Procedures Updated:
+Proc_TestDrive_Test_AssignTaskToTest_Calibration
+**********************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_SeparationAndCalibration_Group' AND COLUMN_NAME = 'dtCreatedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_SeparationAndCalibration_Group ADD dtCreatedOn datetime  
+END  
+
+GO	  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_SeparationAndCalibration_Group' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_SeparationAndCalibration_Group ADD dtModifiedOn datetime  
+END		
+	
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_SeparationAndCalibration_Group' AND COLUMN_NAME = 'uUserId') 
+ BEGIN
+ALTER TABLE t_TestDrive_SeparationAndCalibration_Group ADD uUserId uniqueidentifier  
+END				  
+	
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_SeparationAndCalibration_Group' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_SeparationAndCalibration_Group ADD uModifiedByUserId uniqueidentifier  
+END
+			  
+		 
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_SeparationAndCalibration_Group set dtCreatedOn=GetDate()  where dtCreatedOn is null
+
+GO
+update t_TestDrive_SeparationAndCalibration_Group set dtModifiedOn=GetDate() where dtModifiedOn is null
+
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_SeparationAndCalibration_Task' AND COLUMN_NAME = 'dtCreatedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_SeparationAndCalibration_Task ADD dtCreatedOn datetime  
+END	  
+
+GO	  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_SeparationAndCalibration_Task' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_SeparationAndCalibration_Task ADD dtModifiedOn datetime  
+END		
+
+GO			
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_SeparationAndCalibration_Task' AND COLUMN_NAME = 'uUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_SeparationAndCalibration_Task ADD uUserId uniqueidentifier  
+END
+
+GO				  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_SeparationAndCalibration_Task' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_SeparationAndCalibration_Task ADD uModifiedByUserId uniqueidentifier  
+END
+									 
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_SeparationAndCalibration_Task set dtCreatedOn=GetDate() where dtCreatedOn is null
+
+GO
+update t_TestDrive_SeparationAndCalibration_Task set dtModifiedOn= GetDate() where dtModifiedOn is null
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_SeparationAndCalibration_Task_CalibrationData' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_SeparationAndCalibration_Task_CalibrationData ADD dtModifiedOn datetime  
+END	  
+
+GO	  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_SeparationAndCalibration_Task_CalibrationData' AND COLUMN_NAME = 'uUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_SeparationAndCalibration_Task_CalibrationData ADD uUserId uniqueidentifier  
+END		 
+
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_SeparationAndCalibration_Task_CalibrationData set dtModifiedOn= GetDate() where dtModifiedOn is null
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_SeparationAndCalibration_Task_SeparationData' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_SeparationAndCalibration_Task_SeparationData ADD dtModifiedOn datetime  
+END	  
+
+GO	  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_SeparationAndCalibration_Task_SeparationData' AND COLUMN_NAME = 'uUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_SeparationAndCalibration_Task_SeparationData ADD uUserId uniqueidentifier  
+END		
+
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_SeparationAndCalibration_Task_SeparationData set dtModifiedOn= GetDate() Where dtModifiedOn is NULL
+
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Testdrive_Test_Tasks_Difficulty' AND COLUMN_NAME = 'uSeparationAndCalibrationGroupId') 
+BEGIN
+ALTER TABLE t_Testdrive_Test_Tasks_Difficulty ADD uSeparationAndCalibrationGroupId uniqueidentifier  
+END	    
+
+GO
+/**********************************
+Default Values
+**********************************/
+--update t_Testdrive_Test_Tasks_Difficulty set uSeparationAndCalibrationGroupId= '00000000-0000-0000-0000-000000000000'
+
+
+
+/*****Procs*******/  
+ALTER PROCEDURE [dbo].[Proc_TestDrive_Test_AssignTaskToTest_Calibration]                    
+(                    
+  @uTestId UNIQUEIDENTIFIER,                    
+  @xmlAssignTasks NTEXT                            
+)                    
+AS                     
+BEGIN                            
+/********************************************************************************************                            
+                             
+Created By:    Arvind Sharma                                     
+Create Date:   06.03.2019                                 
+Description:   Add Tasks for Tests with calibration changes.                            
+                
+                        
+********************************************************************************************/                             
+    DECLARE @XmlDoc INT,                    
+        @AssignTaskCount INT,                    
+        @iPageId INT,@iDeletePageId INT,             
+        @iInputStatusId int,@iAlgorithmId int,@uSeparationAndCalibrationGroupId uniqueidentifier ,@iTestTaskId int                         
+                      
+    EXEC sp_xml_preparedocument @XmlDoc OUTPUT, @xmlAssignTasks            
+ -- test's AlgorithmId for Task Separation            
+    Select @iAlgorithmId = iAlgorithmId from t_TestDrive_Test where uTestId=@uTestId         
+ Select @uSeparationAndCalibrationGroupId = uSeparationAndCalibrationGroupId from t_TestDrive_Test where uTestId=@uTestId            
+ -- CHECK IF ANY OF THE TASK IS REMOVED.if so and the Test is Adaptive Test then             
+ --check the InputStatus of the Task.if thats Separation(2) then Update the InputStatus to Base(1)            
+        
+    if(Exists(Select iPageId FROM t_Testdrive_Test_Tasks WHERE uTestId = @uTestId AND             
+    iPageId NOT IN (SELECT  iPageId FROM OPENXML(@XmlDoc, '/Nodes/Node') WITH ( iPageId INT '.' ))))            
+    Begin            
+       Declare Cur_DeleteUnAssinged cursor for            
+   Select iPageId FROM t_Testdrive_Test_Tasks WHERE uTestId = @uTestId AND             
+    iPageId NOT IN (SELECT  iPageId FROM OPENXML(@XmlDoc, '/Nodes/Node') WITH ( iPageId INT '.' ))            
+  Open Cur_DeleteUnAssinged            
+  Fetch Next from Cur_DeleteUnAssinged into @iDeletePageId            
+  While(@@fetch_Status <> -1)            
+  BEGIN            
+   DELETE  FROM t_Testdrive_Test_Tasks WHERE uTestId = @uTestId AND iPageId = @iDeletePageId         
+   delete from  t_Testdrive_Test_Tasks where iTestTaskId in(select iTestTaskId FROM t_Testdrive_Test_Tasks WHERE uTestId = @uTestId AND iPageId = @iDeletePageId)           
+   --if(@iAlgorithmId = 3) -- Adaptive test              
+   -- BEGIN         
+   -- Select @iInputStatusId = iInputStatusId from t_TestDrive_SeparationAndCalibration_Task where iTaskId=@iDeletePageId and uSeparationAndCalibrationGroupId = @uSeparationAndCalibrationGroupId             
+   --   if(@iInputStatusId = 2) -- (2) S Separation            
+   --   Begin            
+   --  Update t_TestDrive_SeparationAndCalibration_Task               
+   --    set cIsSeparated='N' ,              
+   --  dDiscrimination = NULL ,              
+   --  iInputStatusId = 1, --B Base             
+   --  dtWhenInputStatusChanged = getdate() where iTaskId=@iDeletePageId  and uSeparationAndCalibrationGroupId = @uSeparationAndCalibrationGroupId            
+   --   End            
+   --END            
+   Fetch Next from Cur_DeleteUnAssinged into @iDeletePageId            
+  End            
+  Close Cur_DeleteUnAssinged            
+  Deallocate Cur_DeleteUnAssinged                        
+    END            
+         
+         
+    SET @AssignTaskCount = 0            
+                               
+    DECLARE AssignTask_Cursor CURSOR                    
+        FOR SELECT  *                    
+            FROM    OPENXML(@XmlDoc, '/Nodes/Node',1) WITH ( iPageId INT '.' )              
+    OPEN AssignTask_Cursor                                    
+    FETCH NEXT FROM AssignTask_Cursor INTO @iPageId                          
+    WHILE( @@FETCH_STATUS <> -1 )                                    
+        BEGIN       
+            SET @AssignTaskCount = @AssignTaskCount + 1                            
+            IF ( EXISTS ( SELECT    *                    
+    FROM      t_TestDrive_Test_Tasks                    
+                      WHERE     iPageId = @iPageId                    
+                                    AND uTestId = @uTestId ) )                     
+                BEGIN                             
+                    UPDATE  t_TestDrive_Test_Tasks                    
+                    SET     iOrderId = @AssignTaskCount                    
+               WHERE   iPageId = @iPageId                    
+                            AND uTestId = @uTestId        
+    select  @iTestTaskId=@iTestTaskId  FROM t_TestDrive_Test_Tasks WHERE     iPageId = @iPageId and uTestId = @uTestId      
+                END                            
+            ELSE                     
+                BEGIN                            
+                    INSERT  INTO t_TestDrive_Test_Tasks                    
+                           (                    
+                              uTestId,                    
+                              iPageId,                    
+                              iOrderId,iTaskTimeLimit                            
+                            )                    
+                    VALUES  (                    
+                              @uTestId,                    
+                              @iPageId,                    
+                              @AssignTaskCount,-1                           
+                            )         
+                              
+                END               
+                         
+             if(@iAlgorithmId = 3) -- Adaptive test              
+             BEGIN              
+     if not exists(select * from t_TestDrive_SeparationAndCalibration_Task where iTaskId=@iPageId and uSeparationAndCalibrationGroupId = @uSeparationAndCalibrationGroupId )    
+     BEGIN    
+         insert into t_TestDrive_SeparationAndCalibration_Task (uSeparationAndCalibrationTaskId,uSeparationAndCalibrationGroupId,iTaskId,cIsSeparated,dDiscrimination,dtSeparationDateTime,cHasCalibrationStarted,dCalibratedDifficulty,cIsLockedForCalibration
+,dtCalibrationDateTime,cIsCalibrationComplete,cIsCalibratedActive,iInputStatusId,dtWhenInputStatusChanged) values(newid(),@uSeparationAndCalibrationGroupId,@iPageId,'N',NULL,NULL,'N',NULL,'N',NULL,'N','N',2,GETDATE())    
+     END    
+     ELSE    
+      BEGIN    
+      Select @iInputStatusId = iInputStatusId from t_TestDrive_SeparationAndCalibration_Task where iTaskId=@iPageId and uSeparationAndCalibrationGroupId = @uSeparationAndCalibrationGroupId      
+      if(@iInputStatusId = 1) -- (1) B Base || (3)R(U) Revision Separation              
+     BEGIN              
+      Update t_TestDrive_SeparationAndCalibration_Task               
+      set cIsSeparated='N' ,              
+      dDiscrimination = NULL ,              
+      iInputStatusId = 2, --S Separation              
+      dtWhenInputStatusChanged = getdate() where iTaskId=@iPageId   and uSeparationAndCalibrationGroupId=@uSeparationAndCalibrationGroupId           
+     End          
+     --Else if(@iInputStatusId = 6) -- R(k) Revision Kalibration          
+     --Begin          
+     -- update t_TestDrive_SeparationAndCalibration_Task               
+     -- set iInputStatusId = 4, -- K Kalibration          
+     -- cIsCalibratedActive = 'N',          
+     -- cHasCalibrationStarted = 'N',          
+     -- dCalibratedDifficulty = NULL,          
+     -- cIsLockedForCalibration = 'N',          
+     -- dtCalibrationDateTime = NULL,          
+     -- cIsCalibrationComplete = 'N',         
+     -- dtWhenInputStatusChanged = getdate() where iTaskId=@iPageId   and uSeparationAndCalibrationGroupId=@uSeparationAndCalibrationGroupId        
+          
+     -- Delete t_TestDrive_SeparationAndCalibration_Task_Difficulty where       
+     -- uSeparationAndCalibrationTaskId in(select uSeparationAndCalibrationTaskId from t_TestDrive_SeparationAndCalibration_Task      
+     -- where iTaskId = @iPageId  and uSeparationAndCalibrationGroupId = @uSeparationAndCalibrationGroupId)     
+     --END    
+      END             
+             END                  
+            FETCH NEXT FROM AssignTask_Cursor INTO @iPageId                                     
+        END                                     
+    CLOSE AssignTask_Cursor                                    
+    DEALLOCATE AssignTask_Cursor                                           
+    EXEC sp_xml_removedocument @XmlDoc           
+                        
+END     
+    

@@ -1,0 +1,333 @@
+﻿@charset "UTF-8";
+/************************
+*****ADDITION BLOCK******
+*************************/
+.mathSection {
+	font-family: verdana, arial, sans-serif;
+}
+
+.mathSection .mathBlock {
+
+}
+
+.mathSection .mathBlock .addNumericTable {
+	border-spacing: 4px 10px;
+    display: block;
+	margin: 20px auto;
+	width: 450px;
+}
+
+.mathSection .mathBlock .addNumericTable tr {
+	background-color: #E3E3E3;
+	text-align: center;
+}
+
+.mathSection .mathBlock .addNumericTable tr td {
+	background-color: #E3E3E3;
+	text-align: center;
+	padding: 0;
+	font-size: 24px;
+	min-width: 30px;
+	height: 45px;
+}
+
+.mathSection .mathBlock .addNumericTable td:first-child .appendCol::before {
+	content: '+';
+	color: #000;
+	position: absolute;
+	right: 40px;
+    top: -30px;
+}
+
+.mathSection .mathBlock .addNumericTable .sub.appendBlock td:first-child .appendCol::before {
+	content: "—" !important;
+	color: #000;
+	position: absolute;
+	right: 40px;
+    top: -30px;
+}
+
+.mathSection .mathBlock .addNumericTable .appendBlock {
+	position: relative;
+}
+
+.mathSection .mathBlock .addNumericTable .appendBlock td {
+	position: relative;
+	background-color: #fff;
+	height: 10px;
+}
+
+.mathSection .mathBlock .addNumericTable .appendBlock td .appendCol {
+	position: absolute !important;
+	margin-top: -22px !important;
+	border: 1px solid #fff;
+	font-size: 22px;
+	left: 7px;
+	background-color: #E3E3E3;
+	height: 28px;
+	width: 20px;
+}
+
+.mathSection .mathBlock .addNumericTable .appendBlock td .bg-color {
+	background-color: #FFCC66 !important;
+	cursor: pointer;
+}
+
+.mathSection .mathBlock .addNumericTable tr.rowBorder td {
+	padding: 0;
+	border-collapse: collapse;
+	border-spacing: 0;
+	border-bottom: 2px solid #000;
+	height: 0;
+}
+
+.mathSection .mathBlock .addNumericTable .result td.bg-color {
+	background-color: #FFCC66 !important;
+	cursor: pointer;
+}
+
+.mathSection .smallPopUp {
+	position: absolute;
+	margin: 0;
+	width: 85px;
+}
+
+.mathSection .smallPopUp .smallPopUpBlock {
+	padding: 5px 3px;
+	border: 5px solid #A4A4A4;
+	color: #333;
+	background: #fff;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	overflow: auto;
+}
+
+.mathSection .smallPopUp .smallPopUpBlock::before {
+	margin: 13px 0 0 -25px;
+	content: '';
+	position: absolute;
+	left: 16px;
+	bottom: 14px;
+	width: 20px;
+	height: 20px;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #A4A4A4), color-stop(1, #D8D8D8));
+	box-shadow: 0px 3px 8px #999;
+	background: inherit;
+	transform: rotate(135deg);
+	box-shadow: inset -10px -10px 0px -5px #A4A4A4;
+}
+
+.numberRow {
+    display: table-row;
+}
+
+.numberRow button {
+    display: table-cell;
+
+}
+
+.mathSection button {
+	font-size: 16px;
+	font-family: verdana, arial, sans-serif;
+	border: 2px solid #ffffff;
+	cursor: pointer;
+	color: #424242;
+    vertical-align:middle;
+	width: 30px;
+	position: relative;
+	z-index: 1;
+	margin: 2px;
+	height: 30px;
+	background: -o-linear-gradient(top, #A4A4A4, #D8D8D8);
+	background: -moz-linear-gradient(top, #A4A4A4, #D8D8D8);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #A4A4A4), color-stop(1, #D8D8D8));
+	filter: progid:DXImageTransform.Microsoft.gradient(Enabled='true',StartColorStr=#A4A4A4,EndColorStr=#D8D8D8,GradientType=0);
+	-webkit-box-shadow: 0px 3px 8px #999;
+	-moz-box-shadow: 0px 3px 8px #999;
+	box-shadow: 0px 3px 8px #999;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	z-index: 2;
+}
+
+.mathSection button:focus {
+	outline: none;
+}
+
+.mathSection .popUp {
+	position: absolute;
+	margin: 0;
+	width: auto; /*210*/
+}
+
+.mathSection .popUp .popUpBlock {
+	padding: 5px 3px;
+	border: 5px solid #A4A4A4;
+	color: #333;
+	background: #fff;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	display: table;
+	margin: 0 auto;
+	width: auto; /*170*/
+	
+	z-index: 3;
+}
+
+.mathSection .popUp .popUpBlock::before {
+	margin: 13px 0 0 -25px;
+	content: '';
+	position: absolute;
+	left: 16px;
+	bottom: 30px;
+	width: 20px;
+	height: 20px;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #A4A4A4), color-stop(1, #D8D8D8));
+	box-shadow: 0px 3px 8px #999;
+	background: inherit;
+	transform: rotate(135deg);
+	box-shadow: inset -10px -10px 0px -5px #A4A4A4;
+}
+
+.closeIcon {
+	display: block;
+	background: url("Images/close.png") no-repeat;
+	position: absolute;
+	height: 30px;
+	z-index: 5;
+	width: 30px;
+    right: -13px;
+    top: -15px;
+}
+
+
+/****************************
+*****MULTIPLICATION CSS******
+****************************/
+.multiplyNumericTable {
+    border-collapse: collapse;
+}
+.multiplyNumericTable td {
+    padding: 5px 0 5px 4px;
+     text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+.multiplyNumericTable td:first-child {
+    padding-left: 6px;
+}
+
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+   -moz-appearance:    none;
+   appearance:         none;
+}
+
+.circle {
+    background: #000;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto;
+}
+
+.rowBorder td {
+    border-bottom: 2px solid #000;
+}
+tr.appendRowBorder td {
+    padding: 0;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border-bottom: 2px solid #000;
+    height: 0;
+}
+
+tr.btmBorder {
+    border-bottom: 1px solid #000;
+    border-top: 1px solid #000;
+}
+
+tr.btmBorder td {
+    padding:2px 0;
+}
+
+.operator::before {
+    content:'+';
+    color: #000;
+    font-size: 24px;
+    position: relative;
+    left: -6px;
+    font-weight: normal;
+}
+
+.numberInput {
+    border: 1px dotted #4caafe;
+    width: 20px;
+    color: #4caafe;
+     font-size: 20px;
+    text-align: center;
+    font-weight: 700;
+    padding: 2px;
+}
+
+.carry.bottom.numberInput {
+    border: 1px dotted #4caafe;
+}
+input.bottom.numberInput {
+    border-bottom: 1px dotted #4caafe;
+    padding: 0 3px;
+}
+
+
+
+.numberInput:focus, input.answerInput:focus {
+    outline: 0;
+}
+
+
+/***********************
+*****DIVISION CSS******
+***********************/
+.divisionNumericTable {
+    border-collapse: collapse;
+}
+
+.divisionNumericTable td {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    padding:5px;
+}
+
+.divisionNumericTable tr {
+
+}
+
+input.answerInput {
+    border: 0;
+    border-bottom: 1px dotted #4caafe;
+    width: 50px;
+    color: #4caafe;
+    font-size: 24px;
+    text-align: center;
+    font-weight: 700;
+    padding: 4px;
+}
+.inputErrorBorder{
+     border-bottom: 1px solid #4caafe;
+}
+.divisionNumericTable .rowBorder {
+    
+}
+
+td.empty {
+    border: none;
+}
+
+td.sign {
+    font-weight:normal;
+}

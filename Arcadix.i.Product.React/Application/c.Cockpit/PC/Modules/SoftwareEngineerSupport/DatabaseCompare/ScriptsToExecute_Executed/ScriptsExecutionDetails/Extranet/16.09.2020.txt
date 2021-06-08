@@ -1,0 +1,19 @@
+﻿ 
+  Following tables updated:
+
+
+1) t_LearnCoacher_NewsBoard_NewsItem_User
+2) t_LearnCoacher_NewsBoard_NewsItem
+3) t_LearnCoacher_News_ToUser
+4) t_LearnCoacher_News_Group_User
+5) t_LearnCoacher_News_Group
+6) t_LearnCoacher_News
+
+
+
+procs Updated:
+
+JProc_LearnCoacher_News_ForwardNews_20_05_2020
+JProc_LearnCoacher_News_SaveNews_30_06_2020
+JProc_LearnCoacher_SaveNewsGroup
+JProc_LearnCoacher_UpdateSchoolNewsViewedStatus

@@ -1,0 +1,23 @@
+/**********************************
+New table		
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES   WHERE TABLE_NAME = N't_Framework_Country_MainClient')
+BEGIN
+CREATE TABLE [dbo].[t_LearnCoacher_Planner_TimeTable_Color]
+(
+	  [uColorId] UNIQUEIDENTIFIER NOT NULL
+	, [iMainClientId] INT NULL
+	, [vColorCode] VARCHAR(10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+)
+End
+
+
+
+/**********************************
+Default Values
+**********************************/
+
+
+/**********************************
+Angular proc modified
+**********************************/

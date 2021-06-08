@@ -1,0 +1,20 @@
+﻿DISABLE TRIGGER [dbo].[trg_t_TestDrive_Task_AssignedTaskDifficultyLevel] ON [dbo].[t_TestDrive_Task_AssignedTaskDifficultyLevel]
+GO
+
+/****************************************************************************************
+TO alter the datatype of the column tSubjectDescription in table t_TestDrive_Subject_Data
+****************************************************************************************/
+ALTER TABLE t_TestDrive_Subject_Data
+ALTER COLUMN tSubjectDescription nvarchar(max)
+
+GO
+
+/****************************************************************************************
+To Set Default value for dtModifiedOn column t_TestDrive_Test_Tasks table
+****************************************************************************************/
+
+UPDATE t_TestDrive_Test_Tasks 
+SET dtModifiedOn = GETDATE()
+WHERE dtModifiedOn IS NULL
+
+GO

@@ -1,0 +1,99 @@
+﻿<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: calibri;
+        }
+        .main-wrapper{
+            padding: 20px;;
+        }
+        ul {
+            list-style: none;
+        }
+        /* simple dropdown */
+        button.dropdownbox {
+            display: flex;
+            width: 200px;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            outline: 0;
+        }
+        button.dropdownbox img {
+            width: 15px;
+        }
+        .upIcon {
+            transform: rotate(180deg);
+        }
+        .menu {
+            display: none;
+            border: 1px solid #ccc;
+            width: 200px;
+        }
+
+        .showMenu {
+            display: block;
+        }
+        ul.menu li {
+            padding: 5px;
+        }
+        ul.menu li:hover {
+            background: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Simple Dropdown</span>
+            </div>
+            <div class="dropdown-wrapper"> 
+                <button class="dropdownbox"><span>default value</span><img src="https://image.flaticon.com/icons/svg/625/625946.svg" alt="" class="downIcon"></button>
+                <ul class="menu">
+                    <li>default value</li>
+                    <li>Value 1</li>
+                    <li>Value 2</li>
+                    <li>Value 3</li>
+                    <li>Value 4</li>
+                    <li>Value 5</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+    <script>
+
+        /* simple dropdown */
+        let button = document.querySelector(".dropdownbox");
+        let list = document.querySelector(".menu");
+
+        function toggleList() {
+            list.classList.toggle("showMenu");
+            document.querySelector(".downIcon").classList.toggle("upIcon");
+        }
+
+        function changeText(e){
+            button.firstChild.innerHTML=e.target.innerHTML;
+        }
+
+        button.addEventListener("click", toggleList);
+        list.addEventListener("click", changeText);
+
+        /* window */
+        function windowOnClick(event) {
+            if (event.target !== button && list.classList.contains("showMenu")) {
+                toggleList();
+            }
+        }
+        window.addEventListener("click", windowOnClick);
+    </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+/**********************************
+New Columns
+**********************************/
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Member_Pupil_AssignedSubjectClassType' AND COLUMN_NAME = 'dtModifiedOn') 
+  BEGIN
+      ALTER TABLE t_TestDrive_Member_Pupil_AssignedSubjectClassType ADD dtModifiedOn datetime  
+ END
+ Go
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Member_Pupil_AssignedSubjectClassType set dtModifiedOn = GETDATE() where dtModifiedOn is null
+Go
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_TestDrive_AssignClassTypeToPupil_CheckIfPupilAssignedWithClassType
+JProc_TestDrive_AssignClassTypeToPupil_SavePupilsClassType
+JProc_TestDrive_AssignClassTypeToPupil_SavePupilsClassType_New
+JProc_TestDrive_Pupil_GetPupilClassTypeDetails
+JProc_TestDrive_Pupil_GetPupilClassTypeDetailsForMainClient
+JProc_TestDrive_Pupil_MovePupils
+JProc_TestDrive_Pupil_MovePupils_16_08_2019
+JProc_TestDrive_Pupil_MovePupils_26_08_2019
+Proc_TestDrive_AssignClassTypeToPupil_CheckIfPupilAssignedWithClassType
+Proc_TestDrive_AssignClassTypeToPupil_SavePupilsClassType
+Proc_TestDrive_Pupil_GetPupilClassTypeDetails
+Proc_TestDrive_Pupil_GetPupilClassTypeDetailsByClassTypeId
+Proc_TestDrive_School_UpdateClassTypeDetailsForSchool
+***********************************************************/
+
+
+
+/********************Procs to Review**********************
+
+***********************************************************/

@@ -1,0 +1,72 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_Help' AND COLUMN_NAME = 'dtCreatedOn') 
+BEGIN
+ALTER TABLE t_Framework_Help ADD dtCreatedOn datetime default getdate()
+END
+	
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_Help' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_Framework_Help ADD dtModifiedOn datetime default getdate()
+END
+
+GO	   
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_Help' AND COLUMN_NAME = 'cIsDeleted') 
+BEGIN
+ALTER TABLE t_Framework_Help ADD cIsDeleted char(1) default 'N'
+END
+
+GO			 
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_Help' AND COLUMN_NAME = 'iPageId') 
+BEGIN
+ALTER TABLE t_Framework_Help ADD iPageId int 
+END
+
+GO				   
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_Help' AND COLUMN_NAME = 'uUserId') 
+BEGIN
+ALTER TABLE t_Framework_Help ADD uUserId uniqueidentifier 
+END
+
+GO						 
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_Help' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_Framework_Help ADD uModifiedByUserId uniqueidentifier 
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+
+update t_Framework_Help set dtCreatedOn = getdate() Where dtCreatedOn is null
+
+GO
+update t_Framework_Help set dtModifiedOn = getdate() Where dtModifiedOn is null
+
+GO
+update t_Framework_Help set cIsDeleted = 'N' Where cIsDeleted is null
+
+GO
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+JProc_Help_GetData
+Proc_Framework_HelpBubble_GetHelpBubbleContent
+Proc_Framework_HelpTextAdministration_AddEditHelpDetails
+Proc_Framework_HelpTextAdministration_GetGroupByApplicationTypeId
+Proc_Framework_HelpTextAdministration_GetHelpDetailsByMainClientId
+Proc_Framework_HelpTextAdministration_GetHelpKeysByApplicationType
+Proc_Framework_HelpTextAdministration_GetHelpKeysByGroup
+Proc_Framework_ngAssistent_GetAllAssistentData
+Proc_Framework_ngAssistent_UpdateAssistentData
+****************************************************************/
+
+/********************Procs need to Review**********************
+Proc_Framework_HelpTextAdministration_AddEditHelpDetails
+Proc_Framework_ngAssistent_UpdateAssistentData
+****************************************************************/

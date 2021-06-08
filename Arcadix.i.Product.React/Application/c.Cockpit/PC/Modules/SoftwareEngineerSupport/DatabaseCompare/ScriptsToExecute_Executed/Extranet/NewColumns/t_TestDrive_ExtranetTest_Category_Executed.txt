@@ -1,0 +1,30 @@
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_ExtranetTest_Category' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_TestDrive_ExtranetTest_Category ADD uModifiedByUserId uniqueidentifier  
+END
+Go
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_ExtranetTest_Category set uModifiedByUserId = uUserId 
+Go
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+Proc_TestDrive_PageTeacherTest_DeleteTeacherTestCategories
+Proc_TestDrive_PageTeacherTest_GetAllTeacherTestCategories
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/

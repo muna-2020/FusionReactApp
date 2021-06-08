@@ -1,0 +1,83 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_SeparationAndCalibration_Task' AND COLUMN_NAME = 'dtCreatedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_SeparationAndCalibration_Task ADD dtCreatedOn datetime  
+END	  
+
+GO	  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_SeparationAndCalibration_Task' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_SeparationAndCalibration_Task ADD dtModifiedOn datetime  
+END		
+
+GO			
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_SeparationAndCalibration_Task' AND COLUMN_NAME = 'uUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_SeparationAndCalibration_Task ADD uUserId uniqueidentifier  
+END
+
+GO				  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_SeparationAndCalibration_Task' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_SeparationAndCalibration_Task ADD uModifiedByUserId uniqueidentifier  
+END
+									 
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_SeparationAndCalibration_Task set dtCreatedOn=GetDate() where dtCreatedOn is null
+
+GO
+update t_TestDrive_SeparationAndCalibration_Task set dtModifiedOn= GetDate() where dtModifiedOn is null
+
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+GetTaskDifficulty_Calibration
+Proc_CMS_CMSPage_ActivateUnCalibratedTasks_Calibration
+Proc_CMS_CMSPAGE_JAddEditTaskProperties
+Proc_CMS_CMSPage_ResetUnCalibratedTasks_Calibration
+Proc_CMS_CMSTestDrivePage_GetRecentActiveAdaptiveTasks_Calibration
+Proc_CMS_CMSTestDrivePage_GetRecentlyCalibratedTasks_Calibration
+Proc_CMS_CMSTestDrivePage_GetRecentlyChangedTasks_Calibration
+Proc_CMS_CMSTestDrivePage_GetRecentlySeparatedTasks_Calibration
+Proc_CMS_CMSTestDrivePage_ResetTaskToBase_Calibration
+Proc_CMS_CMSTestDrivePage_RestartCalibrationTasks_Calibration
+Proc_CMS_Page_GetTaskCalibrationInformation
+Proc_CMS_SeparationAndCalibration_UpdateTaskInputStatus
+Proc_TestDrive_SeparationAndCalibration_GetSeparationDetailsForDisplay
+Proc_TestDrive_SeparationAndCalibration_GetUnSeparatedTaskAssigned
+Proc_TestDrive_SeparationAndCalibration_GetUnSeparatedTaskResults
+Proc_TestDrive_SeparationAndCalibration_InsertUnSeparatedTasks
+Proc_TestDrive_SeparationAndCalibration_UpdateInputStatusAndSeparationPoint
+Proc_TestDrive_StandardTestProvider_GetAllTasksByTestId_New
+Proc_TestDrive_StandardTestProvider_GetAllTasksByTestId_New_Calibration
+Proc_TestDrive_TaskDifficultyCalibration_GetTaskCalibrationDetailsByTaskId_New
+Proc_TestDrive_TaskDifficultyCalibration_GetTaskCalibrationDetailsByTaskIdForTest_New
+Proc_TestDrive_TaskDifficultyCalibration_LockTaskForCalibration_New
+Proc_TestDrive_TaskDifficultyCalibration_SaveTaskCalibrationDetails_New
+Proc_TestDrive_Test_AssignTaskToTest_Calibration
+Proc_TestDrive_Test_GetAllUncaliberatedTasksByTestId_Calibration
+*************************************************/
+
+/********************Procs need to Review**********************
+Proc_CMS_CMSPage_ActivateUnCalibratedTasks_Calibration
+Proc_CMS_CMSPAGE_JAddEditTaskProperties
+Proc_CMS_CMSPage_ResetUnCalibratedTasks_Calibration
+Proc_CMS_CMSTestDrivePage_ResetTaskToBase_Calibration
+Proc_CMS_CMSTestDrivePage_RestartCalibrationTasks_Calibration
+Proc_CMS_SeparationAndCalibration_UpdateTaskInputStatus
+Proc_TestDrive_SeparationAndCalibration_InsertUnSeparatedTasks
+Proc_TestDrive_SeparationAndCalibration_UpdateInputStatusAndSeparationPoint
+Proc_TestDrive_TaskDifficultyCalibration_LockTaskForCalibration_New
+Proc_TestDrive_TaskDifficultyCalibration_SaveTaskCalibrationDetails_New
+Proc_TestDrive_Test_AssignTaskToTest_Calibration
+*************************************************/

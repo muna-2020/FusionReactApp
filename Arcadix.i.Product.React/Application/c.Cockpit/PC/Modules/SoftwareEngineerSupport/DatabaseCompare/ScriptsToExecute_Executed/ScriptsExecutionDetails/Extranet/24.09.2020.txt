@@ -1,0 +1,12 @@
+﻿  Following tables updated:
+
+  
+  1) t_TestDrive_ExtranetTest_Category
+  2) t_TestDrive_LearningTest_PupilGroup
+  3) t_TestDrive_Member_Class_Group
+  4) t_TestDrive_Member_Class_License
+  5) t_TestDrive_Member_ClassType
+
+  procs Updated:
+
+  JProc_TestDrive_Member_EditClassLicense

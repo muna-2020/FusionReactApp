@@ -1,0 +1,44 @@
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_PathFinder_Jobs_SkillValue' AND COLUMN_NAME = 'dtCreatedOn') 
+BEGIN
+	ALTER TABLE t_PathFinder_Jobs_SkillValue ADD dtCreatedOn datetime  
+END
+Go
+	  
+	  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_PathFinder_Jobs_SkillValue' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_PathFinder_Jobs_SkillValue ADD uModifiedByUserId uniqueidentifier  
+END
+Go
+
+/**********************************
+Default Values
+**********************************/
+update t_PathFinder_Jobs_SkillValue set uModifiedByUserId = uUserId   where uModifiedByUserId is null
+Go
+
+update t_PathFinder_Jobs_SkillValue set dtCreatedOn = GETDATE() where dtCreatedOn is null
+Go
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+GetPathFinderJobSkillValuesByMainClientId
+JProc_PathFinder_GetJobSkillValuesByMainClientId
+JProc_PathFinder_JobCertificateValueManagement_GetJobSkillValue
+Proc_PathFinder_Job_GetJobSkillValue_JobSkills
+Proc_PathFinder_JobCertificateValueManagement_GetJobSkillValue
+Proc_PathFinder_JobCertificateValueManagement_GetJobSkillValue111
+Proc_PathFinder_JobCertificateValueManagement_SaveJobSkillValue
+***********************************************************/
+
+
+/********************Procs to Review**********************
+Proc_PathFinder_JobCertificateValueManagement_SaveJobSkillValue (No Change Required)
+***********************************************************/

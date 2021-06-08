@@ -1,0 +1,62 @@
+﻿
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Member_School_SchoolType' AND COLUMN_NAME = 'cIsDeleted') 
+BEGIN
+ALTER TABLE t_TestDrive_Member_School_SchoolType ADD cIsDeleted char(1)  
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Member_School_SchoolType' AND COLUMN_NAME = 'dtCreatedOn') 
+BEGIN
+ALTER TABLE t_TestDrive_Member_School_SchoolType ADD dtCreatedOn datetime  
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Member_School_SchoolType' AND COLUMN_NAME = 'uUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Member_School_SchoolType ADD uUserId uniqueidentifier  
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Member_School_SchoolType' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Member_School_SchoolType ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO	 
+
+
+/**********************************
+Default Values for Columns
+**********************************/
+
+UPDATE t_TestDrive_Member_School_SchoolType
+SET cIsDeleted = 'N' 
+where cIsDeleted IS NULL
+
+GO
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_TestDrive_BaseObject_SchoolType_GetData
+JProc_TestDrive_SchoolRegistration_GetSchoolStatusTypes
+Proc_Fusion_Extranet_SchoolType_AddData
+Proc_Fusion_Extranet_SchoolType_DeleteData
+Proc_Fusion_Extranet_SchoolType_EditData
+Proc_Fusion_Extranet_SchoolType_GetData
+Proc_Fusion_Extranet_SchoolType_GetData_New
+Proc_Fusion_Extranet_SchoolType_GetData_Old
+Proc_TestDrive_SchoolRegistration_GetSchoolStatusTypes
+****************************************************************/
+
+
+/********************Procs need to Review**********************
+Proc_Fusion_Extranet_SchoolType_AddData
+Proc_Fusion_Extranet_SchoolType_DeleteData
+Proc_Fusion_Extranet_SchoolType_EditData
+****************************************************************/

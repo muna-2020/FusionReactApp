@@ -1,0 +1,58 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_UserPreference_BackgroundTheme' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN 
+	ALTER TABLE t_Framework_UserPreference_BackgroundTheme ADD dtModifiedOn datetime  default getdate()
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_UserPreference_BackgroundTheme' AND COLUMN_NAME = 'cIsDeleted') 
+BEGIN 
+	ALTER TABLE t_Framework_UserPreference_BackgroundTheme ADD cIsDeleted char(1)  default 'N'
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_UserPreference_BackgroundTheme' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN 
+	ALTER TABLE t_Framework_UserPreference_BackgroundTheme ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+
+UPDATE t_Framework_UserPreference_BackgroundTheme SET dtModifiedOn = GETDATE() where dtModifiedOn is null
+
+GO
+UPDATE t_Framework_UserPreference_BackgroundTheme SET cIsDeleted = 'N' where cIsDeleted is null
+
+GO
+UPDATE t_Framework_UserPreference_BackgroundTheme SET uModifiedByUserId = uUserId where uModifiedByUserId is null
+
+GO
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+JProc_Framework_UserPreference_ProfileDetails
+JProc_Framework_UserPreference_ProfileDetailsForMainClient
+JProc_Framework_UserPreference_SaveProfileDetails
+JProc_Framework_UserPreference_SaveProfileDetails_NewProc
+JProc_Framework_UserPreference_SaveProfileDetails_NewProc_06_09_2018
+JProc_Framework_UserProfileDetails_GetBackgroundImages
+Proc_Framework_Profile_SaveBackGroundThemeDetails
+Proc_Framework_UserPreference_ProfileDetails
+Proc_Framework_UserPreference_SaveProfileDetails
+Proc_TestDrive_JProfile_GetBackGroundThemeDetails
+****************************************************************/
+
+/********************Procs need to Review**********************
+JProc_Framework_UserPreference_SaveProfileDetails
+JProc_Framework_UserPreference_SaveProfileDetails_NewProc
+JProc_Framework_UserPreference_SaveProfileDetails_NewProc_06_09_2018
+Proc_Framework_Profile_SaveBackGroundThemeDetails:Checked
+Proc_Framework_UserPreference_SaveProfileDetails
+****************************************************************/

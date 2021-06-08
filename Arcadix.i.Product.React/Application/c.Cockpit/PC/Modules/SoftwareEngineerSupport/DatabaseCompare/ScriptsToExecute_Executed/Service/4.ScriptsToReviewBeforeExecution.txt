@@ -1,0 +1,7 @@
+
+
+/********************************************************
+there were many offline executution data in active, so the preload tales a lot of time.
+*********************************************************/
+truncate table t_TestDrive_OfflineProcess_Execution
+

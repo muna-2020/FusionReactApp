@@ -1,0 +1,138 @@
+﻿<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: calibri;
+        }
+
+        .main-wrapper {
+            width: 1024px;
+            margin: 0px auto;
+            padding: 20px;
+            font-size: 18px;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 24px;
+            padding: 10px;
+            border-bottom: 1px solid #f1f1f1;
+            font-weight: bold;
+        }
+
+        .sub-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .main-wrapper ul {
+            line-height: 2rem;
+            list-style-type: square;
+            margin-left: 20px;
+        }
+
+        .main-wrapper ol {
+            line-height: 2rem;
+            margin-left: 20px;
+        }
+
+        .main-wrapper p {
+            margin: 10px 0px;
+        }
+
+        pre {
+            white-space: pre-line;
+            padding: 20px;
+            width: 100%;
+            padding-right: 100px;
+            margin: 10px 0px;
+            letter-spacing: 1px;
+            background: #282c34;
+            color: #b5b5b5;
+        }
+
+        .yellow-pre {
+            background: #fffcdd;
+            color: #222;
+            border-left: 5px solid #FFEB3B;
+        }
+
+        .light-text {
+            color: #999;
+            font-style: italic;
+        }
+
+        @media screen and (max-width: 1024px) {
+            .main-wrapper {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="title">
+            <span>HTML Vs JSX Differences</span>
+        </div>
+        <p>Here are the main differences that you should be aware of -</p>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>You can use Javascript variables directly in your JSX code</span>
+            </div>
+            <div class="item-wrapper">
+                <p>If you were writing vanilla Javascript and wanted to insert some variable into an HTML element you would have to do something like this:</p>
+                <pre>
+                    document.querySelector('#root').textContent = myVariable;
+                </pre>
+                <p>But in JSX, we can use it inside JSX by wrapping it in curly braces {}. 
+                    This tells the compiler that whatever is inside the curly brackets is a Javascript variable. 
+                    So now, we can simply put our variable into the markup wherever we see fit, like so:</p>
+                <pre class="yellow-pre">
+                    &lt;div id=&quot;root&quot;&gt;{myVariable}&lt;/div&gt;
+                </pre>
+                <p>In the same way, we can also call functions within the curly brackets.</p>
+                <pre class="yellow-pre">
+                    &lt;div id=&quot;root&gt;{myFunction()}&lt;/div&gt;
+                </pre>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Adding custom styling to an element uses different syntax</span>
+            </div>
+            <div class="item-wrapper">
+                <p>Inline styles are a little different. Take a look at the following HTML and its JSX equivalent.</p>
+                <span class="light-text">HTML</span>
+                <pre class="yellow-pre">
+                    &lt;input style='border: 1px solid black; border-radius: 4px'/&gt;
+                </pre>
+                <span class="light-text">JSX</span>
+                <pre>
+                    &lt;input style={{border: '1px solid black', borderRadius: '4px'}}/&gt;
+                </pre>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Some attribute names are different in JSX.</span>
+            </div>
+            <div class="item-wrapper">
+                <p>Sometimes, if you treat your JSX as HTML, you will encounter warnings about using certain attributes. For example, 
+                    in JSX, you are supposed to use the attribute ‘className’ instead of ‘class’. So 
+                   <pre class="yellow-pre"> &lt;div class=&quot;something&quot;&gt;&lt;/div&gt;</pre>
+                    should be 
+                    <pre>&lt;div className=&quot;something&quot;&gt;&lt;/div&gt; </pre>
+                    This is also the case with the ‘for’ attribute. In JSX you should use ‘htmlFor’ instead.
+                </p>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

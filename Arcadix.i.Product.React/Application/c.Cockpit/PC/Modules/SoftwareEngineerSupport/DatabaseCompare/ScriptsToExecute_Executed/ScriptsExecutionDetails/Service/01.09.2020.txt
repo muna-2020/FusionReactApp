@@ -1,0 +1,14 @@
+ 
+  Follwing tables updated:
+
+	1) t_CMS_MainClient_Font
+	2) t_Framework_ApplicationServers
+	3) t_Framework_ApplicationType
+	4) t_Framework_Country
+	5) t_Framework_DatabaseServers
+
+
+procs Updated:
+
+   JEditorProc_CMS_CMSPageContent_AssignedFonts
+   Proc_CMS_CMSPageContent_AssignedFonts

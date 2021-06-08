@@ -1,0 +1,48 @@
+{
+  "iHeight": 420,
+  "iWidth": 420,
+  "cIsInlineEditable": "N", 
+  "cIsIframelessAnimation": "Y",
+  "cHasCustomSidebar": "N", 
+  "cLoadAsURL": "N",
+  "cHasResourceValues": "N", 
+  "cHasCustomEvaluation": "N", 
+  "ExternalScripts": [
+    {
+      "Path": "IframelessTest3.js",
+      "IsCDN": "N",
+	  "ReadFile": "N",
+	  "AnimationScript": "Y",
+      "DynamicImport" : "Y"
+    }
+  ],
+  "ExternalStyles": [
+    {
+      "Path": "IframelessTest3.css",
+      "IsCDN": "N",
+      "ReadFile": "N"
+    }
+  ],
+  "AnimationAttributes": [
+    {
+      "vAttributeName": "InitialArcadix_Hour",
+      "vType": "Number"
+    },
+    {
+      "vAttributeName": "InitialArcadix_Minute",
+      "vType": "Number"
+    },
+    {
+      "vAttributeName": "ResultArcadix_Hour",
+      "cHasTolerance": "Y",
+      "cHasRange": "N",
+      "vType": "Number"
+    },
+    {
+      "vAttributeName": "ResultArcadix_Minute",
+      "cHasTolerance": "Y",
+      "cHasRange": "N",
+      "vType": "Number"
+    }
+  ]
+}

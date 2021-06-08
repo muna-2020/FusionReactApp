@@ -1,0 +1,185 @@
+/**********************************
+New table		
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES   WHERE TABLE_NAME = N't_Framework_Country_MainClient')
+BEGIN
+CREATE TABLE [dbo].[t_Framework_Country_MainClient]
+(
+	  [iCountryMainClientId] INT NOT NULL IDENTITY(1,1)
+	, [iCountryId] INT NULL
+	, [iMainClientId] INT NULL
+	, [iApplicationTypeId] INT NULL
+	, [dtModifiedOn] DATETIME NULL
+	, [dtCreatedOn] DATETIME NULL
+	, [uUserId] UNIQUEIDENTIFIER NULL
+	, [cIsDeleted] CHAR(1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	, [uModifiedByUserId] UNIQUEIDENTIFIER NULL
+	, CONSTRAINT [PK_t_Framework_Country_MainClient] PRIMARY KEY ([iCountryMainClientId] ASC)
+)
+
+END
+
+GO
+CREATE NONCLUSTERED INDEX  IX_t_Framework_Country_MainClient_iCountryId ON t_Framework_Country_MainClient ( [iCountryId] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_t_Framework_Country_MainClient_iMainClientId ON t_Framework_Country_MainClient ( [iMainClientId] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_t_Framework_Country_MainClient_iApplicationTypeId ON t_Framework_Country_MainClient ( [iApplicationTypeId] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_t_Framework_Country_MainClient_dtModifiedOn ON t_Framework_Country_MainClient ( [dtModifiedOn] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_t_Framework_Country_MainClient_dtCreatedOn ON t_Framework_Country_MainClient ( [dtCreatedOn] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_t_Framework_Country_MainClient_uUserId ON t_Framework_Country_MainClient ( [uUserId] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_t_Framework_Country_MainClient_cIsDeleted ON t_Framework_Country_MainClient ( [cIsDeleted] ASC ) 
+CREATE NONCLUSTERED INDEX  IX_t_Framework_Country_MainClient_uModifiedByUserId ON t_Framework_Country_MainClient ( [uModifiedByUserId] ASC ) 
+Go
+
+/**********************************
+Default Values
+**********************************/
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 0 and iApplicationTypeId =1)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,0,1,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 0 and iApplicationTypeId =2)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,0,2,getdate(),getdate(),null,'N',null)
+END
+
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 0 and iApplicationTypeId =4)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,0,4,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 0 and iApplicationTypeId =6)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,0,6,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 0 and iApplicationTypeId =16)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,0,16,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 97 and iApplicationTypeId =1)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,97,1,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 97 and iApplicationTypeId =2)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,97,2,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 97 and iApplicationTypeId =4)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,97,4,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 97 and iApplicationTypeId =6)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,97,6,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 97 and iApplicationTypeId =16)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,97,16,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 115 and iApplicationTypeId =1)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,115,1,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 115 and iApplicationTypeId =2)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,115,2,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 115 and iApplicationTypeId =4)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,115,4,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 115 and iApplicationTypeId =6)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,115,6,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 115 and iApplicationTypeId =16)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,115,16,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 112 and iApplicationTypeId =1)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,112,1,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 112 and iApplicationTypeId =2)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,112,2,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 112 and iApplicationTypeId =4)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,112,4,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 112 and iApplicationTypeId =6)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,112,6,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 112 and iApplicationTypeId =16)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,112,16,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 114 and iApplicationTypeId =1)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,114,1,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 114 and iApplicationTypeId =2)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,114,2,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 114 and iApplicationTypeId =4)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,114,4,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 114 and iApplicationTypeId =6)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,114,6,getdate(),getdate(),null,'N',null)
+END
+
+GO
+IF NOT EXISTS (select * from t_Framework_Country_MainClient where iCountryid = 1 and iMainClientId = 114 and iApplicationTypeId =16)
+BEGIN
+insert into t_Framework_Country_MainClient values(1,114,16,getdate(),getdate(),null,'N',null)
+END
+
+

@@ -1,0 +1,41 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Task_TaskKeyword' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Task_TaskKeyword ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO		 
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Task_TaskKeyword set uModifiedByUserId= uUserId Where uModifiedByUserId is null
+
+GO
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_CMS_CMSPage_GetTaskDetailsByFolderId
+FProc_CMS_CMSPage_GetTaskDetailsById
+FProc_TestDrive_BaseObject_TaskKeyword_GetData
+JEditorProc_CMS_CMSPage_GetTaskDetailsByFolderId
+JEditorProc_CMS_CMSPage_GetTaskDetailsById
+Proc_CMS_AddEditTask_InsertNewKeyWords
+Proc_CMS_CMSPage_GetTaskDetailsByFolderId
+Proc_CMS_CMSPage_GetTaskDetailsById
+Proc_CMS_CMSPage_GetTaskKeyword
+Proc_TestDrive_JTeacherTestTask_GetAllTasksByTestId
+Proc_TestDrive_StandardTestProvider_GetAllTasksAssignedWithTests
+Proc_TestDrive_StandardTestProvider_GetAllTasksByTestId_New
+Proc_TestDrive_StandardTestProvider_GetAllTasksByTestId_New_Calibration
+Proc_TestDrive_Task_TaskKeyword_SaveKeywordDetails
+****************************************************************/
+
+/********************Procs need to Review**********************
+Proc_CMS_AddEditTask_InsertNewKeyWords
+Proc_TestDrive_Task_TaskKeyword_SaveKeywordDetails
+****************************************************************/

@@ -1,0 +1,25 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_LinearAdaptivePointMapping' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Test_LinearAdaptivePointMapping ADD uModifiedByUserId uniqueidentifier  
+END				 
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Test_LinearAdaptivePointMapping set uModifiedByUserId= uUserId Where uModifiedByUserId is null
+
+GO
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+JProc_Testdrive_LinearAdaptiveMapping_GetLinearAdaptiveMappingDetails
+Proc_Testdrive_LinearAdaptiveMapping_GetLinearAdaptiveMappingDetails
+****************************************************************/
+
+

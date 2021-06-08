@@ -1,0 +1,202 @@
+/***************************************************************************************************
+
+Script to add data to t_Fusion_Intranet_ResultPageCertificate and 
+t_Fusion_Intranet_ResultPageCertificate_Data tables (These are Sample Data added during Table creation)
+
+****************************************************************************************************/
+--main table
+if NOT Exists(select * from t_Fusion_Intranet_ResultPageCertificate where uResultPageCertificateId = '50C6C0AC-3566-46E9-BB8C-63F7B7F6F8AA') 
+BEGIN
+insert into t_Fusion_Intranet_ResultPageCertificate select '50C6C0AC-3566-46E9-BB8C-63F7B7F6F8AA','StandardCertificate','97','N','Y','E4205C35-2A37-458A-BA0D-52660FD6ECE2','Jun 23 2020 12:00AM','Jun 23 2020 12:00AM',NULL
+END
+
+GO
+
+ --data table
+if NOT Exists(select * from t_Fusion_Intranet_ResultPageCertificate_Data where uResultPageCertificateDataId = 'DCAF7171-E46D-4A96-BE86-58A7CAFB3ECD' and iLanguageId = 3 )
+BEGIN
+insert into t_Fusion_Intranet_ResultPageCertificate_Data select 'DCAF7171-E46D-4A96-BE86-58A7CAFB3ECD','50C6C0AC-3566-46E9-BB8C-63F7B7F6F8AA','3','StandardResultCertificate'
+END
+
+GO
+
+/***************************************************************************************************
+
+Script to add cIsForFusion='Y' to t_TestDrive_Test_TestProgressDisplay and data to
+t_Fusion_Intranet_ResultPageCertificate_Data tables 
+
+****************************************************************************************************/
+--main table
+Update t_TestDrive_Test_TestProgressDisplay
+Set cIsForFusion = 'Y' where cIsForFusion is NULL
+GO
+
+/***************************************************************************************************
+
+Script to add data to t_TestDrive_Test_ResultAttribute and 
+t_TestDrive_Test_ResultAttribute_Data tables (These are Sample Data added during Table creation)
+
+****************************************************************************************************/
+--main table
+if NOT Exists(select * from t_TestDrive_Test_ResultAttribute where uResultAttributeId = 'BEA2CD8D-3459-4FC8-9419-F14628FD40F9' )
+ BEGIN 
+ insert into t_TestDrive_Test_ResultAttribute select 'BEA2CD8D-3459-4FC8-9419-F14628FD40F9','1','TestPoint','N','May 19 2020 9:04PM','May 19 2020 9:04PM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','N',NULL,'Y','Y','2','N','97','Y',NULL 
+ END
+if NOT Exists(select * from t_TestDrive_Test_ResultAttribute where uResultAttributeId = '0BF1F95C-4371-48DC-BE48-3FD1AE8C5038' )
+ BEGIN 
+ insert into t_TestDrive_Test_ResultAttribute select '0BF1F95C-4371-48DC-BE48-3FD1AE8C5038','1','TestPercentage','N','May 19 2020 9:04PM','May 19 2020 9:04PM','AE27E1A5-CEAF-48DC-9FD7-5EE49BF434C6','N',NULL,'Y','Y','2','N','97','Y',NULL 
+ END
+
+ --data table
+if NOT Exists(select * from t_TestDrive_Test_ResultAttribute_Data where uResultAttributeDataId = '72240C65-A70F-407B-9DF4-7B1CB9D0A1EC'and iLanguageId = '1' )
+ BEGIN 
+ insert into t_TestDrive_Test_ResultAttribute_Data select '72240C65-A70F-407B-9DF4-7B1CB9D0A1EC','BEA2CD8D-3459-4FC8-9419-F14628FD40F9','1','TestPoint',NULL
+  END
+if NOT Exists(select * from t_TestDrive_Test_ResultAttribute_Data where uResultAttributeDataId = 'CF718D01-0348-4D83-96A7-2C3E2F2B1131'and iLanguageId = '3' ) 
+BEGIN 
+insert into t_TestDrive_Test_ResultAttribute_Data select 'CF718D01-0348-4D83-96A7-2C3E2F2B1131','BEA2CD8D-3459-4FC8-9419-F14628FD40F9','3','TestPoint',NULL 
+END
+if NOT Exists(select * from t_TestDrive_Test_ResultAttribute_Data where uResultAttributeDataId = '4E0544C6-7BA0-4096-B073-EEF79757A0E7'and iLanguageId = '2' )
+ BEGIN
+  insert into t_TestDrive_Test_ResultAttribute_Data select '4E0544C6-7BA0-4096-B073-EEF79757A0E7','BEA2CD8D-3459-4FC8-9419-F14628FD40F9','2','TestPoint',NULL 
+  END
+if NOT Exists(select * from t_TestDrive_Test_ResultAttribute_Data where uResultAttributeDataId = '239DC1EB-B1B1-419A-AFBC-A0CBA131AD31'and iLanguageId = '1' ) 
+BEGIN 
+insert into t_TestDrive_Test_ResultAttribute_Data select '239DC1EB-B1B1-419A-AFBC-A0CBA131AD31','0BF1F95C-4371-48DC-BE48-3FD1AE8C5038','1','TestPercentage',NULL 
+END
+if NOT Exists(select * from t_TestDrive_Test_ResultAttribute_Data where uResultAttributeDataId = 'BE1B1CAF-D278-499C-BF2E-32F2D4E3AE45'and iLanguageId = '3' ) 
+BEGIN 
+insert into t_TestDrive_Test_ResultAttribute_Data select 'BE1B1CAF-D278-499C-BF2E-32F2D4E3AE45','0BF1F95C-4371-48DC-BE48-3FD1AE8C5038','3','TestPercentage',NULL 
+END
+if NOT Exists(select * from t_TestDrive_Test_ResultAttribute_Data where uResultAttributeDataId = '7FCFB018-428A-4C9F-90E4-E85CBF515319'and iLanguageId = '2' ) 
+BEGIN 
+insert into t_TestDrive_Test_ResultAttribute_Data select '7FCFB018-428A-4C9F-90E4-E85CBF515319','0BF1F95C-4371-48DC-BE48-3FD1AE8C5038','2','TestPercentage',NULL 
+END
+
+GO
+
+
+/*******************************************************************************************
+To Disable the Trigger in tables related to Task (Old triggers to add Audit data)
+*****************************************************************************************/
+DISABLE TRIGGER ALL ON t_CMS_Page
+
+GO
+DISABLE TRIGGER ALL ON t_CMS_Page_Data
+
+GO
+DISABLE TRIGGER ALL ON t_CMS_Page_AssignedWorkflowStatus
+
+GO
+DISABLE TRIGGER ALL ON t_CMS_PageProperty_TestDrive
+
+GO
+DISABLE TRIGGER ALL ON t_CMS_Page_Language
+
+GO
+DISABLE TRIGGER ALL ON t_TestDrive_Task_AssignedAdditionalTaskProperty
+
+GO
+DISABLE TRIGGER ALL ON t_TestDrive_Task_AssignedTaskDifficultyLevel
+
+GO
+
+/*****************************************************************************************
+To rename the column names of the table t_CMS_FileSystem_PageFolder
+****************************************************************************************/
+sp_rename 't_CMS_FileSystem_PageFolder.iPageFolderID','iPageFolderId','COLUMN'
+GO
+sp_rename 't_CMS_FileSystem_PageFolder.iPageParentFolderID','iPageParentFolderId','COLUMN'
+GO
+
+/****************************************************************************************
+TO alter the datatype of the column tSubjectDescription in table t_TestDrive_Subject_Data
+****************************************************************************************/
+alter table t_TestDrive_Subject_Data
+alter column tSubjectDescription nvarchar(max)
+
+Go
+update t_testdrive_cycle set iMainClientId = 114
+where uCycleId = '85E13FD3-2337-415A-BBC9-7C2FC90982E9'
+
+Go 
+
+
+------------------
+
+CREATE procedure [dbo].[p_Extranet_Pupil_Module_UpdateLearningTestTeacherIdIfPupilMoved]              
+(                                                            
+ @vTestIds nvarchar(4000),        
+ @uTeacherId uniqueidentifier,      
+ @uClassId uniqueidentifier                        
+)                                
+AS                              
+/********************************************************************************************                                                            
+ Created By: Praveen                                       
+ Created Date: 04.01.2018                  
+ Description: update learningtest userid to new Teacherid to which the pupil is moved        
+********************************************************************************************/                                           
+BEGIN           
+        
+update t_TestDrive_Test set uUserId = @uTeacherId where  uTestId in (SELECT *        
+FROM OPENJSON(@vTestIds) with (uTestId nvarchar(200) '$.TestId'))        
+      
+UPDATE t_TestDrive_Test_TestProperty SET uClassId = @uClassId where uTestId in (SELECT *        
+FROM OPENJSON(@vTestIds) with (uTestId nvarchar(200) '$.TestId'))        
+        
+select( Select @@ROWCOUNT as RowsAffected for json path,INCLUDE_NULL_VALUES, without_array_wrapper) as JSONResult         
+        
+End  
+
+----------------------------------------------------------------------
+CREATE PROCEDURE [dbo].[p_Extranet_LinearAndRandomResultExcelGeneration_GetPupilDetails]          
+(          
+ @iLanguageId int          
+)          
+AS          
+BEGIN          
+/********************************************************************************************                                  
+   Created By : Sikkandar Basha          
+   Created Date : 14.10.2008                        
+   Description : Gets All the ResultCalculationProvider Details.          
+                        
+   Modified By :          
+   Modified Date :          
+   Description :          
+********************************************************************************************/            
+          
+ Select (Select RCPD.iResultCalculationProviderId,          
+   RCPD.vResultCalculationProviderName         
+   for json path,INCLUDE_NULL_VALUES, without_array_wrapper) as JSONResult           
+ From t_TestDrive_Test_ResultCalculationProvider RCP           
+ JOIN t_TestDrive_Test_ResultCalculationProvider_Data RCPD ON RCP.iResultCalculationProviderId = RCPD.iResultCalculationProviderId          
+ Where RCPD.iLanguageId = @iLanguageId          
+END   
+
+
+---------------------------------------------------------------------------------------------------------------
+CREATE procedure [dbo].[p_Extranet_PracticeTest_Module_StartTest]    
+@vTestPracticeFilter nvarchar(max)    
+AS                               
+ Begin                              
+/********************************************************************************************                                              
+  Created By:    Sanjay                                  
+  Create Date:   10.07.2019                                             
+  Description:  Saves testpractice filter in t_Testdrive_Test_Practice               
+                      
+  Modified By:                            
+  Create Date:                                        
+  Description:                      
+ ********************************************************************************************/                        
+               
+ declare @uTestPracticeId uniqueidentifier             
+ set @uTestPracticeId = NEWID()          
+         
+ insert into t_Testdrive_Test_Practice values(@uTestPracticeId,@vTestPracticeFilter,GETDATE())             
+     
+     
+ select(select TP.uTestPracticeId, TP.tTestPracticeFilter,TP.dtCreatedOn  from t_Testdrive_Test_Practice TP where uTestPracticeId = @uTestPracticeId  for json path, include_null_values, without_Array_wrapper) as JSONResult    
+       
+END   
+
+------------------------------------------------------------------------

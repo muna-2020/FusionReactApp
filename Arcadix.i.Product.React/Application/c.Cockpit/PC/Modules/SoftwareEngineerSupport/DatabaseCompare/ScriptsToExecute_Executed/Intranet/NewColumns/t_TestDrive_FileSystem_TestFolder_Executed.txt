@@ -1,0 +1,47 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_FileSystem_TestFolder' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_FileSystem_TestFolder ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_FileSystem_TestFolder set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_TestDrive_BaseObject_TestFolder_AddData
+FProc_TestDrive_BaseObject_TestFolder_DeleteData
+FProc_TestDrive_BaseObject_TestFolder_EditData
+FProc_TestDrive_BaseObject_TestFolder_GetData
+JProc_CMS_CMSTest_GetTestFolders
+Proc_TestDrive_Test_AddEditTestFolderProperties
+Proc_TestDrive_Test_CopyPasteTest_New
+Proc_TestDrive_Test_CopyPasteTestFolder
+Proc_TestDrive_Test_CopyPasteTestFolder_New
+Proc_TestDrive_Test_DeleteTestFolders
+Proc_TestDrive_Test_GetFoldersByFolderId
+Proc_TestDrive_Test_MoveTest
+Proc_TestDrive_Test_MoveTestFolder
+Proc_TestDrive_Test_MoveTestFolder_New
+*************************************************/
+
+/********************Procs need to Review**********************
+FProc_TestDrive_BaseObject_TestFolder_AddData
+Proc_TestDrive_Test_AddEditTestFolderProperties
+Proc_TestDrive_Test_CopyPasteTest_New
+Proc_TestDrive_Test_CopyPasteTestFolder
+Proc_TestDrive_Test_CopyPasteTestFolder_New
+Proc_TestDrive_Test_MoveTest
+Proc_TestDrive_Test_MoveTestFolder
+Proc_TestDrive_Test_MoveTestFolder_New
+*************************************************/

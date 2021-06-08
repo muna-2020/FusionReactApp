@@ -1,0 +1,49 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_Country' AND COLUMN_NAME = 'vCurrency') 
+BEGIN
+ALTER TABLE t_Framework_Country ADD vCurrency nvarchar(MAX)  
+END
+
+GO	 
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_Country' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN
+ALTER TABLE t_Framework_Country ADD dtModifiedOn datetime  DEFAULT (getdate())
+END
+
+GO		   
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_Country' AND COLUMN_NAME = 'cIsDeleted') 
+BEGIN
+ALTER TABLE t_Framework_Country ADD cIsDeleted char(1)  DEFAULT ('N')
+END
+				 
+GO
+/**********************************
+Default Values
+**********************************/
+update t_Framework_Country set cIsDeleted='N' Where cIsDeleted is null
+
+GO
+update t_Framework_Country set dtModifiedOn=getdate() Where dtModifiedOn is null
+
+GO
+update t_Framework_Country set vCurrency ='CHF' where iCountryId = 1
+
+GO
+update t_Framework_Country set vCurrency ='USD' where iCountryId = 2
+
+GO
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+JProc_Framework_ClientConfiguration_GetCultureByCountryId
+Proc_Framework_ClientConfiguration_GetCultureByCountryId
+****************************************************************/
+
+
+/********************Procs need to Review**********************
+			No proc to update
+****************************************************************/

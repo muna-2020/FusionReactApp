@@ -1,0 +1,27 @@
+﻿{
+  "Dashboard": {
+    "Tabs": [
+      {
+        "TabId": "1",
+        "TabText": "ToolBar.Dashboard",
+        "IsDefault": true,
+        "Groups": [
+          {
+            "GroupTitle": "Dashboard.Dashboard",
+            "ToolbarItem": [
+              {
+                "Type": "single",
+                "Action": "Reload",
+                "IconTitle": "Dashboard.Refresh",
+                "ImageAltText": "Dashboard.Refresh",
+                "IconPath": "Toolbar/Refresh_Large",
+                "ImageType": "png",
+                "Attributes": { "ActionMethod": "Reload" }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

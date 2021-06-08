@@ -1,0 +1,155 @@
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Member_Pupil' AND COLUMN_NAME = 'uLoginGeneratedBy') 
+BEGIN
+	ALTER TABLE t_TestDrive_Member_Pupil ADD uLoginGeneratedBy uniqueidentifier  
+END
+Go
+ 
+ 
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Member_Pupil' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+	ALTER TABLE t_TestDrive_Member_Pupil ADD uModifiedByUserId uniqueidentifier  
+END
+Go
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Member_Pupil set uModifiedByUserId = uUserId ,uLoginGeneratedBy = uUserId 
+Go
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+FProc_TestDrive_BaseObject_Pupil_AddData
+FProc_TestDrive_BaseObject_Pupil_DeleteData
+FProc_TestDrive_BaseObject_Pupil_EditData
+FProc_TestDrive_BaseObject_Pupil_GetData
+FProc_TestDrive_StellwerkZurich_DeleteAllExternalMappings
+JEditorProc_TestDrive_StandardPupilProvider_GetPupilDetailsForTestApplication
+JProc_Framework_JLogin_InsertAutoLoginCredentialsForUser
+JProc_Testdrive_AutoLogin_GetPupilLoggedInInfo_06_08_2020
+JProc_Testdrive_LearncoacherPupilMembership_ValidateUser
+JProc_Testdrive_LearningTestCount
+JProc_TestDrive_Member_GetClassData_Sync
+JProc_Testdrive_Member_GetExternalPupilsForMainClient
+JProc_TestDrive_Member_GetPupilData_Sync
+JProc_Testdrive_Member_GetUserDetailsForAutoLogin
+JProc_Testdrive_Member_GetUserDetailsFromExternalSourceId
+JProc_TestDrive_Member_RefreshCache
+JProc_Testdrive_Memeber_Pupil_GetPupilsForSchool
+JProc_Testdrive_Memeber_Pupil_GetSchoolPupilForMainClient
+JProc_Testdrive_Memeber_Pupil_GetSchoolPupilForMainClient_Sync
+JProc_TestDrive_Pupil_GetAllPupilDetails
+JProc_TestDrive_Pupil_GetPupilDetailsByPupilId
+JProc_TestDrive_Pupil_GetPupilDetailsOfSameEmail
+JProc_TestDrive_Pupil_SavePupilPasswordHashForEmail
+JProc_TestDrive_Pupil_SavePupilPasswordHashForEmail_04_06_2019
+JProc_TestDrive_Pupil_SavePupilPasswordHashForEmail_24_07_2019
+JProc_Testdrive_Pupil_SaveUserNameAndSchoolPupil
+JProc_TestDrive_Pupil_UpdateUserName
+JProc_Testdrive_SimplelLoginMembershipProvider_ValidateUser
+JProc_Testdrive_SimplelLoginMembershipProvider_ValidateUser_01_08_2019
+JProc_Testdrive_SimplelLoginMembershipProvider_ValidateUser_18_05_2018
+JProc_Testdrive_SimplelLoginMembershipProvider_ValidateUser_23_07_2019
+JProc_TestDrive_StandardPupilProvider_EditProfileCodeForMultiplePupil
+JProc_TestDrive_StandardPupilProvider_GetPupilDetailsForTestApplication
+JProc_TestDrive_StellwerkZurich_SavePupilExternalMapping
+JProc_TestDrive_Teacher_GetAllPupilByMainClientId
+Proc_Framework_ClientUser_GetMemberDetails
+Proc_Pupil_Create_LoadTest
+Proc_Testdrive_BRNWMembershipProvider_ValidateUser
+Proc_TestDrive_Dashboard_GetLearningJournal
+Proc_TestDrive_Demo_SaveDemoUserDetails
+Proc_Testdrive_EdupoolLearncoacherPupilMembership_ValidateUser
+Proc_TestDrive_ePrologPupilImportProvider_SavePupilFromExcel
+Proc_TestDrive_ExperienceGrade_GetExperienceGradeByClassId
+Proc_TestDrive_ExperienceGrade_GetExperienceGradeByPupilId
+Proc_TestDrive_ExperienceGrade_GetExperienceGradeDetails
+Proc_TestDrive_ExperienceGrade_GetExperienceGradeDetailsByClassId
+Proc_TestDrive_GetAllUsers
+Proc_TestDrive_GetAllUsersForAllMainClients
+Proc_TestDrive_JGroupTesting_CreateGroupAndPupils
+Proc_TestDrive_JProfilePupil_GetPupilProfileImageDetails
+Proc_TestDrive_JProfilePupil_SavePupilProfileImage
+Proc_Testdrive_LearncoacherPupilMembership_ValidateUser
+Proc_Testdrive_Member_GetAllCommunications
+Proc_TestDrive_Member_GetMemberDetailsForDashboard
+Proc_TestDrive_MiscExport_GetDocumentCount
+Proc_TestDrive_MiscExport_GetNewsCount
+Proc_TestDrive_NantysAdvancedStandardPupilProvider_EditProfileCodeForMultiplePupil
+Proc_TestDrive_NantysAdvancedStandardPupilProvider_EditProfileCodeForPupil
+Proc_TestDrive_PageResultTransfer_GetTeacherSchoolDetailsByClass
+Proc_Testdrive_PathfinderPupilMembership_ValidateUser_JobSkills
+Proc_Testdrive_ProfileLoginMembership_ValidateUser
+Proc_TestDrive_Pupil_CheckIfPupilPasswordAlreadyExists
+Proc_TestDrive_Pupil_CheckIfPupilPasswordAlreadyExistsForMainclient
+Proc_TestDrive_Pupil_GetAllPupilDetails
+Proc_TestDrive_Pupil_GetAllPupilsForUserNameOrEmail
+Proc_TestDrive_Pupil_GetAllPupilsForUserNameOrEmail_24_07_2019
+Proc_TestDrive_Pupil_GetPupilDetails
+Proc_TestDrive_Pupil_GetPupilDetails_Yousty
+Proc_TestDrive_Pupil_GetPupilDetailsByPupilId_Yousty
+Proc_TestDrive_Pupil_GetPupilDetailsByStateId
+proc_TestDrive_Pupil_GetPupilDetailsOfSameEmail
+Proc_TestDrive_Pupil_PermanentDelete
+Proc_TestDrive_Pupil_SaveClassPupilMappings
+Proc_TestDrive_Pupil_SaveExternalPupil_Yousty
+Proc_TestDrive_Pupil_SaveExternalPupil_YoustyAsNVarchar
+Proc_TestDrive_Pupil_SaveExternalPupil_YoustyAsNVarchar_WithCheckToken
+Proc_TestDrive_Pupil_SaveExternalPupil_YoustyAsNVarchar_WithCheckToken_04_28_2020
+Proc_TestDrive_Pupil_SaveExternalPupil_YoustyAsNVarcharTest
+Proc_TestDrive_Pupil_SaveProfileCodeForPupil_Core2
+Proc_TestDrive_Pupil_SavePupilPasswordForEmail
+Proc_TestDrive_Pupil_SavePupilPasswordHashForEmail
+Proc_TestDrive_Pupil_UpdatePupilInformation
+Proc_TestDrive_Pupil_UpdateUserName
+Proc_TestDrive_PupilManagement_GetGridData
+Proc_Testdrive_PupilMembership_ValidateUser
+Proc_TestDrive_RealTimeTestUsage_GetPupilDetails
+Proc_TestDrive_RomandsPupilImportProvider_SavePupilFromExcel
+Proc_Testdrive_SimplelLoginMembershipProvider_ValidateUser
+Proc_Testdrive_SimplelLoginMembershipProvider_ValidateUser_Temp
+Proc_TestDrive_SinglePageTest_GetPupilDetails
+Proc_TestDrive_SinglePageTest_GetPupilsByProfileCode
+Proc_TestDrive_StandardClassProvider_GetPupils
+Proc_TestDrive_StandardPupilProvider_EditProfileCodeForMultiplePupil
+Proc_TestDrive_StandardPupilProvider_EditProfileCodeForPupil
+Proc_TestDrive_StandardPupilProvider_GetPupilByProfileCode
+Proc_TestDrive_StandardPupilProvider_GetPupilDetailsForTestApplication
+Proc_TestDrive_StandardPupilProvider_GetPupilDetailsForTestApplication_New
+Proc_TestDrive_StandardTeacherProvider_GetAllClassesByTeacherId
+Proc_TestDrive_StandardTeacherProvider_GetAllClassesByTeacherId_New
+Proc_TestDrive_StandardTeacherProvider_GetAllPupilsByTeacherId
+Proc_TestDrive_StandardTeacherProvider_GetAllPupilsByTeacherId_New
+Proc_TestDrive_StellwerkLearncoacherPupilImportProvider_SavePupilFromExcel
+Proc_TestDrive_StellwerkPupilImportProvider_SavePupilFromExcel
+Proc_TestDrive_StellwerkPupilProvider_GetPupilDetailsByPupilId
+Proc_TestDrive_Teacher_GetPupilAssessorDetails
+Proc_Testdrive_UpdateHashedPassword
+***********************************************************/
+
+
+/********************Procs to Review**********************
+JProc_TestDrive_Pupil_SavePupilPasswordHashForEmail_24_07_2019
+JProc_Testdrive_Pupil_SaveUserNameAndSchoolPupil
+
+JProc_Framework_JLogin_InsertAutoLoginCredentialsForUser (No Change Required)
+Proc_TestDrive_Demo_SaveDemoUserDetails (No Change Required)
+Proc_TestDrive_ePrologPupilImportProvider_SavePupilFromExcel (No Change Required)
+Proc_TestDrive_JGroupTesting_CreateGroupAndPupils (No Change Required)
+Proc_TestDrive_Pupil_SaveClassPupilMappings (No Change Required)
+Proc_TestDrive_Pupil_SaveExternalPupil_Yousty (No Change Required)
+Proc_TestDrive_Pupil_SaveExternalPupil_YoustyAsNVarchar (No Change Required)
+Proc_TestDrive_Pupil_SaveExternalPupil_YoustyAsNVarchar_WithCheckToken (No Change Required)
+Proc_TestDrive_Pupil_SaveExternalPupil_YoustyAsNVarchar_WithCheckToken_04_28_2020 (No Change Required)
+Proc_TestDrive_Pupil_SaveExternalPupil_YoustyAsNVarcharTest (No Change Required)
+Proc_TestDrive_RomandsPupilImportProvider_SavePupilFromExcel (No Change Required)
+Proc_TestDrive_StellwerkLearncoacherPupilImportProvider_SavePupilFromExcel (No Change Required)
+Proc_TestDrive_StellwerkPupilImportProvider_SavePupilFromExcel (No Change Required)
+***********************************************************/

@@ -1,0 +1,16 @@
+﻿ Follwing tables updated:
+
+	1) t_Framework_UserPreference
+	2) t_Framework_Help
+	3) t_Framework_Help_GROUP
+	4) t_Framework_UserPreference_BackgroundTheme
+	5) t_Framework_UserPreference_ProfileImage
+	6) t_Framework_ApplicationServers
+
+
+procs Updated:
+
+   Proc_Framework_Profile_SaveUserPreferenceDetails
+   JProc_TestDrive_GateKeeper_GetCurrentURL
+   Proc_LoadDistribution_GetApplicationServerDetails
+   Proc_TestDrive_GateKeeper_GetCurrentURL

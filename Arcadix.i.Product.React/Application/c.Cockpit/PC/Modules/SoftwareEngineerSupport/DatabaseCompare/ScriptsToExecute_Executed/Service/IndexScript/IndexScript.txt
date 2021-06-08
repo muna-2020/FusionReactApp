@@ -1,0 +1,20 @@
+/**********************************************************
+Index for t_TestDrive_Member_LoggedinUserInformation table
+**********************************************************/
+
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Member_LoggedinUserInformation_cIsLoginFailed] ON [dbo].[t_TestDrive_Member_LoggedinUserInformation] ([cIsLoginFailed])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Member_LoggedinUserInformation_cIsManualLogin] ON [dbo].[t_TestDrive_Member_LoggedinUserInformation] ([cIsManualLogin])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Member_LoggedinUserInformation_dtDateTimeOfLogin] ON [dbo].[t_TestDrive_Member_LoggedinUserInformation] ([dtDateTimeOfLogin])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Member_LoggedinUserInformation_dtDateTimeOfLogout] ON [dbo].[t_TestDrive_Member_LoggedinUserInformation] ([dtDateTimeOfLogout])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Member_LoggedinUserInformation_dtMasterLoad] ON [dbo].[t_TestDrive_Member_LoggedinUserInformation] ([dtMasterLoad])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Member_LoggedinUserInformation_iApplicationTypeId] ON [dbo].[t_TestDrive_Member_LoggedinUserInformation] ([iApplicationTypeId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Member_LoggedinUserInformation_iMainClientId] ON [dbo].[t_TestDrive_Member_LoggedinUserInformation] ([iMainClientId])
+GO
+CREATE NONCLUSTERED INDEX [IX_t_TestDrive_Member_LoggedinUserInformation_uUserId] ON [dbo].[t_TestDrive_Member_LoggedinUserInformation] ([uUserId])
+GO

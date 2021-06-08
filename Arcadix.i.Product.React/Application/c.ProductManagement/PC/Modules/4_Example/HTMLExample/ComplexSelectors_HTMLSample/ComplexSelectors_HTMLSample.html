@@ -1,0 +1,387 @@
+﻿<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: calibri;
+        }
+
+        .main-wrapper {
+            width: 1024px;
+            margin: 0px auto;
+            padding: 20px;
+            font-size: 18px;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 24px;
+            padding: 10px;
+            border-bottom: 1px solid #f1f1f1;
+            font-weight: bold;
+        }
+
+        .sub-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 15px;
+            background: #FFC107;
+            width: max-content;
+            padding: 5px;
+        }
+
+        ul {
+            line-height: 2rem;
+            list-style-type: square;
+            list-style-position: inside;
+        }
+
+        .item-wrapper p {
+            margin: 10px 0px;
+        }
+
+        pre {
+            white-space: pre-line;
+            padding: 20px;
+            width: 100%;
+            padding-right: 100px;
+            margin: 10px 0px;
+            letter-spacing: 1px;
+            background: #282c34;
+            color: #b5b5b5;
+        }
+
+        .yellow-pre {
+            background: #fffcdd;
+            color: #222;
+            border-left: 5px solid #FFEB3B;
+        }
+
+        .light-text {
+            color: #999;
+            font-style: italic;
+        }
+        .topic-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0px;
+        }
+        .output {
+            border: 1px solid #607D8B;
+            padding: 10px 20px;
+            margin: 10px 0px;
+        }
+        .standard-table {
+            margin: 20px 0px;
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid #ddd;
+        }
+        .standard-table td, .standard-table th {
+            border: 1px solid #ddd;
+            padding: 15px;
+        }
+        em {
+            padding: 0px 7px;
+            background: #f7f5f5;
+        }
+        @media screen and (max-width: 1024px) {
+            .main-wrapper {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="title">
+            <span>Complex CSS Selectors</span>
+        </div>
+        <div class="topic-title">
+            <span>Attribute selectors</span>
+        </div>
+        <p>
+            HTML elements can have attributes that give further detail about the element being marked up.
+            In CSS you can use attribute selectors to target elements with certain attributes.
+        </p>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Presence and value selectors</span>
+            </div>
+            <div class="text-wrapper">
+                <p>
+                    These selectors enable the selection of an element based on the presence of an attribute alone (for example <em>href</em> ),
+                    or on various different matches against the value of the attribute.
+                </p>
+                <table class="standard-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Selector</th>
+                            <th scope="col">Example</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>[attr]</td>
+                            <td>a[title]</td>
+                            <td>
+                                Matches elements with an
+                                <em>attr</em> attribute (whose name is the value in square brackets).
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>[attr=value]</td>
+                            <td>a[href="https://example.com"]</td>
+                            <td>
+                                Matches elements with an
+                                <em>attr</em> attribute whose value is exactly
+                                <em>value</em> — the string inside the quotes.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>[attr~=value]</td>
+                            <td>p[class~="special"]</td>
+                            <td>
+                                Matches elements with an
+                                <em>attr</em> attribute whose value is exactly
+                                <em>value</em>, or contains
+                                <em>value</em> in its (space separated) list of values.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>[attr|=value]</td>
+                            <td>div[lang|="zh"]</td>
+                            <td>
+                                Matches elements with an
+                                <em>attr</em> attribute whose value is exactly
+                                <em>value</em> or begins with
+                                <em>value</em> immediately followed by a hyphen.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Substring matching selectors</span>
+            </div>
+            <div class="text-wrapper">
+                <p>
+                    These selectors allow for more advanced matching of substrings inside the value of your attribute. <br />
+                    For example, if you had classes of <em>box-warning</em> and <em>box-error</em> and wanted to match everything that started with the string <em>"box-"</em>,
+                    you could use <em>[class^="box-"]</em> to select.
+                </p>
+                <table class="standard-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Selector</th>
+                            <th scope="col">Example</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>[attr^=value]</td>
+                            <td>div[class^="box-"]</td>
+                            <td>
+                                Matches elements with an
+                                <em>attr</em> attribute (whose name is the value in square brackets), whose value begins with
+                                <em>value</em>.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>[attr$=value]</td>
+                            <td>div[class$="-box"]</td>
+                            <td>
+                                Matches elements with an
+                                <em>attr</em> attribute whose value ends with
+                                <em>value</em>.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>[attr*=value]</td>
+                            <td>div[class*="box"]></td>
+                            <td>
+                                Matches elements with an
+                                <em>attr</em> attribute whose value contains
+                                <em>value</em> anywhere within the string.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <div class="topic-title">
+            <span>pseudo-class selectors</span>
+        </div>
+        <div class="text-wrapper">
+            <p>
+                A pseudo-class is a selector that selects elements that are in a specific state, e.g. they are the first element of their type,
+                or they are being hovered over by the mouse pointer.
+            </p><br />
+            <p>Pseudo-classes are keywords that start with a colon:</p>
+            <pre class="yellow-pre">:pseudo-class-name</pre>
+        </div>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Simple pseudo-class example</span>
+            </div>
+            <div class="text-wrapper">
+                <p>
+                    Let's look at a simple example. If we wanted to make the first paragraph in an article larger and bold,
+                    we could use the <em>:first-child</em> pseudo-class selector — this will always target the first child element in the article,
+                    as shown in the example below:
+                </p>
+            </div>
+            <pre>
+                article p:first-child {
+                    font-size: 120%;
+                    font-weight: bold;
+                }                    
+            </pre>
+            <p>All pseudo-classes behave in this same kind of way. They target some bit of your document that is in a certain state.</p>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>User-action pseudo classes</span>
+            </div>
+            <div class="text-wrapper">
+                <p>
+                    Some pseudo-classes only apply when the user interacts with the document in some way. These user-action pseudo-classes,
+                    sometimes referred to as dynamic pseudo-classes, act as if a class had been added to the element when the user interacts with it.
+                    Examples include:
+                </p>
+                <ul>
+                    <li>
+                        <em>:hover</em> — mentioned above; this only applies if the user moves their pointer over an element, typically a link.
+                    </li>
+                    <li>
+                        <em>:focus</em> — only applies if the user focuses the element using keyboard controls.
+                    </li>
+                </ul>
+            </div>
+            <pre>
+                a:link{
+                    color:blue;
+                }
+                a:visited{
+                    color:red;
+                }
+                a:hover {
+                    color:black;
+                }   
+                button:focus {
+                    color: purple;
+                    font-weight: bold;
+                }                 
+            </pre>
+        </section>
+        <div class="topic-title">
+            <span>pseudo-element selectors</span>
+        </div>
+        <div class="text-wrapper">
+            <p>
+                Pseudo-elements behave in a similar way, however they act as if you had added a whole new HTML element into the markup,
+                rather than applying a class to existing elements. Pseudo-elements start with a double colon ::
+            </p>
+            <pre class="yellow-pre">::pseudo-element-name</pre>
+        </div>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Simple pseudo-element example</span>
+            </div>
+            <div class="text-wrapper">
+                <p>
+                    Let's look at a simple example. If we wanted to make the first line of a paragraph in an article red,
+                    we could use the <em>::first-line</em> pseudo-element selector
+                </p>
+            </div>
+            <pre>
+                .article p:first-line {
+                    color: red;
+                }                    
+            </pre>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Generating content with ::before and ::after</span>
+            </div>
+            <div class="text-wrapper">
+                <p>There are a couple of special pseudo-elements, which are used along with the content property to insert content into your document using CSS.</p>
+                <p>The use of the <em>::before</em> and <em>::after</em> pseudo-elements along with the content property is referred to as "Generated Content" in CSS</p>
+            </div>
+            <pre>
+                .box::after {
+                    content: " ➥"
+                }                 
+            </pre>
+        </section>
+        <section class="content-wrapper">
+            <div class="topic-title">
+                <span>Descendant selector</span>
+            </div>
+            <div class="text-wrapper">
+                <p>These selectors select elements that are descendants of others selector. They do not need to be direct children to match</p>
+                <p>For example, to select all <em>&lt;p&gt;</em> elements that are children of <em>&lt;article&gt;</em> elements:</p>
+            </div>
+            <pre>    
+                body article p{
+                    . . . 
+                }         
+            </pre>
+        </section>
+        <section class="content-wrapper">
+            <div class="topic-title">
+                <span>Child combinator</span>
+            </div>
+            <div class="text-wrapper">
+                <p>
+                    The child combinator is a greater-than symbol <em>(>)</em>, which matches only when the selectors select elements that are direct children.
+                    Descendants further down the hierarchy don't match.
+                </p>
+                <p>For example, to select only <em>&lt;p&gt;</em> elements that are direct children of <em>&lt;article&gt;</em> elements:</p>
+            </div>
+            <pre>    
+                article > p{
+                    . . . 
+                }
+            </pre>
+        </section>
+        <section class="content-wrapper">
+            <div class="topic-title">
+                <span>Adjacent sibling</span>
+            </div>
+            <div class="text-wrapper">
+                <p>The adjacent sibling selector <em>(+)</em> is used to select something if it is right next to another element at the same level of the hierarchy.</p>
+                <p>For example, to select all <em>&lt;img&gt;</em> elements that come right after <em>&lt;p&gt;</em> elements:</p>
+            </div>
+            <pre>    
+                p + img{
+                    . . . 
+                }
+            </pre>
+        </section>
+        <section class="content-wrapper">
+            <div class="topic-title">
+                <span>General sibling</span>
+            </div>
+            <div class="text-wrapper">
+                <p>If you want to select siblings of an element even if they are not directly adjacent, then you can use the general sibling combinator <em>(~)</em>.</p>
+                <p>For example, to select all <em>&lt;img&gt;</em> elements that come anywhere after <em>&lt;p&gt;</em> elements, we'd do this:</p>
+            </div>
+            <pre>    
+                p ~ img{
+                    . . . 
+                }
+            </pre>
+        </section>
+    </div>
+</body>
+</html>

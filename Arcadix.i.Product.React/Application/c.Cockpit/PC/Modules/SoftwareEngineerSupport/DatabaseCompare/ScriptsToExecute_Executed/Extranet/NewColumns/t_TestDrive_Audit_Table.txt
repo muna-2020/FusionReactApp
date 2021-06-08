@@ -1,0 +1,30 @@
+/**********************************
+New Columns
+**********************************/
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Audit_Table' AND COLUMN_NAME = 'uModifiedByUserId') 
+  BEGIN
+      ALTER TABLE t_TestDrive_Audit_Table ADD uModifiedByUserId uniqueidentifier  
+ END
+ Go
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Audit_Table set uModifiedByUserId = uUserId  
+Go
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+FProc_TestDrive_Member_GetSyncFTP
+FProc_TestDrive_StellwerkZurich_DeleteAllExternalMappings
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/

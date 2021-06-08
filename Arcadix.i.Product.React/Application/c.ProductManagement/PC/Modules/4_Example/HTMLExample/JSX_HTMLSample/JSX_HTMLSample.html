@@ -1,0 +1,183 @@
+﻿<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: calibri;
+        }
+
+        .main-wrapper {
+            width: 1024px;
+            margin: 0px auto;
+            padding: 20px;
+            font-size: 18px;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 24px;
+            padding: 10px;
+            border-bottom: 1px solid #f1f1f1;
+            font-weight: bold;
+        }
+
+        .sub-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .main-wrapper ul {
+            line-height: 2rem;
+            list-style-type: square;
+            margin-left: 20px;
+        }
+
+        .main-wrapper ol {
+            line-height: 2rem;
+            margin-left: 20px;
+        }
+
+        .main-wrapper p {
+            margin: 10px 0px;
+        }
+
+        pre {
+            white-space: pre-line;
+            padding: 20px;
+            width: 100%;
+            padding-right: 100px;
+            margin: 10px 0px;
+            letter-spacing: 1px;
+            background: #282c34;
+            color: #b5b5b5;
+        }
+
+        .yellow-pre {
+            background: #fffcdd;
+            color: #222;
+            border-left: 5px solid #FFEB3B;
+        }
+
+        .light-text {
+            color: #999;
+            font-style: italic;
+        }
+
+        @media screen and (max-width: 1024px) {
+            .main-wrapper {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="title">
+            <span>JSX</span>
+        </div>
+        <p>JSX allows us to write HTML elements in JavaScript and place them in the DOM without any createElement()  and/or appendChild() methods.</p>
+        <p>JSX converts HTML tags into react elements.</p>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Use JSX in React</span>
+            </div>
+            <div class="item-wrapper">
+                <p>Let's understand through an example how to create an element with JavaScript.</p>
+                <div class="light-text">without JSX</div>
+                <pre class="yellow-pre">
+                    const element = React.createElement('h1', {}, 'I do not use JSX!');
+                    ReactDOM.render(element, document.getElementById('root'));
+                </pre>
+                <div class="light-text">JSX</div>
+                <pre>
+                    const element = &lt;h1&gt;Hello World!&lt;/h1&gt;;
+                    ReactDOM.render(element, document.getElementById('root'));
+                </pre>
+                <p>In the above example, JSX allows us to write HTML directly within the JavaScript code.</p>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Embedding Expressions in JSX</span>
+            </div>
+            <div class="item-wrapper">
+                <p>In the example below, we declare a variable called name and then use it inside JSX by wrapping it in curly braces:</p>
+                <pre>
+                    const name = 'Josh Perez';
+                    const element = &lt;h1&gt;Hello, {name}&lt;/h1&gt;;
+
+                    ReactDOM.render(
+                    element,
+                    document.getElementById('root')
+                    );
+                </pre>
+                <p>You can put any valid JavaScript expression inside the curly braces in JSX. For example, 2 + 2, user.firstName, 
+                    or formatName(user) are all valid JavaScript expressions.</p>
+                <p>In the example below, we embed the result of calling a JavaScript function, formatName(user), into an &lt;h1&gt; element.</p>
+                <pre class="yellow-pre">
+                    function formatName(user) {
+                        return user.firstName + ' ' + user.lastName;
+                    }
+                    
+                    const user = {
+                        firstName: 'Harper',
+                        lastName: 'Perez'
+                    };
+                    
+                    const element = (
+                        &lt;h1&gt;
+                            Hello, {formatName(user)}!
+                        &lt;/h1&gt;
+                    );
+                    
+                    ReactDOM.render(
+                        element,
+                        document.getElementById('root')
+                    );
+                </pre>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Specifying Attributes with JSX</span>
+            </div>
+            <div class="item-wrapper">
+                <p>You may use quotes to specify string literals as attributes:</p>
+                <pre class="yellow-pre">
+                    const element = &lt;div tabIndex=&quot;0&quot;&gt;&lt;/div&gt;;
+                </pre>
+                <P>You may also use curly braces to embed a JavaScript expression in an attribute:</P>
+                <pre class="yellow-pre">
+                    const element = &lt;img src={user.avatarUrl}&gt;&lt;/img&gt;;
+                </pre>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Specifying Children with JSX</span>
+            </div>
+            <div class="item-wrapper">
+                <p>If a tag is empty, you may close it immediately with />, like XML:</p>
+                <pre class="yellow-pre">
+                    const element = &lt;img src={user.avatarUrl} /&gt;;
+                </pre>
+                <P>JSX tags may contain children:</P>
+                <pre>
+                    const element = (
+                    &lt;div&gt;
+                        &lt;h1&gt;Hello!&lt;/h1&gt;
+                        &lt;h2&gt;Good to see you here.&lt;/h2&gt;
+                    &lt;/div&gt;
+                    );
+                </pre>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

@@ -1,0 +1,30 @@
+/**********************************
+New Columns
+**********************************/
+ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Testdrive_Planner_Curriculum' AND COLUMN_NAME = 'uModifiedByUserId') 
+  BEGIN
+      ALTER TABLE t_Testdrive_Planner_Curriculum ADD uModifiedByUserId uniqueidentifier  
+ END
+ Go
+
+/**********************************
+Default Values
+**********************************/
+update t_Testdrive_Planner_Curriculum set uModifiedByUserId = uUserId  
+Go
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+Proc_Extranet_Planner_SaveCurriculumDetails
+Proc_Extranet_TeacherPlanner_GetAllCurriculumDataByClass
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/

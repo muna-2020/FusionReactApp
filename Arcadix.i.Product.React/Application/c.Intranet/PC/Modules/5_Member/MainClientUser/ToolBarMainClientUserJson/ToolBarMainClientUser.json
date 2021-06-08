@@ -1,0 +1,62 @@
+﻿{
+  "MainClientUser": {
+    "Tabs": [
+      {
+        "TabId": "1",
+        "TabText": "ToolBar.NewText",
+        "IsDefault": true,
+        "Groups": [
+          {
+            "GroupTitle": "ToolBar.Administrator",
+            "ToolbarItem": [
+              {
+                "Type": "single",
+                "Action": "New",
+                "IconTitle": "ToolBar.NewText",
+                "ImageAltText": "ToolBar.NewText",
+                "IconPath": "Toolbar/New_Large",
+                "ImageType": "svg",
+                "Attributes": { "ActionMethod": "JMainClientUser_NewDetailedInput" },
+                "PopupName": "mainclientuseraddeditdeletepopup",
+                "PopupTitle": "Add New User"
+              },
+              {
+                "Type": "single",
+                "Action": "Edit",
+                "IconTitle": "ToolBar.EditText",
+                "ImageAltText": "ToolBar.EditText",
+                "IconPath": "Toolbar/Edit_Large",
+                "ImageType": "svg",
+                "Attributes": { "ActionMethod": "JMainClientUser_EditDetailedInput" },
+                "PopupName": "mainclientuseraddeditdeletepopup",
+                "PopupTitle": "Edit User"
+              },
+              {
+                "Type": "single",
+                "Action": "Delete",
+                "IconTitle": "ToolBar.DeleteText",
+                "ImageAltText": "ToolBar.DeleteText",
+                "IconPath": "Toolbar/Delete_Large",
+                "ImageType": "svg",
+                "Attributes": { "ActionMethod": "JMainClientUser_DeleteDetailedInput" },
+                "PopupName": "mainclientuseraddeditdeletepopup",
+                "PopupTitle": "Delete User"
+              },
+              {
+                "Type": "single",
+                "Action": "InvokeRibbonAction",
+                "IconTitle": "ToolBar.SendEmail",
+                "ImageAltText": "ToolBar.SendEmail",
+                "IconPath": "Toolbar/SendLogin_Large",
+                "ImageType": "svg",
+                "Attributes": { "ActionMethod": "JMainClientUser_SendPasswordByEmail" },
+                "PopupName": "mainclientuseraddeditdeletepopup",
+                "PopupTitle": "Send Mail"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

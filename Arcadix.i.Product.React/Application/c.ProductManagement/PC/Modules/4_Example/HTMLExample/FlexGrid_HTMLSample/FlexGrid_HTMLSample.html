@@ -1,0 +1,801 @@
+﻿<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: calibri;
+        }
+
+        .main-wrapper {
+            width: 1024px;
+            margin: 0px auto;
+            padding: 20px;
+            font-size: 18px;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 24px;
+            padding: 10px;
+            border-bottom: 1px solid #f1f1f1;
+            font-weight: bold;
+        }
+
+        .sub-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 25px 0px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .item-wrapper ul {
+            line-height: 2rem;
+            list-style-type: square;
+            list-style-position: inside;
+        }
+
+        .item-wrapper p {
+            margin: 10px 0px;
+        }
+
+        pre {
+            white-space: pre-line;
+            padding: 20px;
+            width: 100%;
+            padding-right: 100px;
+            margin: 10px 0px;
+            letter-spacing: 1px;
+            background: #282c34;
+            color: #b5b5b5;
+        }
+
+        .yellow-pre {
+            background: #fffcdd;
+            color: #222;
+            border-left: 5px solid #FFEB3B;
+        }
+
+        .light-text {
+            color: #999;
+            font-style: italic;
+            font-size: 14px;
+        }
+        .sub-heading {
+            font-size: 20px;
+            margin: 10px 0px;
+        }
+        .flex-container {
+            display: flex;
+        }
+        .output {
+            margin: 0px 20px;
+        }
+        .box-container div {
+            width: 100px;
+            height: 100px;
+            border: 1px solid #ccc;
+            text-align: center;
+            line-height: 100px;
+            background: #fff;
+            margin: 10px;
+        }
+        .box-container {
+            display: flex;
+            background: #ccc;
+        }
+        .flex-column{
+            flex-direction: column;
+        }
+        .flex-wrap{
+            flex-wrap: wrap;
+            width: 360px;
+        }
+        .justify-content{
+            justify-content: center;
+            width: 500px;
+        }
+        .align-item {
+            height: 200px;
+            width: 400px;
+            align-items: center;
+        }
+        .align-content {
+            height: 300px;
+            width: 360px;
+            flex-wrap: wrap;
+            align-content: space-between;
+        }
+        .perfect-centering {
+            width: 400px;
+            height: 300px;
+            justify-content: center;
+            align-items: center;
+        }
+        .flex-item{
+            flex: 0 0 200px;
+        }
+        .align-self-item {
+            height: 50px !important;
+            width: 50px !important;
+            line-height: 50px !important;
+            align-self: center;
+        }
+        /* Grid  */
+        .grid-box-container {
+            display: grid;
+            grid-template-columns: auto auto auto;
+            background-color: #ccc;
+            padding: 10px;
+        }
+        .grid-item {
+            background-color: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.8);
+            height: 50px;
+            width: 50px;
+            line-height: 50PX;
+            text-align: center;
+        }
+        .grid-gap{
+            grid-gap: 25px;
+        }
+        .grid-item.grid-item1 {
+            grid-row-start: 1;
+            grid-row-end: 3;
+            height: auto;
+            width: auto;
+        }
+        .grid-template-column{
+            grid-template-columns: auto auto auto auto;
+        }
+        .grid-template-rows{
+            grid-template-rows:50px 100px;
+        }
+        .grid-template-rows .grid-item{
+            height: auto;
+        }
+         @media screen and (max-width: 1024px) {
+            .main-wrapper {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="title">
+            <span>Flexbox and Grid</span>
+        </div>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Flexbox</span>
+            </div>
+            <div class="item">
+                <div class="sub-heading">
+                    <span>Parent Element (Container)</span>
+                </div>
+                <div class="flex-container">
+                    <div class="code-container">
+                        <div class="code">
+                            <span class="light-text">HTML</span>
+                            <pre class="yellow-pre">
+                                &lt;div class="box-container"&gt;
+                                    &lt;div&gt;1&lt;/div&gt;
+                                    &lt;div&gt;2&lt;/div&gt;
+                                    &lt;div&gt;3&lt;/div&gt;
+                                &lt;/div&gt;
+                            </pre>
+                        </div>
+                        <div class="code">
+                            <span class="light-text">CSS</span>
+                            <pre>
+                                /* The box container becomes flexible by setting the display property to flex */
+    
+                                .box-container{
+                                    display: flex;
+                                }
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="output">
+                        <span class="light-text">Output</span>
+                        <div class="box-container">
+                            <div>1</div>
+                            <div>2</div>
+                            <div>3</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="sub-heading">
+                    <span>The flex-direction Property</span>
+                </div>
+                <div class="flex-container">
+                    <div class="code-container">
+                        <div class="code">
+                            <span class="light-text">HTML</span>
+                            <pre class="yellow-pre">
+                                &lt;div class="box-container"&gt;
+                                    &lt;div&gt;1&lt;/div&gt;
+                                    &lt;div&gt;2&lt;/div&gt;
+                                    &lt;div&gt;3&lt;/div&gt;
+                                &lt;/div&gt;
+                            </pre>
+                        </div>
+                        <div class="code">
+                            <span class="light-text">CSS</span>
+                            <pre>
+                                /* The column value stacks the flex items vertically (from top to bottom) */
+    
+                                .box-container{
+                                    display: flex;
+                                    flex-direction: column;
+                                }
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="output">
+                        <span class="light-text">Output</span>
+                        <div class="box-container flex-column">
+                            <div>1</div>
+                            <div>2</div>
+                            <div>3</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="sub-heading">
+                    <span>The flex-wrap Property</span>
+                </div>
+                <div class="flex-container">
+                    <div class="code-container">
+                        <div class="code">
+                            <span class="light-text">HTML</span>
+                            <pre class="yellow-pre">
+                                &lt;div class="box-container"&gt;
+                                    &lt;div&gt;1&lt;/div&gt;
+                                    &lt;div&gt;2&lt;/div&gt;
+                                    &lt;div&gt;3&lt;/div&gt;
+                                    &lt;div&gt;4&lt;/div&gt;
+                                    &lt;div&gt;5&lt;/div&gt;
+                                &lt;/div&gt;
+                            </pre>
+                        </div>
+                        <div class="code">
+                            <span class="light-text">CSS</span>
+                            <pre>
+                                /* The wrap value specifies that the flex items will wrap if necessary */
+    
+                                .box-container{
+                                    display: flex;
+                                    flex-wrap: wrap;
+                                }
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="output">
+                        <span class="light-text">Output</span>
+                        <div class="box-container flex-wrap">
+                            <div>1</div>
+                            <div>2</div>
+                            <div>3</div>
+                            <div>4</div>
+                            <div>5</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="sub-heading">
+                    <span>The justify-content Property</span>
+                </div>
+                <div class="flex-container">
+                    <div class="code-container">
+                        <div class="code">
+                            <span class="light-text">HTML</span>
+                            <pre class="yellow-pre">
+                                &lt;div class="box-container"&gt;
+                                    &lt;div&gt;1&lt;/div&gt;
+                                    &lt;div&gt;2&lt;/div&gt;
+                                    &lt;div&gt;3&lt;/div&gt;
+                                &lt;/div&gt;
+                            </pre>
+                        </div>
+                        <div class="code">
+                            <span class="light-text">CSS</span>
+                            <pre>
+                                /* The center value aligns the flex items at the center of the container */
+    
+                                .box-container{
+                                    display: flex;
+                                    justify-content: center;
+                                }
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="output">
+                        <span class="light-text">Output</span>
+                        <div class="box-container justify-content">
+                            <div>1</div>
+                            <div>2</div>
+                            <div>3</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="sub-heading">
+                    <span>The align-item Property</span>
+                </div>
+                <div class="flex-container">
+                    <div class="code-container">
+                        <div class="code">
+                            <span class="light-text">HTML</span>
+                            <pre class="yellow-pre">
+                                &lt;div class="box-container"&gt;
+                                    &lt;div&gt;1&lt;/div&gt;
+                                    &lt;div&gt;2&lt;/div&gt;
+                                    &lt;div&gt;3&lt;/div&gt;
+                                &lt;/div&gt;
+                            </pre>
+                        </div>
+                        <div class="code">
+                            <span class="light-text">CSS</span>
+                            <pre>
+                                /* The center value aligns the flex items in the middle of the container */
+    
+                                .box-container{
+                                    display: flex;
+                                    justify-content: center;
+                                }
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="output">
+                        <span class="light-text">Output</span>
+                        <div class="box-container align-item">
+                            <div>1</div>
+                            <div>2</div>
+                            <div>3</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="sub-heading">
+                    <span>The align-content Property</span>
+                </div>
+                <div class="flex-container">
+                    <div class="code-container">
+                        <div class="code">
+                            <span class="light-text">HTML</span>
+                            <pre class="yellow-pre">
+                                &lt;div class="box-container"&gt;
+                                    &lt;div&gt;1&lt;/div&gt;
+                                    &lt;div&gt;2&lt;/div&gt;
+                                    &lt;div&gt;3&lt;/div&gt;
+                                    &lt;div&gt;4&lt;/div&gt;
+                                    &lt;div&gt;5&lt;/div&gt;
+                                    &lt;div&gt;6&lt;/div&gt;
+                                &lt;/div&gt;
+                            </pre>
+                        </div>
+                        <div class="code">
+                            <span class="light-text">CSS</span>
+                            <pre>
+                                /* The space-between value displays the flex lines with equal space between them */
+    
+                                .box-container{
+                                    display: flex;
+                                    flex-wrap: wrap;
+                                    align-content: space-between;
+                                }
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="output">
+                        <span class="light-text">Output</span>
+                        <div class="box-container align-content">
+                            <div>1</div>
+                            <div>2</div>
+                            <div>3</div>
+                            <div>4</div>
+                            <div>5</div>
+                            <div>6</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="sub-heading">
+                    <span>Perfect Centering</span>
+                </div>
+                <div class="flex-container">
+                    <div class="code-container">
+                        <div class="code">
+                            <span class="light-text">HTML</span>
+                            <pre class="yellow-pre">
+                                &lt;div class="box-container"&gt;
+                                    &lt;div&gt;1&lt;/div&gt;
+                                &lt;/div&gt;
+                            </pre>
+                        </div>
+                        <div class="code">
+                            <span class="light-text">CSS</span>
+                            <pre>
+                                /* Set both the justify-content and align-items properties to center, and the flex item will be perfectly centered */
+    
+                                .box-container{
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                }
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="output">
+                        <span class="light-text">Output</span>
+                        <div class="box-container perfect-centering">
+                            <div>1</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="sub-heading">
+                    <span>Child Elements (Items)</span>
+                </div>
+                <div class="flex-container">
+                    <div class="code-container">
+                        <div class="code">
+                            <span class="light-text">HTML</span>
+                            <pre class="yellow-pre">
+                                &lt;div class="box-container"&gt;
+                                    &lt;div&gt;1&lt;/div&gt;
+                                    &lt;div&gt;2&lt;/div&gt;
+                                    &lt;div&gt;3&lt;/div&gt;
+                                &lt;/div&gt;
+                            </pre>
+                        </div>
+                        <div class="code">
+                            <span class="light-text">CSS</span>
+                            <pre>
+                                /* The direct child elements of a flex container automatically becomes flexible (flex) items */
+    
+                                .box-container{
+                                    display: flex;
+                                }
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="output">
+                        <span class="light-text">Output</span>
+                        <div class="box-container">
+                            <div>1</div>
+                            <div>2</div>
+                            <div>3</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="sub-heading">
+                    <span>The flex Property</span>
+                </div>
+                <div class="flex-container">
+                    <div class="code-container">
+                        <div class="code">
+                            <span class="light-text">HTML</span>
+                            <pre class="yellow-pre">
+                                &lt;div class="box-container"&gt;
+                                    &lt;div&gt;1&lt;/div&gt;
+                                    &lt;div class="second-item" &gt;2&lt;/div&gt;
+                                    &lt;div&gt;3&lt;/div&gt;
+                                &lt;/div&gt;
+                            </pre>
+                        </div>
+                        <div class="code">
+                            <span class="light-text">CSS</span>
+                            <pre>
+                                /* The flex property is a shorthand property for the flex-grow, flex-shrink, and flex-basis properties. */
+    
+                                .box-container{
+                                    display: flex;
+                                }
+                                .flex-item{
+                                    flex: 0 0 200px;
+                                }
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="output">
+                        <span class="light-text">Output</span>
+                        <div class="box-container">
+                            <div>1</div>
+                            <div class="flex-item">2</div>
+                            <div>3</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="sub-heading">
+                    <span>The align-self Property</span>
+                </div>
+                <div class="flex-container">
+                    <div class="code-container">
+                        <div class="code">
+                            <span class="light-text">HTML</span>
+                            <pre class="yellow-pre">
+                                &lt;div class="box-container"&gt;
+                                    &lt;div&gt;1&lt;/div&gt;
+                                    &lt;div class="align-self-item" &gt;2&lt;/div&gt;
+                                    &lt;div&gt;3&lt;/div&gt;
+                                &lt;/div&gt;
+                            </pre>
+                        </div>
+                        <div class="code">
+                            <span class="light-text">CSS</span>
+                            <pre>
+                                /* The align-self property specifies the alignment for the selected item inside the flexible container. */
+    
+                                .box-container{
+                                    display: flex;
+                                }
+                                .align-self-item {
+                                    align-self: center;
+                                }
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="output">
+                        <span class="light-text">Output</span>
+                        <div class="box-container">
+                            <div>1</div>
+                            <div class="align-self-item">2</div>
+                            <div>3</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content-wrapper">
+            <div class="sub-title">
+                <span>Grid</span>
+            </div>
+            <div class="item">
+                <div class="sub-heading">
+                    <span>Display Property</span>
+                </div>
+                <div class="flex-container">
+                    <div class="code-container">
+                        <div class="code">
+                            <span class="light-text">HTML</span>
+                            <pre class="yellow-pre">
+                                &lt;div class="grid-box-container"&gt;
+                                    &lt;div class="grid-item"&gt;1&lt;/div&gt;
+                                    &lt;div class="grid-item"&gt;2&lt;/div&gt;
+                                    &lt;div class="grid-item"&gt;3&lt;/div&gt;  
+                                    &lt;div class="grid-item"&gt;4&lt;/div&gt;   
+                                    &lt;div class="grid-item"&gt;5&lt;/div&gt;  
+                                    &lt;div class="grid-item"&gt;6&lt;/div&gt;   
+                                &lt;/div&gt;
+                            </pre>
+                        </div>
+                        <div class="code">
+                            <span class="light-text">CSS</span>
+                            <pre>
+                                /* An HTML element becomes a grid container when its display property is set to grid or inline-grid */
+    
+                                .grid-box-container {
+                                    display: grid;
+                                    grid-template-columns: auto auto auto;
+                                }
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="output">
+                        <span class="light-text">Output</span>
+                        <div class="grid-box-container">
+                            <div class="grid-item">1</div>
+                            <div class="grid-item">2</div>
+                            <div class="grid-item">3</div>  
+                            <div class="grid-item">4</div>   
+                            <div class="grid-item">5</div>  
+                            <div class="grid-item">6</div> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="sub-heading">
+                    <span>Grid gap Property</span>
+                </div>
+                <div class="flex-container">
+                    <div class="code-container">
+                        <div class="code">
+                            <span class="light-text">HTML</span>
+                            <pre class="yellow-pre">
+                                &lt;div class="grid-box-container"&gt;
+                                    &lt;div class="grid-item"&gt;1&lt;/div&gt;
+                                    &lt;div class="grid-item"&gt;2&lt;/div&gt;
+                                    &lt;div class="grid-item"&gt;3&lt;/div&gt;  
+                                    &lt;div class="grid-item"&gt;4&lt;/div&gt;   
+                                    &lt;div class="grid-item"&gt;5&lt;/div&gt;  
+                                    &lt;div class="grid-item"&gt;6&lt;/div&gt;   
+                                &lt;/div&gt;
+                            </pre>
+                        </div>
+                        <div class="code">
+                            <span class="light-text">CSS</span>
+                            <pre>
+                                /* The grid-gap property can be used to set both the row gap and the column gap in one value */
+    
+                                .grid-box-container {
+                                    display: grid;
+                                    grid-template-columns: auto auto auto;
+                                    grid-gap: 25px;
+                                }
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="output">
+                        <span class="light-text">Output</span>
+                        <div class="grid-box-container grid-gap">
+                            <div class="grid-item">1</div>
+                            <div class="grid-item">2</div>
+                            <div class="grid-item">3</div>  
+                            <div class="grid-item">4</div>   
+                            <div class="grid-item">5</div>  
+                            <div class="grid-item">6</div> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="sub-heading">
+                    <span>Grid lines (row lines and column lines)</span>
+                </div>
+                <div class="flex-container">
+                    <div class="code-container">
+                        <div class="code">
+                            <span class="light-text">HTML</span>
+                            <pre class="yellow-pre">
+                                &lt;div class="grid-box-container"&gt;
+                                    &lt;div class="grid-item grid-item1"&gt;1&lt;/div&gt;
+                                    &lt;div class="grid-item"&gt;2&lt;/div&gt;
+                                    &lt;div class="grid-item"&gt;3&lt;/div&gt;  
+                                    &lt;div class="grid-item"&gt;4&lt;/div&gt;   
+                                    &lt;div class="grid-item"&gt;5&lt;/div&gt;  
+                                    &lt;div class="grid-item"&gt;6&lt;/div&gt;   
+                                &lt;/div&gt;
+                            </pre>
+                        </div>
+                        <div class="code">
+                            <span class="light-text">CSS</span>
+                            <pre>
+                                /* Place a grid item at column line 1, and let it end on column line 3 */
+    
+                                .grid-box-container {
+                                    display: grid;
+                                    grid-template-columns: auto auto auto;
+                                }
+                                .grid-item1 {
+                                    grid-row-start: 1;
+                                    grid-row-end: 3;
+                                  }
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="output">
+                        <span class="light-text">Output</span>
+                        <div class="grid-box-container">
+                            <div class="grid-item grid-item1">1</div>
+                            <div class="grid-item">2</div>
+                            <div class="grid-item">3</div>  
+                            <div class="grid-item">4</div>  
+                            <div class="grid-item">5</div>  
+                            <div class="grid-item">6</div>   
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="sub-heading">
+                    <span>The grid-template-columns Property</span>
+                </div>
+                <div class="flex-container">
+                    <div class="code-container">
+                        <div class="code">
+                            <span class="light-text">HTML</span>
+                            <pre class="yellow-pre">
+                                &lt;div class="grid-box-container"&gt;
+                                    &lt;div class="grid-item"&gt;1&lt;/div&gt;
+                                    &lt;div class="grid-item"&gt;2&lt;/div&gt;
+                                    &lt;div class="grid-item"&gt;3&lt;/div&gt;  
+                                    &lt;div class="grid-item"&gt;4&lt;/div&gt;   
+                                    &lt;div class="grid-item"&gt;5&lt;/div&gt;  
+                                    &lt;div class="grid-item"&gt;6&lt;/div&gt;   
+                                &lt;/div&gt;
+                            </pre>
+                        </div>
+                        <div class="code">
+                            <span class="light-text">CSS</span>
+                            <pre>
+                                /* The grid-template-columns property defines the number of columns in your grid layout, and it can define the width of each column */
+    
+                                .grid-box-container {
+                                    display: grid;
+                                    grid-template-columns: auto auto auto auto;
+                                }
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="output">
+                        <span class="light-text">Output</span>
+                        <div class="grid-box-container grid-template-column">
+                            <div class="grid-item">1</div>
+                            <div class="grid-item">2</div>
+                            <div class="grid-item">3</div>  
+                            <div class="grid-item">4</div>  
+                            <div class="grid-item">5</div>  
+                            <div class="grid-item">6</div>   
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="sub-heading">
+                    <span>The grid-template-rows Property</span>
+                </div>
+                <div class="flex-container">
+                    <div class="code-container">
+                        <div class="code">
+                            <span class="light-text">HTML</span>
+                            <pre class="yellow-pre">
+                                &lt;div class="grid-box-container"&gt;
+                                    &lt;div class="grid-item"&gt;1&lt;/div&gt;
+                                    &lt;div class="grid-item"&gt;2&lt;/div&gt;
+                                    &lt;div class="grid-item"&gt;3&lt;/div&gt;  
+                                    &lt;div class="grid-item"&gt;4&lt;/div&gt;   
+                                    &lt;div class="grid-item"&gt;5&lt;/div&gt;  
+                                    &lt;div class="grid-item"&gt;6&lt;/div&gt;   
+                                &lt;/div&gt;
+                            </pre>
+                        </div>
+                        <div class="code">
+                            <span class="light-text">CSS</span>
+                            <pre>
+                                /* The grid-template-columns property defines the number of columns in your grid layout, and it can define the width of each column */
+    
+                                .grid-box-container {
+                                    display: grid;
+                                    grid-template-columns: auto auto auto;
+                                    grid-template-rows:50px 100px;
+                                }
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="output">
+                        <span class="light-text">Output</span>
+                        <div class="grid-box-container grid-template-rows">
+                            <div class="grid-item">1</div>
+                            <div class="grid-item">2</div>
+                            <div class="grid-item">3</div>  
+                            <div class="grid-item">4</div>  
+                            <div class="grid-item">5</div>  
+                            <div class="grid-item">6</div>   
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

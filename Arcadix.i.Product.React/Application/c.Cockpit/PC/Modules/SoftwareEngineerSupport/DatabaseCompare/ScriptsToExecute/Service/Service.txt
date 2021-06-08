@@ -1,0 +1,754 @@
+/****************************************************************************************************************/
+To Make the below Columns as Nullable in t_Framework_XMLConfiguration (as these are not used in Fusion Version)
+/****************************************************************************************************************/
+GO
+ALTER TABLE t_Framework_XMLConfiguration
+ALTER COLUMN iConfigurationFileId int null
+
+GO
+ALTER TABLE t_Framework_XMLConfiguration
+ALTER COLUMN cIsEditable char(1) null
+GO
+
+/*Update Script to show Data Comparison for Teacher*/
+UPDATE t_Framework_XMLConfiguration 
+SET iApplicationTypeId = 1,dtCreatedOn = GETDATE(),dtModifiedOn= GETDATE(),cIsForFusion = 'Y',uModifiedByUserId = NEWID()
+WHERE iMainClientId = 115 and vKey = 'ShowDataComparison'
+GO
+
+/*Insert Script for AdaptiveTestProvider ClientSetting*/
+Insert into t_Framework_XMLConfiguration(iMainClientId, vParentKey, vSubParentKey, vKey, vValue, dtCreatedOn, dtModifiedOn, cIsForFusion)
+Values (0, 'TestApplication', 'AdaptiveAlogirthmType' , 'AdaptiveTestProvider', 'Arcadix.TestApplication.Provider.SequenceProvider.AdaptiveProvider.ArcadixZurichReplicaProvider', GETDATE(), GETDATE(), 'Y')
+GO
+
+
+/********************************************************************
+Entries for t_TestDrive_OfflineProcess_Definition
+*********************************************************************/
+
+IF NOT EXISTS(select * from t_TestDrive_OfflineProcess_Definition where vMethodName ='GenerateTaskPdf')
+BEGIN
+insert into t_TestDrive_OfflineProcess_Definition values(newid(),'Arcadix.Intranet.Modules.Task.GenereateTaskPdf_Module','GenerateTaskPdf','Y','N','N',NULL,'GenerateTaskPdf',NULL,'Arcadix.Intranet',GETDATE(),GETDATE())
+END
+
+GO
+
+/********************************************************************
+Entries for t_Framework_Client_HostUrl - Checktools Dev and Test links
+*********************************************************************/
+
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '610' and vHostURL = 'ManagerDevFusionChecktools.arcadixdevelopment.com')
+BEGIN  
+	insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) 
+	values('612','ManagerDevFusionChecktools.arcadixdevelopment.com','N',NULL,NULL,NULL,NULL,'Y',3,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7',GETDATE(),'Y','prefetchdev.lernpassplus.ch')
+END 
+
+GO
+
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '611' and vHostURL = 'IntranetDevFusionChecktools.arcadixdevelopment.com')
+BEGIN  
+	insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) 
+	values('611','IntranetDevFusionChecktools.arcadixdevelopment.com','N',NULL,NULL,NULL,NULL,'Y',3,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7',GETDATE(),'Y','prefetchdev.lernpassplus.ch')
+END 
+
+GO
+
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '612' and vHostURL = 'TestDevFusionChecktools.arcadixdevelopment.com')
+BEGIN  
+	insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) 
+	values('612','TestDevFusionChecktools.arcadixdevelopment.com','N',NULL,NULL,NULL,NULL,'Y',3,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7',GETDATE(),'Y','prefetchdev.lernpassplus.ch')
+END 
+
+GO
+
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '610' and vHostURL = 'ManagerTestFusionChecktools.arcadixdevelopment.com')
+BEGIN  
+	insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) 
+	values('610','ManagerTestFusionChecktools.arcadixdevelopment.com','N',NULL,NULL,NULL,NULL,'Y',3,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7',GETDATE(),'Y','prefetchtest.lernpassplus.ch')
+END 
+
+GO
+
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '611' and vHostURL = 'IntranetTestFusionChecktools.arcadixdevelopment.com')
+BEGIN  
+	insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) 
+	values('611','IntranetTestFusionChecktools.arcadixdevelopment.com','N',NULL,NULL,NULL,NULL,'Y',3,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7',GETDATE(),'Y','prefetchtest.lernpassplus.ch')
+END 
+
+GO
+
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '612' and vHostURL = 'TestTestFusionChecktools.arcadixdevelopment.com')
+BEGIN  
+	insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) 
+	values('612','TestTestFusionChecktools.arcadixdevelopment.com','N',NULL,NULL,NULL,NULL,'Y',3,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7',GETDATE(),'Y','prefetchtest.lernpassplus.ch')
+END 
+
+GO
+
+/********************************************************************
+Entries for t_Framework_Client_HostUrl - LocalHost and PM(Dev link)
+*********************************************************************/
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '624' and vHostURL = 'productmanagementdevfusion.arcadixdevelopment.com')
+BEGIN  
+	insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) 
+	values('624','productmanagementdevfusion.arcadixdevelopment.com','N',NULL,NULL,NULL,NULL,'Y',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7',GETDATE(),'Y','prefetchdev.lernpassplus.ch')
+END  
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '624' and vHostURL = 'productmanagementtestfusion.arcadixdevelopment.com')
+BEGIN  
+	insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) 
+	values('624','productmanagementtestfusion.arcadixdevelopment.com','N',NULL,NULL,NULL,NULL,'Y',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7',GETDATE(),'Y','prefetchtest.lernpassplus.ch')
+END  
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '620' and vHostURL = 'localhost:9007') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted,	iThemeId	,uTestId	,uLoginControlId	,iFormId	,cIsActive	,iLanguageId	,vStartPage	,cIsForTesting	,vMobileStartPage	,vTabletStartPage	,vImageHostURL,	vCssHostURL,	vDataHostURL,	iTargetGroupId,	cIsAngularApplication,	iTargetDeviceId,	dtModifiedOn,	cIsForFusion,	vPrefetchURL)values('620','localhost:9007','N',NULL,NULL,NULL,NULL,'Y','3',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7','2021-02-15 19:49:20.413','Y','localhost:9007') END  
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '624' and vHostURL = 'localhost:9138') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('626','localhost:9138','N',NULL,NULL,NULL,NULL,'Y',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7','2020-08-19 17:23:46.870','Y','localhost:9138') END  																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '604' and vHostURL = 'localhost:9002') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('604','localhost:9002','N',NULL,NULL,NULL,NULL,'Y','3',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7','2020-08-12 17:13:38.987','Y','localhost:9002') END  																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '618' and vHostURL = 'localhost:4114') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('618','localhost:4114','N',NULL,NULL,NULL,NULL,'Y',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7','2020-09-10 19:07:13.227','Y','localhost:4114') END 																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '609' and vHostURL = 'localhost:9115') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('609','localhost:9115','N',NULL,NULL,NULL,NULL,'Y',NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,'-1',NULL,'7','2020-09-22 20:12:11.653','Y','localhost:9115') END  																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '605' and vHostURL = 'localhost:4006') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('605','localhost:4006','N',NULL,NULL,NULL,NULL,'Y',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7','2020-09-23 11:52:28.190','Y','localhost:4006') END																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '606' and vHostURL = 'localhost:4001') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('606','localhost:4001','N',NULL,NULL,NULL,NULL,'Y',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7','2020-09-23 12:56:21.803','Y','localhost:4001') END																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '607' and vHostURL = 'localhost:4016') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('607','localhost:4016','N',NULL,NULL,NULL,NULL,'Y',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7','2020-09-23 16:43:40.913','Y','localhost:4016') END																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '624' and vHostURL = 'localhost:9104') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('624','localhost:9104','N',NULL,NULL,NULL,NULL,'Y',NULL,NULL,'Y',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7','2020-11-23 15:08:05.530','Y','localhost:9104') END 																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '614' and vHostURL = 'localhost:9112') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('614','localhost:9112','N',NULL,NULL,NULL,NULL,'Y',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7','2020-10-20 14:43:34.610','Y','localhost:9112') END																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '621' and vHostURL = 'localhost:2006') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('621','localhost:2006','N',NULL,NULL,NULL,NULL,'Y',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2020-11-23 11:01:41.880','Y','localhost:2006') END																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '622' and vHostURL = 'localhost:2001') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('622','localhost:2001','N',NULL,NULL,NULL,NULL,'Y',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2020-11-23 11:02:07.377','Y','localhost:2001') END																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '623' and vHostURL = 'localhost:2016') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('623','localhost:2016','N',NULL,NULL,NULL,NULL,'Y',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2020-11-23 11:02:26.787','Y','localhost:2016') END  																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '619' and vHostURL = 'localhost:9114') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('619','localhost:9114','N',NULL,NULL,NULL,NULL,'Y',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'-1',NULL,'7','2020-12-04 11:49:06.033','Y','localhost:9114') END 																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '608' and vHostURL = 'localhost:4115') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('608','localhost:4115','N',NULL,NULL,NULL,NULL,'Y',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7','2020-09-03 19:32:39.080','Y','localhost:4115') END 																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '610' and vHostURL = 'localhost:1006') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('610','localhost:1006','N',NULL,NULL,NULL,NULL,'Y','3',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7','2020-12-18 11:37:01.270','Y','localhost:1006') END  																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '620' and vHostURL = 'localhost:9000') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('620','localhost:9000','N',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7','2020-09-17 14:32:54.613','Y','localhost:9000') END 																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '617' and vHostURL = 'localhost:3016') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('617','localhost:3016','N',NULL,NULL,NULL,NULL,'Y',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7','2020-09-09 13:04:06.690','Y','localhost:3016') END  																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '615' and vHostURL = 'localhost:3006') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('615','localhost:3006','N',NULL,NULL,NULL,NULL,'Y',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7','2020-09-08 16:46:08.257','Y','localhost:3006') END  																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '616' and vHostURL = 'localhost:3001') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('616','localhost:3001','N',NULL,NULL,NULL,NULL,'Y',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7','2020-09-08 16:52:54.687','Y','localhost:3001') END  																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '612' and vHostURL = 'localhost:1016') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('612','localhost:1016','N',NULL,NULL,NULL,NULL,'Y','3',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7','2020-12-18 18:31:19.940','Y','localhost:1016') END 																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '592' and vHostURL = 'localhost:54337') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('592','localhost:54337','N',NULL,NULL,NULL,NULL,'N','3',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Y','5','2020-08-19 20:25:00.557',NULL,NULL) END 																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '505' and vHostURL = 'localhost/Yousty') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('505','localhost/Yousty','N',NULL,'3FC049AF-271D-487F-BCA3-63793D5C01C1',NULL,NULL,'N','2',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2','2020-08-19 20:25:00.557',NULL,NULL) END  																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '603' and vHostURL = 'localhost:9004') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('603','localhost:9004','N',NULL,NULL,NULL,NULL,'Y','3',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7','2021-02-16 11:44:06.880','Y','localhost:9004') END 																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '611' and vHostURL = 'localhost:1001') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('611','localhost:1001','N',NULL,NULL,NULL,NULL,'Y','3',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7','2020-12-18 12:32:05.617','Y','localhost:1001') END 																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '478' and vHostURL = 'localhost/NantysAdvanceManager') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('478','localhost/NantysAdvanceManager','N',NULL,NULL,NULL,NULL,'N',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'N','2','2020-08-19 20:25:00.557',NULL,NULL) END																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '477' and vHostURL = 'localhost/NantysAdvanceTest') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('477','localhost/NantysAdvanceTest','N',NULL,NULL,NULL,NULL,'N',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'N','2','2020-08-19 20:25:00.557',NULL,NULL) END 																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '589' and vHostURL = 'localhost/teacher') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('589','localhost/teacher','N',NULL,NULL,NULL,NULL,'N',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Y','3','2020-08-19 20:25:00.557',NULL,NULL) END 																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '594' and vHostURL = 'localhost:54334') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('594','localhost:54334','N',NULL,NULL,NULL,NULL,'N','3',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Y','5','2020-08-19 20:25:00.557',NULL,NULL) END 																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '529' and vHostURL = 'localhost/LernpassTest') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('529','localhost/LernpassTest','N',NULL,NULL,NULL,NULL,'N',NULL,NULL,'Y',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2','2020-08-19 20:25:00.557',NULL,NULL) END 																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '593' and vHostURL = 'localhost:54336') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('593','localhost:54336','N',NULL,NULL,NULL,NULL,'N','3',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Y','5','2020-08-19 20:25:00.557',NULL,NULL) END  																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '528' and vHostURL = 'localhost/jobskillsplus') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('528','localhost/jobskillsplus','N',NULL,NULL,NULL,NULL,'N',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'N','2','2020-08-19 20:25:00.557',NULL,NULL) END 																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '589' and vHostURL = 'localhost/OfflineTask') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('589','localhost/OfflineTask','N',NULL,NULL,NULL,NULL,'N',NULL,NULL,NULL,'mExtranet.html',NULL,NULL,NULL,NULL,NULL,'Y','3','2020-08-19 20:25:00.557',NULL,NULL) END 																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '589' and vHostURL = 'localhost:54934') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('589','localhost:54934','N',NULL,NULL,NULL,NULL,'N',NULL,NULL,NULL,'mExtranet.html',NULL,NULL,NULL,NULL,NULL,'Y','3','2020-08-19 20:25:00.557',NULL,NULL) END 																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '591' and vHostURL = 'localhost:54937') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('591','localhost:54937','N',NULL,NULL,NULL,NULL,'N',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Y','3','2020-08-19 20:25:00.557',NULL,NULL) END 																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '590' and vHostURL = 'localhost:54936') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('590','localhost:54936','N',NULL,NULL,NULL,NULL,'N',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Y','3','2020-08-19 20:25:00.557',NULL,NULL) END  																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '477' and vHostURL = 'localhost/NantysTest') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('477','localhost/NantysTest','N',NULL,NULL,NULL,NULL,'N','3',NULL,'Y',NULL,NULL,NULL,NULL,NULL,NULL,'N','2','2020-08-19 20:25:00.557',NULL,NULL) END  																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '400' and vHostURL = 'localhost/codocteacher') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('400','localhost/codocteacher','N',NULL,NULL,NULL,NULL,'N',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'N','2','2020-08-19 20:25:00.557',NULL,NULL) END																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '437' and vHostURL = 'localhost:51140') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('437','localhost:51140','N',NULL,NULL,NULL,NULL,'N','3',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2','2020-08-19 20:25:00.557',NULL,NULL) END  																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '437' and vHostURL = 'localhost/lernlupetest') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('437','localhost/lernlupetest','N',NULL,NULL,NULL,NULL,'N','3',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'N','2','2020-08-19 20:25:00.557',NULL,NULL) END  																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '559' and vHostURL = 'localhost/lernlupepupil') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('559','localhost/lernlupepupil','N',NULL,NULL,'2AFB2BA4-DA36-4D9B-8113-F67BBBB4B507',NULL,'N',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Y','2','2020-08-19 20:25:00.557',NULL,NULL) END 																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '457' and vHostURL = 'localhost/eassessmentManager') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('457','localhost/eassessmentManager','N',NULL,NULL,NULL,NULL,'N',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'N','2','2020-08-19 20:25:00.557',NULL,NULL) END  																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '600' and vHostURL = 'localhost:9006') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('600','localhost:9006','N',NULL,NULL,NULL,NULL,'Y','3',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7','2020-08-18 16:27:36.510','Y','localhost:9006') END 																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '601' and vHostURL = 'localhost:9001') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('601','localhost:9001','N',NULL,NULL,NULL,NULL,'Y','3',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7','2020-08-18 16:28:05.717','Y','localhost:9001') END 																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '602' and vHostURL = 'localhost:9016') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('602','localhost:9016','N',NULL,NULL,NULL,NULL,'Y','3',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7','2020-08-18 16:28:29.337','Y','localhost:9016') END 																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '598' and vHostURL = 'localhost:54338') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('598','localhost:54338','N',NULL,NULL,NULL,NULL,'N','3',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Y','6','2020-08-19 20:25:00.557',NULL,NULL) END  																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '279' and vHostURL = 'localhost/lernlupetest1') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('279','localhost/lernlupetest1','N',NULL,NULL,NULL,NULL,'N','3',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2','2020-08-19 20:25:00.557',NULL,NULL) END  																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '505' and vHostURL = 'localhost/BscTest') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('505','localhost/BscTest','N',NULL,NULL,NULL,NULL,'N',NULL,NULL,'Y',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2','2020-08-19 20:25:00.557',NULL,NULL) END 																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '438' and vHostURL = 'localhost/lernlupeteacher') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('438','localhost/lernlupeteacher','N',NULL,NULL,'1B7D2DB5-52D1-4E5A-A498-F3EBF8CE7309',NULL,'N','3',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'N','2','2020-08-19 20:25:00.557',NULL,NULL) END																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '314' and vHostURL = 'localhost/NantysIntranet') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('314','localhost/NantysIntranet','N',NULL,NULL,NULL,NULL,'N',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'N','2','2020-08-19 20:25:00.557',NULL,NULL) END  																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '319' and vHostURL = 'localhost/LernlupeIntranet1') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('319','localhost/LernlupeIntranet1','N',NULL,NULL,NULL,NULL,'N',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'N','2','2020-08-19 20:25:00.557',NULL,NULL) END  																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '279' and vHostURL = 'localhost/lernlupetest1') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('279','localhost/lernlupetest1','N',NULL,NULL,NULL,NULL,'N','3',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'N','2','2020-08-19 20:25:00.557',NULL,NULL) END 																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '348' and vHostURL = 'localhost/VoralbergIntranet') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('348','localhost/VoralbergIntranet','N',NULL,NULL,NULL,NULL,'N',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'N','2','2020-08-19 20:25:00.557',NULL,NULL) END																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '316' and vHostURL = 'localhost/nantysManager') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('316','localhost/nantysManager','N',NULL,NULL,NULL,NULL,'N',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'N','2','2020-08-19 20:25:00.557',NULL,NULL) END  																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '519' and vHostURL = 'localhost/LernpassIntranet') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('519','localhost/LernpassIntranet','N',NULL,NULL,NULL,NULL,'N',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2','2020-08-19 20:25:00.557',NULL,NULL) END																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '446' and vHostURL = 'localhost/EPrologTeacher') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('446','localhost/EPrologTeacher','N',NULL,NULL,NULL,NULL,'N',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'N','2','2020-08-19 20:25:00.557',NULL,NULL) END 																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '436' and vHostURL = 'localhost/LernlupeIntranet') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('436','localhost/LernlupeIntranet','N',NULL,NULL,NULL,NULL,'N','3',NULL,'Y',NULL,NULL,NULL,NULL,NULL,NULL,'N','2','2020-08-19 20:25:00.557',NULL,NULL) END																			
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '401' and vHostURL = 'localhost/lernlupepupil') BEGIN insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) values('401','localhost/lernlupepupil','N',NULL,NULL,NULL,NULL,'N','3',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'N','2','2020-08-19 20:25:00.557',NULL,NULL) END 																			
+
+/************************************************************************************
+Entries for t_Framework_MainClient_User - WindowAuthentication Users (Cockpit and PM)
+**************************************************************************************/
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'ksharma' and iApplicationTypeId = 24) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Sharma','Kishlaya','kishlaya.sharma@arcadix.com','N',GETDATE(),GETDATE(),'ksharma', 24)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'achaubey' and iApplicationTypeId = 24) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Chaubey','Anshuman','anshuman.chaubey@arcadix.com','N',GETDATE(),GETDATE(),'achaubey', 24)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'apatchigolla' and iApplicationTypeId = 24) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Patchigolla','Ayyappa','ayyappa@arcadix.com','N',GETDATE(),GETDATE(),'apatchigolla', 24)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'sateesh.tv' and iApplicationTypeId = 24) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'TV','Sateesh','sateesh.tv@arcadix.com','N',GETDATE(),GETDATE(),'sateesh.tv', 24)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'mgandan' and iApplicationTypeId = 24) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Gandan','Mani','mani.gandan@arcadix.com','N',GETDATE(),GETDATE(),'mgandan', 24)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'shulgur' and iApplicationTypeId = 24) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Hulgur','Sannidhi','sannidhi.hulgur@arcadix.com','N',GETDATE(),GETDATE(),'shulgur', 24)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'adebbarma' and iApplicationTypeId = 24) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Debbarma','Anamika','anamika.debbarma@arcadix.com','N',GETDATE(),GETDATE(),'adebbarma', 24)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'avats' and iApplicationTypeId = 24) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Vats','Aviral','aviral.vats@arcadix.com','N',GETDATE(),GETDATE(),'avats', 24)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'phaunreiter' and iApplicationTypeId = 24) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Haunreiter','Pascal','pascal.haunreiter@arcadix.com','N',GETDATE(),GETDATE(),'phaunreiter', 24)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'kb' and iApplicationTypeId = 24) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'NULL','Karabasappa','karabasappa@arcadix.com','N',GETDATE(),GETDATE(),'kb', 24)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'asarkar' and iApplicationTypeId = 24) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Sarkar','Ananya','ananya.sarkar@arcadix.com','N',GETDATE(),GETDATE(),'asarkar', 24)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 's.kumar' and iApplicationTypeId = 24) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Kumar','Sanjay','sanjay.kumar@arcadix.com','N',GETDATE(),GETDATE(),'s.kumar', 24)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'adas' and iApplicationTypeId = 24) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Das','Aruneel','aruneel.das@arcadix.com','N',GETDATE(),GETDATE(),'adas', 24)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'prajwal' and iApplicationTypeId = 24) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'NULL','Prajwal','prajwal@arcadix.com','N',GETDATE(),GETDATE(),'prajwal', 24)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'praveen' and iApplicationTypeId = 24) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'NULL','Praveen','praveen@arcadix.com','N',GETDATE(),GETDATE(),'praveen', 24)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'vsingh' and iApplicationTypeId = 24) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Singh','Vishal','vishal.singh@arcadix.com','N',GETDATE(),GETDATE(),'vsingh', 24)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'v.singh' and iApplicationTypeId = 24) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Singh','Vikram','vikram.singh@arcadix.com','N',GETDATE(),GETDATE(),'v.singh', 24)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'maravind' and iApplicationTypeId = 24) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Aravind','M','maravind@arcadix.com','N',GETDATE(),GETDATE(),'maravind', 24)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'asharma' and iApplicationTypeId = 24) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Sharma','Arvind','sharma@arcadix.com','N',GETDATE(),GETDATE(),'asharma', 24)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'msethi' and iApplicationTypeId = 24) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Sethi','Muna','muna.sethi@arcadix.com','N',GETDATE(),GETDATE(),'msethi', 24)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'karvind' and iApplicationTypeId = 24) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'K','Arvind','arvind.k@arcadix.com','N',GETDATE(),GETDATE(),'karvind', 24)
+END
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'avenkatesan' and iApplicationTypeId = 24) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'ArunKumar','Venkatesan','arunkumar.venkatesan@arcadix.com','N',GETDATE(),GETDATE(),'avenkatesan', 24)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'akumar' and iApplicationTypeId = 24) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Kumar','Amit','amit.kumar@arcadix.com','N',GETDATE(),GETDATE(),'akumar', 24)
+END
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'ksharma' and iApplicationTypeId = 7) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Sharma','Kishlaya','kishlaya.sharma@arcadix.com','N',GETDATE(),GETDATE(),'ksharma', 7)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'achaubey' and iApplicationTypeId = 7) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Chaubey','Anshuman','anshuman.chaubey@arcadix.com','N',GETDATE(),GETDATE(),'achaubey', 7)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'apatchigolla' and iApplicationTypeId = 7) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Patchigolla','Ayyappa','ayyappa@arcadix.com','N',GETDATE(),GETDATE(),'apatchigolla', 7)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'sateesh.tv' and iApplicationTypeId = 7) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'TV','Sateesh','sateesh.tv@arcadix.com','N',GETDATE(),GETDATE(),'sateesh.tv', 7)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'mgandan' and iApplicationTypeId = 7) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Gandan','Mani','mani.gandan@arcadix.com','N',GETDATE(),GETDATE(),'mgandan', 7)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'shulgur' and iApplicationTypeId = 7) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Hulgur','Sannidhi','sannidhi.hulgur@arcadix.com','N',GETDATE(),GETDATE(),'shulgur', 7)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'adebbarma' and iApplicationTypeId = 7) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Debbarma','Anamika','anamika.debbarma@arcadix.com','N',GETDATE(),GETDATE(),'adebbarma', 7)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'avats' and iApplicationTypeId = 7) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Vats','Aviral','aviral.vats@arcadix.com','N',GETDATE(),GETDATE(),'avats', 7)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'phaunreiter' and iApplicationTypeId = 7) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Haunreiter','Pascal','pascal.haunreiter@arcadix.com','N',GETDATE(),GETDATE(),'phaunreiter', 7)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'kb' and iApplicationTypeId = 7) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'NULL','Karabasappa','karabasappa@arcadix.com','N',GETDATE(),GETDATE(),'kb', 7)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'asarkar' and iApplicationTypeId = 7) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Sarkar','Ananya','ananya.sarkar@arcadix.com','N',GETDATE(),GETDATE(),'asarkar', 7)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 's.kumar' and iApplicationTypeId = 7) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Kumar','Sanjay','sanjay.kumar@arcadix.com','N',GETDATE(),GETDATE(),'s.kumar', 7)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'adas' and iApplicationTypeId = 7) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Das','Aruneel','aruneel.das@arcadix.com','N',GETDATE(),GETDATE(),'adas', 7)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'prajwal' and iApplicationTypeId = 7) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'NULL','Prajwal','prajwal@arcadix.com','N',GETDATE(),GETDATE(),'prajwal', 7)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'praveen' and iApplicationTypeId = 7) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'NULL','Praveen','praveen@arcadix.com','N',GETDATE(),GETDATE(),'praveen', 7)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'vsingh' and iApplicationTypeId = 7) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Singh','Vishal','vishal.singh@arcadix.com','N',GETDATE(),GETDATE(),'vsingh', 7)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'v.singh' and iApplicationTypeId = 7) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Singh','Vikram','vikram.singh@arcadix.com','N',GETDATE(),GETDATE(),'v.singh', 7)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'maravind' and iApplicationTypeId = 7) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Aravind','M','maravind@arcadix.com','N',GETDATE(),GETDATE(),'maravind', 7)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'asharma' and iApplicationTypeId = 7) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Sharma','Arvind','sharma@arcadix.com','N',GETDATE(),GETDATE(),'asharma', 7)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'msethi' and iApplicationTypeId = 7) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Sethi','Muna','muna.sethi@arcadix.com','N',GETDATE(),GETDATE(),'msethi', 7)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'karvind' and iApplicationTypeId = 7) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'K','Arvind','arvind.k@arcadix.com','N',GETDATE(),GETDATE(),'karvind', 7)
+END
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'avenkatesan' and iApplicationTypeId = 7) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'ArunKumar','Venkatesan','arunkumar.venkatesan@arcadix.com','N',GETDATE(),GETDATE(),'avenkatesan', 7)
+END
+
+GO
+
+if NOT Exists(select * from t_Framework_MainClient_User where vWindowUserName = 'akumar' and iApplicationTypeId = 7) 
+BEGIN
+Insert into t_Framework_MainClient_User (iMainClientId, vName, vFirstName, vEmail, cIsDeleted, dtCreatedOn, dtModifiedOn, vWindowUserName, iApplicationTypeId)
+Values(0, 'Kumar','Amit','amit.kumar@arcadix.com','N',GETDATE(),GETDATE(),'akumar', 7)
+END
+
+
+/********************************************************************
+Entries for t_Framework_Client_HostUrl - ReactNative Entries (lernlupe and lernpassplus)
+*********************************************************************/
+
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '600' and vHostURL = 'SchulereactnativeFusionLernlupe.arcadixdevelopment.com')
+BEGIN  
+	insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) 
+	values('600','SchulereactnativeFusionLernlupe.arcadixdevelopment.com','N',NULL,NULL,NULL,NULL,'Y',3,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7',GETDATE(),'Y','prefetchdev.lernpassplus.ch')
+END 
+
+GO
+
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '601' and vHostURL = 'LehrpersonreactnativeFusionLernlupe.arcadixdevelopment.com')
+BEGIN  
+	insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) 
+	values('601','LehrpersonreactnativeFusionLernlupe.arcadixdevelopment.com','N',NULL,NULL,NULL,NULL,'Y',3,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7',GETDATE(),'Y','prefetchdev.lernpassplus.ch')
+END 
+
+GO
+
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '602' and vHostURL = 'PupilreactnativeFusionLernlupe.arcadixdevelopment.com')
+BEGIN  
+	insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) 
+	values('602','PupilreactnativeFusionLernlupe.arcadixdevelopment.com','N',NULL,NULL,NULL,NULL,'Y',3,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7',GETDATE(),'Y','prefetchdev.lernpassplus.ch')
+END 
+
+GO
+
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '603' and vHostURL = 'IntranetreactnativeFusionLernlupe.arcadixdevelopment.com')
+BEGIN  
+	insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) 
+	values('603','IntranetreactnativeFusionLernlupe.arcadixdevelopment.com','N',NULL,NULL,NULL,NULL,'Y',3,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7',GETDATE(),'Y','prefetchdev.lernpassplus.ch')
+END 
+
+GO
+
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '604' and vHostURL = 'TestreactnativeFusionLernlupe.arcadixdevelopment.com')
+BEGIN  
+	insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) 
+	values('604','TestreactnativeFusionLernlupe.arcadixdevelopment.com','N',NULL,NULL,NULL,NULL,'Y',3,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7',GETDATE(),'Y','prefetchdev.lernpassplus.ch')
+END 
+
+GO
+
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '605' and vHostURL = 'SchulereactnativeFusionLernpassplus.arcadixdevelopment.com')
+BEGIN  
+	insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) 
+	values('605','SchulereactnativeFusionLernpassplus.arcadixdevelopment.com','N',NULL,NULL,NULL,NULL,'Y',3,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7',GETDATE(),'Y','prefetchdev.lernpassplus.ch')
+END 
+
+GO
+
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '606' and vHostURL = 'LehrpersonreactnativeFusionLernpassplus.arcadixdevelopment.com')
+BEGIN  
+	insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) 
+	values('606','LehrpersonreactnativeFusionLernpassplus.arcadixdevelopment.com','N',NULL,NULL,NULL,NULL,'Y',3,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7',GETDATE(),'Y','prefetchdev.lernpassplus.ch')
+END 
+
+GO
+
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '607' and vHostURL = 'PupilreactnativeFusionLernpassplus.arcadixdevelopment.com')
+BEGIN  
+	insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) 
+	values('607','PupilreactnativeFusionLernpassplus.arcadixdevelopment.com','N',NULL,NULL,NULL,NULL,'Y',3,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7',GETDATE(),'Y','prefetchdev.lernpassplus.ch')
+END 
+
+GO
+
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '608' and vHostURL = 'IntranetreactnativeFusionLernpassplus.arcadixdevelopment.com')
+BEGIN  
+	insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) 
+	values('608','IntranetreactnativeFusionLernpassplus.arcadixdevelopment.com','N',NULL,NULL,NULL,NULL,'Y',3,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7',GETDATE(),'Y','prefetchdev.lernpassplus.ch')
+END 
+
+GO
+
+if NOT Exists(select * from t_Framework_Client_HostUrl where iClientId = '609' and vHostURL = 'TestreactnativeFusionLernpassplus.arcadixdevelopment.com')
+BEGIN  
+	insert into t_Framework_Client_HostUrl (iClientId, vHostURL, cIsDeleted, iThemeId ,uTestId ,uLoginControlId ,iFormId ,cIsActive ,iLanguageId ,vStartPage ,cIsForTesting ,vMobileStartPage ,vTabletStartPage ,vImageHostURL, vCssHostURL, vDataHostURL, iTargetGroupId, cIsAngularApplication, iTargetDeviceId, dtModifiedOn, cIsForFusion, vPrefetchURL) 
+	values('609','TestreactnativeFusionLernpassplus.arcadixdevelopment.com','N',NULL,NULL,NULL,NULL,'Y',3,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'7',GETDATE(),'Y','prefetchdev.lernpassplus.ch')
+END 
+
+GO
+
+
+/********************************************************************
+Entries for t_TestDrive_OfflineProcess_Definition
+*********************************************************************/
+IF NOT EXISTS(select * from t_TestDrive_OfflineProcess_Definition where vMethodName ='TaskExportAsExcel')
+BEGIN
+ insert into t_TestDrive_OfflineProcess_Definition (uOfflineProcessDefinitionId,vClassName,vMethodName,cIsActive,cIsScheduledProcess,cRepeat,iToRepeatAfterInMinutes,vOfflineProcessKeyword,cHasFileGenerated,vAssemblyName,dtCreatedOn,dtModifiedOn) 
+   values ('A0DE39B3-73C9-446D-9331-B71461F72513','Arcadix.Intranet.Modules.Task.TaskExport_Module','TaskExportAsExcel','Y','N','N',null,'TaskExportAsExcel',null,'Arcadix.Intranet','2020-09-15T17:00:55.76','2020-09-15T17:00:55.76')
+END
+
+IF NOT EXISTS(select * from t_TestDrive_OfflineProcess_Definition where vMethodName ='GenerateTaskPdf')
+BEGIN
+insert into t_TestDrive_OfflineProcess_Definition values(newid(),'Arcadix.Intranet.Modules.Task.Pdf_Module','GenerateTaskPdf','Y','N','N',NULL,'GenerateTaskPdf',NULL,'Arcadix.Intranet',GETDATE(),GETDATE())
+END
+
+GO
+
+/********************************************************************
+Entries for t_Framework_Help_Group
+*********************************************************************/
+IF NOT EXISTS(select * from t_Framework_Help_Group where vHelpGroupKey ='Taxonomy')
+BEGIN
+insert into t_Framework_Help_Group (uHelpGroupId,iApplicationTypeId,vHelpGroupKey,iMainClientId,iTargetGroupId,iOrderId,dtCreatedOn,dtModifiedOn,uUserId,uModifiedByUserId)
+values ('152C9441-2DD5-41F9-8393-0D5241D13F33',4,'Taxonomy',97,1,1,'2020-09-04T15:48:58.480','2020-09-04T15:48:58.480',null,null)
+END
+
+GO
+
+IF NOT EXISTS(select * from t_Framework_Help_Group where vHelpGroupKey ='Extranet')
+BEGIN
+insert into t_Framework_Help_GROUP (uHelpGroupId,iApplicationTypeId,vHelpGroupKey,iMainClientId,iTargetGroupId,iOrderId,dtCreatedOn,dtModifiedOn,cIsDeleted,uUserId,uModifiedByUserId)
+values (NEWID(),24,'Extranet',0,1,1,'2020-11-20T19:04:21.503','2020-11-20T19:04:21.503','N',null,null)
+END 
+
+GO
+
+IF NOT EXISTS(select * from t_Framework_Help_Group where vHelpGroupKey ='Intranet')
+BEGIN
+insert into t_Framework_Help_GROUP (uHelpGroupId,iApplicationTypeId,vHelpGroupKey,iMainClientId,iTargetGroupId,iOrderId,dtCreatedOn,dtModifiedOn,cIsDeleted,uUserId,uModifiedByUserId)
+values (NEWID(),24,'Intranet',0,1,1,'2020-11-20T19:04:21.503','2020-11-20T19:04:21.503','N',null,null)
+END
+
+GO
+
+IF NOT EXISTS(select * from t_Framework_Help_Group where vHelpGroupKey ='Document')
+BEGIN
+insert into t_Framework_Help_GROUP (uHelpGroupId,iApplicationTypeId,vHelpGroupKey,iMainClientId,iTargetGroupId,iOrderId,dtCreatedOn,dtModifiedOn,cIsDeleted,uUserId,uModifiedByUserId)
+values (NEWID(),24,'Document',0,1,1,'2020-11-20T19:04:21.503','2020-11-20T19:04:21.503','N',null,null)
+END
+
+GO
+
+IF NOT EXISTS(select * from t_Framework_Help_Group where vHelpGroupKey ='Editor')
+BEGIN
+insert into t_Framework_Help_GROUP (uHelpGroupId,iApplicationTypeId,vHelpGroupKey,iMainClientId,iTargetGroupId,iOrderId,dtCreatedOn,dtModifiedOn,cIsDeleted,uUserId,uModifiedByUserId)
+values (NEWID(),24,'Editor',0,1,1,'2020-11-20T19:04:21.503','2020-11-20T19:04:21.503','N',null,null)
+END
+
+GO
+
+IF NOT EXISTS(select * from t_Framework_Help_Group where vHelpGroupKey ='Examples')
+BEGIN
+insert into t_Framework_Help_GROUP (uHelpGroupId,iApplicationTypeId,vHelpGroupKey,iMainClientId,iTargetGroupId,iOrderId,dtCreatedOn,dtModifiedOn,cIsDeleted,uUserId,uModifiedByUserId)
+values (NEWID(),24,'Examples',0,1,1,'2020-11-20T19:04:21.503','2020-11-20T19:04:21.503','N',null,null)
+END 
+
+GO
+
+IF NOT EXISTS(select * from t_Framework_Help_Group where vHelpGroupKey ='TestApplication')
+BEGIN
+insert into t_Framework_Help_GROUP (uHelpGroupId,iApplicationTypeId,vHelpGroupKey,iMainClientId,iTargetGroupId,iOrderId,dtCreatedOn,dtModifiedOn,cIsDeleted,uUserId,uModifiedByUserId)
+values (NEWID(),24,'TestApplication',0,1,1,'2020-11-20T19:04:21.503','2020-11-20T19:04:21.503','N',null,null)
+END 
+
+GO
+
+/********************************************************************
+Entries for t_Framework_XMLConfiguration 
+*********************************************************************/
+
+IF NOT EXISTS(select * from t_Framework_XMLConfiguration where vParentKey ='Common' and vSubParentKey ='OneDrive' and vKey ='OneDriveId')
+BEGIN
+insert into "t_Framework_XMLConfiguration" (uXMLConfigurationId,iMainClientId,iConfigurationFileId,vParentKey,vSubParentKey,vKey,vValue,cIsEditable,iStateId,iApplicationTypeId,dtCreatedOn,dtModifiedOn,cIsForFusion,uUserId,uModifiedByUserId)
+ values (NEWID(),0,null,'Common','OneDrive','OneDriveId','b!0ZrWyYH1g02iLmqME8e-CoRZ7BZbbfxJmGSF36_WtcJ59DsUoSfYRqKM-Iwk_UyX','N',null,null,'2020-08-18 20:36:10.537','2020-08-18 20:36:10.537','Y',null,null)
+end
+
+GO
+
+IF NOT EXISTS(select * from t_Framework_XMLConfiguration where vParentKey ='Common' and vSubParentKey ='OneDrive' and vKey ='OneDriveClientSecret')
+BEGIN
+insert into "t_Framework_XMLConfiguration" (uXMLConfigurationId,iMainClientId,iConfigurationFileId,vParentKey,vSubParentKey,vKey,vValue,cIsEditable,iStateId,iApplicationTypeId,dtCreatedOn,dtModifiedOn,cIsForFusion,uUserId,uModifiedByUserId)
+ values (NEWID(),0,null,'Common','OneDrive','OneDriveClientSecret','OxFmq1i+dUPTba0iEFQ+5I10Rzac3hqRglVDWliM+no=','N',null,null,'2020-08-18 20:36:10.537','2020-08-18 20:36:10.537','Y',null,null)
+end
+
+GO
+
+IF NOT EXISTS(select * from t_Framework_XMLConfiguration where vParentKey ='Common' and vSubParentKey ='OneDrive' and vKey ='OneDriveUserName')
+BEGIN
+insert into "t_Framework_XMLConfiguration" (uXMLConfigurationId,iMainClientId,iConfigurationFileId,vParentKey,vSubParentKey,vKey,vValue,cIsEditable,iStateId,iApplicationTypeId,dtCreatedOn,dtModifiedOn,cIsForFusion,uUserId,uModifiedByUserId)
+ values (NEWID(),0,null,'Common','OneDrive','OneDriveUserName','info@arcadix.com','N',null,null,'2020-08-18 20:36:10.537','2020-08-18 20:36:10.537','Y',null,null)
+end
+
+GO
+
+IF NOT EXISTS(select * from t_Framework_XMLConfiguration where vParentKey ='Common' and vSubParentKey ='OneDrive' and vKey ='OneDriveClientId')
+BEGIN
+insert into "t_Framework_XMLConfiguration" (uXMLConfigurationId,iMainClientId,iConfigurationFileId,vParentKey,vSubParentKey,vKey,vValue,cIsEditable,iStateId,iApplicationTypeId,dtCreatedOn,dtModifiedOn,cIsForFusion,uUserId,uModifiedByUserId)
+ values (NEWID(),0,null,'Common','OneDrive','OneDriveClientId','da162a70-184a-424a-817a-c294e7e0b720','N',null,null,'2020-08-18 20:36:10.537','2020-08-18 20:36:10.537','Y',null,null)
+end
+
+GO
+
+IF NOT EXISTS(select * from t_Framework_XMLConfiguration where vParentKey ='Common' and vSubParentKey ='OneDrive' and vKey ='OneDriveTenantId')
+BEGIN
+insert into "t_Framework_XMLConfiguration" (uXMLConfigurationId,iMainClientId,iConfigurationFileId,vParentKey,vSubParentKey,vKey,vValue,cIsEditable,iStateId,iApplicationTypeId,dtCreatedOn,dtModifiedOn,cIsForFusion,uUserId,uModifiedByUserId)
+ values (NEWID(),0,null,'Common','OneDrive','OneDriveTenantId','2df06c52-197f-428e-b032-8b02fb0fc138','N',null,null,'2020-08-18 20:36:10.537','2020-08-18 20:36:10.537','Y',null,null)
+end
+
+GO
+IF NOT EXISTS(select * from t_Framework_XMLConfiguration where vParentKey ='Common' and vSubParentKey ='OneDrive' and vKey ='OneDrivePassword')
+BEGIN
+insert into "t_Framework_XMLConfiguration" (uXMLConfigurationId,iMainClientId,iConfigurationFileId,vParentKey,vSubParentKey,vKey,vValue,cIsEditable,iStateId,iApplicationTypeId,dtCreatedOn,dtModifiedOn,cIsForFusion,uUserId,uModifiedByUserId)
+ values (NEWID(),0,null,'Common','OneDrive','OneDrivePassword','Huh44499','N',null,null,'2020-08-18 20:36:10.537','2020-08-18 20:36:10.537','Y',null,null)
+end
+
+
+/********************************************************************
+Enabling JobSkills ApplicationType for Fusion
+*********************************************************************/
+UPDATE t_Framework_ApplicationType
+SET cIsForFusion = 'Y' 
+WHERE iApplicationTypeId = 13
+
+GO
+
+/********************************************************************
+Enabling localhost URL for Active Intranet/TestApplication in t_Framework_Client_HostUrl
+*********************************************************************/
+UPDATE t_Framework_Client_HostUrl 
+SET cIsActive ='Y'
+WHERE iHostURLId =2069 --Intranet
+
+UPDATE t_Framework_Client_HostUrl 
+SET cIsActive ='Y'
+WHERE iHostURLId =4354 --TestApplication

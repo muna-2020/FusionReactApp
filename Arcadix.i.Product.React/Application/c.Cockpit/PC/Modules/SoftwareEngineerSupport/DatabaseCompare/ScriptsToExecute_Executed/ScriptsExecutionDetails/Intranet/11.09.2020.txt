@@ -1,0 +1,93 @@
+﻿  /**********************************
+ Following tables updated:
+
+	1) t_TestDrive_Task_AdditionalTaskProperty
+	2) t_TestDrive_Task_AdditionalTaskProperty_Old
+	3) t_TestDrive_Task_AdditionalTaskProperty_Value
+	4) t_Testdrive_Task_IntermediateProperty
+	5) t_TestDrive_Task_TaskDifficultyLevel
+
+	**********************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Task_AdditionalTaskProperty' AND COLUMN_NAME = 'uModifiedByUserId')
+BEGIN  
+ALTER TABLE t_TestDrive_Task_AdditionalTaskProperty ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Task_AdditionalTaskProperty set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+GO
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Task_AdditionalTaskProperty_Old' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Task_AdditionalTaskProperty_Old ADD uModifiedByUserId uniqueidentifier  
+END	 
+
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Task_AdditionalTaskProperty_Old set uModifiedByUserId=uUserId where uModifiedByUserId is null
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Task_AdditionalTaskProperty_Value' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Task_AdditionalTaskProperty_Value ADD uModifiedByUserId uniqueidentifier  
+END			 
+
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Task_AdditionalTaskProperty_Value set uModifiedByUserId=uUserId where uModifiedByUserId is null
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Testdrive_Task_IntermediateProperty' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_Testdrive_Task_IntermediateProperty ADD uModifiedByUserId uniqueidentifier  
+END
+	
+GO	
+
+
+/**********************************
+Default Values
+**********************************/
+update t_Testdrive_Task_IntermediateProperty set uModifiedByUserId=uUserId where uModifiedByUserId is null
+
+
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Task_TaskDifficultyLevel' AND COLUMN_NAME = 'uModifiedByUserId')  BEGIN
+ALTER TABLE t_TestDrive_Task_TaskDifficultyLevel ADD uModifiedByUserId uniqueidentifier  
+END			 
+
+GO
+/**********************************
+Default Values
+**********************************/ 
+update t_TestDrive_Task_TaskDifficultyLevel set uModifiedByUserId= uUserId Where uModifiedByUserId is null
+
+GO

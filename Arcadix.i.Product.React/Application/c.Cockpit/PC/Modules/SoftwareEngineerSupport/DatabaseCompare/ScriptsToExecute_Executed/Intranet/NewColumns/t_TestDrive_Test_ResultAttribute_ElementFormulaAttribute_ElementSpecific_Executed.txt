@@ -1,0 +1,35 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_ResultAttribute_ElementFormulaAttribute_ElementSpecific' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Test_ResultAttribute_ElementFormulaAttribute_ElementSpecific ADD uModifiedByUserId uniqueidentifier  
+END
+ 
+ GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Test_ResultAttribute_ElementFormulaAttribute_ElementSpecific set uModifiedByUserId= uUserId Where uModifiedByUserId is null
+
+
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_CMS_CMSContainer_SaveElementPointOverrideInformation
+FProc_CMS_CMSPageContent_GetAllTasksElementOverridePoints
+JEditorProc_CMS_CMSContainer_SaveElementPointOverrideInformation
+JEditorProc_CMS_CMSPageContent_GetAllTasksElementOverridePoints
+Proc_CMS_CMSContainer_SaveElementPointOverrideInformation
+Proc_CMS_CMSPageContent_GetAllTasksElementOverridePoints
+Proc_Testdrive_StandardResultCalculation_GetElementOverrideAttributes
+****************************************************************/
+
+/********************Procs need to Review**********************
+FProc_CMS_CMSContainer_SaveElementPointOverrideInformation
+JEditorProc_CMS_CMSContainer_SaveElementPointOverrideInformation
+Proc_CMS_CMSContainer_SaveElementPointOverrideInformation
+****************************************************************/

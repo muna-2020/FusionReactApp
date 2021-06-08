@@ -1,0 +1,55 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_ApplicationType' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN 
+ALTER TABLE t_Framework_ApplicationType ADD dtModifiedOn datetime  
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_ApplicationType' AND COLUMN_NAME = 'cIsDeleted') 
+BEGIN 
+ALTER TABLE t_Framework_ApplicationType ADD cIsDeleted char(1)  
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_ApplicationType' AND COLUMN_NAME = 'cIsForFusion') 
+BEGIN 
+ALTER TABLE t_Framework_ApplicationType ADD cIsForFusion char(1)  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_Framework_ApplicationType set cIsDeleted='N'   Where cIsDeleted is null
+
+GO
+update t_Framework_ApplicationType set dtModifiedOn=getdate()  Where dtModifiedOn is null
+
+GO
+update t_Framework_ApplicationType set cIsForFusion='Y' where iApplicationTypeId in (1,2,4,6,7,16,12)
+
+GO
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_Framework_FrameworkClient_GetClientConfiguration
+FProc_Framework_FrameworkClient_GetClientConfigurationByClientId
+JProc_Framework_FrameworkClient_GetAllApplicationTypes
+JProc_Framework_FrameworkClient_GetApplicationTypeForMainClient
+JProc_Framework_FrameworkClient_GetClientConfiguration
+JProc_Framework_FrameworkClient_GetClientConfigurationByClientId
+Proc_Forms_GetFormTablesForTree
+Proc_Framework_FrameworkClient_GetAllApplicationTypes
+Proc_Framework_FrameworkClient_GetApplicationTypeForMainClient
+Proc_Framework_FrameworkClient_GetClientConfiguration
+Proc_Framework_FrameworkClient_GetClientConfiguration_JobSkills
+Proc_Framework_FrameworkClient_GetClientConfigurationByClientId
+****************************************************************/
+
+/********************Procs need to Review**********************
+		No Procs to Review
+****************************************************************/

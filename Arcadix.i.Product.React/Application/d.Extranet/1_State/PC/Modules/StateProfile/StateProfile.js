@@ -1,0 +1,2 @@
+﻿const StateProfile = (props) => {
+}

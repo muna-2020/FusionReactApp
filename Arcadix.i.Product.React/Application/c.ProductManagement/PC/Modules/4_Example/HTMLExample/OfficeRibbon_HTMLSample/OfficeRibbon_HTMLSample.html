@@ -1,0 +1,248 @@
+﻿<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: calibri;
+        }
+        .toolbar-section {
+            background: rgb(249, 249, 249);
+            padding: 10px 13px;
+            display: flex;
+        }
+        .toolbar {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            justify-content: space-between;
+        }
+        .toolbar:after {
+            position: absolute;
+            content: '';
+            height: 100%;
+            width: 2px;
+            background: #ececec;
+            top: 0;
+            right: -3px;
+        }
+        .toolbar-btn {
+            display: flex;
+        }
+        .flex-column {
+            display: flex;
+            flex-direction: column;
+        }
+        .flex-column button img {
+            width: 15px;
+            margin: 0 5px;
+        }
+        .flex-column input {
+            width: 100px;
+            margin: 0px auto;
+        }
+        .toolbar-btn button {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            width: fit-content;
+            padding: 7px 7px;
+            border: 0;
+            background: transparent;
+        }
+        .flex-column button {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            padding: 2px 10px;
+        }
+        .toolbar-btn button:hover {
+            background: #e6e4e1;
+        }
+        .toolbar-btn img {
+            width: 24px;
+            margin-bottom: 10px;
+        }
+        .toolbar-text {
+            padding-top: 2px;
+            font-size: 14px;
+        }
+        .flex-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            width: 270px;
+            background: #fff;
+            height: 70px;
+            overflow-y: scroll;
+        }
+        .flex-wrap button {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            width: 125px;
+        }
+        .flex-wrap button img {
+            margin: 0px 5px;
+            width: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <section class="toolbar-section">
+            <div class="toolbar">
+                <div class="toolbar-btn">
+                   <button title='New Email'>
+                       <img src="https://image.flaticon.com/icons/svg/1089/1089343.svg" alt=""> 
+                       <span>New Email</span>
+                   </button>
+                   <button title='New Items'>
+                       <img src="https://image.flaticon.com/icons/svg/1034/1034133.svg" alt=""> 
+                       <span>New Items</span>
+                   </button>
+                </div>
+                <div class="toolbar-text">
+                    <span>New</span>
+                </div>
+            </div>
+            <div class="toolbar">
+                <div class="toolbar-btn">
+                   <div class="flex-column">
+                        <button title='Ignore'>
+                            <img src="https://image.flaticon.com/icons/svg/564/564622.svg" alt=""> 
+                            <span>Ignore</span>
+                        </button>
+                        <button title='Clean up'>
+                            <img src="https://image.flaticon.com/icons/svg/1040/1040218.svg" alt=""> 
+                            <span>Clean up</span>
+                        </button>
+                        <button title='Junk'>
+                            <img src="https://image.flaticon.com/icons/svg/399/399409.svg" alt=""> 
+                            <span>Junk</span>
+                        </button>
+                   </div>
+                   <button title='Delete'>
+                       <img src="https://image.flaticon.com/icons/svg/1214/1214428.svg" alt=""> 
+                       <span>Delete</span>
+                   </button>
+                   <button title='Archive'>
+                       <img src="https://image.flaticon.com/icons/svg/2606/2606527.svg" alt=""> 
+                       <span>Archive</span>
+                   </button>
+                </div>
+                <div class="toolbar-text">
+                    <span>Delete</span>
+                </div>
+            </div>
+            <div class="toolbar">
+                <div class="toolbar-btn">
+                   <button title='Reply'>
+                       <img src="https://image.flaticon.com/icons/svg/2001/2001370.svg" alt=""> 
+                       <span>Reply</span>
+                   </button>
+                   <button title='Reply All'>
+                       <img src="https://image.flaticon.com/icons/svg/482/482152.svg" alt=""> 
+                       <span>Reply All</span>
+                   </button>
+                   <button title='Fordward'>
+                    <img src="https://image.flaticon.com/icons/svg/1828/1828959.svg" alt=""> 
+                    <span>Fordward</span>
+                </button>
+                   <div class="flex-column">
+                    <button title='Meeting'>
+                        <img src="https://image.flaticon.com/icons/svg/509/509653.svg" alt=""> 
+                        <span>Meeting</span>
+                    </button>
+                    <button title='IM'>
+                        <img src="https://image.flaticon.com/icons/svg/2526/2526606.svg" alt=""> 
+                        <span>IM</span>
+                    </button>
+                    <button title='>More'>
+                        <img src="https://image.flaticon.com/icons/svg/570/570223.svg" alt=""> 
+                        <span>More</span>
+                    </button>
+               </div>
+                </div>
+                <div class="toolbar-text">
+                    <span>Respond</span>
+                </div>
+            </div>
+            <div class="toolbar">
+                <div class="toolbar-btn">
+                   <div class="flex-column">
+                        <button title='New group'>
+                            <img src="https://image.flaticon.com/icons/svg/1388/1388246.svg" alt=""> 
+                            <span>New group</span>
+                        </button>
+                        <button title='Browse Group'>
+                            <img src="https://image.flaticon.com/icons/svg/615/615075.svg" alt=""> 
+                            <span>Browse Group</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="toolbar-text">
+                    <span>Group</span>
+                </div>
+            </div>
+            <div class="toolbar">
+                <div class="toolbar-btn">
+                   <div class="flex-column">
+                        <input type="text" name="searchpeople" id="" placeholder="search people">
+                        <button title='Address Book'>
+                            <img src="https://image.flaticon.com/icons/svg/1388/1388246.svg" alt=""> 
+                            <span>Address Book</span>
+                        </button>
+                        <button title='Filter email'>
+                            <img src="https://image.flaticon.com/icons/svg/615/615075.svg" alt=""> 
+                            <span>Filter email</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="toolbar-text">
+                    <span>Find</span>
+                </div>
+            </div>
+            <div class="toolbar">
+                <div class="toolbar-btn">
+                   <div class="flex-wrap">
+                        <button title='New Test'>
+                            <img src="https://image.flaticon.com/icons/svg/615/615075.svg" alt=""> 
+                            <span>Filter email</span>
+                        </button>
+                        <button title='New Test'>
+                            <img src="https://image.flaticon.com/icons/svg/615/615075.svg" alt=""> 
+                            <span>Filter email</span>
+                        </button>
+                        <button title='New Test'>
+                            <img src="https://image.flaticon.com/icons/svg/615/615075.svg" alt=""> 
+                            <span>Filter email</span>
+                        </button>
+                        <button title='New Test'>
+                            <img src="https://image.flaticon.com/icons/svg/615/615075.svg" alt=""> 
+                            <span>Filter email</span>
+                        </button>
+                        <button title='New Test'>
+                            <img src="https://image.flaticon.com/icons/svg/615/615075.svg" alt=""> 
+                            <span>Filter email</span>
+                        </button>
+                        <button title='New Test'>
+                            <img src="https://image.flaticon.com/icons/svg/615/615075.svg" alt=""> 
+                            <span>Filter email</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="toolbar-text">
+                    <span>Quick Steps</span>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

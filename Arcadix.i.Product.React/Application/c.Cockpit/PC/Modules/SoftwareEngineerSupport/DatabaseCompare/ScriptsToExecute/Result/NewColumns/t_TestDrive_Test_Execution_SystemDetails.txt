@@ -1,0 +1,90 @@
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_Execution_SystemDetails' AND COLUMN_NAME = 'vDeviceOs') 
+BEGIN
+ALTER TABLE t_TestDrive_Test_Execution_SystemDetails ADD vDeviceOs nvarchar(max)
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Test_Execution_SystemDetails' AND COLUMN_NAME = 'vDevice') 
+BEGIN
+ALTER TABLE t_TestDrive_Test_Execution_SystemDetails ADD vDevice nvarchar(max)
+END
+
+/**********************************
+Default Values
+**********************************/
+
+/**********************************
+Angular proc modified
+**********************************/
+
+/********************All Dependent Procs******************
+JProc_Testdrive_AdaptiveQualityControl
+JProc_Testdrive_PageResults_GetResultsToAssignPupil
+JProc_Testdrive_PageResults_GetResultsToAssignPupil_10_04_2019
+JProc_TestDrive_PageTestApplicationIntroduction_AddExecutionSystemDetails
+JProc_TestDrive_Pupil_MergePupils_InsertTestResultsToPupil
+JProc_TestDrive_Pupil_MovePupils_GetSourceClassResults_New
+JProc_TestDrive_Pupil_MovePupils_GetSourceClassResults2
+JProc_TestDrive_Pupil_MovePupils_InsertTestResultsToPupil
+JProc_TestDrive_Pupil_MovePupils_ResetTestResultForPupil
+JProc_TestDrive_StandardTestProvider_AssignTestResultsToPupil
+JProc_TestDrive_StandardTestProvider_CreateTestLoginsPaperless
+JProc_TestDrive_StandardTestProvider_CreateTestLoginsPaperless_New
+JProc_TestDrive_StandardTestProvider_CreateTestLoginsPaperless_New_02_03_2020
+JProc_TestDrive_StandardTestProvider_CreateTestLoginsPaperless_New_10_04_2019
+JProc_TestDrive_StandardTestProvider_GetResultsForExcel
+JProc_Testdrive_StandardTestProvider_ResetTestResultForPupil
+JProc_TestDrive_Test_GetCompleteResults
+JProc_TestDrive_Test_GetCompleteResults_10_04_2019
+JProc_Testdrive_Test_GetTestResultsForTeacher
+JProc_Testdrive_TestLoginsAndResults_GetTestLoginsAndResults
+JProc_Testdrive_TestLoginsAndResults_GetTestLoginsAndResultsForCycleAndState
+JProc_TestDrive_WrapperTestProvider_CreateTestLoginsPaperless
+JProc_TestDrive_WrapperTestProvider_CreateTestLoginsPaperless_New
+JProc_TestDrive_WrapperTestProvider_CreateTestLoginsPaperless_New_02_03_2020
+JProc_TestDrive_WrapperTestProvider_CreateTestLoginsPaperless_New_10_04_2019
+JProcOld_TestDrive_PageTestApplicationIntroduction_AddExecutionSystemDetails
+p_Extranet_School_MovePupil_GetSourceClassResults
+p_Extranet_School_MovePupil_InsertTestResultsToPupil
+p_Extranet_School_MovePupil_MergePupil_InsertTestResultsToPupil
+p_Extranet_School_MovePupil_ResetTestResultForPupil
+p_Object_TestApplication_TestLoginAndResult_EditData
+p_Object_TestApplication_TestLoginAndResult_GetData
+p_Object_TestApplication_TestLoginAndResult_GetData_Sync
+p_Object_TestApplication_WrapperTestLoginAndResult_EditData
+p_PageResults_GetResultsToAssignPupil
+p_StandardTestProvider_AssignTestResultsToPupil
+p_StandardTestProvider_ResetTestResultForPupil
+p_Test_AddExecutionDetails
+p_Test_CompleteResults_GetData
+p_Test_GetLoginDetails
+p_Test_SaveResultSummary
+p_Test_UpdateStartTestTime
+Proc_Fusion_Extranet_TestResult_ResetResult
+Proc_Fusion_Object_TestApplication_TestLoginsAndResult_StandardTest_EditData
+Proc_Fusion_TestDrive_PageTestApplicationIntroduction_AddExecutionSystemDetails
+Proc_Testdrive_AnonymousMembership_ClearAnonymousResults
+Proc_TestDrive_ImportResults
+Proc_Testdrive_PageResults_GetResultsToAssignPupil
+Proc_TestDrive_PageTestApplicationIntroduction_AddExecutionSystemDetails
+Proc_TestDrive_StandardTestProvider_AssignTestResultsToPupil
+Proc_TestDrive_StandardTestProvider_GetCompleteResultsForClass
+Proc_TestDrive_StandardTestProvider_GetDateRangeValuesForTestCounter
+Proc_TestDrive_StandardTestProvider_GetDateRangeValuesForTestCounter_temp
+Proc_TestDrive_StandardTestProvider_GetResultsForExcel
+Proc_TestDrive_StandardTestProvider_GetTestResultForPupilReset
+Proc_TestDrive_StandardTestProvider_InsertTestResultInRecycleBinForPupil
+Proc_Testdrive_StandardTestProvider_ResetTestResultForPupil
+Proc_Testdrive_Test_GetTestResultsForTeacher
+Proc_Testdrive_Test_GetTestResultsForTeacherTemp
+Proc_Testdrive_TestLoginsAndResults_GetTestLoginsAndResults
+Proc_TestDrive_WrapperTestProvider_GetCompleteResultsForClass
+Proc_TestDrive_WrapperTestProvider_GetDateRangeValuesForTestCounter
+***********************************************************/
+
+
+/********************Procs to Review**********************
+
+***********************************************************/

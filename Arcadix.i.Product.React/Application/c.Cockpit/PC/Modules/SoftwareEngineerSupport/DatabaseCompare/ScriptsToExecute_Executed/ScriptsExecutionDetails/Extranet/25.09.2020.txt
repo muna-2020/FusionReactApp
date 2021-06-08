@@ -1,0 +1,20 @@
+﻿  Following tables updated:
+
+
+ 1)t_Testdrive_Member_MemberSurvey
+ 2)t_Testdrive_Member_MemberSurvey_Question
+ 3)t_TestDrive_Member_OpenApplicationCredential
+ 4)t_TestDrive_Member_Pupil_AssignedSubjectClassType
+ 5)t_Testdrive_Member_StateAdministrator
+ 6)t_Testdrive_Planner_Curriculum
+ 7)t_TestDrive_Member_LoggedinUserInformation
+ 8)t_TestDrive_Member_FTPSync
+ 9)t_TestDrive_Member_ExternalAssessor
+
+
+  procs Updated:
+
+1) JProc_Testdrive_Member_GetUserDetailsFromExternalSourceId
+2) JProc_TestDrive_Pupil_MovePupils_26_08_2019
+3) Proc_Extranet_Planner_SaveCurriculumDetails
+4) FProc_TestDrive_Member_SyncFTP                     

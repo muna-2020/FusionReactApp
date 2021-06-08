@@ -1,0 +1,33 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Task_AdditionalTaskProperty' AND COLUMN_NAME = 'uModifiedByUserId')
+BEGIN  
+ALTER TABLE t_TestDrive_Task_AdditionalTaskProperty ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Task_AdditionalTaskProperty set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+GO
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_CMS_CMSPage_GetAdditionalTaskPropertyByMainClient
+FProc_CMS_CMSPage_GetAssignedAdditionalTaskProperty
+FProc_TestDrive_BaseObject_AdditionalTaskProperty_GetData
+FProc_TestDrive_BaseObject_MetaAttributeOverview_GetData
+JEditorProc_CMS_CMSPage_GetAdditionalTaskPropertyByMainClient
+JEditorProc_CMS_CMSPage_GetAssignedAdditionalTaskProperty
+Proc_CMS_CMSPage_GetAdditionalTaskPropertyByMainClient
+Proc_CMS_CMSPage_GetAssignedAdditionalTaskProperty
+Proc_Testdrive_Task_GetSubjectsForAdditionalTaskProperty
+*************************************************/
+

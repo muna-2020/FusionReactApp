@@ -1,0 +1,29 @@
+{
+  "name": "ArcadixModulePerformance",
+  "description": "example extension",
+  "manifest_version": 2,
+  "version": "2",
+  "background": {
+    "scripts": [ "background.js" ],
+    "persistent": true
+  },
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "permissions": [
+    "tabs",
+    "bookmarks",
+    "<all_urls>",
+    "unlimitedStorage",
+    "downloads",
+    "webRequest",
+    "webRequestBlocking",
+    "<all_urls>",
+    "webNavigation"
+  ],
+  "content_scripts": [
+    {
+      "matches": [ "<all_urls>" ],
+      "js": [ "content.js" ]
+    }
+  ],
+  "web_accessible_resources": [ "pagescript.js" ]
+}

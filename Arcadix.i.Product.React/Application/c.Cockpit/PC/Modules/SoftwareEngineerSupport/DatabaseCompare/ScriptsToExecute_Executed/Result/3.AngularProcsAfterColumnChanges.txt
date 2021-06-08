@@ -1,0 +1,988 @@
+ALTER PROCEDURE JProc_TestDrive_Pupil_MergePupils_InsertTestResultsToPupil      
+(                                          
+  @vResultJSON  nvarchar(max),    
+  @uCycleId uniqueidentifier,    
+  @uClassId uniqueidentifier,    
+  @uSourcePupilId uniqueidentifier,    
+  @uTargetPupilId uniqueidentifier,    
+  @cIsRecycleBinDataBase CHAR(1)                              
+)                                          
+AS                                          
+BEGIN    
+DECLARE @Message NVARCHAR(MAX);    
+ BEGIN TRANSACTION    
+ BEGIN TRY    
+  DECLARE @uTestTokenId UNIQUEIDENTIFIER;    
+     
+  DECLARE CURSOR_TestTokenData CURSOR FOR    
+  SELECT uTestTokenId FROM OPENJSON(@vResultJSON,'$.TestTokens')    
+  WITH ( uTestTokenId UNIQUEIDENTIFIER '$.uTestTokenId' )    
+    
+  OPEN CURSOR_TestTokenData                                        
+  FETCH NEXT FROM CURSOR_TestTokenData into @uTestTokenId    
+  WHILE(@@FETCH_STATUS <> -1)                                   
+  BEGIN    
+      
+   IF EXISTS( SELECT * FROM t_TestDrive_Test_Token WHERE uTestTokenId = @uTestTokenId) AND @cIsRecycleBinDataBase = 'N'    
+    BEGIN    
+     UPDATE t_TestDrive_Test_Token     
+     SET uClassId = @uClassId, uPupilId = @uTargetPupilId    
+     WHERE uTestTokenId = @uTestTokenId    
+    END    
+   ELSE    
+    BEGIN    
+        
+     INSERT INTO t_TestDrive_Test_Token(uTestTokenId, vTestTokenNumber, uCycleId, uPupilId, uTestId, dtCreatedOn, uClassId, uParentTestId, iCycleRepetition, iLoginProviderId, dtValidTill, cIsActive, dtValidFrom, dtValidTo, iSubjectId, cIsPracticeTest, dtModifiedOn)    
+     SELECT     
+       uTestTokenId    
+      ,vTestTokenNumber    
+      ,uCycleId    
+      ,@uTargetPupilId    
+      ,uTestId    
+      ,dtCreatedOn    
+      ,@uClassId    
+      ,uParentTestId    
+      ,iCycleRepetition    
+      ,iLoginProviderId    
+      ,dtValidTill    
+      ,cIsActive    
+      ,dtValidFrom    
+      ,dtValidTo    
+      ,iSubjectId    
+      ,cIsPracticeTest    
+      ,dtModifiedOn --Not Present in Active DB    
+     FROM     
+     OPENJSON(@vResultJSON,'$.TestTokens')    
+     WITH(    
+       uTestTokenId uniqueidentifier    
+      ,vTestTokenNumber nvarchar(26)    
+      ,uCycleId uniqueidentifier          
+      ,uTestId uniqueidentifier    
+      ,dtCreatedOn smalldatetime    
+      ,uClassId uniqueidentifier    
+      ,uParentTestId uniqueidentifier    
+      ,iCycleRepetition int    
+      ,iLoginProviderId int    
+      ,dtValidTill datetime    
+      ,cIsActive char(1)    
+      ,dtValidFrom datetime    
+      ,dtValidTo datetime    
+      ,iSubjectId int    
+      ,cIsPracticeTest char(1)    
+      ,dtModifiedOn datetime    
+     )    
+     WHERE uTestTokenId = @uTestTokenId;    
+    
+     INSERT INTO t_TestDrive_Test_Execution(uExecutionId, uTestTokenId, dtTestStart, dtTestEnd, iSoundVolume, iTestStatusId, dBound1, dBound2, dStartProb, dTestSubjectConstance, dTestSubjectVariance, iMaximumTasksToBeShown, iMinimumTasksToBeShown, dDifficultyUpperBound, iPerfectNumber, iLanguageId, iTestSubjectId, dStandardErrorConfidenceIntervalAlpha, uElementFormulaAttributeTemplateId, uResultAttributeGroupId, vAdaptivePropertiesJson, iAlgorithmId, iTaskCountDisplayed, iTotalEffectiveTimeTaken, dtLastTaskAnsweredOn)    
+     SELECT * FROM     
+     OPENJSON(@vResultJSON,'$.TestExecutions')    
+     WITH (    
+       uExecutionId uniqueidentifier    
+      ,uTestTokenId uniqueidentifier    
+      ,dtTestStart datetime    
+      ,dtTestEnd datetime    
+      ,iSoundVolume int    
+      ,iTestStatusId int    
+      ,dBound1 decimal    
+      ,dBound2 decimal    
+      ,dStartProb decimal    
+      ,dTestSubjectConstance decimal    
+      ,dTestSubjectVariance decimal    
+      ,iMaximumTasksToBeShown int    
+      ,iMinimumTasksToBeShown int    
+      ,dDifficultyUpperBound decimal    
+      ,iPerfectNumber int    
+      ,iLanguageId int    
+      ,iTestSubjectId int    
+      ,dStandardErrorConfidenceIntervalAlpha decimal    
+      ,uElementFormulaAttributeTemplateId uniqueidentifier    
+      ,uResultAttributeGroupId uniqueidentifier    
+      ,vAdaptivePropertiesJson nvarchar(MAX)    
+      ,iAlgorithmId int    
+      --Not Present in Active DB Arcadix_Lernpassplus_Result_2018_SG_1    
+      ,iTaskCountDisplayed int    
+      ,iTotalEffectiveTimeTaken int    
+      ,dtLastTaskAnsweredOn datetime    
+      --Not Present in Active DB Arcadix_Lernpassplus_Result_2018_SG_1    
+     )    
+     WHERE uTestTokenId = @uTestTokenId;    
+    
+     DECLARE @uExecutionId UNIQUEIDENTIFIER ;    
+     SELECT @uExecutionId = uExecutionId FROM     
+     OPENJSON(@vResultJSON,'$.TestExecutions')    
+     WITH ( uExecutionId uniqueidentifier, uTestTokenId uniqueidentifier)    
+     WHERE uTestTokenId = @uTestTokenId;    
+    
+     INSERT INTO t_TestDrive_Test_Execution_SubSubjectDetails  (uExecutionSubSubjectDetailsId,uExecutionId,iSubjectId,dConstance,dVariance)  
+     SELECT * FROM     
+     OPENJSON(@vResultJSON,'$.TestExecutionSubSubjectDetail')    
+     WITH (    
+       uExecutionSubSubjectDetailsId uniqueidentifier    
+      ,uExecutionId uniqueidentifier    
+      ,iSubjectId int    
+      ,dConstance decimal    
+      ,dVariance decimal    
+     )    
+     WHERE uExecutionId = @uExecutionId;    
+    
+     INSERT INTO t_TestDrive_Test_Execution_SystemDetails  (uTestExecutionSystemDetailsId,uExecutionId,vIPAddress,dtDatetimeOfLogin,vBrowserInformation,vBrowser,vBrowserVersion,vOs)  
+     SELECT * FROM     
+     OPENJSON(@vResultJSON,'$.TestExecutionSystemDetails')    
+     WITH (    
+       uTestExecutionSystemDetailsId uniqueidentifier    
+      ,uExecutionId uniqueidentifier    
+      ,vIPAddress nvarchar(50)    
+      ,dtDatetimeOfLogin datetime    
+      ,vBrowserInformation nvarchar(MAX)    
+      ,vBrowser nvarchar(200)    
+      ,vBrowserVersion nvarchar(200)    
+      ,vOs nvarchar(200)    
+     )    
+     WHERE uExecutionId = @uExecutionId;    
+    
+     INSERT INTO t_TestDrive_Test_Result (uResultId, uExecutionId, iPageId, iTaskStatusId, dtCreatedOn, iTimesShown, iDisplayedOrder, dNextDifficulty, cIsCalibratedActive, dDifficultyBefore, dDifficultyAfter, iTaskSubjectId, dTaskDifficulty, iTimeTakenToAnswer, vPageName, iTimeAllocated, iTaskTypeId, iRoundNumber, dTaskPercentage, iTaskObjectsCorrect, iTaskObjectsWrong, iTaskObjectsNotAnswered, iTaskWeightage, cIsSeparated, cHasTaskBeenDisplayed, iAttemptsToSolveTaskCorrectly, cIsDataStoragePlaceHolder, iParentTaskId, iSuperGroupTimeAllocated, vTaskResultAttribute, vTaskElementResultAttribute, vTaskDifficulty, iCategoryId, iCategoryCompetencyId)    
+     SELECT * FROM     
+     OPENJSON(@vResultJSON,'$.TestResult')    
+     WITH (    
+       uResultId uniqueidentifier    
+      ,uExecutionId uniqueidentifier    
+      ,iPageId int    
+      ,iTaskStatusId int    
+      ,dtCreatedOn datetime    
+      ,iTimesShown int    
+      ,iDisplayedOrder int    
+      ,dNextDifficulty decimal    
+      ,cIsCalibratedActive char(1)    
+      ,dDifficultyBefore decimal    
+      ,dDifficultyAfter decimal    
+      ,iTaskSubjectId int    
+      ,dTaskDifficulty decimal    
+      ,iTimeTakenToAnswer int    
+      ,vPageName nvarchar(200)    
+      ,iTimeAllocated int    
+      ,iTaskTypeId int    
+      ,iRoundNumber int    
+      ,dTaskPercentage decimal    
+      ,iTaskObjectsCorrect int    
+      ,iTaskObjectsWrong int    
+      ,iTaskObjectsNotAnswered int    
+      ,iTaskWeightage int    
+      ,cIsSeparated char(1)    
+      ,cHasTaskBeenDisplayed char(1)    
+      ,iAttemptsToSolveTaskCorrectly int    
+      ,cIsDataStoragePlaceHolder char(1)    
+      ,iParentTaskId int    
+      ,iSuperGroupTimeAllocated int    
+      ,vTaskResultAttribute nvarchar(MAX)    
+      ,vTaskElementResultAttribute nvarchar(MAX)    
+      ,vTaskDifficulty nvarchar(MAX)    
+      ,iCategoryId int    
+      ,iCategoryCompetencyId int    
+     )    
+     WHERE uExecutionId = @uExecutionId;    
+    
+     CREATE TABLE #tempResultIds( uResultId UNIQUEIDENTIFIER );    
+     INSERT INTO #tempResultIds    
+     SELECT * FROM     
+     OPENJSON(@vResultJSON,'$.TestResult')    
+     WITH (uResultId uniqueidentifier,uExecutionId uniqueidentifier)    
+     WHERE uExecutionId = @uExecutionId;    
+        
+     INSERT INTO t_TestDrive_Test_ResultValues (uResultValueId,uResultId,iElementValueId,vAnswerValue,iElementId,vElementType,vCorrectAnswer,iContainerId,iElementDisplayedOrder,iAnswerIndex,iObjectStatus,iAttemptsToSolveTaskCorrectly,cIsCorrectAnswer,dMarkerValue)   
+     SELECT * FROM     
+     OPENJSON(@vResultJSON,'$.TestResultValues')    
+     WITH (    
+       uResultValueId uniqueidentifier    
+      ,uResultId uniqueidentifier    
+      ,iElementValueId int    
+      ,vAnswerValue NVARCHAR(MAX)    
+      ,iElementId int    
+      ,vElementType nvarchar(100)    
+      ,vCorrectAnswer nvarchar(MAX)    
+      ,iContainerId int    
+      ,iElementDisplayedOrder int    
+      ,iAnswerIndex int    
+      ,iObjectStatus int    
+      ,iAttemptsToSolveTaskCorrectly int    
+      ,cIsCorrectAnswer char(1)    
+      ,dMarkerValue decimal    
+     )    
+     WHERE uResultId in (SELECT uResultId FROM #tempResultIds);    
+    
+     INSERT INTO t_TestDrive_Test_ResultSummary (uResultSummaryId, uExecutionId, iTestNumberOfTasks, dTestCorrectAnswerValue, dTestWrongAnswerValue, dTestNotAttemptedValue, dTestPoints, dTestStandardErrorConfidenceIntervalLowerBound, dTestStandardErrorConfidenceIntervalUpperBound, iTaskObjectsCorrect, iTaskObjectsWrong, iTaskObjectsNotAnswered, vResultAttribute)   
+     SELECT * FROM     
+     OPENJSON(@vResultJSON,'$.TestResultSummary')    
+     WITH(    
+       uResultSummaryId uniqueidentifier    
+      ,uExecutionId uniqueidentifier    
+      ,iTestNumberOfTasks int    
+      ,dTestCorrectAnswerValue decimal    
+      ,dTestWrongAnswerValue decimal    
+      ,dTestNotAttemptedValue decimal    
+      ,dTestPoints decimal    
+      ,dTestStandardErrorConfidenceIntervalLowerBound decimal    
+      ,dTestStandardErrorConfidenceIntervalUpperBound decimal    
+      ,iTaskObjectsCorrect int    
+      ,iTaskObjectsWrong int    
+      ,iTaskObjectsNotAnswered int    
+      ,vResultAttribute nvarchar(MAX)    
+     )    
+     WHERE uExecutionId = @uExecutionId;    
+    
+     CREATE TABLE #tempResultSummaryIds( uResultSummaryId UNIQUEIDENTIFIER );    
+     INSERT INTO #tempResultSummaryIds    
+     SELECT * FROM     
+     OPENJSON(@vResultJSON,'$.TestResultSummary')    
+     WITH (uResultSummaryId uniqueidentifier,uExecutionId uniqueidentifier)    
+     WHERE uExecutionId = @uExecutionId;    
+    
+     INSERT INTO t_TestDrive_Test_ResultSummary_SubSubject  (uResultSummaryId,  
+  iSubjectId,  
+  dSubSubjectPoints,  
+  iSubSubjectNumberOfTasks,  
+  dSubSubjectCorrectAnswerValue,  
+  dSubSubjectWrongAnswerValue,  
+  dSubSubjectNotAttemptedValue,  
+  dSubSubjectStandardErrorConfidenceIntervalLowerBound,  
+  dSubSubjectStandardErrorConfidenceIntervalUpperBound,  
+  iTaskObjectsCorrect,  
+  iTaskObjectsWrong,  
+  iTaskObjectsNotAnswered,  
+  vResultAttribute,  
+  cIsSurveySubject,  
+  uResultSummarySubSubjectId)  
+     SELECT * FROM     
+     OPENJSON(@vResultJSON,'$.TestResultSubSubjectSummary')    
+     WITH(    
+       uResultSummaryId uniqueidentifier    
+      ,iSubjectId int    
+      ,dSubSubjectPoints decimal    
+      ,iSubSubjectNumberOfTasks int    
+      ,dSubSubjectCorrectAnswerValue decimal    
+      ,dSubSubjectWrongAnswerValue decimal    
+      ,dSubSubjectNotAttemptedValue decimal    
+      ,dSubSubjectStandardErrorConfidenceIntervalLowerBound decimal    
+      ,dSubSubjectStandardErrorConfidenceIntervalUpperBound decimal    
+      ,iTaskObjectsCorrect int    
+      ,iTaskObjectsWrong int    
+      ,iTaskObjectsNotAnswered int    
+      ,vResultAttribute nvarchar(MAX)    
+      ,cIsSurveySubject char(1)    
+     )    
+     WHERE uResultSummaryId IN (SELECT uResultSummaryId FROM #tempResultSummaryIds);    
+    
+     DROP TABLE #tempResultIds;    
+     DROP TABLE #tempResultSummaryIds;    
+    END    
+    
+   FETCH NEXT FROM CURSOR_TestTokenData INTO @uTestTokenId              
+     
+  END    
+  CLOSE CURSOR_TestTokenData    
+  DEALLOCATE CURSOR_TestTokenData    
+    
+  IF EXISTS(SELECT * FROM t_TestDrive_WrapperTest_TestForPupil WHERE uCycleId = @uCycleId AND uPupilId = @uSourcePupilId)    
+   BEGIN    
+    UPDATE t_TestDrive_WrapperTest_TestForPupil     
+    SET uClassId = @uClassId, uPupilId = @uTargetPupilId    
+    WHERE uCycleId = @uCycleId AND uPupilId = @uSourcePupilId    
+   END    
+  ELSE    
+   BEGIN    
+    INSERT INTO t_TestDrive_WrapperTest_TestForPupil  (uWrapperTestId,  
+ uTestId,  
+ uPupilId,  
+ uClassId,  
+ uCycleId,  
+ iCycleRepetition)  
+    SELECT     
+      uWrapperTestId    
+     ,uTestId    
+     ,@uTargetPupilId    
+     ,@uClassId    
+     ,uCycleId    
+     ,iCycleRepetition    
+     FROM     
+    OPENJSON(@vResultJSON,'$.WrapperTest')    
+    WITH (    
+      uWrapperTestId uniqueidentifier    
+     ,uTestId uniqueidentifier    
+     ,uPupilId uniqueidentifier    
+     ,uClassId uniqueidentifier    
+     ,uCycleId uniqueidentifier    
+     ,iCycleRepetition int    
+    )    
+    WHERE uCycleId = @uCycleId AND uPupilId = @uTargetPupilId    
+   END    
+    
+  SET @Message = 'Success'    
+ END TRY    
+ BEGIN CATCH    
+  SET @Message = ERROR_MESSAGE();    
+  ROLLBACK TRANSACTION    
+ END CATCH    
+ COMMIT TRANSACTION    
+    
+ SELECT (SELECT @Message as vMessage for json path,INCLUDE_NULL_VALUES, without_array_wrapper) as JSONResult         
+END 
+
+GO
+
+ALTER PROCEDURE JProc_TestDrive_Pupil_MovePupils_InsertTestResultsToPupil      
+(                                          
+  @vResultJSON  nvarchar(max),    
+  @uCycleId uniqueidentifier,    
+  @uClassId uniqueidentifier,    
+  @uPupilId NVARCHAR(MAX),    
+  @cIsRecycleBinDataBase CHAR(1)                              
+)                                          
+AS                                          
+BEGIN    
+-- EXEC JProc_TestDrive_Pupil_MovePupils_InsertTestResultsToPupil '{"TestTokens":[],"TestExecutions":[],"TestExecutionSubSubjectDetail":[],"TestExecutionSystemDetails":[],"TestResult":[],"TestResultValues":[],"TestResultSummary":[],"TestResultSubSubjectSummary":[],  
+--"WrapperTest":[]}', 'b9dadda2-81f4-4d8c-bc98-0763a16d79c5','ab6b68a2-83ac-49a8-b5d9-ad62315f4b7a','65821287-E029-439B-9B9A-8DA7B848170B','N'    
+DECLARE @Message NVARCHAR(MAX);    
+ BEGIN TRANSACTION    
+ BEGIN TRY    
+  DECLARE @uTestTokenId UNIQUEIDENTIFIER;    
+     
+  DECLARE CURSOR_TestTokenData CURSOR FOR    
+  SELECT uTestTokenId FROM OPENJSON(@vResultJSON,'$.TestTokens')    
+  WITH ( uTestTokenId UNIQUEIDENTIFIER '$.uTestTokenId' )    
+    
+  OPEN CURSOR_TestTokenData                                        
+  FETCH NEXT FROM CURSOR_TestTokenData into @uTestTokenId    
+  WHILE(@@FETCH_STATUS <> -1)                                   
+  BEGIN    
+      
+   IF EXISTS( SELECT * FROM t_TestDrive_Test_Token WHERE uTestTokenId = @uTestTokenId) AND @cIsRecycleBinDataBase = 'N'    
+    BEGIN    
+     UPDATE t_TestDrive_Test_Token     
+     SET uClassId = @uClassId    
+     WHERE uTestTokenId = @uTestTokenId    
+    END    
+   ELSE    
+    BEGIN    
+        
+     INSERT INTO t_TestDrive_Test_Token  (uTestTokenId, vTestTokenNumber, uCycleId, uPupilId, uTestId, dtCreatedOn, uClassId, uParentTestId, iCycleRepetition, iLoginProviderId, dtValidTill, cIsActive, dtValidFrom, dtValidTo, iSubjectId, cIsPracticeTest, dtModifiedOn)    
+     SELECT     
+       uTestTokenId    
+      ,vTestTokenNumber    
+      ,uCycleId    
+      ,uPupilId    
+      ,uTestId    
+      ,dtCreatedOn    
+      ,@uClassId    
+      ,uParentTestId    
+      ,iCycleRepetition    
+      ,iLoginProviderId    
+      ,dtValidTill    
+      ,cIsActive    
+      ,dtValidFrom    
+      ,dtValidTo    
+      ,iSubjectId    
+      ,cIsPracticeTest    
+      ,dtModifiedOn --Not Present in Active DB    
+     FROM     
+     OPENJSON(@vResultJSON,'$.TestTokens')    
+     WITH(    
+       uTestTokenId uniqueidentifier    
+      ,vTestTokenNumber nvarchar(26)    
+      ,uCycleId uniqueidentifier    
+      ,uPupilId uniqueidentifier    
+      ,uTestId uniqueidentifier    
+      ,dtCreatedOn smalldatetime    
+      ,uClassId uniqueidentifier    
+      ,uParentTestId uniqueidentifier    
+      ,iCycleRepetition int    
+      ,iLoginProviderId int    
+      ,dtValidTill datetime    
+      ,cIsActive char(1)    
+      ,dtValidFrom datetime    
+      ,dtValidTo datetime    
+      ,iSubjectId int    
+      ,cIsPracticeTest char(1)    
+      ,dtModifiedOn datetime    
+     )    
+     WHERE uTestTokenId = @uTestTokenId;    
+    
+     INSERT INTO t_TestDrive_Test_Execution(uExecutionId, uTestTokenId, dtTestStart, dtTestEnd, iSoundVolume, iTestStatusId, dBound1, dBound2, dStartProb, dTestSubjectConstance, dTestSubjectVariance, iMaximumTasksToBeShown, iMinimumTasksToBeShown, dDifficultyUpperBound, iPerfectNumber, iLanguageId, iTestSubjectId, dStandardErrorConfidenceIntervalAlpha, uElementFormulaAttributeTemplateId, uResultAttributeGroupId, vAdaptivePropertiesJson, iAlgorithmId, iTaskCountDisplayed, iTotalEffectiveTimeTaken, dtLastTaskAnsweredOn)    
+     SELECT * FROM     
+     OPENJSON(@vResultJSON,'$.TestExecutions')    
+     WITH (    
+       uExecutionId uniqueidentifier    
+      ,uTestTokenId uniqueidentifier    
+      ,dtTestStart datetime    
+      ,dtTestEnd datetime    
+      ,iSoundVolume int    
+      ,iTestStatusId int    
+      ,dBound1 decimal    
+      ,dBound2 decimal    
+      ,dStartProb decimal    
+      ,dTestSubjectConstance decimal    
+      ,dTestSubjectVariance decimal    
+,iMaximumTasksToBeShown int    
+      ,iMinimumTasksToBeShown int    
+      ,dDifficultyUpperBound decimal    
+      ,iPerfectNumber int    
+      ,iLanguageId int    
+      ,iTestSubjectId int    
+      ,dStandardErrorConfidenceIntervalAlpha decimal    
+      ,uElementFormulaAttributeTemplateId uniqueidentifier    
+      ,uResultAttributeGroupId uniqueidentifier    
+      ,vAdaptivePropertiesJson nvarchar(MAX)    
+      ,iAlgorithmId int    
+      --Not Present in Active DB Arcadix_Lernpassplus_Result_2018_SG_1    
+      ,iTaskCountDisplayed int    
+      ,iTotalEffectiveTimeTaken int    
+      ,dtLastTaskAnsweredOn datetime    
+      --Not Present in Active DB Arcadix_Lernpassplus_Result_2018_SG_1    
+     )    
+     WHERE uTestTokenId = @uTestTokenId;    
+    
+     DECLARE @uExecutionId UNIQUEIDENTIFIER ;    
+     SELECT @uExecutionId = uExecutionId FROM     
+     OPENJSON(@vResultJSON,'$.TestExecutions')    
+     WITH ( uExecutionId uniqueidentifier, uTestTokenId uniqueidentifier)    
+     WHERE uTestTokenId = @uTestTokenId;    
+    
+     INSERT INTO t_TestDrive_Test_Execution_SubSubjectDetails  (uExecutionSubSubjectDetailsId,uExecutionId,iSubjectId,dConstance,dVariance)  
+     SELECT * FROM     
+     OPENJSON(@vResultJSON,'$.TestExecutionSubSubjectDetail')    
+     WITH (    
+       uExecutionSubSubjectDetailsId uniqueidentifier    
+      ,uExecutionId uniqueidentifier    
+      ,iSubjectId int    
+      ,dConstance decimal    
+      ,dVariance decimal    
+     )    
+     WHERE uExecutionId = @uExecutionId;    
+    
+     INSERT INTO t_TestDrive_Test_Execution_SystemDetails  (uTestExecutionSystemDetailsId,uExecutionId,vIPAddress,dtDatetimeOfLogin,vBrowserInformation,vBrowser,vBrowserVersion,vOs)  
+     SELECT * FROM     
+     OPENJSON(@vResultJSON,'$.TestExecutionSystemDetails')    
+     WITH (    
+       uTestExecutionSystemDetailsId uniqueidentifier    
+      ,uExecutionId uniqueidentifier    
+      ,vIPAddress nvarchar(50)    
+      ,dtDatetimeOfLogin datetime    
+      ,vBrowserInformation nvarchar(MAX)    
+      ,vBrowser nvarchar(200)    
+      ,vBrowserVersion nvarchar(200)    
+      ,vOs nvarchar(200)    
+     )    
+     WHERE uExecutionId = @uExecutionId;    
+    
+     INSERT INTO t_TestDrive_Test_Result(uResultId, uExecutionId, iPageId, iTaskStatusId, dtCreatedOn, iTimesShown, iDisplayedOrder, dNextDifficulty, cIsCalibratedActive, dDifficultyBefore, dDifficultyAfter, iTaskSubjectId, dTaskDifficulty, iTimeTakenToAnswer, vPageName, iTimeAllocated, iTaskTypeId, iRoundNumber, dTaskPercentage, iTaskObjectsCorrect, iTaskObjectsWrong, iTaskObjectsNotAnswered, iTaskWeightage, cIsSeparated, cHasTaskBeenDisplayed, iAttemptsToSolveTaskCorrectly, cIsDataStoragePlaceHolder, iParentTaskId, iSuperGroupTimeAllocated, vTaskResultAttribute, vTaskElementResultAttribute, vTaskDifficulty, iCategoryId, iCategoryCompetencyId)    
+     SELECT * FROM     
+     OPENJSON(@vResultJSON,'$.TestResult')    
+     WITH (    
+       uResultId uniqueidentifier    
+      ,uExecutionId uniqueidentifier    
+      ,iPageId int    
+      ,iTaskStatusId int    
+      ,dtCreatedOn datetime    
+      ,iTimesShown int    
+      ,iDisplayedOrder int    
+      ,dNextDifficulty decimal    
+      ,cIsCalibratedActive char(1)    
+      ,dDifficultyBefore decimal    
+      ,dDifficultyAfter decimal    
+      ,iTaskSubjectId int    
+      ,dTaskDifficulty decimal    
+      ,iTimeTakenToAnswer int    
+      ,vPageName nvarchar(200)    
+      ,iTimeAllocated int    
+      ,iTaskTypeId int    
+      ,iRoundNumber int    
+      ,dTaskPercentage decimal    
+      ,iTaskObjectsCorrect int    
+      ,iTaskObjectsWrong int    
+      ,iTaskObjectsNotAnswered int    
+      ,iTaskWeightage int    
+      ,cIsSeparated char(1)    
+      ,cHasTaskBeenDisplayed char(1)    
+      ,iAttemptsToSolveTaskCorrectly int    
+      ,cIsDataStoragePlaceHolder char(1)    
+      ,iParentTaskId int    
+      ,iSuperGroupTimeAllocated int    
+      ,vTaskResultAttribute nvarchar(MAX)    
+      ,vTaskElementResultAttribute nvarchar(MAX)    
+      ,vTaskDifficulty nvarchar(MAX)    
+      ,iCategoryId int    
+      ,iCategoryCompetencyId int    
+     )    
+     WHERE uExecutionId = @uExecutionId;    
+    
+     CREATE TABLE #tempResultIds( uResultId UNIQUEIDENTIFIER );    
+     INSERT INTO #tempResultIds    
+     SELECT * FROM     
+     OPENJSON(@vResultJSON,'$.TestResult')    
+     WITH (uResultId uniqueidentifier,uExecutionId uniqueidentifier)    
+     WHERE uExecutionId = @uExecutionId;    
+        
+     INSERT INTO t_TestDrive_Test_ResultValues  (uResultValueId,uResultId,iElementValueId,vAnswerValue,iElementId,vElementType,vCorrectAnswer,iContainerId,iElementDisplayedOrder,iAnswerIndex,iObjectStatus,iAttemptsToSolveTaskCorrectly,cIsCorrectAnswer,dMarkerValue)   
+     SELECT * FROM     
+     OPENJSON(@vResultJSON,'$.TestResultValues')    
+     WITH (    
+       uResultValueId uniqueidentifier    
+      ,uResultId uniqueidentifier    
+      ,iElementValueId int    
+      ,vAnswerValue NVARCHAR(MAX)    
+      ,iElementId int    
+      ,vElementType nvarchar(100)    
+      ,vCorrectAnswer nvarchar(MAX)    
+      ,iContainerId int    
+      ,iElementDisplayedOrder int    
+      ,iAnswerIndex int    
+      ,iObjectStatus int    
+      ,iAttemptsToSolveTaskCorrectly int    
+      ,cIsCorrectAnswer char(1)    
+      ,dMarkerValue decimal    
+     )    
+     WHERE uResultId in (SELECT uResultId FROM #tempResultIds);    
+    
+     INSERT INTO t_TestDrive_Test_ResultSummary (uResultSummaryId, uExecutionId, iTestNumberOfTasks, dTestCorrectAnswerValue, dTestWrongAnswerValue, dTestNotAttemptedValue, dTestPoints, dTestStandardErrorConfidenceIntervalLowerBound, dTestStandardErrorConfidenceIntervalUpperBound, iTaskObjectsCorrect, iTaskObjectsWrong, iTaskObjectsNotAnswered, vResultAttribute)    
+     SELECT * FROM     
+     OPENJSON(@vResultJSON,'$.TestResultSummary')    
+     WITH(    
+       uResultSummaryId uniqueidentifier    
+      ,uExecutionId uniqueidentifier    
+      ,iTestNumberOfTasks int    
+      ,dTestCorrectAnswerValue decimal    
+      ,dTestWrongAnswerValue decimal    
+      ,dTestNotAttemptedValue decimal    
+      ,dTestPoints decimal    
+      ,dTestStandardErrorConfidenceIntervalLowerBound decimal    
+      ,dTestStandardErrorConfidenceIntervalUpperBound decimal    
+      ,iTaskObjectsCorrect int    
+      ,iTaskObjectsWrong int    
+      ,iTaskObjectsNotAnswered int    
+      ,vResultAttribute nvarchar(MAX)    
+     )    
+     WHERE uExecutionId = @uExecutionId;    
+    
+     CREATE TABLE #tempResultSummaryIds( uResultSummaryId UNIQUEIDENTIFIER );    
+     INSERT INTO #tempResultSummaryIds    
+     SELECT * FROM     
+     OPENJSON(@vResultJSON,'$.TestResultSummary')    
+     WITH (uResultSummaryId uniqueidentifier,uExecutionId uniqueidentifier)    
+     WHERE uExecutionId = @uExecutionId;    
+    
+     INSERT INTO t_TestDrive_Test_ResultSummary_SubSubject  (uResultSummaryId,  
+  iSubjectId,  
+  dSubSubjectPoints,  
+  iSubSubjectNumberOfTasks,  
+  dSubSubjectCorrectAnswerValue,  
+  dSubSubjectWrongAnswerValue,  
+  dSubSubjectNotAttemptedValue,  
+  dSubSubjectStandardErrorConfidenceIntervalLowerBound,  
+  dSubSubjectStandardErrorConfidenceIntervalUpperBound,  
+  iTaskObjectsCorrect,  
+  iTaskObjectsWrong,  
+  iTaskObjectsNotAnswered,  
+  vResultAttribute,  
+  cIsSurveySubject,  
+  uResultSummarySubSubjectId)  
+     SELECT * FROM     
+     OPENJSON(@vResultJSON,'$.TestResultSubSubjectSummary')    
+     WITH(    
+       uResultSummaryId uniqueidentifier    
+      ,iSubjectId int    
+      ,dSubSubjectPoints decimal    
+      ,iSubSubjectNumberOfTasks int    
+      ,dSubSubjectCorrectAnswerValue decimal    
+      ,dSubSubjectWrongAnswerValue decimal    
+      ,dSubSubjectNotAttemptedValue decimal    
+      ,dSubSubjectStandardErrorConfidenceIntervalLowerBound decimal    
+      ,dSubSubjectStandardErrorConfidenceIntervalUpperBound decimal    
+      ,iTaskObjectsCorrect int    
+      ,iTaskObjectsWrong int    
+      ,iTaskObjectsNotAnswered int    
+      ,vResultAttribute nvarchar(MAX)    
+      ,cIsSurveySubject char(1)    
+     )    
+     WHERE uResultSummaryId IN (SELECT uResultSummaryId FROM #tempResultSummaryIds);    
+    
+     DROP TABLE #tempResultIds;    
+     DROP TABLE #tempResultSummaryIds;    
+    END    
+    
+   FETCH NEXT FROM CURSOR_TestTokenData INTO @uTestTokenId              
+     
+  END    
+  CLOSE CURSOR_TestTokenData    
+  DEALLOCATE CURSOR_TestTokenData    
+    
+  IF EXISTS(SELECT * FROM t_TestDrive_WrapperTest_TestForPupil WHERE uCycleId = @uCycleId AND uPupilId = @uPupilId)    
+   BEGIN    
+    UPDATE t_TestDrive_WrapperTest_TestForPupil     
+    SET uClassId = @uClassId    
+    WHERE uCycleId = @uCycleId AND uPupilId = @uPupilId    
+   END    
+  ELSE    
+   BEGIN    
+    INSERT INTO t_TestDrive_WrapperTest_TestForPupil  (uWrapperTestId,  
+ uTestId,  
+ uPupilId,  
+ uClassId,  
+ uCycleId,  
+ iCycleRepetition)  
+    SELECT     
+      uWrapperTestId    
+     ,uTestId    
+     ,uPupilId    
+     ,@uClassId    
+     ,uCycleId    
+     ,iCycleRepetition    
+     FROM     
+    OPENJSON(@vResultJSON,'$.WrapperTest')    
+    WITH (    
+      uWrapperTestId uniqueidentifier    
+     ,uTestId uniqueidentifier    
+     ,uPupilId uniqueidentifier    
+     ,uClassId uniqueidentifier    
+     ,uCycleId uniqueidentifier    
+     ,iCycleRepetition int    
+    )    
+    WHERE uCycleId = @uCycleId AND uPupilId = @uPupilId    
+   END    
+    
+  SET @Message = 'Success'    
+ END TRY    
+ BEGIN CATCH    
+  SET @Message = ERROR_MESSAGE();    
+  ROLLBACK TRANSACTION    
+ END CATCH    
+ COMMIT TRANSACTION    
+    
+ SELECT (SELECT @Message as vMessage for json path,INCLUDE_NULL_VALUES, without_array_wrapper) as JSONResult         
+END 
+
+Go
+ALTER PROCEDURE [dbo].[Proc_TestDrive_PageResultTransfer_InsertResults]          
+(            
+ @vXMLData ntext,            
+ @uCycleId uniqueidentifier,        
+ @vAdditionalNumberForTestToken nvarchar(10)        
+)            
+AS            
+Begin Transaction        
+ /********************************************************************************************            
+   Created By:  Gobinath            
+   Create Date:  03.08.2007            
+   Description:  Created to insert results from actual Result db      
+       
+   Modified By: Arvind K                                         
+   Modified Date: 12/08/2020                                       
+   Description: Included column list for Insert Statement          
+ ********************************************************************************************/            
+ Declare @idoc int,@uPupilId nvarchar(100),@uTestId uniqueidentifier,@uClassId uniqueidentifier        
+,@uTestTokenId nvarchar(100),@vTestTokenNumber nvarchar(100),@Error int        
+  EXEC sp_xml_preparedocument @idoc OUTPUT, @vXMLData          
+        
+ select @uTestTokenId = uTestTokenId,@vTestTokenNumber = vTestTokenNumber,@uPupilId = uPupilId,@uTestId = uTestId,@uClassId = uClassId        
+    from OPENXML(@idoc,'/Input/Tokens/Token')                 
+    WITH ( uTestTokenId nvarchar(100) 'uTestTokenId',        
+  vTestTokenNumber nvarchar(100) 'vTestTokenNumber',        
+  uPupilId nvarchar(100) 'uPupilId',            
+    uTestId nvarchar(100) 'uTestId',          
+    uClassId nvarchar(100) 'uClassId')        
+Begin Try        
+ if(not exists(select uTesttokenId from t_TestDrive_Test_Token where uPupilId = @uPupilId and uTestId = @uTestId and uClassId = @uClassId and uCycleId = @uCycleId))            
+ Begin          
+  declare @randNum numeric(15),                      
+  @strTokenId nvarchar(13),                      
+  @intCheckForExistence int,@uNewTokenId nvarchar(100),        
+       @uNewExecutionId nvarchar(100),@uResultId nvarchar(100),@NewuResultSummaryId  nvarchar(100)              
+ set @intCheckForExistence = 1                          
+ while ( @intCheckForExistence = 1 )                          
+  Begin                          
+   select  @randNum = floor(rand() * 100000000)                          
+   set @strTokenId = @randNum                          
+   while( len(@strTokenId) < 8 )                          
+    Begin                          
+     set @strTokenId = @strTokenId + '0'                          
+    End                     
+             
+   if ( len(@strTokenId) > 8 )                       
+    Begin                          
+     set @strTokenId = substring(@strTokenId, 1, 8)                          
+    End                          
+   SET @strTokenId = rtrim(ltrim(@vAdditionalNumberForTestToken)) + @strTokenId         
+   if ( not Exists ( select    vTestTokenNumber                      
+         from      t_TestDrive_Test_Token                      
+         where     vTestTokenNumber = @strTokenId )                      
+      )                       
+    Begin                          
+     set @intCheckForExistence = 0                          
+    End                          
+  End           
+print @strTokenId        
+  set @uNewTokenId = newid()        
+  INSERT t_TestDrive_Test_Token         
+ ([uTestTokenId]        
+    ,[vTestTokenNumber]        
+    ,[uCycleId]        
+    ,[uPupilId]        
+    ,[uTestId]        
+    ,[dtCreatedOn]        
+    ,[uClassId]        
+    ,[uParentTestId]        
+    ,[iCycleRepetition])           
+   select @uNewTokenId,rtrim(ltrim(@strTokenId)),Convert(nvarchar(200),@uCycleId),uPupilId,uTestId,dtCreatedOn,uClassId,uParentTestId,iCycleRepetition            
+    from OPENXML(@idoc,'/Input/Tokens/Token')                 
+    WITH (uPupilId nvarchar(200) 'uPupilId',            
+  uTestId nvarchar(200) 'uTestId',          
+  dtCreatedOn DateTime 'dtCreatedOn',            
+  uClassId nvarchar(200) 'uClassId',            
+  uParentTestId nvarchar(200) 'uParentTestId',          
+  iCycleRepetition int 'iCycleRepetition')          
+        
+  Set @uNewExecutionId = newid()        
+ INSERT INTO [t_TestDrive_Test_Execution]          
+           ([uExecutionId]          
+           ,[uTestTokenId]          
+           ,[dtTestStart]          
+           ,[dtTestEnd]          
+           ,[iSoundVolume]          
+           ,[iTestStatusId]          
+           ,[dBound1]          
+           ,[dBound2]          
+           ,[dStartProb]          
+           ,[iTestSubjectId]          
+           ,[dTestSubjectConstance]          
+           ,[dTestSubjectVariance]          
+           ,[iMaximumTasksToBeShown]          
+           ,[iMinimumTasksToBeShown]          
+           ,[dDifficultyUpperBound]          
+           ,[iPerfectNumber]          
+           ,[iLanguageId])           
+   select @uNewExecutionId,@uNewTokenId,dtTestStart,dtTestEnd,iSoundVolume,iTestStatusId,dBound1          
+           ,dBound2          
+           ,dStartProb          
+           ,iTestSubjectId          
+           ,dTestSubjectConstance          
+           ,dTestSubjectVariance          
+           ,iMaximumTasksToBeShown          
+           ,iMinimumTasksToBeShown          
+           ,dDifficultyUpperBound          
+           ,iPerfectNumber          
+           ,iLanguageId          
+    from OPENXML(@idoc,'/Input/Executions/Execution')                 
+    WITH (dtTestStart DateTime 'dtTestStart',            
+      dtTestEnd DateTime 'dtTestEnd',            
+      iSoundVolume int 'iSoundVolume',               
+      iTestStatusId int 'iTestStatusId',          
+      dBound1 Decimal(8,4) 'dBound1',          
+      dBound2 Decimal(8,4) 'dBound2',          
+      dStartProb Decimal(8,4) 'dStartProb',          
+      iTestSubjectId int 'iTestSubjectId',          
+      dTestSubjectConstance decimal(8,4) 'dTestSubjectConstance',          
+      dTestSubjectVariance decimal(8,4) 'dTestSubjectVariance',          
+      iMaximumTasksToBeShown int 'iMaximumTasksToBeShown',          
+      iMinimumTasksToBeShown int 'iMinimumTasksToBeShown',          
+      dDifficultyUpperBound decimal(8,4) 'dDifficultyUpperBound',          
+      iPerfectNumber int 'iPerfectNumber',          
+      vBrowserInformation nvarchar(max) 'vBrowserInformation',          
+      iLanguageId int 'iLanguageId')        
+        
+  INSERT t_TestDrive_Test_Execution_SubSubjectDetails (uExecutionSubSubjectDetailsId,uExecutionId,iSubjectId,dConstance,dVariance)          
+   select newid(),@uNewExecutionId,iSubjectId,dConstance,dVariance          
+    from OPENXML(@idoc,'/Input/SubSubjects/SubSubject')                 
+    WITH (          
+  iSubjectId int 'iSubjectId',            
+  dConstance Decimal(8,4) 'dConstance',            
+  dVariance Decimal(8,4) 'dVariance')        
+              
+  Declare Cur_Result Cursor for         
+  select uResultId           
+  from OPENXML(@idoc,'/Input/Results/Result')                 
+  WITH ( uResultId nvarchar(100) 'uResultId')        
+ Open Cur_Result        
+ Fetch next from Cur_Result into @uResultId        
+while(@@Fetch_Status <> -1)        
+ Begin        
+ Declare @uNewResultId uniqueidentifier        
+ Set @uNewResultId = newid()        
+        
+  INSERT INTO [t_TestDrive_Test_Result]          
+      ([uResultId]          
+      ,[uExecutionId]          
+      ,[iPageId]          
+      ,[iTaskStatusId]          
+      ,[dtCreatedOn]          
+      ,[iTimesShown]          
+      ,[iDisplayedOrder]          
+      ,[dNextDifficulty]          
+      ,[cIsCalibratedActive]          
+      ,[dDifficultyBefore]          
+      ,[dDifficultyAfter]          
+      ,[iRoundNumber]          
+      ,[iTaskSubjectId]          
+      ,[dTaskDifficulty]          
+      ,[iTimeTakenToAnswer]          
+      ,[vPageName]          
+      ,[iTimeAllocated]          
+      ,[iTaskTypeId]          
+      ,[dTaskPercentage]          
+      ,[iTaskObjectsCorrect]          
+      ,[iTaskObjectsWrong]          
+      ,[iTaskObjectsNotAnswered]          
+      ,[iTaskWeightage]          
+      ,[cIsSeparated])        
+          
+   select @uNewResultId,          
+    @uNewExecutionId,          
+    iTaskId,           
+    iTaskStatusId,          
+    dtCreatedOn,          
+    iTimesShown,          
+    iDisplayedOrder,          
+    dNextDifficulty,          
+    cIsCalibratedActive,          
+    dDifficultyBefore,          
+    dDifficultyAfter,          
+    iRoundNumber          
+      ,iTaskSubjectId          
+      ,dTaskDifficulty          
+      ,iTimeTakenToAnswer          
+     ,vPageName          
+      ,iTimeAllocated          
+      ,iTaskTypeId          
+      ,dTaskPercentage          
+      ,iTaskObjectsCorrect          
+      ,iTaskObjectsWrong          
+      ,iTaskObjectsNotAnswered          
+      ,iTaskWeightage          
+      ,cIsSeparated          
+  from OPENXML(@idoc,'/Input/Results/Result')                 
+  WITH ( uResultId nvarchar(100) 'uResultId',            
+   iTaskId int 'iPageId',            
+   iTaskStatusId int 'iTaskStatusId',            
+   dtCreatedOn DateTime 'dtCreatedOn',            
+   iTimesShown int 'iTimesShown',            
+   iDisplayedOrder int 'iDisplayedOrder',            
+   dNextDifficulty decimal(8,4) 'dNextDifficulty',            
+   cIsCalibratedActive char(1) 'cIsCalibratedActive',            
+   dDifficultyBefore decimal(8,4) 'dDifficultyBefore',            
+   dDifficultyAfter decimal(8,4) 'dDifficultyAfter',          
+   iRoundNumber int 'iRoundNumber',          
+     iTaskSubjectId int 'iTaskSubjectId',          
+     dTaskDifficulty decimal(8,4) 'dTaskDifficulty',          
+     iTimeTakenToAnswer int 'iTimeTakenToAnswer',          
+     vPageName nvarchar(200) 'vPageName',          
+     iTimeAllocated int 'iTimeAllocated',          
+     iTaskTypeId int 'iTaskTypeId',          
+     dTaskPercentage Decimal(8,4) 'dTaskPercentage',          
+     iTaskObjectsCorrect int 'iTaskObjectsCorrect',          
+     iTaskObjectsWrong int 'iTaskObjectsWrong',          
+     iTaskObjectsNotAnswered int 'iTaskObjectsNotAnswered',          
+     iTaskWeightage int 'iTaskWeightage',          
+     cIsSeparated char(1) 'cIsSeparated')          
+ where uResultId = @uResultId         
+          
+    Declare @uResultValueId uniqueidentifier        
+ Declare Cur_ResultValues Cursor for         
+  select uResultValueId,uResultId         
+  from OPENXML(@idoc,'/Input/ResultValues/Values')                 
+  WITH ( uResultValueId nvarchar(100) 'uResultValueId',uResultId nvarchar(100) 'uResultId')        
+  where uResultId = @uResultId        
+    Open Cur_ResultValues        
+ fetch next from Cur_ResultValues into @uResultValueId,@uResultId        
+    While(@@fetch_Status <> -1)        
+    Begin        
+  Declare @vElementType nvarchar(100)        
+  select @vElementType = vElementType        
+   from OPENXML(@idoc,'/Input/ResultValues/Values')                 
+   WITH ( uResultValueId nvarchar(100) 'uResultValueId',         
+    vElementType nvarchar(200) 'vElementType')         
+  where uResultValueId = @uResultValueId        
+   if(upper(@vElementType) = 'TWORADIO' or upper(@vElementType) = 'DRAGDROP')        
+   Begin        
+   INSERT t_TestDrive_test_ResultValues (uResultValueId, uResultId, iElementValueId, vAnswerValue,iElementId,vElementType,vCorrectAnswer,iContainerId)       
+     select newid(),@uNewResultId,iElementValueId,convert(nvarchar(max),vAnswerValue),iElementId,vElementType,vCorrectAnswer,iContainerId          
+   from OPENXML(@idoc,'/Input/ResultValues/Values/vAnswerValue')                 
+   WITH ( uResultValueId nvarchar(100) '../uResultValueId',            
+     iElementValueId int '../iElementValueId',            
+     vAnswerValue xml 'ElementAnswer',            
+     iElementId int '../iElementId',          
+     vElementType nvarchar(200) '../vElementType',          
+     vCorrectAnswer nvarchar(200) '../vCorrectAnswer',          
+     iContainerId  int'../iContainerId')         
+   where uResultValueId = @uResultValueId        
+   End        
+   Else        
+   Begin        
+   INSERT t_TestDrive_test_ResultValues (uResultValueId, uResultId, iElementValueId, vAnswerValue,iElementId,vElementType,vCorrectAnswer,iContainerId)              
+   select newid(),@uNewResultId,iElementValueId,vAnswerValue,iElementId,vElementType,vCorrectAnswer,iContainerId          
+   from OPENXML(@idoc,'/Input/ResultValues/Values')                 
+    WITH ( uResultValueId nvarchar(100) 'uResultValueId',            
+    uResultId nvarchar(100) 'uResultId',            
+    iElementValueId int 'iElementValueId',            
+    vAnswerValue nvarchar(4000) 'vAnswerValue',            
+    iElementId int 'iElementId',          
+    vElementType nvarchar(200) 'vElementType',          
+    vCorrectAnswer nvarchar(200) 'vCorrectAnswer',          
+    iContainerId  int'iContainerId')         
+    where uResultValueId = @uResultValueId        
+   End        
+ fetch next from Cur_ResultValues into @uResultValueId,@uResultId        
+ End          
+ Close Cur_ResultValues        
+    DeAllocate Cur_ResultValues        
+    Fetch next from Cur_Result into @uResultId        
+End        
+Close Cur_Result        
+Deallocate Cur_Result        
+        
+  Set @NewuResultSummaryId = newid()        
+  INSERT t_TestDrive_test_ResultSummary (uResultSummaryId,uExecutionId,iTestNumberOfTasks,dTestCorrectAnswerValue,dTestWrongAnswerValue,dTestNotAttemptedValue,dTestPoints)            
+   select @NewuResultSummaryId,@uNewExecutionId,iTestNumberOfTasks,dTestCorrectAnswerValue,dTestWrongAnswerValue,dTestNotAttemptedValue,dTestPoints          
+    from OPENXML(@idoc,'/Input/ResultSummary/Summary')                 
+    WITH ( iTestNumberOfTasks int 'iTestNumberOfTasks',            
+  dTestCorrectAnswerValue decimal(8,4) 'dTestCorrectAnswerValue',          
+  dTestWrongAnswerValue decimal(8,4) 'dTestWrongAnswerValue',          
+  dTestNotAttemptedValue decimal(8,4) 'dTestNotAttemptedValue',          
+  dTestPoints decimal(8,4) 'dTestPoints')        
+        
+ INSERT INTO [t_TestDrive_Test_ResultSummary_SubSubject]          
+           ([uResultSummaryId]          
+           ,[iSubjectId]          
+           ,[dSubSubjectPoints]          
+           ,[iSubSubjectNumberOfTasks]          
+           ,[dSubSubjectCorrectAnswerValue]          
+           ,[dSubSubjectWrongAnswerValue]          
+     ,[dSubSubjectNotAttemptedValue])               
+   select @NewuResultSummaryId,iSubjectId          
+   ,dSubSubjectPoints          
+           ,iSubSubjectNumberOfTasks          
+           ,dSubSubjectCorrectAnswerValue          
+           ,dSubSubjectWrongAnswerValue          
+           ,dSubSubjectNotAttemptedValue          
+    from OPENXML(@idoc,'/Input/SubjectAbility/Ability')                 
+    WITH ( iSubjectId int 'iSubjectId',            
+  dSubSubjectPoints decimal(8,4) 'dSubSubjectPoints'            
+       ,iSubSubjectNumberOfTasks int 'iSubSubjectNumberOfTasks'          
+       ,dSubSubjectCorrectAnswerValue decimal(8,4) 'dSubSubjectCorrectAnswerValue'          
+       ,dSubSubjectWrongAnswerValue decimal(8,4) 'dSubSubjectWrongAnswerValue'          
+       ,dSubSubjectNotAttemptedValue decimal(8,4) 'dSubSubjectNotAttemptedValue')               
+          
+    select @uPupilId uPupilId,@uTestId uTestId,@uClassId uClassId,@uTestTokenId uTestTokenId,@vTestTokenNumber vTestTokenNumber,'Success' Status        
+ End          
+ Else        
+ Begin        
+  select @uPupilId uPupilId,@uTestId uTestId,@uClassId uClassId,@uTestTokenId uTestTokenId,@vTestTokenNumber vTestTokenNumber,'Failure' Status        
+  End        
+End Try        
+Begin Catch            
+        select @uPupilId uPupilId,@uTestId uTestId,@uClassId uClassId,@uTestTokenId uTestTokenId,@vTestTokenNumber vTestTokenNumber,'Failure' Status        
+         ,str(ERROR_NUMBER())+ERROR_PROCEDURE()+str(ERROR_LINE())+ERROR_MESSAGE() Error        
+  IF @@TRANCOUNT > 0        
+  Begin        
+   print 'On rollback'        
+   ROLLBACK TRANSACTION        
+  End        
+  return        
+ End Catch        
+  EXEC sp_xml_removedocument @idoc          
+Commit transaction 

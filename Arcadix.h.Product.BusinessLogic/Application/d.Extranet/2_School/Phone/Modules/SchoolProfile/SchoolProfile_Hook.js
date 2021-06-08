@@ -1,0 +1,1 @@
+﻿export * from '@shared/Application/d.Extranet/2_School/PC/Modules/SchoolProfile/SchoolProfile_Hook';

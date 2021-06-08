@@ -1,0 +1,155 @@
+  table {
+                    width: 100%;
+                    border-spacing: 0;
+                }
+
+                .editorSidebar {
+                    border: 1px solid #bbb;
+                    background-color: #fff;
+                }
+               
+                .editorTbl td {
+                    padding: 5px;
+                }
+.p0 {
+			   	padding:0 !Important;
+			   }
+                .sidebarHdr {
+                    background-color: #ffe8bf;
+                }
+
+                .sidebarPopupTitle {
+                    color: #333;
+                    text-align: left;
+                    font: 14px/18px "dosis-bold", Tahoma, Arial;
+                }
+
+                .sidebarPopupSubTitle {
+                    font: 12px/18px "dosis-bold", Tahoma, Arial;
+                }
+
+                .sidebarFramedBox {
+                    padding: 5px;
+                  
+                    height: 100%;
+                }
+				table.sidebarFramedBox
+ {
+ 	border-spacing: 0 4px;
+ }
+                .tbdSidebarToolBar {
+					background-color: #F6F8FA;
+    				border: 1px solid #808080;
+					padding: 2px;
+				}
+
+                .sidebarBtn {
+                    text-align: center;
+                    color: #FFF;
+                    text-decoration: none;
+                    font: 10px/20px "Segoe UI", "Trebuchet MS", Tahoma, Arial;
+                    cursor: pointer;
+                    width: auto;
+                    background-color: #A6AEBB;
+                    margin: 5px;
+                    border: none;
+                }
+
+                    .sidebarBtn a {
+                        background-color: #A6AEBB;
+                        color: #FFF;
+                        text-decoration: none;
+                        padding: 4px 10px;
+                    }
+
+
+                /* sidebar sliding css */
+
+                .sidenav {
+                    height: 100%;
+                    
+                    position: fixed;
+                    z-index: 1;
+                    top: 0;
+                   
+                    transition: 0.5s;
+                    padding-top: 60px;
+                }
+
+                    .sidenav a {
+                        padding: 8px 8px 8px 32px;
+                        text-decoration: none;
+                        font-size: 25px;
+                        color: #818181;
+                        display: block;
+                        transition: 0.3s;
+                    }
+
+                    /* .sidenav a:hover {
+            color: #f1f1f1;
+        } */
+
+                    .sidenav .closebtn {
+                        position: absolute;
+                        top: 0;
+                        right: 25px;
+                        font-size: 36px;
+                        margin-left: 50px;
+                    }
+
+                #main {
+                    transition: margin-left .5s;
+                    padding: 16px;
+                }
+
+                @media screen and (max-height: 450px) {
+                    .sidenav {
+                        padding-top: 15px;
+                    }
+
+                        .sidenav a {
+                            font-size: 18px;
+                        }
+                }
+
+                /* sidebar sliding css */
+				
+				
+				
+				.ParagraphSubtitle {
+    height: 20px;
+    padding-left: 2px;
+    vertical-align: middle;
+    color: #333;
+    font: 12px 'dosis-bold', Tahoma, Arial, Helvectica, sans-serif;
+    background: #eee;
+}
+.Label, .LabelValue, .Text {
+    color: #333;
+    font: 12px 'latoregular', Tahoma, Arial, Helvectica, sans-serif;
+}
+
+.btnOrnge{
+	    border: solid 1px #fbaf2a;
+    cursor: pointer;
+    background: #ffe8bf;
+    text-align: center;
+    vertical-align: middle;
+    padding: 4px 25px;
+    font: 13px Tahoma;
+
+}
+.btnOrnge:hover {
+	border: 1px solid #fbaf2a;
+    background: #fbaf2a;
+    color: #fff;
+}
+.Input, .Dropdown {
+    color: #333;
+    font: 12px 'latoregular', Tahoma, Arial, Helvectica, sans-serif;
+    border: 1px solid #C6C6C6;
+    height: 22px;
+    padding-left: 5px;
+	width: 100%;
+}
+

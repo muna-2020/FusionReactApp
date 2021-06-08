@@ -1,0 +1,29 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Competency_Planner' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Competency_Planner ADD uModifiedByUserId uniqueidentifier  
+END		 
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Competency_Planner set uModifiedByUserId=uUserId where uModifiedByUserId is null
+
+
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+Proc_TestDrive_CompetencyPlanner_AddEditMemberSchedulerEvent
+Proc_TestDrive_CompetencyPlanner_DeleteMemberSchedulerBySchedulerId
+Proc_TestDrive_CompetencyPlanner_GetMemberSchedulerEventDataBySchedulerId
+Proc_TestDrive_CompetencyPlanner_GetMemberSchedulerEvents
+***********************************************************/
+
+/********************Procs need to Review**********************
+Proc_TestDrive_CompetencyPlanner_AddEditMemberSchedulerEvent
+************************************************************/

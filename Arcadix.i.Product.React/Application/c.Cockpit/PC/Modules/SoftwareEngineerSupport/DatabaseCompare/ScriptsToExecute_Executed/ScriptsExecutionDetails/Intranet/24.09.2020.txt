@@ -1,0 +1,105 @@
+﻿ /**********************************
+  Following tables updated:
+
+	1) t_TestDrive_Subject_FeedbackThreshold
+	2) t_testdrive_Subject_FeedbackThreshold_Topic
+	3) t_testdrive_Subject_FeedbackThreshold_Topic_Description
+	4) t_TestDrive_Task_AdditionalTaskProperty
+	5) t_TestDrive_Task_AdditionalTaskProperty_Old
+**********************************/
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Subject_FeedbackThreshold' AND COLUMN_NAME = 'iPageId') 
+BEGIN
+ALTER TABLE t_TestDrive_Subject_FeedbackThreshold ADD iPageId int  
+END
+
+GO
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Subject_FeedbackThreshold' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Subject_FeedbackThreshold ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Subject_FeedbackThreshold set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+GO
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_testdrive_Subject_FeedbackThreshold_Topic' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_testdrive_Subject_FeedbackThreshold_Topic ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_testdrive_Subject_FeedbackThreshold_Topic set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+GO
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_testdrive_Subject_FeedbackThreshold_Topic_Description' AND COLUMN_NAME = 'iPageId') 
+BEGIN
+ALTER TABLE t_testdrive_Subject_FeedbackThreshold_Topic_Description ADD iPageId int  
+END  
+
+GO
+	  
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_testdrive_Subject_FeedbackThreshold_Topic_Description' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_testdrive_Subject_FeedbackThreshold_Topic_Description ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_testdrive_Subject_FeedbackThreshold_Topic_Description set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+GO
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Task_AdditionalTaskProperty' AND COLUMN_NAME = 'uModifiedByUserId')
+BEGIN  
+ALTER TABLE t_TestDrive_Task_AdditionalTaskProperty ADD uModifiedByUserId uniqueidentifier  
+END
+
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Task_AdditionalTaskProperty set uModifiedByUserId= uUserId where uModifiedByUserId is null
+
+GO
+
+/**********************************
+New Columns
+**********************************/
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_TestDrive_Task_AdditionalTaskProperty_Old' AND COLUMN_NAME = 'uModifiedByUserId') 
+BEGIN
+ALTER TABLE t_TestDrive_Task_AdditionalTaskProperty_Old ADD uModifiedByUserId uniqueidentifier  
+END	 
+
+GO
+
+/**********************************
+Default Values
+**********************************/
+update t_TestDrive_Task_AdditionalTaskProperty_Old set uModifiedByUserId=uUserId where uModifiedByUserId is null

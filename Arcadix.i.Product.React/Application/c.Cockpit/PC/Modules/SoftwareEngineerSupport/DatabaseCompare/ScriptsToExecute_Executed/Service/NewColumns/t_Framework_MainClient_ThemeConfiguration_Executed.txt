@@ -1,0 +1,82 @@
+/**********************************
+New Columns
+**********************************/
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_ThemeConfiguration' AND COLUMN_NAME = 'cIsDeleted') 
+BEGIN 
+ALTER TABLE t_Framework_MainClient_ThemeConfiguration ADD cIsDeleted char(1)  
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_ThemeConfiguration' AND COLUMN_NAME = 'dtModifiedOn') 
+BEGIN 
+ALTER TABLE t_Framework_MainClient_ThemeConfiguration ADD dtModifiedOn datetime  
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_ThemeConfiguration' AND COLUMN_NAME = 'vThemeConfigurationName') 
+BEGIN 
+ALTER TABLE t_Framework_MainClient_ThemeConfiguration ADD vThemeConfigurationName nvarchar(MAX)  
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 't_Framework_MainClient_ThemeConfiguration' AND COLUMN_NAME = 'cIsForFusion') 
+BEGIN 
+ALTER TABLE t_Framework_MainClient_ThemeConfiguration ADD cIsForFusion char(1)  
+END
+
+GO
+/**********************************
+Default Values
+**********************************/
+update t_Framework_MainClient_ThemeConfiguration set cIsDeleted ='N'  where cIsDeleted is null
+
+GO
+update t_Framework_MainClient_ThemeConfiguration SET dtModifiedOn = getdate()  where dtModifiedOn is null
+
+GO
+update t_Framework_MainClient_ThemeConfiguration set cIsForFusion='N' where cIsForFusion is null
+
+GO
+/**********************************
+Angular proc modified
+**********************************/
+/********************AllDependentProc********************
+FProc_Framework_FrameworkClient_GetClientConfiguration
+FProc_Framework_FrameworkClient_GetClientConfigurationByClientId
+JProc_Framework_ClientConfiguration_UpdateTheme
+JProc_Framework_FrameworkClient_GetActiveClientDetails
+JProc_Framework_FrameworkClient_GetAllClientsForMainClient
+JProc_Framework_FrameworkClient_GetClientConfiguration
+JProc_Framework_FrameworkClient_GetClientConfigurationByClientId
+JProc_Framework_FrameworkMainClient_GetMainClientConfiguration
+Proc_Framework_ClientConfiguration_UpdateTheme
+Proc_Framework_FrameworkClient_GetActiveClientDetails
+Proc_Framework_FrameworkClient_GetAllClientsForMainClient
+Proc_Framework_FrameworkClient_GetAllHostUrlDetailsByMainClient
+Proc_Framework_FrameworkClient_GetClientConfiguration
+Proc_Framework_FrameworkClient_GetClientConfiguration_JobSkills
+Proc_Framework_FrameworkClient_GetClientConfigurationByClientId
+Proc_Framework_FrameworkMainClient_GetMainClientConfiguration
+proc_TestDrive_Deployement_CreateCultureConfiguration
+****************************************************************/
+
+/********************Procs need to Review**********************
+FProc_Framework_FrameworkClient_GetClientConfiguration
+FProc_Framework_FrameworkClient_GetClientConfigurationByClientId
+JProc_Framework_ClientConfiguration_UpdateTheme
+JProc_Framework_FrameworkClient_GetActiveClientDetails
+JProc_Framework_FrameworkClient_GetAllClientsForMainClient
+JProc_Framework_FrameworkClient_GetClientConfiguration
+JProc_Framework_FrameworkClient_GetClientConfigurationByClientId
+JProc_Framework_FrameworkMainClient_GetMainClientConfiguration
+Proc_Framework_ClientConfiguration_UpdateTheme
+Proc_Framework_FrameworkClient_GetActiveClientDetails
+Proc_Framework_FrameworkClient_GetAllClientsForMainClient
+Proc_Framework_FrameworkClient_GetAllHostUrlDetailsByMainClient
+Proc_Framework_FrameworkClient_GetClientConfiguration
+Proc_Framework_FrameworkClient_GetClientConfiguration_JobSkills
+Proc_Framework_FrameworkClient_GetClientConfigurationByClientId
+Proc_Framework_FrameworkMainClient_GetMainClientConfiguration
+proc_TestDrive_Deployement_CreateCultureConfiguration
+****************************************************************/

@@ -1,0 +1,29 @@
+﻿
+/**
+* @name GetMainClientCountryOfficeRibbonData
+* @param {object} objData takes  objData
+* @summary Get data to initialize RibbonData
+* @returns {array} array
+*/
+export function GetMainClientCountryOfficeRibbonData(objData) {
+    var objTextResource = Object_Framework_Services_TextResource.GetData("/c.Cockpit/Modules/MainClient/MainClientCountry", objData.objContext.props);
+    return (
+        [
+            {
+                Text: Localization.TextFormatter(objTextResource, "MainClientCountry"),
+                ToolBarData: [
+                    {
+                        "vGroupName": Localization.TextFormatter(objTextResource, "SaveButton"),
+                        "t_GroupData": [
+                            {
+                                "ImageName": "SaveImage",
+                                "type": "single",
+                                "OnClick": () => objData.SaveMethod()
+                            }   
+                        ]
+                    }
+                ]
+            }
+        ]
+    );
+}

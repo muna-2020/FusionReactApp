@@ -1,0 +1,53 @@
+﻿Command to create the services:
+
+Swiss Server:
+sc create Arcadix_Fusion_OfflineProcessService binpath="\"D:\Arcadix\Product.Fusion\Arcadix.i.Product.WindowsServices\bin\Debug\net5.0\Arcadix.i.Product.WindowsServices.exe\" {'ProcessName':'OfflineProcessController','Arguments':{'HostName':'productmanagement.arcadixdevelopment.com,intranetfusionlernlupe.arcadixdevelopment.com,intranetfusionlernpassplus.arcadixdevelopment.com,cockpitfusion.arcadixdevelopment.com'}}"
+
+sc create Arcadix_Fusion_FtpSyncService binpath="\"D:\Arcadix\Product.Fusion\Arcadix.i.Product.WindowsServices\bin\Debug\net5.0\Arcadix.i.Product.WindowsServices.exe\" {'ProcessName':'FtpSync','Arguments':{}}"
+
+sc create Arcadix_Fusion_CssFileMerge binpath="\"D:\Arcadix\Product.Fusion\Arcadix.i.Product.WindowsServices\bin\Debug\net5.0\Arcadix.i.Product.WindowsServices.exe\" {'ProcessName':'CssFileMerge','Arguments':{}}"
+
+Indian Servers:
+sc create Arcadix_Fusion_OfflineProcessService binpath="\"G:\Arcadix\Product.Fusion\Arcadix.i.Product.WindowsServices\bin\Debug\net5.0\Arcadix.i.Product.WindowsServices.exe\" {'ProcessName':'OfflineProcessController','Arguments':{'HostName':'productmanagementdevfusion.arcadixdevelopment.com,intranetdevfusionlernlupe.arcadixdevelopment.com,intranetdevfusionlernpassplus.arcadixdevelopment.com,cockpitdevfusion.arcadixdevelopment.com'}}"
+
+sc create Arcadix_Fusion_VimeoPollingService binpath="\"G:\Arcadix\Product.Fusion\Arcadix.i.Product.WindowsServices\bin\Debug\net5.0\Arcadix.i.Product.WindowsServices.exe\" {'ProcessName':'VimeoPolling','Arguments':{'ServerName':'ax-mgmtserver7'}}"
+
+sc create Arcadix_Fusion_OneDriveService binpath="\"G:\Arcadix\Product.Fusion\Arcadix.i.Product.WindowsServices\bin\Debug\net5.0\Arcadix.i.Product.WindowsServices.exe\" {'ProcessName':'OneDriveService','Arguments':{}}"
+
+sc create Arcadix_Fusion_FileWatcherService binpath="\"G:\Arcadix\Product.Fusion\Arcadix.i.Product.WindowsServices\bin\Debug\net5.0\Arcadix.i.Product.WindowsServices.exe\" {'ProcessName':'FileWatcher','Arguments':{}}"
+
+sc create Arcadix_Fusion_ArcadixAppPoolService binpath="\"G:\Arcadix\Product.Fusion\Arcadix.i.Product.WindowsServices\bin\Debug\net5.0\Arcadix.i.Product.WindowsServices.exe\" {'ProcessName':'ArcadixAppPool','Arguments':{'ServerName':'ax-mgmtserver7'}}"
+
+sc create Arcadix_Fusion_FtpSyncService binpath="\"G:\Arcadix\Product.Fusion\Arcadix.i.Product.WindowsServices\bin\Debug\net5.0\Arcadix.i.Product.WindowsServices.exe\" {'ProcessName':'FtpSync','Arguments':{}}"
+
+sc create Arcadix_Fusion_CssFileMerge binpath="\"G:\Arcadix\Product.Fusion\Arcadix.i.Product.WindowsServices\bin\Debug\net5.0\Arcadix.i.Product.WindowsServices.exe\" {'ProcessName':'CssFileMerge','Arguments':{}}" start=auto
+
+sc create Arcadix_Fusion_SyncService binpath="\"G:\Arcadix\Product.Fusion\Arcadix.i.Product.WindowsServices\bin\Debug\net5.0\Arcadix.i.Product.WindowsServices.exe\" {'ProcessName':'SyncService','Arguments':{}}"
+
+sc create Arcadix_Fusion_SystemPerformance binpath="\"G:\Arcadix\Product.Fusion\Arcadix.i.Product.WindowsServices\bin\Debug\net5.0\Arcadix.i.Product.WindowsServices.exe\" {'ProcessName':'SystemPerformance','Arguments':{}}"
+
+Test Server:
+sc create Arcadix_Fusion_OfflineProcessService binpath="\"G:\Arcadix\Product.Fusion\Arcadix.i.Product.WindowsServices\bin\Debug\net5.0\Arcadix.i.Product.WindowsServices.exe\" {'ProcessName':'OfflineProcessController','Arguments':{'HostName':'productmanagementtestfusion.arcadixdevelopment.com,intranettestfusionlernlupe.arcadixdevelopment.com,intranettestfusionlernpassplus.arcadixdevelopment.com,cockpittestfusion.arcadixdevelopment.com'}}"
+
+sc create Arcadix_Fusion_ArcadixAppPoolService binpath="\"G:\Arcadix\Product.Fusion\Arcadix.i.Product.WindowsServices\bin\Debug\net5.0\Arcadix.i.Product.WindowsServices.exe\" {'ProcessName':'ArcadixAppPool','Arguments':{'ServerName':'ax-mgmtserver1'}}"
+
+Command to Start the Services:
+
+sc start Arcadix_Fusion_OfflineProcessService
+sc start Arcadix_Fusion_VimeoPollingService
+sc start Arcadix_Fusion_OneDriveService
+sc start Arcadix_Fusion_FileWatcherService
+sc start Arcadix_Fusion_ArcadixAppPoolService
+sc start Arcadix_Fusion_FtpSyncService
+sc start Arcadix_Fusion_CssFileMerge
+
+Command to Delete the services:
+
+sc delete Arcadix_Fusion_OfflineProcessService
+sc delete Arcadix_Fusion_VimeoPollingService
+sc delete Arcadix_Fusion_OneDriveService
+sc delete Arcadix_Fusion_FileWatcherService
+sc delete Arcadix_Fusion_ArcadixAppPoolService
+sc delete Arcadix_Fusion_FtpSyncService
+sc delete Arcadix_Fusion_CssFileMerge
+

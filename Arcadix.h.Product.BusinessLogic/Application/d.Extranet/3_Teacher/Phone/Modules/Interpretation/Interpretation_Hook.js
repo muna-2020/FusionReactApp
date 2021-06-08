@@ -1,0 +1,1 @@
+﻿export * from '@shared/Application/d.Extranet/3_Teacher/PC/Modules/Interpretation/Interpretation_Hook';
