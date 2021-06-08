@@ -94,6 +94,7 @@
     "vmsg": "^0.3.6",
     "webdav.client": "^5.16.5450",
     "webpack": "^4.43.0",
+    "webpack-cli":"^4.7.2",
     "webpack-bundle-analyzer": "^4.4.0",
     "webpack-cleanup-plugin": "^0.5.1",
     "webpack-dev-middleware": "^2.0.6",
